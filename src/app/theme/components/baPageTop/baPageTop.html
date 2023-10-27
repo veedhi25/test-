@@ -1,0 +1,483 @@
+<div class="page-top" maxHeight="50" (scrollChange)="scrolledChanged($event)" [ngClass]="{ scrolled: isScrolled }">
+  <div class="menu-area master-menu">
+
+    <div class="dropdown" *ngFor="let menuItem of menuItems">
+      <ng-container *ngIf="EnableOfflineMenu(menuItem)">
+        <a *ngIf="!menuItem.children && menuItem.url && isShowPageMenu(menuItem)"
+          (mouseenter)="onHoverItem($event, item)" [href]="menuItem.url" [target]="menuItem.target"
+          class="main-menu-button">
+
+          <i *ngIf="menuItem.icon" class="{{ menuItem.icon }}"></i><span>{{ menuItem.title }}</span>
+        </a>
+        <a *ngIf="!menuItem.children && !menuItem.url && isShowPageMenu(menuItem)"
+          (mouseenter)="onHoverItem($event, item)" [ngClass]="{ selected: menuItem.title == selectedMenuItems.title }"
+          class="main-menu-button" [routerLink]="menuItem.route.paths" [title]="menuItem.title">
+          <i *ngIf="menuItem.icon" class="{{ menuItem.icon }}"></i><span>{{ menuItem.title }}</span>
+        </a>
+        <a *ngIf="menuItem.children && isShowPageMenu(menuItem)" (click)="setSelectedMenu(menuItem)"
+          [ngClass]="{ selected: menuItem.title == selectedMenuItems.title }" class="main-menu-button"
+          [title]="menuItem.title">
+
+          <i *ngIf="menuItem.icon && menuItem.title !='IMSPOS'" class="{{ menuItem.icon }}"></i>
+          <span *ngIf="menuItem.title !='IMSPOS'">{{ menuItem.title }}</span>
+          <div style="float: left;" class="logo-bh">
+            <img style="position: relative; width: 110px;" *ngIf="menuItem.title =='IMSPOS'" src="{{ icon }}"
+              (click)="logoClickEvent()">
+          </div>
+
+
+        </a>
+      </ng-container>
+    </div>
+
+  </div>
+
+
+  <div class="main-menu-inner menu-area master-menu" style="float: right;margin-left:0px">
+    <div class="dropdown">
+      <a class="dropbtn">
+        <i class="fa fa-user-circle-o" aria-hidden="true" style="font-size: 20px;color:#616363">
+        </i><i class="ion-arrow-down-b" style="color: #616363"></i>
+      </a>
+      <div class="dropdown-content" style="min-width: 136px !important;right: -17px;;">
+        <a title="log out" class="signout" (click)="logout()" style="cursor:pointer;padding-left: 10px;">
+          <i class="fa fa-power-off"></i><span>Sign Out</span>
+        </a>
+        <a title="change password" class="signout" (click)="changePasswordPrompt()"
+          style="padding-left: 10px;cursor:pointer;">
+          <i></i><span>Change Password</span>
+        </a>
+        <a href="./../../../assets/help.pdf" target="_blank" style="padding-left: 10px;">
+          <i class="fa fa-question-circle" aria-hidden="true"></i><span>Help</span>
+        </a>
+
+      </div>
+    </div>
+  </div>
+  <div class="main-menu-inner menu-area master-menu" style="float: right;margin-left: 10px;margin-top: 10px">
+    <a (click)="downloadPrintService()" title="configure printer" style="cursor: pointer">
+      <i class="fa fa-print" aria-hidden="true" style="font-size: 20px;color:#616363"></i>
+    </a>
+  </div>
+
+  <div class="main-menu-inner menu-area master-menu" style="float: right;margin-left: 10px;margin-top: 10px"
+    *ngIf="showSyncMaster()">
+    <!-- <a (click)="syncmaster()" title="Sync Database" style="cursor: pointer"> -->
+    <a (click)="loadsyncmaster()" title="Sync Database" style="cursor: pointer">
+      <!-- <i class="fa fa-refresh" [ngClass]="{'fa-spin':offlineSyncStatus}" aria-hidden="true" style="font-size: 20px;color:#616363"></i> -->
+      <i class="fa fa-refresh" aria-hidden="true" style="font-size: 20px;color:#616363"></i>
+    </a>
+  </div>
+  <div class="main-menu-inner menu-area master-menu" style="margin-left: 0px;margin-top: 10px">
+    <app-simple-suggest [options]="menu" [labelKey]="'name'" [valueKey]="'path'" [formControl]="menuSearched">
+    </app-simple-suggest>
+  </div>
+
+</div>
+
+<div class="main-menu">
+  <div class="main-menu-inner">
+    <div class="dropdown" *ngFor="let menuItem of selectedMenuItems.children">
+      <ng-container *ngIf="EnableOfflineMenuChild(menuItem)">
+        <a *ngIf="!menuItem.children && isShowPageMenu(menuItem)" [ngClass]="{ 'dropbtn-selected': menuItem.selected }"
+          class="dropbtn" [routerLink]="menuItem.route.paths" [title]="menuItem.title">
+          <i *ngIf="menuItem.icon" class="{{ menuItem.icon }}"></i>
+          <span>{{ menuItem.title }}</span>
+        </a>
+        <a *ngIf="menuItem.children && isShowPageMenu(menuItem)" class="dropbtn" [title]="menuItem.title">
+          <i *ngIf="menuItem.icon" class="{{ menuItem.icon }}"></i>
+          <span>{{ menuItem.title }}</span> <i class="ion-arrow-down-b"></i>
+        </a>
+        <div class="dropdown-content" style=" overflow: inherit !important;"
+          *ngIf="menuItem.children && isShowPageMenu(menuItem) && (menuItem.title =='Sales Reports')">
+          <ng-container *ngFor="let childrenItem of menuItem.children">
+            <ng-container *ngIf="EnbaleOfflineChildren(childrenItem)">
+              <a [ngClass]="{ 'dropbtn-selected': menuItem.selected }" [routerLink]="childrenItem.route.paths"
+                *ngIf="!childrenItem.children && isShowPageMenu(childrenItem)">
+                <i *ngIf="childrenItem.icon" class="{{ childrenItem.icon }}"></i>
+                <span>{{ childrenItem.title }}</span>
+              </a>
+
+              <!-- more level down to menu -->
+              <div class="dropdown-inner">
+                <a *ngIf="childrenItem.children && isShowPageMenu(childrenItem)" class="dropbtn-inner"
+                  [title]="childrenItem.title">
+                  <i *ngIf="childrenItem.icon" class="{{ childrenItem.icon }}"></i>
+                  <span>{{ childrenItem.title }}</span>
+                  <i class="ion-arrow-right-b" style="float:right"></i>
+                </a>
+                <div class="dropdown-content-inner" *ngIf="childrenItem.children && isShowPageMenu(childrenItem)">
+                  <ng-container *ngFor="let childrenChildrenItem of childrenItem.children">
+                    <a [ngClass]="{ 'dropbtn-selected': menuItem.selected }"
+                      [routerLink]="childrenChildrenItem.route.paths" *ngIf="isShowPageMenu(childrenChildrenItem)">
+                      <i *ngIf="childrenChildrenItem.icon" class="{{ childrenChildrenItem.icon }}"></i>
+                      <span>{{ childrenChildrenItem.title }}</span>
+                    </a>
+                  </ng-container>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+        <div class="dropdown-content" style=" overflow: inherit !important;"
+          *ngIf="menuItem.children && isShowPageMenu(menuItem) && (menuItem.title =='Inventory Reports')">
+          <ng-container *ngFor="let childrenItem of menuItem.children">
+            <ng-container *ngIf="EnbaleOfflineChildren(childrenItem)">
+              <a [ngClass]="{ 'dropbtn-selected': menuItem.selected }" [routerLink]="childrenItem.route.paths"
+                *ngIf="!childrenItem.children && isShowPageMenu(childrenItem)">
+                <i *ngIf="childrenItem.icon" class="{{ childrenItem.icon }}"></i>
+                <span>{{ childrenItem.title }}</span>
+              </a>
+
+              <!-- more level down to menu -->
+              <div class="dropdown-inner">
+                <a *ngIf="childrenItem.children && isShowPageMenu(childrenItem)" class="dropbtn-inner"
+                  [title]="childrenItem.title">
+                  <i *ngIf="childrenItem.icon" class="{{ childrenItem.icon }}"></i>
+                  <span>{{ childrenItem.title }}</span>
+                  <i class="ion-arrow-right-b" style="float:right"></i>
+                </a>
+                <div class="dropdown-content-inner" *ngIf="childrenItem.children && isShowPageMenu(childrenItem)">
+                  <ng-container *ngFor="let childrenChildrenItem of childrenItem.children">
+                    <a [ngClass]="{ 'dropbtn-selected': menuItem.selected }"
+                      [routerLink]="childrenChildrenItem.route.paths" *ngIf="isShowPageMenu(childrenChildrenItem)">
+                      <i *ngIf="childrenChildrenItem.icon" class="{{ childrenChildrenItem.icon }}"></i>
+                      <span>{{ childrenChildrenItem.title }}</span>
+                    </a>
+                  </ng-container>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+        <div class="dropdown-content" style=" overflow: inherit !important;"
+          *ngIf="menuItem.children && isShowPageMenu(menuItem) && (menuItem.title =='Central Reports')">
+          <ng-container *ngFor="let childrenItem of menuItem.children">
+            <ng-container *ngIf="EnbaleOfflineChildren(childrenItem)">
+              <a [ngClass]="{ 'dropbtn-selected': menuItem.selected }" [routerLink]="childrenItem.route.paths"
+                *ngIf="!childrenItem.children && isShowPageMenu(childrenItem)">
+                <i *ngIf="childrenItem.icon" class="{{ childrenItem.icon }}"></i>
+                <span>{{ childrenItem.title }}</span>
+              </a>
+
+              <!-- more level down to menu -->
+              <div class="dropdown-inner">
+                <a *ngIf="childrenItem.children && isShowPageMenu(childrenItem)" class="dropbtn-inner"
+                  [title]="childrenItem.title">
+                  <i *ngIf="childrenItem.icon" class="{{ childrenItem.icon }}"></i>
+                  <span>{{ childrenItem.title }}</span>
+                  <i class="ion-arrow-right-b" style="float:right"></i>
+                </a>
+                <div class="dropdown-content-inner" *ngIf="childrenItem.children && isShowPageMenu(childrenItem)">
+                  <ng-container *ngFor="let childrenChildrenItem of childrenItem.children">
+                    <a [ngClass]="{ 'dropbtn-selected': menuItem.selected }"
+                      [routerLink]="childrenChildrenItem.route.paths" *ngIf="isShowPageMenu(childrenChildrenItem)">
+                      <i *ngIf="childrenChildrenItem.icon" class="{{ childrenChildrenItem.icon }}"></i>
+                      <span>{{ childrenChildrenItem.title }}</span>
+                    </a>
+                  </ng-container>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+        <div class="dropdown-content"
+          *ngIf="menuItem.children && isShowPageMenu(menuItem) && (menuItem.title !='Sales Reports' && menuItem.title !='Inventory Reports' && menuItem.title !='Central Reports')">
+          <ng-container *ngFor="let childrenItem of menuItem.children">
+            <ng-container *ngIf="EnbaleOfflineChildren(childrenItem)">
+              <a [ngClass]="{ 'dropbtn-selected': menuItem.selected }" [routerLink]="childrenItem.route.paths"
+                *ngIf="!childrenItem.children && isShowPageMenu(childrenItem)">
+                <i *ngIf="childrenItem.icon" class="{{ childrenItem.icon }}"></i>
+                <span>{{ childrenItem.title }}</span>
+              </a>
+
+              <!-- more level down to menu -->
+              <div class="dropdown-inner">
+                <a *ngIf="childrenItem.children && isShowPageMenu(childrenItem)" class="dropbtn-inner"
+                  [title]="childrenItem.title">
+                  <i *ngIf="childrenItem.icon" class="{{ childrenItem.icon }}"></i>
+                  <span>{{ childrenItem.title }}</span>
+                  <i class="ion-arrow-right-b" style="float:right"></i>
+                </a>
+                <div class="dropdown-content-inner" *ngIf="childrenItem.children && isShowPageMenu(childrenItem)">
+                  <ng-container *ngFor="let childrenChildrenItem of childrenItem.children">
+                    <a [ngClass]="{ 'dropbtn-selected': menuItem.selected }"
+                      [routerLink]="childrenChildrenItem.route.paths" *ngIf="isShowPageMenu(childrenChildrenItem)">
+                      <i *ngIf="childrenChildrenItem.icon" class="{{ childrenChildrenItem.icon }}"></i>
+                      <span>{{ childrenChildrenItem.title }}</span>
+                    </a>
+                  </ng-container>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+
+      </ng-container>
+
+    </div>
+  </div>
+</div>
+
+
+
+<div class="print-modal-sticky xl-modalbox" *ngIf="forgetPassword">
+
+  <div class="modal-content modal-content-main-area">
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel">Change Password</h4>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="form-group">
+          <label for="username">User Name</label>
+          <input type="text" class="form-control" name="username" [(ngModel)]="userData.username">
+        </div>
+        <div class="form-group">
+          <label for="Old_Password">Old Password</label>
+          <input type="password" class="form-control" name="Old_Password" [(ngModel)]="userData.password">
+        </div>
+        <div class="form-group">
+          <label for="new_Password">New Password</label>
+          <input type="password" class="form-control" name="new_Password" [(ngModel)]="userData.newPassword">
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn add-btn" data-dismiss="modal" (click)="changePassword()">
+        <span *ngIf="!changepwd">Change Password</span>
+        <span *ngIf="changepwd">Changing Password
+          <i class="fa fa-spinner fa-pulse  fa-fw"></i>
+        </span>
+      </button>
+      <button type="button" class="btn cancel-btn" (click)="cancelPassword()">Cancel</button>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+  .modal-content {
+    padding: 1px;
+    margin: 0px;
+    float: right;
+  }
+
+  tbody>tr:hover {
+    background-color: #f3f5f4;
+    cursor: pointer;
+  }
+
+  tr {
+    font-size: 11px;
+  }
+
+  .selected-row {
+    background-color: #ced6d3 !important;
+  }
+
+  .table>tbody>tr>td {
+    line-height: 30px !important;
+  }
+
+  .table>thead>tr>th {
+    line-height: 5px !important;
+  }
+
+  .table>tbody>tr>td:first-child {
+    text-align: left !important;
+    padding: 0px 0px 0px 11px !important;
+  }
+
+  .modal-content {
+    box-shadow: -10px 0px 10px 1px #aaaaaa;
+  }
+
+  .modal-content-main-area {
+    max-height: 100%;
+    height: 100%;
+    overflow: auto;
+    overflow-x: hidden;
+  }
+
+  .modal-content-summary-area {
+    max-height: 20%;
+    height: 20%;
+    overflow: auto;
+    overflow-x: hidden;
+  }
+
+  .ellipsis {
+    /* width: 220px;
+    text-overflow: ellipsis;
+    overflow: hidden; */
+    white-space: nowrap;
+  }
+</style>
+<div class="modal-sticky" [class.modal-sticky-hide]="!offlineSyncStatus"
+  style="display : block; padding: 0px;  margin-bottom: 25px;">
+  <!-- Modal content -->
+  <div class="modal-content modal-content-main-area">
+    <div>
+      <div>
+        <div class="modal-header" style="padding: 0px;background: #ecad79;">
+          <button class="close" aria-label="Close" (click)="offlineSyncStatus=!offlineSyncStatus">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title" style="text-align: center;">
+            Local Sync Table
+          </h4>
+        </div>
+
+        <div class="col-md-12 table-scroll">
+          <table class="table">
+            <thead>
+              <tr style="background: #b5e26a;">
+                <td>Sync Table</td>
+                <!-- <td>last Sync Date</td> -->
+                <td>Action</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Item</td>
+                <!-- <td></td> -->
+                <td><i class="fa fa-refresh" (click)="syncmaster('syncforofflinedownloaditems')"></i></td>
+              </tr>
+              <tr>
+                <td>Price</td>
+                <!-- <td></td> -->
+                <td><i class="fa fa-refresh" (click)="syncmaster('syncforofflinedownloadproductprice')"></i></td>
+              </tr>
+              <tr>
+                <td>Batch</td>
+                <!-- <td></td> -->
+                <td><i class="fa fa-refresh" (click)="syncmaster('syncforofflinedownloadbatch')"></i></td>
+              </tr>
+              <tr>
+                <td>Margin</td>
+                <!-- <td></td> -->
+                <td><i class="fa fa-refresh" (click)="syncmaster('syncforofflinedownloadProductMargin')"></i></td>
+              </tr>
+              <tr>
+                <td>Account</td>
+                <!-- <td></td> -->
+                <td><i class="fa fa-refresh" (click)="syncmaster('syncforofflinedownloadaccount')"></i></td>
+              </tr>
+              <tr>
+                <td>Transaction</td>
+                <!-- <td></td> -->
+                <td><i class="fa fa-refresh" (click)="syncmaster('syncforofflinedownloadtransaction')"></i></td>
+              </tr>
+              <tr>
+                <td>Sales</td>
+                <!-- <td></td> -->
+                <td><i class="fa fa-refresh" (click)="syncmaster('syncforofflineuploadsales')"></i></td>
+              </tr>
+              <tr>
+                <td>Scheme</td>
+                <!-- <td></td> -->
+                <td><i class="fa fa-refresh" (click)="syncmaster('syncforofflinedownloadschemes')"></i></td>
+              </tr>
+              <tr>
+                <td>Notification</td>
+                <!-- <td></td> -->
+                <td><i class="fa fa-refresh" (click)="syncmaster('SyncOfflineNotificationData')"></i></td>
+              </tr>
+              <tr>
+                <td>User profiles</td>
+                <!-- <td></td> -->
+                <td><i class="fa fa-refresh" (click)="syncmaster('SyncOfflineUserProfiles')"></i></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="modal-sticky" [class.modal-sticky-hide]="!onlineSyncStatus"
+  style="display : block; padding: 0px;  margin-bottom: 25px;">
+  <!-- Modal content -->
+  <div class="modal-content modal-content-main-area" style="width: max-content;
+  height: max-content;">
+    <div>
+      <div>
+        <div class="modal-header" style="padding: 0px;background: #ecad79;">
+          <button class="close" aria-label="Close" (click)="onlineSyncStatus=!onlineSyncStatus">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title" style="text-align: center;">
+            Sync Master
+          </h4>
+        </div>
+        <div>
+          <div class="modal-header" style="padding: 0px;background: #ecad79;">
+
+            <div>
+              <select name="sci" id="sci" (change)="syncInChildDomains(sci.value)" onfocus="this.selectedIndex = -1"
+                #sci>
+                <option value="supplier">Supplier</option>
+                <option value="customer">Customer</option>
+                <option value="Items">Items</option>
+                <option value="ItemCategory">ItemCategory</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 table-scroll" style="padding: 0;">
+          <table class="table">
+            <thead>
+              <tr style="background: #b5e26a;">
+                <td>Sync option</td>
+                <td>Action</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>DSM List</td>
+                <td><i class="fa fa-refresh" (click)="onlinesyncmaster('syncdsmmaster')"></i></td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  .menu-area.master-menu .dropdown {
+    margin-top: 15px;
+    margin-left: 6px;
+  }
+
+  .logo-bh {
+    position: relative;
+    top: -16px;
+  }
+</style>

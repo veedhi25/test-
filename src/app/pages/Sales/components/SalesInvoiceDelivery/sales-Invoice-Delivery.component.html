@@ -1,0 +1,23 @@
+<div class="clearfix fixed-top">
+    <div class="col-md-4"><h3>Sales Invoice Delivery</h3></div>
+    <div class="col-md-8">
+        <button class="btn btn-info pull-right" (click)="deliver()">Update Delivery Status</button>
+        <button class="btn btn-info pull-right" style="margin-right: 5px;" (click)="load()">Load</button>
+    </div>
+</div>
+
+
+<div class="clearfix" style="margin-top: 5px;">
+    <div class="col-md-2"><label>Date Selection</label></div>
+    <div class="col-md-2">
+        <form [formGroup]="calendarForm">
+            <input type="text" ngxDaterangepickerMd formControlName="selectedDate"
+                class="form-control" placeholder="Choose date" [showDropdowns]="true"
+                showCancel="true" [ranges]="ranges" [alwaysShowCalendars]="true" />
+        </form>
+    </div>
+</div>
+
+<div class="clearfix">
+    <invoice-list *ngIf="source" [source]="source" (pageChange)="onPageChangedEvent($event)" [header]="Header"></invoice-list>
+</div>

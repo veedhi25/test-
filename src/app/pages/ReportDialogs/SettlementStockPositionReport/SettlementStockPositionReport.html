@@ -1,0 +1,95 @@
+<div style="background-color : #ffffff; padding :1%; height : auto; ">
+        <div class="row">
+         <div class="modal-header" >
+                    <button type="button" class="close" data-dismiss="modal" (click)="hide()">&times;</button>
+                   <h4 class="modal-title">Stock Settlement Position</h4> 
+            </div>
+            <!-- Left Column -->
+            <div class=" col-md-6">
+                    <fieldset >
+                            <legend style="font-size:11px;font-weight: bold; width:auto">Date Range Selection :</legend>                   
+                                <table>
+                                  <tr>
+                                     <td><label class="smallBoldLabel">From:(AD)</label></td>
+                                     <td><label class="smallBoldLabel">To:(AD)</label></td>   
+                                  </tr>
+                                   <tr>
+                                        <td>                                                 
+                                          <label class="smallBoldLabel"><input  type="date"  style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]="StockSettlement.DATE1"  (change)="changeEntryDate($event.target.value,'AD')"  ></label>
+                                        </td>
+                                        <td>                                                 
+                                           <label class="smallBoldLabel"><input  type="date" style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]="StockSettlement.DATE2"  (change)="changeEndDate($event.target.value,'AD')"   ></label>
+                                         </td>
+                                      </tr>
+                                      <tr>
+                                            <td>
+                                                   <label class="smallBoldLabel"> <input id="nepaliDate" style="width:152px;height:25px;text-align:center" class="nepali-calendar ndp-nepali-calendar" [(ngModel)]="StockSettlement.BSDATE1"
+                                                     type="text" (change)="changeEntryDate($event.target.value,'BS')"
+                                                    placeholder="yyyy-mm-dd" />
+                                                </label>  
+                                                                    
+                                               </td>
+                                               <td>
+                                                   <label class="smallBoldLabel">
+                                                    <input id="nepaliDate" style="width:152px;height:25px;text-align:center" class="nepali-calendar ndp-nepali-calendar" [(ngModel)]="StockSettlement.BSDATE2"
+                                                    type="text" (change)="changeEndDate($event.target.value,'BS')"
+                                                   placeholder="yyyy-mm-dd" />
+                                                </label>                     
+                                               </td>                              
+                                       </tr>
+                                </table>
+                    </fieldset> 
+                    <fieldset>
+                            <legend >Warehouse Selection :</legend>          
+                            <div class="col-md-12">
+                                    <select  [(ngModel)]="StockSettlement.selectedWarehouse" style="width:95%;" >
+                                        <option *ngFor="let item of items" [value]="item.NAME">{{item.NAME}} </option>
+                                    </select>
+                            </div>                                                                                                                       
+                     </fieldset> 
+                     <fieldset>
+                            <legend >Division Selection :</legend>          
+                            <div class="col-md-12">
+                                    <select [(ngModel)]="StockSettlement.selectedDivision" style="width:95%;" >
+                                            <option *ngFor="let div of division" value={{div.NAME}} >{{div.NAME}} </option>
+                                    </select>
+                            </div>                                                                                                                     
+                    </fieldset>
+
+            </div>
+            <!-- Another column -->
+            <div class="col-md-6">
+                    <fieldset>
+                            <legend >Report Format :</legend>           
+                              <div class="col-md-6 smallBoldLabel" >                      
+                                  <label><input type="radio" name="Rfradio" [(ngModel)]="StockSettlement.TreeFormat" value="0" checked>Non-Tree Structure</label>                                                   
+                              </div> 
+                              <div class="col-md-6 smallBoldLabel">                      
+                                  <label><input type="radio" name="Rfradio" [(ngModel)]="StockSettlement.TreeFormat" value="1" checked>Tree Structure</label>                                                   
+                              </div>
+                              <label class="smallBoldLabel">Major Group Selection</label>
+                              <select  [(ngModel)]="StockSettlement.selectedMajorGroup" style="width:95%;" >
+                                      <option *ngFor="let item of GroupList" value="">{{item.NAME}} </option>
+                              </select>  
+
+                       </fieldset>
+                       <fieldset>
+                            <legend>Stock Settlement Mode :</legend>                                         
+                            <select  [(ngModel)]="StockSettlement.selectedMode" style="width:95%;" >
+                                    <option *ngFor="let settMList of settlementModeList"  [value]="settMList.DESCRIPTION">{{settMList.DESCRIPTION}} </option>
+                            </select>                                                                                                                                                         
+                     </fieldset>  
+                     <div class="btn"> 
+                            <button class="btn btn-info confirm-btn" type="button"  (click)=onload()>RUN</button>
+                            <button type="button"  title="Cancel" class="btn btn-info">Close</button>  
+                        </div> 
+
+            </div>
+
+   
+                            
+            <!-- </div> -->
+        </div>      
+    </div>
+
+

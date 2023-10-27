@@ -1,0 +1,146 @@
+<div class="content-wrapper">
+  <div class="right-btn">
+    <button class="btn view-btn" (click)="onViewLoyalty()">View All Loyalty Info</button>
+    <button class="btn add-btn" (click)="onAddClick()">Add Loyalty Info</button>
+    <button class="btn btn-info" (click)="onLoyaltyImport()">Import Loyalty Points</button>
+
+  </div>
+</div>
+<div class="row" *ngIf="this.loyaltyList!=null">
+  <div class="col-md-12">
+    <table class="table" width="100%">
+      <thead>
+
+        <tr>
+          <th>Sno.</th>
+          <th>Name</th>
+          <th>Category</th>
+          <th>Minimum Redeem Amount</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let l of this.loyaltyList;let i  = index">
+          <td>{{i+1}}</td>
+          <td>{{l.LNAME}}</td>
+          <td>{{l.cus_category}}</td>
+          <td>{{l.MINREDEEMAMNT}}</td>
+          <td>{{l.STATUS}}</td>
+          <td><a class="btn btn-warning" (click)="EditLoyalty(l.LCODE)">Edit</a>
+            <a class="btn btn-danger" (click)="DeleteLoyalty(l.LCODE)">Delete</a>
+            <button type="button" class="btn btn-primary" data-toggle="modal" [attr.data-target]="'#exampleModal' + i">
+              View
+            </button>
+            <!-- <a *ngIf="authService.getAuth().profile.CompanyInfo.isHeadoffice==1" class="btn btn-success" (click)="SyncLoyalty(l.LCODE)">Sync</a> -->
+          </td>
+
+          <div class="modal fade" style="top: -46%;" [attr.id]="'exampleModal'+i" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">{{l.LNAME}} details</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <table class="table">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th scope="col">From Amount</th>
+                        <th scope="col">To Amount</th>
+                        <th scope="col">Incremental Value</th>
+                        <th scope="col">Earn Points</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let r of l.RANGE" class="tr">
+                        <td>{{r.MINAMNT}}</td>
+                        <td>{{r.MAXAMNT}}</td>
+                        <td>{{r.INCREMENTALVALUE}}</td>
+                        <td>{{r.EARNPOINTS}}</td>
+
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+
+  .table-inner {
+    height: 300px;
+    overflow: auto;
+    width: 100%;
+  }
+
+  .table>tbody>tr>td {
+    padding: 2px 8px;
+    line-height: 35px;
+    border: 1px solid #b7b7b7;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    border-bottom: 1px solid #b7b7b7;
+    vertical-align: middle;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .table>thead>tr>th {
+    padding: 4px 8px;
+    line-height: 35px;
+    border: 1px solid #0588ca;
+    font-weight: 600;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    background: #0099e5;
+    color: #fff !important;
+  }
+
+  .table-responsive {
+    margin-top: 0;
+  }
+
+  .table-inner[_ngcontent-c5] {
+    width: 100%;
+    background: #fff;
+    margin: 24px 0 0;
+    padding: 0;
+  }
+
+  table {
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    padding: 5px;
+    word-break: break-all;
+  }
+</style>
+
+
+
+
+<file-uploader-popup #fileUploadPopup [popupsettings]="fileUploadPopupSettings"
+  (onUploaded)="fileUploadSuccessStatus($event)">
+</file-uploader-popup>

@@ -1,0 +1,114 @@
+
+       <div id="purchaseReportItemDetailWiseId" style="background-color : #ffffff; padding :1%; height : auto; ">
+            <div class="row">
+               <div class="modal-header" style="width : 97%; margin : 0px auto;">
+                  <button type="button" class="close" data-dismiss="modal" (click)="closeReportBox()">&times;</button>
+                  <h4 class="modal-title">Detail Report</h4>
+               </div>
+               <!-- Left Column -->
+               <div class="col-md-6">
+                    <fieldset>
+                            <legend>Report Type : </legend>                                
+                            <label class="smallBoldLabel"><input type="radio" value="BILLWISE" name="optReportType" [(ngModel)]="ReportParameters.OPT_WISE">&nbsp;Bill Wise Report</label>
+                            <label class="smallBoldLabel"><input type="radio" value="DAYWISE" name="optReportType" [(ngModel)]="ReportParameters.OPT_WISE">&nbsp;Day Wise Report</label>
+                    </fieldset>
+       
+                    <fieldset style="width : 99%;">
+                            <legend>Date Range Selection :</legend>
+                            <table>
+                               <tr>
+                                  <td><label class="smallBoldLabel">From(AD):</label></td>
+                                  <td><label class="smallBoldLabel">To(AD):</label></td>
+                               </tr>
+                               <tr>
+                                  <td>                                                 
+                                        <label class="smallBoldLabel"><input  type="date"  style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]="ReportParameters.DATE1"  (change)="changestartDate($event.target.value,'AD')"  ></label>
+                                  </td>
+                                  <td>                                                 
+                                        <label class="smallBoldLabel"><input  type="date" style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]="ReportParameters.DATE2"  (change)="changeEndDate($event.target.value,'AD')"   ></label>
+                                  </td>
+                               </tr>
+                               <tr>
+                                  <td>
+                                        <label class="smallBoldLabel"><input id="nepaliDate" style="width:152px;height:25px;text-align:center" class="nepali-calendar ndp-nepali-calendar" [(ngModel)]="ReportParameters.BSDATE1"
+                                     type="text" (change)="changestartDate($event.target.value,'BS')"
+                                     placeholder="yyyy-mm-dd" /> </label>
+                                  </td>
+                                  <td>
+                                        <label class="smallBoldLabel"><input id="nepaliDate" style="width:152px;height:25px;text-align:center" class="nepali-calendar ndp-nepali-calendar" [(ngModel)]="ReportParameters.BSDATE2"
+                                     type="text" (change)="changeEndDate($event.target.value,'BS')"
+                                     placeholder="yyyy-mm-dd" /> </label>
+                                  </td>
+                               </tr>
+                            </table>
+                    </fieldset>
+       
+                    <label class="smallBoldLabel"><input type="checkbox" style="vertical-align: middle;" (change)="$event.target.checked?(ReportParameters.CHK_BARCODEWISEREPORT=1):(ReportParameters.CHK_BARCODEWISEREPORT=0)" [checked]="ReportParameters.CHK_BARCODEWISEREPORT == 1"  name="barcodeWiseReport" >&nbsp;Show Barcode Wise Report</label><br>
+                    <label class="smallBoldLabel"><input type="checkbox" style="vertical-align: middle;" (change)="$event.target.checked?(ReportParameters.CHK_BARCODEDETAIL=1):(ReportParameters.CHK_BARCODEDETAIL=0)" [checked]="ReportParameters.CHK_BARCODEDETAIL == 1"  name="showbarcodedet" >&nbsp;Show Barcode Detail</label><br>
+                    <label class="smallBoldLabel"><input type="checkbox" style="vertical-align: middle;" (change)="$event.target.checked?(ReportParameters.CHK_DIVISIONWISEREPORT=1):(ReportParameters.CHK_DIVISIONWISEREPORT=0)" [checked]="ReportParameters.CHK_DIVISIONWISEREPORT == 1"  name="showDivWiseRep" >&nbsp;Show Division Wise Sales Report</label>
+                              
+               </div>
+               <!-- Right Column -->
+               <div class="col-md-6">
+                  <fieldset>
+                     <legend style="font-size:11px;font-weight: bold; width:auto">Item Selection:</legend>          
+                       <div class="col-md-6">
+                           <!-- <label style="width:105.5px;">Barcode</label> -->
+                           <div class="smalllabeldiv">
+                                 <label class="smallBoldLabel">Barcode :</label>
+                            </div>
+                            <div class="smalllabeldiv">
+                                 <input type="text"   style="width:100%; height: 25px;">                                                                                                                                                    
+                            </div>
+                          
+                      </div>
+
+                      <div class="col-md-6">                                               
+                          <!-- <label style="width:100%;">Item Code :</label>  -->
+                          <div class="smalllabeldiv">
+                                 <label class="smallBoldLabel">Item Code:</label>
+                          </div>
+                          <div class="smallBoldLabel">
+                                 <input tabindex="-1" type="text" style="width:120px"  (keydown.enter)="menucodeChanged($event.target.value)" [(ngModel)]="itemCode" >                                
+                          </div>
+                            
+                    </div> 
+                    <div class="col-md-12">                                                     
+                               <!-- <label>Item Name :</label>    -->
+                               <div class="smalllabeldiv">
+                                     <label class="smallBoldLabel">Item Name:</label>
+                                </div>
+                                 <div class="smallBoldLabel">
+                                     <input ngui-auto-complete [source]="dropListItem.bind(this)" max-num-list="25" [(ngModel)]="selectedProd" (ngModelChange)="itemChanged($event)"
+                                         style="width:284px;height:25px" list-formatter="DESCA" 
+                                         display-property-name="DESCA">
+                                 </div>
+                 </div>                           
+                </fieldset>
+   
+
+                    <fieldset>
+                            <legend>Division Selection:</legend>
+                            <select [(ngModel)]="ReportParameters.DIVISION" style="width : 100%;">
+                               <option value="%">ALL</option>
+                               <option *ngFor="let div of division" value="{{ div.INITIAL }}">
+                                  {{ div.NAME }}
+                               </option>
+                            </select>
+                         </fieldset>
+
+               
+
+
+                  <div class="btn">
+                        <!-- <button type="button"  title="onSave" class="btn btn-info">Run</button>    -->
+                        <button class="btn btn-info confirm-btn" type="button"  (click)=onload()>RUN</button>
+                        <button type="button"  title="Cancel" class="btn btn-info" (click)="closeReportBox()">Close</button>  
+                     </div>
+               
+            </div>
+            <!-- <div class="modal-footer">
+               <button class="btn btn-info confirm-btn" type="button"  (click)=onload()>RUN</button>
+               </div> -->
+         
+       </div>

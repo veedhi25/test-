@@ -1,0 +1,35 @@
+
+
+    <div style="margin-left: 50px;" >
+        <label> Sales Tax: </label>
+        <input (change)="changeTax()" [(ngModel)]="productObj.SalesTax" style="width: 200px;" type="number">
+    
+        <label style="padding: 0px;">HSN Code</label>
+        <input (change)="changeHSN()" type="text" [(ngModel)]="productObj.HSNCode" >
+
+        <label>GST</label>
+      <select style="color:black;width:200px" [(ngModel)]="productObj.GST" (change)="changeGST()">
+        <option value="-1">Exempted</option>
+        <option value=0>0 %</option>
+        <option value=3>3 %</option>
+        <option value=5>5 %</option>
+        <option value=12>12 %</option>
+        <option value=18>18 %</option>
+        <option value="28">28 %</option>
+      </select>
+
+      <label> VAT: </label>
+      <select (change)="changeVAT()" [(ngModel)]="productObj.VAT" style="width: 200px;" >
+          <option></option>
+      </select>
+      
+    </div>
+
+    <div style="margin-top: 5px; margin-left: 50px;" >
+        <label>Tax Inclusive</label>
+        <select (change)="changeInclusive()" [(ngModel)]="productObj.InclusiveOfTax" style="color:black;width:200px">
+          <option value=0>No</option>
+          <option value=1>Yes</option>
+        </select>
+    </div>
+

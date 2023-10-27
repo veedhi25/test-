@@ -1,0 +1,295 @@
+<div style="margin-left:20px">
+  <div class="row">
+    <div style="width: 250px;float:left">
+      <label>Purchase Rate</label>
+      <input
+        style="width:150px;text-align: right"
+        type="number"
+        [(ngModel)]="productObj.PRATE_A"
+      />
+      <label *ngIf="productObj.CRATE > 0" style="font-weight: 600;width: 240px"
+        >C_Rate :{{ productObj.CRATE }}</label
+      >
+    </div>
+    <fieldset style="width: 150px;height: 85px;float: left">
+      <legend style="width: 80px;margin: 0px;font-size: 13px;height: 20px">
+        Product Type
+      </legend>
+      <label style="width: 140px;height: 20px"
+        ><input
+          type="radio"
+          name="VAT"
+          [value]="1"
+          [(ngModel)]="productObj.VAT"
+          style="vertical-align: middle"
+          checked
+        />Vat Product</label
+      >
+      <label style="width: 140px;height: 20px"
+        ><input
+          type="radio"
+          name="VAT"
+          [value]="0"
+          [(ngModel)]="productObj.VAT"
+          style="vertical-align: middle"
+        />Non-Vat Product</label
+      >
+    </fieldset>
+    <fieldset
+      *ngIf="AppSettings.GblEnableRateDiscount == 1"
+      style="width: 380px;height: 95px;float: left"
+    >
+      <legend style="width: 110px;margin: 0px;font-size: 13px;height: 20px">
+        Rate Discount(%)
+      </legend>
+      <label>Distributor :</label>
+      <input
+        type="number"
+        style="width: 80px;text-align: right"
+        [(ngModel)]="productObj.ItemRateDiscount.DTRRATE"
+      />
+      <label>Whole Seller :</label>
+      <input
+        type="number"
+        style="width: 80px;text-align: right"
+        [(ngModel)]="productObj.ItemRateDiscount.WSLRATE"
+      />
+      <label>Retailer :</label>
+      <input
+        type="number"
+        style="width: 80px;text-align: right"
+        [(ngModel)]="productObj.ItemRateDiscount.RTLRATE"
+      />
+      <label>Flat Rate :</label>
+      <input
+        type="number"
+        style="width: 80px;text-align: right"
+        [(ngModel)]="productObj.ItemRateDiscount.FLTRATE"
+      />
+    </fieldset>
+  </div>
+  <div class="row">
+    <!-- <div style="width:260px;float: left">
+      <div class="col-md-12 row">
+        <div class="col-md-6">
+          <fieldset style="height: 170px;width: 300px">
+            <legend
+              style="width: 70px;margin: 0px;font-size: 13px;height: 20px;width: 300px;"
+            >
+              Group
+            </legend>
+            <label>MRP :</label>
+            <input
+              type="number"
+              style="width: 90px;text-align: right"
+              [(ngModel)]="productObj.MRP"
+            />
+            <label>GST Rate :</label>
+            <input
+              type="number"
+              style="width: 90px;text-align: right"
+              [(ngModel)]="productObj.GST"
+            />
+            <label>HSNCODE:</label>
+            <input
+              type="number"
+              style="width: 90px;text-align: right"
+              [(ngModel)]="productObj.HSNCode"
+            />
+            <label>Weight:</label>
+            <input
+              type="number"
+              style="width: 90px;text-align: right"
+              [(ngModel)]="productObj.GWEIGHT"
+            />
+          </fieldset>
+        </div>
+      </div>
+
+      <div style="width: 255px;height: 130px;">
+        <div>
+          <label style="width: 100px">Rec.Margin(%)</label>
+          <label style="width: 10px">:</label>
+          <label style="font-weight: 600">{{
+            productObj.RECRATE | number: "1.2-2"
+          }}</label>
+        </div>
+        <div>
+          <label style="width: 100px">Actual Margin(%)</label>
+          <label style="width: 10px">:</label>
+          <div style="width: 130px;float: right">
+            <label style="font-weight: 600;width: 120px"
+              >{{ productObj.MARGIN | number: "1.2-2" }} % on P-Rate</label
+            >
+            <label style="font-weight: 600;width: 120px"
+              >{{ productObj.SMARGIN | number: "1.2-2" }} % on S-Rate</label
+            >
+          </div>
+        </div>
+      </div>
+    </div> -->
+    <div class="col-md-12">
+      <div class="col-md-3">
+        <fieldset style="width: 260px;height: 170px">
+          <legend style="width: 70px;margin: 0px;font-size: 13px;height: 20px">
+            Sales Price
+          </legend>
+          <label>Retail Sale :</label>
+          <input
+            type="number"
+            style="width: 90px;text-align: right"
+            [(ngModel)]="productObj.RATE_A"
+            (focusout)="CheckSalesPrice()"
+          />
+          <button class="btn btn-info"
+            [disabled]="productObj.RATE_A < 0 || productObj.RATE_A == null"
+            style="height:28px;width: 26px;vertical-align: middle"
+            (click)="SetItemRateClick('SRate')"
+          >
+            ...
+          </button>
+          <label>Whole Sale :</label>
+          <input
+            type="number"
+            style="width: 90px;text-align: right"
+            [(ngModel)]="productObj.RATE_B"
+            (focusout)="CheckSalesPrice()"
+          />
+          <button class="btn btn-info"
+            [disabled]="productObj.RATE_B < 0 || productObj.RATE_B == null"
+            style="height:28px;width: 26px;vertical-align: middle"
+            (click)="SetItemRateClick('WRate')"
+          >
+            ...
+          </button>
+          <label>Int-Company Sale :</label>
+          <input
+            type="number"
+            style="width: 90px;text-align: right"
+            [(ngModel)]="productObj.RATE_C"
+            (focusout)="CheckSalesPrice()"
+          />
+          <button class="btn btn-info"
+            [disabled]="productObj.RATE_C < 0 || productObj.RATE_C == null"
+            style="height:28px;width: 26px;vertical-align: middle"
+            (click)="SetItemRateClick('ICRate')"
+          >
+            ...
+          </button>
+        </fieldset>
+      </div>
+      <div class="col-md-9">
+        <fieldset
+          *ngIf="ItemRateVisible == true"
+          style="width: 530px;height: 220px;float: left;margin:10px 20px;"
+        >
+          <label>Rate Type :</label>
+          <input type="text" style="width: 150px" [(ngModel)]="RateTypeName" />
+
+          <label style="width: 50px">Unit :</label>
+          <input type="text" style="width: 60px" [(ngModel)]="Unit" />
+          <button class="btn btn-info"
+            style="height:28px;width: 50px;vertical-align: middle"
+            (click)="clearClick()"
+          >
+            Clear
+          </button>
+          <button class="btn btn-info"
+            style="height:28px;width: 50px;vertical-align: middle"
+            (click)="backClick()"
+          >
+            Back
+          </button>
+          <fieldset style="width: 500px;height: 170px;float: right">
+            <label>Description :</label>
+            <select style="width: 210px" [(ngModel)]="ItemRateObj.RateGroup">
+              <option *ngFor="let rg of RGroupList" [ngValue]="rg">{{
+                rg.DESCRIPTION
+              }}</option>
+            </select>
+            <input
+              type="number"
+              style="width: 100px;text-align: center"
+              placeholder="Rate"
+              [(ngModel)]="ItemRateObj.RATE"
+            />
+            <button class="btn btn-info"
+              [disabled]="
+                ItemRateObj.RateGroup == null ||
+                ItemRateObj.RateGroup.DESCRIPTION == null ||
+                ItemRateObj.RATE == null ||
+                ItemRateObj.RATE <= 0
+              "
+              style="height:28px;width: 50px;vertical-align: middle"
+              (click)="addItemRate()"
+            >
+              Add
+            </button>
+
+            <Table id="BlueHeaderResizableTable">
+              <div style="height:30px;width:480px;">
+                <tr>
+                  <th style="width:40px">SNo</th>
+                  <th style="width:300px">Description</th>
+                  <th style="width:100px">Rate</th>
+                  <th style="width:40px"></th>
+                </tr>
+              </div>
+
+              <div
+                style="height:100px;width:480px;overflow:auto;scrollbar-3dlight-color:#FFFFFF;scrollbar-arrow-color:#000000;scrollbar-base-color:#FF9999;scrollbar-darkshadow-color:#000000;scrollbar-face-color:#000000;scrollbar-highlight-color:#000000;scrollbar-shadow-color:#0033CC;"
+              >
+                <tr
+                  *ngFor="let ir of ItemRateList; let i = index"
+                  style="height:28px"
+                >
+                  <td style="width:40px">{{ i + 1 }}</td>
+                  <td style="width:300px">{{ ir.RateGroup.DESCRIPTION }}</td>
+                  <td style="width:100px">{{ ir.RATE }}</td>
+                  <td style="width:40px">
+                    <button class=""
+                      class="btn btn-info"
+                      (click)="removeItemRate(i)"
+                    >
+                  <i class="fa fa-trash"></i>
+                  </button>
+                  </td>
+                </tr>
+              </div>
+            </Table>
+          </fieldset>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  bsModal
+  #childModal="bs-modal"
+  style="top:0"
+  [config]="{ backdrop: 'static' }"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="mySmallModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" aria-label="Close" (click)="hideChildModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Information</h4>
+      </div>
+      <div class="modal-body">
+        {{ DialogMessage }}
+      </div>
+      <!--<div class="modal-footer">
+                        <button class="btn btn-info confirm-btn" (click)="hideChildModal()">Save changes</button>
+                        <button class="btn btn-info confirm-btn" type="button" (click)=onsubmit()>Save</button>
+                    </div>!-->
+    </div>
+  </div>
+</div>

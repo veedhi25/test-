@@ -1,0 +1,211 @@
+<div class="content-wrapper">
+  <div class="report-title-topbar">
+    <h4 class="modal-title">{{showReportName(activeurlpath,reportFilterService.repObj.reportdescription)}}</h4>
+    <div class="report-filtercvr">
+      <input class="form-control" type="text" name="search" [(ngModel)]="filter" placeholder="Search in report">
+    </div>
+  </div>
+  <div class="reporttable-outer">
+    <div class="report-lefticon">
+      <table class="icon-tble">
+        <tr style="height:30px;width:30px">
+          <td style="border: 1pt solid black;" (click)="fiterClickEvent()">
+            <i tooltip-placement="right" tooltip="Main filters" style="margin:5px;cursor: pointer"><span
+                class="glyphicon glyphicon-filter" tooltip="Main filters"></span></i>
+          </td>
+        </tr>
+        <tr style="height:30px;width:30px">
+          <td style="border: 1pt solid black;">
+            <i (click)="SettingClickEvent()" style="margin:5px;cursor: pointer"> <span
+                class="glyphicon glyphicon-grain"></span></i>
+          </td>
+        </tr>
+        <tr style="height:30px;width:30px">
+          <td style="border: 1pt solid black;">
+            <i (click)="ExportReportInExcel()" style="margin:5px;cursor: pointer"> <span
+                class="glyphicon glyphicon-export"></span></i>
+          </td>
+        </tr>
+        <tr style="height:30px;width:30px">
+          <td style="border: 1pt solid black;">
+            <i (click)="tableEdit()" style="margin:5px;cursor: pointer"> <span
+                class="glyphicon glyphicon-cog"></span></i>
+          </td>
+        </tr>
+        <tr style="height:30px;width:30px">
+          <td style="border: 1pt solid black;">
+            <i (click)="sendToMail()" style="margin:5px;cursor: pointer"> <span
+                class="glyphicon glyphicon-envelope"></span></i>
+          </td>
+        </tr>
+        <tr style="height:30px;width:30px" *ngIf="userProfile.username=='patanjali_user'">
+          <td style="border: 1pt solid black;">
+            <i (click)="setting()" style="margin:5px;cursor: pointer"> <span class="fa fa-cog"></span></i>
+          </td>
+        </tr>
+
+        <tr style="height:30px;width:30px" *ngIf="userProfile.username=='patanjali_user'">
+          <td style="border: 1pt solid black;">
+            <i (click)="setFavourite()" style="margin:5px;cursor: pointer"> <span
+                class="glyphicon glyphicon-heart"></span></i>
+          </td>
+        </tr>
+
+      </table>
+
+    </div>
+    <div class="report-table">
+      <div class="widgets">
+        <div class="row table-container">
+          <table id="BlueHeaderResizableTable" #reportHtmlTable style="overflow-x :auto;" class="reportTabel">
+            <thead>
+              <tr>
+                <th *ngFor="let column1 of reportHeaders;let id=index" width="{{column1.width}}">
+                  {{column1.colHeader}}
+                  <i *ngIf="column1.sortOrder=='none'" class="fa fa-sort"
+                    (click)="sortTableData(column1.mappingName,'desc',id)"></i>
+                  <i *ngIf="column1.sortOrder=='asc'" class="fa fa-sort-asc"
+                    (click)="sortTableData(column1.mappingName,'asc',id)"></i>
+                  <i *ngIf="column1.sortOrder=='desc'" class="fa fa-sort-desc"
+                    (click)="sortTableData(column1.mappingName,'desc',id)"></i>
+                </th>
+              </tr>
+            </thead>
+            <tbody style="width: fit-content;">
+              <tr [class.selected-row]="selectedRowIndex == i"
+                *ngFor=" let data of reportData | filter:filter | paginate: { itemsPerPage: 20, currentPage: p };let i=index"
+                (click)="RowClick(i)" (dblclick)="doubleClick(data)">
+
+                <td style="white-space: pre;overflow: auto;padding-left:5px;padding-right:3px"
+                  *ngFor="let column of reportHeaders" width="{{column.width}}"
+                  [style.text-align]="column.alignment==0?'inherit':'end'">{{data[column.mappingName] |
+                  ReportFormatPipe:column.stringFormat}}</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <th *ngFor="let column of reportHeaders" width="{{column.width}}" class="text-right">
+                  <b>{{totalRow[column.mappingName]}}</b>
+                </th>
+              </tr>
+            </tfoot>
+          </table>
+          <pagination-controls (pageChange)="p = $event"></pagination-controls>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" bsModal #childModal="bs-modal" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="this.childModal.hide()">&times;</button>
+        <h4 class="modal-title">Information</h4>
+      </div>
+      <div class="modal-body">
+        {{DialogMessage}}
+      </div>
+    </div>
+  </div>
+</div>
+
+<ims-report-column-format #reportFormat [Headerlist]="allHeaders" (columnData)="updateReportColumnFormat($event)">
+</ims-report-column-format>
+
+
+
+
+<div class="print-modal-sticky" *ngIf="promptExportFormat" style="
+    display: block;
+    padding: 0px;
+    height: auto;
+    position: absolute;
+    top: 15%;
+    width: 250px;
+    left: 30px;
+    z-index: 9999999;">
+
+  <div class="modal-content modal-content-main-area">
+    <div class="modal-header" style="padding: 5px;">
+      <h4 class="modal-title" id="myModalLabel">Choose Export Format</h4>
+    </div>
+    <div class="modal-body">
+
+
+      <div class="radio">
+        <label style="margin: 0;">
+          <input type="radio" name="excelformat" value="xlsx" [(ngModel)]="exportFormat">
+          Excel
+        </label>
+      </div>
+      <div class="radio">
+        <label style="margin: 0;">
+          <input type="radio" name="excelformat" value="csv" checked [(ngModel)]="exportFormat">
+          Comma Separated Value
+        </label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger btn-info" data-dismiss="modal"
+        (click)="cancelExport()">Cancel</button>
+      <button type="button" class="btn btn-primary btn-info" (click)="exportReport()">Export</button>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="overlay" *ngIf="editTable">
+  <div class="popup ">
+    <div>
+      <a class="close " (click)="editTable=false">&times;</a>
+      <h3>Edit Table</h3>
+      <button type="button" class="btn btn-primary btn-info pull-right" (click)="updateReportColumnFormat()"
+        style="margin-top: -30px;margin-right: 42px;">Save</button>
+    </div>
+    <br>
+    <table style="height: 95%;margin-top: -14px;">
+      <thead>
+        <tr>
+          <th>Mapping Name</th>
+          <th>Column Header</th>
+          <th>Column Position</th>
+          <th>Show Column</th>
+          <th>Export In Excel</th>
+          <th>Alignment</th>
+          <th>Column Width</th>
+        </tr>
+      </thead>
+      <tbody style="width: 896px;">
+        <tr *ngFor="let data of allHeaders; let i=index">
+          <td>{{data.mappingName}}</td>
+          <td><input class="form-control" type="text" [(ngModel)]="data.colHeader" style="width: 138px;height: 25px;">
+          </td>
+          <td><input class="form-control" type="text" [(ngModel)]="data.colPosition" style="width: 138px;height: 25px;">
+          </td>
+          <td>
+            <select style="width: 138px;" class="form-control" [(ngModel)]="data.visible">
+              <option value=0>Hide Column</option>
+              <option value=1>Show Column</option>
+            </select>
+          </td>
+          <td>
+            <select style="width: 138px;" class="form-control" [(ngModel)]="data.showhideinexcel">
+              <option value="0">Export In Excel</option>
+              <option value="1">Hide In Excel</option>
+            </select>
+          </td>
+          <td>
+            <select style="width: 138px;" class="form-control" [(ngModel)]="data.alignment">
+              <option value=0>Left</option>
+              <option value=1>Right</option>
+            </select>
+          </td>
+          <td><input class="form-control" type="text" [(ngModel)]="data.size" style="width: 138px;height: 25px;"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

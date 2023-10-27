@@ -1,0 +1,94 @@
+<div class="content-wrapper add-tendar">
+    <div class="user-topbtn">
+        <h3 class="page-title">{{ modeTitle }}</h3>
+        <div class="right-btn">
+            <button *ngIf="viewMode == false" (click)="onSave()" class="btn add-btn" [disabled]="!form.valid">
+                Save
+            </button>
+            <button type="button" class="btn btn-back" (click)="cancel()">
+                Back
+            </button>
+        </div>
+    </div>
+
+    <div class="full-width">
+        <div class="tap-tabbable General-inofo">
+
+            <div class="tabbable" id="warehouse-tabs">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#general-info" data-toggle="tab">General Info</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="general-info">
+                        <form class="row" class="form-horizontal" [formGroup]="form">
+                            <!-- <ba-card baCardClass="with-scroll">  -->
+                            <div class="form-group">
+                                <label class="col-sm-4 form-control-label">Name:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="tenderTypeName" name="tenderTypeName"
+                                        formControlName="PAYMENTMODENAME" placeholder="Name" />
+                                    <div *ngIf="
+                                    !form.controls['PAYMENTMODENAME'].valid &&
+                                    form.controls['PAYMENTMODENAME']?.touched
+                                  " class="text-danger">
+                                        <span *ngIf="form.get('PAYMENTMODENAME').hasError('required')">
+                                            Tender Name is Required.
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 form-control-label">Type :</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" (click)="TenderTypeChange($event)" style="color:black"
+                                        formControlName="TYPE">
+                                        <option value="Card">Card</option>
+                                        <option value="Coupon">Coupon</option>
+                                        <option value="Wallet">Wallet</option>
+                                        <!-- <option  value="SamridhiCard">Samridhi Card</option> -->
+                                        <option value="Loyalty">Loyalty</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div *ngIf="TenderType" class="form-group">
+                                <label class="col-sm-4 form-control-label">Mode :</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" style="color:black" formControlName="MODE">
+                                        <option value="Manual">Manual</option>
+                                        <option value="Ongo">Ongo</option>
+                                        <option value="Dazzlepay">DazzlePay</option>
+                                    </select>
+
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label class="col-sm-4 form-control-label">Status :</label>
+                                <div class="col-sm-8">
+                                    <select class="form-control" style="color:black" formControlName="STATUS">
+                                        <option value="1">Active</option>
+                                        <option value="0">InAcive</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <!-- </ba-card>  -->
+                        </form>
+                    </div>
+                    <!-- <div class="tab-pane" id="tab2">
+                          <p>
+                            Howdy, I'm in Section 2.
+                          </p>
+                        </div> -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

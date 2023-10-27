@@ -1,0 +1,45 @@
+<form class="row" class="form-horizontal" [formGroup]="form">
+    <div class="col-md-6">
+        <label class="col-md-4 form-control-label">BrandCode:</label>
+        <div class="col-md-6">
+            <input type="text" [style.background-color]="disabled()" style="color:black" class="form-control"
+                id="BRANDCODE" name="BRANDCODE" formControlName="BRANDCODE"
+                placeholder="Press TAB or Enter to select ITEM" disabled />
+        </div>
+    </div>
+    <div class="col-md-6">
+        <label class="col-md-4 form-control-label">Brand Name:</label>
+        <div class="col-md-6">
+            <input type="text" [style.background-color]="disabled()" style="color:black" class="form-control"
+                id="BRANDNAME" name="BRANDNAME" formControlName="BRANDNAME"
+                placeholder="Press TAB or Enter to select ITEM" disabled />
+        </div>
+    </div>
+    <div class="col-md-6">
+        <label class="col-md-4 form-control-label">MCODE:</label>
+        <div class="col-md-6">
+            <input type="text" [style.background-color]="disabled()" style="color:black" class="form-control" id="MCODE"
+                name="MCODE" formControlName="MCODE" placeholder="Press TAB or Enter to select ITEM" disabled />
+        </div>
+    </div>
+    <div class="col-md-6">
+        <label class="col-md-4 form-control-label">Channel:</label>
+        <div class="col-md-6">
+            <select class="form-control" style="color:black" [style.background-color]="disabled()" name="CHANNEL"
+                id="CHANNEL" formControlName="CHANNEL">
+                <option>SUPER MARKET</option>
+                <option value=0>GROCERY</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <label class="col-md-4 form-control-label">Channel SubType:</label>
+        <div class="col-md-6">
+            <select class="form-control" style="color:black" [style.background-color]="disabled()" name="SUBTYPE"
+                id="SUBTYPE" formControlName="SUBTYPE">
+                <option>SUPER MARKET</option>
+                <option value=0>GROCERY</option>
+            </select>
+        </div>
+    </div>
+</form>

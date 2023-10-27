@@ -1,0 +1,96 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" class="form-horizontal">
+    <div class="mvl ptm uiInterstitial uiInterstitialLarge uiBoxWhite">
+        <div class="uiHeader uiHeaderBottomBorder mhl mts uiHeaderPage interstitialHeader">
+            <div class="uiHeaderTop">
+                <div class="rfloat _ohf">
+                   <div class="uiHeaderActions"></div>
+                </div>
+                <div class="login-heading">
+                    <h3>B-POS</h3>
+                    <h6>Find Your Account.</h6>
+                </div>
+            </div>
+        </div>
+        <div class="phl ptm uiInterstitialContent">
+            <div class="identify_yourself_block">
+                <div class="form-group">
+                    <label for="">Please enter your username to search for your account.</label>
+                    <input type="text" class="inputtext custom-input" name="email" placeholder="Username" autofocus="1"  [formControl]="email" (keydown.enter)="clickedEnter()">
+                </div>
+            </div>
+        </div>
+       <div class="btn-inner">
+           <button class="btn search-btn" type="button" title="Save" (click)="SearchUser()">Search</button>
+           <button class="btn cancle-btn" type="button" title="Save" (click)="Cancel()">Cancel</button>
+       </div>
+    </div>
+    </form>
+    <div class="modal fade" bsModal #childModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button class="close" aria-label="Close" (click)="hideChildModal()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+                            <h4 class="modal-title" style="border-bottom: solid 1px #dcdcdc;">Information</h4>
+                        </div>
+                        <div class="modal-body">
+                            {{DialogMessage}}
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+    
+    <style>
+    .btn {
+        padding: 12px 20px;
+        margin: 0 6px;
+    }
+    
+    .btn.search-btn {
+        background: #11cdef;
+        color: #fff;
+        font-weight: 600;
+        min-width: 130px;
+    }
+    
+    .btn.cancle-btn{
+        background: #333333;
+        color: #fff;
+        font-weight: 600;
+        min-width: 130px;
+    }
+    
+    label.control-label.forgetpass a {
+        cursor: pointer;
+        font-weight: 600;
+    }
+    
+    input.inputtext.custom-input {
+        display: block;
+        width: 100%;
+        padding: 8px 16px;
+        font-size: 15px;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+    
+    .form-group label {
+        margin-bottom: 3px;
+        color: #424242;
+        font-size: 14px;
+        line-height: 22px;
+        font-weight: 500;
+    }
+    
+    </style>
+    
+    
+    

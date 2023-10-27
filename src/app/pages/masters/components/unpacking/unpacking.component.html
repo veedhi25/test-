@@ -1,0 +1,134 @@
+<style>
+  label {
+  margin: 0;
+  padding: 3px;
+  }
+  .PList {
+  display: block;
+  margin-top: 40px;
+  height: 640px;
+  width: 1100px;
+  position: fixed;
+  float: right;
+  margin-left: 0px;
+  background-color: rgba(0, 0, 0, 0);
+  left: 0;
+  top: 0;
+  z-index: 1;
+  }
+  .form-control[readonly],
+  .form-control[disabled] {
+  color: #000000;
+  }
+</style>
+<div class="content-wrapper">
+  <div class="user-topbtn">
+    <h3 class="page-title space-heading">Unpacking [{{ _trnMainService.TrnMainObj.Mode }}]</h3>
+    <div class="right-btn">
+      <button class="btn add-btn" (click)="onSaveClicked()">F6 Save</button>
+      <button class="btn btn-download" (click)="onReset()">F3 Reset</button>
+      <button class="btn btn-back" (click)="onViewClicked()">F4 View</button>
+    </div>
+  </div>
+  <div class="full-width compony-infoouter">
+    <div class="row">
+      <div class="col-md-12 kit-config2">
+        <div class="form-group">
+          <label for="date" class="col-md-4 form-control-label">Entry Date :</label>
+          <div class="col-md-8 kit-config-lable">
+            {{ _trnMainService.TrnMainObj.TRNDATE }}
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="date" class="col-md-4 form-control-label">Combo No :</label>
+          <div class="col-md-8 kit-config-lable">{{ _trnMainService.TrnMainObj.VCHRNO }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="inner-wrap">
+    
+        
+      <div class="col-md-6">      
+        <label for="type" class="col-md-4 form-control-label">Combopack Name :</label>
+        <div class="col-md-8"> 
+          <h3 class="title-prodct">{{ product }}</h3>
+        </div>
+      </div>
+      <div class="col-md-6">   
+          <label for="type" class="col-md-4 form-control-label">Config Qty :</label>
+          <div class="col-md-8">
+            <input type="number" [(ngModel)]="kitConfigQty" class="form-control"/>
+          </div>
+        </div>
+        
+    
+      <div class="custom-table">
+        <table class="table">
+          <tr style="
+            border-bottom: 2px solid #e6e6e6;
+            border-top: 2px solid #e6e6e6;
+            height: 30px;
+            background: silver;
+            color: black;
+            ">
+            <th style="width: 7%">S.No.</th>
+            <th style="width: 8%">Code</th>
+            <!-- style="width: 28%" -->
+            <th>
+              Description
+            </th>
+            <th style="width: 13%">
+              Batch
+            </th>
+            <th style="width: 10%">
+              MFG
+            </th>
+            <th style="width: 10%">
+              EXP
+            </th>
+            <th style="width: 10%">PRATE</th>
+            <th>Unit</th>
+            <th style="width: 10%">Qty</th>
+          </tr>
+          <tbody style="width: fit-content">
+            <tr *ngFor="let product of products; let i = index" (click)="RowClick(i)"
+            style="border: 1px solid #e6e6e6; max-height: 25px">
+            <td id="sno{{ i }}" style="border: 1px solid #e6e6e6; width: 20px">
+              {{ i + 1 }}
+            </td>
+            <td style="height: 23px; border: 1px solid #e6e6e6; width: 80px">
+              {{ product.MCODE }}
+            </td>
+            <td style="height: 23px; border: 1px solid #e6e6e6; width: 80px">
+              {{ product.DESCA }}
+            </td>
+            <td style="height: 23px; border: 1px solid #e6e6e6; width: 80px">
+              {{ product.BATCH }}
+            </td>
+            <td style="height: 23px; border: 1px solid #e6e6e6; width: 80px">
+              {{ product.MFGDATE }}
+            </td>
+            <td style="height: 23px; border: 1px solid #e6e6e6; width: 80px">
+              {{ product.EXPDATE }}
+            </td>
+            <td style="height: 23px; border: 1px solid #e6e6e6; width: 80px">
+              {{ product.PRATE }}
+            </td>
+            <td style="height: 23px; border: 1px solid #e6e6e6; width: 80px">
+              {{ product.UNIT }}
+            </td>
+            <td style="height: 23px; border: 1px solid #e6e6e6; width: 80px">
+              {{ product.QTY }}
+            </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<generic-popup-grid #genericGridProduct [popupsettings]="gridProductPopupSettings"
+(onItemDoubleClick)="dblClickPopupProduct($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericGridview [popupsettings]="gridItemviewSettings" (onItemDoubleClick)="dblClickview($event)">
+</generic-popup-grid>

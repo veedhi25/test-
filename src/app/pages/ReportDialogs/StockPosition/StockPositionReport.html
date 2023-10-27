@@ -1,0 +1,290 @@
+<div style="background-color : #ffffff; padding :1%; height : auto;width:auto; ">
+        <div class="row">
+          
+          <div class="modal-header"style="width: 97%; margin:0px auto;" >
+                    <button type="button" class="close" data-dismiss="modal" (click)="hide()">&times;</button>
+                   <h4 class="modal-title">Stock Position</h4> 
+            </div>
+            <!-- Left Column -->
+            <div class="_left_section col-md-6">
+                    <fieldset style="width:352px">
+                            <legend style="font-size:11px;font-weight: bold; width:auto">Date Range Selection :</legend>                   
+                                <table>
+                                  <tr>
+                                     <td><label class="smallBoldLabel">From:(AD)</label></td>
+                                     <td><label class="smallBoldLabel">To:(AD)</label></td>   
+                                  </tr>
+                                   <tr>
+                                        <td>                                                 
+                                          <label class="smallBoldLabel"><input  type="date"  style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]="StockPosition.DATE1"  (change)="changeEntryDate($event.target.value,'AD')"  ></label>
+                                        </td>
+                                        <td>                                                 
+                                           <label class="smallBoldLabel"><input  type="date" style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]="StockPosition.DATE2"  (change)="changeEndDate($event.target.value,'AD')"   ></label>
+                                         </td>
+                                      </tr>
+                                      <tr>
+                                            <td>
+                                                   <label class="smallBoldLabel"> <input id="nepaliDate" style="width:152px;height:25px;text-align:center" class="nepali-calendar ndp-nepali-calendar" [(ngModel)]="StockPosition.BSDATE1"
+                                                     type="text" (change)="changeEntryDate($event.target.value,'BS')"
+                                                    placeholder="yyyy-mm-dd" />
+                                                </label>  
+                                                                    
+                                               </td>
+                                               <td>
+                                                   <label class="smallBoldLabel">
+                                                    <input id="nepaliDate" style="width:152px;height:25px;text-align:center" class="nepali-calendar ndp-nepali-calendar" [(ngModel)]="StockPosition.BSDATE2"
+                                                    type="text" (change)="changeEndDate($event.target.value,'BS')"
+                                                   placeholder="yyyy-mm-dd" />
+                                                </label>                     
+                                               </td>                              
+                                       </tr>
+                                </table>
+                    </fieldset> 
+                    <fieldset>
+                           <legend style="font-size:11px;font-weight: bold; width:auto">Report Type Selection :</legend>                 
+                             <div class="col-md-12">                        
+                                 <div class="radio">
+                                     <label class="smallBoldLabel"><input type="radio" name="optradio" [(ngModel)]="StockPosition.OPT_WISE" value="ITEM" >Item Wise&nbsp;&nbsp;</label>
+                                 </div>
+                                 <div class="radio">
+                                     <label class="smallBoldLabel"><input type="radio" name="optradio" [(ngModel)]="StockPosition.OPT_WISE" value="MGROUP"  >Item Group Wise&nbsp;&nbsp;</label>
+                                 </div>
+                                 <div class="radio">
+                                      <label class="smallBoldLabel"><input type="radio" name="optradio" [(ngModel)]="StockPosition.OPT_WISE" value="MCAT" >Item Category Wise</label>
+                                 </div>                    
+                             </div>                                                                                                                                                             
+                    </fieldset>
+<!--                     
+                    <div>
+                            <div class="smalllabeldiv">
+                                <label class="smallBoldLabel">Warehouse Selection :</label>
+                            </div>                       
+                            <select [(ngModel)]="SelectedWarehouse" (click)="onSelectWarehouse($event.target.value)" style="width:95%;" >
+                                    <option *ngFor="let item of items" [ngValue]="warehouse">{{item.NAME}} </option>
+                                </select>
+                        </div> -->
+    
+
+
+                    <fieldset>
+                         <legend style="font-size:11px;font-weight: bold; width:auto">Report Option Selection :</legend>              
+                           <div class="col-md-12">                      
+                               <div class="radio">
+                                   <label class="smallBoldLabel"><input type="radio" name="Roradio" [(ngModel)]="StockPosition.OPT_RepMode" value=0>Show All Product Stock Position</label>
+                               </div>
+                               <div class="radio">
+                                   <label class="smallBoldLabel"><input type="radio" name="Roradio" [(ngModel)]="StockPosition.OPT_RepMode" value=1>Show Item Stock Excluding Zero B/L</label>
+                               </div>
+                               <div class="radio">
+                                    <label class="smallBoldLabel"><input type="radio" name="Roradio" [(ngModel)]="StockPosition.OPT_RepMode" value=2>Show Negative Stock B/L Item Only</label>
+                               </div> 
+                               <div class="radio">
+                                   <label class="smallBoldLabel"><input type="radio" name="Roradio" [(ngModel)]="StockPosition.ROPT_RepMode" value=3>Show Zero Stock B/L Item Only</label>
+                              </div>                    
+                           </div>                                                                                                                                                            
+                    </fieldset> 
+
+                    <fieldset>
+                        <legend style="font-size:11px;font-weight: bold; width:auto">Report Format :</legend>           
+                          <div class="col-md-6">                      
+                              <label class="smallBoldLabel"><input type="radio" name="Rfradio" [(ngModel)]="StockPosition.OPT_TREE" value=0 checked>Non-Tree Structure</label>                                                   
+                          </div> 
+                          <div class="col-md-6">                      
+                              <label class="smallBoldLabel"><input type="radio" name="Rfradio" [(ngModel)]="StockPosition.OPT_TREE" value=1 checked>Tree Structure</label>                                                   
+                          </div>                                                                                
+                   </fieldset>
+
+                   <!-- <div>
+                       <div class="smalllabeldiv">
+                            <label class="smallBoldLabel">Division Selection :</label>
+                       </div>                       
+                       <select [(ngModel)]="SelectedWarehouse" (click)="onSelectDivision($event.target.value)" style="width:95%;" >
+                            <option *ngFor="let div of division" value={{div.NAME}} >{{div.NAME}} </option>
+                        </select>
+                   </div> -->
+
+                   <fieldset>
+                        <legend  style="font-size:11px;font-weight: bold; width:auto">Division Selection :</legend>          
+                        <div >         
+                                <select  [(ngModel)]="StockPosition.selectedDivision" style="width:275px;" >
+                                        <option>--All--</option>
+                                        <option *ngFor="let div of division" [value]="div.INITIAL" >{{div.NAME}} </option>
+                                </select>
+                        </div>                                                                                                                     
+                   </fieldset> 
+                   
+                   <fieldset>
+                        <legend style="font-size:11px;font-weight: bold; width:auto">Warehouse Selection :</legend>          
+                        <div >
+                                <select  [(ngModel)]="StockPosition.selectedWarehouse" style="width:275px;" >
+                                    <option>--All--</option>
+                                    <option *ngFor="let item of items" [value]="item.NAME">{{item.NAME}} </option>
+                                </select>
+                        </div>                                                                                                                       
+                 </fieldset>
+                
+            </div>
+            <!-- Another column -->
+            <div class="_right_section col-md-6">
+
+                 
+                    <!-- <div style="margin-left:25px">
+                            <div class="smalllabeldiv">
+                                <label class="smallBoldLabel">Report Type Selection :</label>
+                            </div>
+                            <select>
+                                <option>--All Report Option--</option>
+                                <option value="ITEM">Item Wise</option>
+                                <option value="MGROUP">Item Group Wise</option>
+                                <option value="MCAT">Item Category Wise</option>
+                            </select>
+                        </div>
+    
+                        <div style="margin-left:25px">
+                            <div class="smalllabeldiv">
+                                <label class="smallBoldLabel">Report Option Selection :</label>
+                            </div>                       
+                            <select>
+                                <option>--All Report Option--</option>
+                                <option value="0">show All Stock Position</option>
+                                <option value="1">Show Item Stock Excluding Zero B/L</option>
+                                <option value="2">Show Negative Stock B/L Item Only</option>
+                                <option value="3">Show Zero Stock B/L Item Only</option>
+                            </select>
+                        </div> -->
+
+                   
+            
+                    <fieldset>
+                        <legend style="font-size:11px;font-weight: bold; width:auto">Report Filter Option:</legend>         
+                          <div class="col-md-12">
+                                <!-- <label style="width:105.5px;">Item Group:</label>  -->
+                                <div class="smalllabeldiv">
+                                        <label class="smallBoldLabel">Item Group:</label>
+                                </div>                            
+                                <div >
+                                        <select style="width:285px;" [(ngModel)]="StockPosition.selectedItemGroup" style="width:285px;"  >
+                                            <option *ngFor="let itemGroup of itemsGroup"  [value]="itemGroup.MCODE" >{{itemGroup.DESCA}} </option>
+                                        </select>
+                                    </div>                                  
+                         </div>
+                         <div class="col-md-12">
+                              <div class="smalllabeldiv">
+                                    <label class="smallBoldLabel">Item Category:</label>
+                               </div>
+                              <div >
+                                <select   [(ngModel)]="StockPosition.selectedItemCategory" style="width:285px;" >
+                                       <option>--All--</option>
+                                        <option *ngFor="let itemCat of itemsCategory"  [value]="itemCat.MENUCAT" >{{itemCat.MENUCAT}} </option>
+                                </select>
+                            </div>
+                         </div>                        
+                         <div class="col-md-12"> 
+                                <!-- <label style="width:105.5px;">Item Type:</label> -->
+                                <div class="smalllabeldiv">
+                                        <label class="smallBoldLabel">Item Type:</label>
+                                </div>
+                                <label >
+                                        <select  [(ngModel)]="StockPosition.selectedItemType" style="width:285px;" >
+                                            <option>--All--</option>
+                                                <option *ngFor="let itemT of itemsType" value="itemT.PTYPENAME">{{itemT.PTYPENAME}} </option>
+                                        </select>
+                                </label>
+                                   
+                        </div>  
+                        <div class="col-md-12">
+                                    <!-- <label style="width:90%">Supplier Name:</label>  -->
+                            <div class="smalllabeldiv">
+                                    <label class="smallBoldLabel">Supplier Name:</label>
+                               </div>
+                              <div >
+                                    <select [(ngModel)]="StockPosition.selectedSupplierName" style="width:285px;" >
+                                        <option>--All--</option>
+                                            <option *ngFor="let supName of suppliersName" [value]="supName.ACID" >{{supName.ACNAME}} </option>
+                                    </select>
+                              </div>                               
+                        </div> 
+                                                                                                                             
+                    </fieldset>
+            
+                    <fieldset>
+                        <legend style="font-size:11px;font-weight: bold; width:auto">Item Selection:</legend>          
+                          <div class="col-md-6">
+                              <!-- <label style="width:105.5px;">Barcode</label> -->
+                              <div class="smalllabeldiv">
+                                    <label class="smallBoldLabel">Barcode :</label>
+                               </div>
+                               <div class="smalllabeldiv">
+                                    <input type="text"  class="form-control input-sm" style="min-width:80%; height: 25px;" placeholder="Barcode" >                                                                                                                                                    
+                               </div>
+                             
+                         </div>
+
+                         <div class="col-md-6">                                               
+                             <!-- <label style="width:100%;">Item Code :</label>  -->
+                             <div class="smalllabeldiv">
+                                    <label class="smallBoldLabel">Item Code:</label>
+                             </div>
+                             <div class="smallBoldLabel">
+                                    <input tabindex="-1" type="text" style="width:120px"  (keydown.enter)="menucodeChanged($event.target.value)" [(ngModel)]="itemCode" >                                
+                             </div>
+                               
+                       </div> 
+                       <div class="col-md-12">                                                     
+                                  <!-- <label>Item Name :</label>    -->
+                                  <div class="smalllabeldiv">
+                                        <label class="smallBoldLabel">Item Name:</label>
+                                   </div>
+                                    <div class="smallBoldLabel">
+                                        <input ngui-auto-complete [source]="dropListItem.bind(this)" max-num-list="25" [(ngModel)]="selectedProd" (ngModelChange)="itemChanged($event)"
+                                            style="width:284px;height:25px" list-formatter="DESCA" 
+                                            display-property-name="DESCA">
+                                    </div>
+                    </div>                           
+                   </fieldset>
+
+                    <fieldset>
+                        <legend style="font-size:11px;font-weight: bold; width:auto">Product Group Tree:</legend>
+                        <!-- <div class="smalllabeldiv">
+                                <label class="smallBoldLabel">Product Group Tree :</label>
+                           </div> -->
+                            <div class="col-md-12">                  
+                                    <select [(ngModel)]="SelectedWarehouse" style="width:95%;" >
+                                        <option>--All--</option>
+                                            <option *ngFor="let prodGTree of productGroupTree" [ngValue]="warehouse">{{prodGTree.ACNAME}} </option>
+                                    </select>
+                            </div>                                                                                        
+                    </fieldset>     
+                        <div class="col-md-6 ">
+                            <label class="smallBoldLabel"><input type="checkbox" name="vehicle1" [(ngModel)]="StockPosition.SHOWVALUATIONRATE"  value=1> Show GRN Wise Stock<br></label>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="smallBoldLabel"><input type="checkbox" name="vehicle1" [(ngModel)]="StockPosition.BYBARCODE"  value=0> Show BarcodeWise Stock<br></label>
+                        </div>                            
+                    <fieldset>
+                        <legend style="font-size:11px;font-weight: bold; width:auto">Stock Valuation Options:</legend>           
+                          <div class="col-md-6">
+                              <div class="radio">
+                                  <label class="smallBoldLabel"><input type="radio" name="Svradio" [(ngModel)]="StockPosition.OPT_FIFO" value=0 checked>Last Market Price </label>
+                              </div>                                                                
+                         </div>
+                         <div class="col-md-6">
+                            <div class="radio">
+                                <label class="smallBoldLabel"><input type="radio" name="Svradio"[(ngModel)]="StockPosition.OPT_FIFO" value=1 checked>FIFO valuation Rate</label>
+                            </div>                                                                
+                       </div> 
+                   </fieldset> 
+                   <div class="btn">
+                    <!-- <button type="button"  title="onSave" class="btn btn-info">Run</button>    -->
+                    <button class="btn btn-info confirm-btn" type="button"  (click)=onload()>RUN</button>
+                    <button type="button"  title="Cancel" (click)="Close()" class="btn btn-info">Close</button>  
+                  </div>
+            </div>
+        </div>
+
+        <!-- <div class="modal-footer">
+             <button class="btn btn-info confirm-btn" type="button"  (click)=onload()>RUN</button>
+        </div> -->
+</div>
+
+

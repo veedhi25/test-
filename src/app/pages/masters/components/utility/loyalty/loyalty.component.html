@@ -1,0 +1,94 @@
+<div class="content-wrapper loyalty-form">
+    <div class="clearfix sticky-top">
+        <h3 class="col-md-2">{{ modeTitle }}</h3>
+        <div class="col-md-10">
+            <button type="button" class="btn btn-info add-btn pull-right" (click)="onSave()">
+                Save
+            </button>
+            <button type="button" class="btn btn-info pull-right btn-back" (click)="cancel()">
+                Back
+            </button>
+
+        </div>
+    </div>
+    <div class="clearfix" style="margin-top: 5vh;">
+        <div class="col-md-7">
+            <div class="col-md-4">
+                <label>Category:</label>
+                <select class="form-control" [(ngModel)]="loyalty.cus_category">
+                    <option value="walkin">Walkin</option>
+                    <option *ngFor="let cat of categoryList;let i=index" [value]="cat.CATEGORY_NAME">{{cat.CATEGORY_NAME}}
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label>Loyalty Name:</label>
+                <input type="text" [(ngModel)]="this.loyalty.LNAME" class="form-control">
+            </div>
+            <div class="col-md-4">
+                <label for="STATUS">Status</label>
+                <select id="STATUS" [(ngModel)]="this.loyalty.STATUS" [disabled]="this.uneditableStatus"
+                    class="form-control">
+                    <option value="Active">Active</option>
+                    <option value="InActive">InActive</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="">Minimum Redeem Amount</label>
+                <input type="number" class="form-control" [(ngModel)]="this.loyalty.MINREDEEMAMNT">
+            </div>
+        </div>
+        <div class="col-md-4" *ngIf="outletList && outletList.length" class="clearfix">
+            <div class="col-md-4">
+                <angular4-multiselect [data]="outletList" class="form-control" [(ngModel)]="loyalty.outletList"
+                    [settings]="multiselectOutLetSetting" (onSelect)="onMultiSelect($event)"
+                    (onDeSelect)="onMultiSelect($event)" (onSelectAll)="onMultiSelect($event)"
+                    (onDeSelectAll)="onMultiSelect($event)">
+                </angular4-multiselect>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <h3 class="page-title">Rules</h3>
+            <div class="custom-table no-mr">
+                <table class="table">
+                    <tr class="">
+                        <td>
+                            <label>From Amount:</label>
+                        </td>
+                        <td>
+                            <label>To Amount:</label>
+                        </td>
+                        <td>
+                            <label>For Each:</label>
+                        </td>
+                        <td>
+                            <label>EARN POINTS:</label>
+                        </td>
+
+                    </tr>
+
+                    <tr *ngFor="let r of loyalty.RANGE;let i = index" class="">
+                        <td>
+                            <input class="form-control" type="number" [(ngModel)]="r.MINAMNT">
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" [(ngModel)]="r.MAXAMNT">
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" [(ngModel)]="r.INCREMENTALVALUE">
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" [(ngModel)]="r.EARNPOINTS"
+                                (keydown.enter)="addToRange()">
+                        </td>
+                    </tr>
+                </table>
+                <button class="btn btn-danger" (click)="RemoveFromRange()">Delete</button>
+                <button class="btn btn-success" (click)="addToRange()">+</button>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>

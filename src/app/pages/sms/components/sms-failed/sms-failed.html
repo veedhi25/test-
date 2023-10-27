@@ -1,0 +1,138 @@
+<style>
+  .selected-row {
+  background-color: #ced6d3 !important;
+}
+
+</style>
+
+
+
+
+<div class="clearfix">
+<div class="col-md-6">
+  <h4 class="modal-title">Text SMS Failed Report</h4>
+</div>
+<div class="col-md-6">
+  <input class="form-control" style="width: 300px;height:25px; float: right;
+              margin-right: 50px;
+              margin-bottom: 10px;" type="text" name="search" [(ngModel)]="filter" placeholder="Search in report">
+</div>
+</div>
+<div class="clearfix">
+<div style="float:left;width:4%; margin-left: 10px;">
+  <table>
+    <tr style="height:30px;width:30px">
+      <td style="border: 1pt solid black;" (click)="fiterClickEvent()">
+        <i tooltip-placement="right" tooltip="Main filters" style="margin:5px"><span
+            class="glyphicon glyphicon-filter" tooltip="Main filters"></span></i>
+      </td>
+    </tr>
+    <tr style="height:30px;width:30px">
+      <td style="border: 1pt solid black;">
+        <i (click)="SettingClickEvent()" style="margin:5px"> <span class="glyphicon glyphicon-grain"></span></i>
+      </td>
+    </tr>
+    <tr style="height:30px;width:30px">
+      <td style="border: 1pt solid black;">
+        <i (click)="ExportReportInExcel()" style="margin:5px"> <span class="glyphicon glyphicon-export"></span></i>
+      </td>
+    </tr>
+    <tr style="height:30px;width:30px">
+      <td  style="border: 1pt solid black;">
+        <i (click)="setting()" style="margin:5px"> <span class="fa fa-cog"></span></i>
+      </td>
+    </tr>
+    <tr style="height:30px;width:30px">
+      <td style="border: 1pt solid black;">
+        <i (click)="mailCsvFile()" style="margin:5px"> <span class="glyphicon glyphicon-envelope"></span></i>
+      </td>
+    </tr>
+  </table>
+
+</div>
+<div style="float:right;width:95%" class="report-table">
+  <div class="widgets">
+    <div class="row table-container">
+      <table id="BlueHeaderResizableTable" #reportHtmlTable style="font-size:12px; width: 98%; overflow-x :auto;"
+        class="reportTabel">
+        <thead>
+          
+          <tr>
+            <th *ngFor="let column1 of colTableHeader;let id=index" width="{{column1.width}}" >
+              {{column1.value}} 
+             </th>
+          </tr>
+        </thead>
+        <tbody style="width: fit-content;">
+          <!-- <tr [class.selected-row]="selectedRowIndex == i"
+          *ngFor=" let data of reportData | filter:filter | paginate: { itemsPerPage: 20, currentPage: p };let i=index"
+            (click)="RowClick(i)" (dblclick)="doubleClick(data)">
+            <td style="white-space: pre;overflow: auto;padding-left:5px;padding-right:3px"
+              *ngFor="let column of reportHeaders" width="{{column.width}}"
+              [style.text-align]="column.alignment==0?'inherit':'end'">{{data[column.mappingName] | ReportFormatPipe:column.stringFormat}}</td>
+          </tr> -->
+        </tbody>
+       
+      </table>
+      <!-- <pagination-controls (pageChange)="p = $event"></pagination-controls> -->
+    </div>
+  </div>
+</div>
+</div>
+<div class="modal fade" bsModal #childModal="bs-modal" role="dialog">
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" (click)="this.childModal.hide()">&times;</button>
+      <h4 class="modal-title">Information</h4>
+    </div>
+    <div class="modal-body">
+      {{DialogMessage}}
+    </div>
+  </div>
+</div>
+</div>
+
+
+
+
+
+<div class="print-modal-sticky" *ngIf="promptExportFormat" style="
+  display: block;
+  padding: 0px;
+  height: auto;
+  position: absolute;
+  top: 15%;
+  width: 250px;
+  left: 30px;
+  z-index: 9999999;">
+
+<div class="modal-content modal-content-main-area">
+  <div class="modal-header" style="padding: 5px;">
+    <h4 class="modal-title" id="myModalLabel">Choose Export Format</h4>
+  </div>
+  <div class="modal-body">
+
+
+    <div class="radio">
+      <label style="margin: 0;">
+        <input type="radio" name="excelformat" value="xlsx" [(ngModel)]="exportFormat">
+        Excel
+      </label>
+    </div>
+    <div class="radio">
+      <label style="margin: 0;">
+        <input type="radio" name="excelformat" value="csv" checked [(ngModel)]="exportFormat">
+       Comma Separated Value
+      </label>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger btn-info" data-dismiss="modal" (click)="cancelExport()">Cancel</button>
+    <button type="button" class="btn btn-primary btn-info" (click)="exportReport()">Export</button>
+  </div>
+</div>
+</div>
+
+
+

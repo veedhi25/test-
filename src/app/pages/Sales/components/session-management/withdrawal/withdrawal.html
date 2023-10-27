@@ -1,0 +1,25 @@
+<div class="row justify-content-center">
+  <div class="col-md-8">
+
+    <table class="tableBorder table" style="padding:10px">
+
+      <tr>
+        <th style="background-color: rgb(240, 164, 164);padding-left: 10px">
+          Deno</th>
+        <th style="padding-left:10px;background-color: rgb(240, 164, 164)">
+          Count</th>
+        <th style="background-color: rgb(240, 164, 164)">Amount</th>
+      </tr>
+      <tr *ngFor="let item of denoList;let i=index">
+        <td style="padding-left:10px">{{item.denO_NAME}}</td>
+        <td><input type="number" class="form-control" (change)="calculateDenomination()" [(ngModel)]="item.qty"></td>
+        <td style="padding-left:10px">{{item.amount}}</td>
+      </tr>
+      <tr>
+        <td colspan=2>Total</td>
+        <td colspan=2>{{total}}</td>
+
+      </tr>
+    </table>
+  </div>
+</div>

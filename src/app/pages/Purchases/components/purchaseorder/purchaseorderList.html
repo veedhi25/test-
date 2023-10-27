@@ -1,0 +1,16 @@
+<div class="widgets">
+    <div class ="row">
+       
+         <button type="button" class="btn btn-info" (click)="onAddClick()" style="margin-left:18px; margin-bottom:10px">Add Purchase Order</button>
+       
+     </div>
+     <div class="row">
+       <div [ngBusy]="sub" ></div>
+       <ba-card title="Purchase Order" baCardClass="with-scroll">
+         <ng2-smart-table [settings]="settings" [source]="source"  (view)="onViewClick($event)" ></ng2-smart-table>
+       </ba-card>
+     </div>
+    
+   
+   </div>
+   

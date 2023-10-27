@@ -1,0 +1,49 @@
+<div style="margin-left: 50px;" class="row">
+    <!-- <div class="col-md-1">
+        <label style="margin-left: 20px;">Retails Price</label>
+    </div>
+    <div class="col-md-3">
+        <input type="text" class="form-control" style="width: 250px;" [(ngModel)]="productObj.sellingPrice">
+    </div> -->
+    <!-- <div class="col-md-1">
+        <label style="width: 94px;margin-left: 20px;">Wholesale Price</label>
+    </div>
+    <div class="col-md-3">
+        <input type="text" class="form-control" style="width: 250px;margin-left: 5px;" [(ngModel)]="productObj.wholesalePrice">
+    </div> -->
+    <label>Landing Price</label>
+    <input type="text" style="width:200px" [(ngModel)]="productObj.PRATE_A"  (input)="marginCalculation()"
+            [ngModelOptions]="{standalone: true}"  />
+    <label>MRP</label>
+    <input type="text" style="width:200px" [(ngModel)]="productObj.MRP" (input)="changeMRP()"  [ngModelOptions]="{standalone: true}" />
+    <label> Purchase Price </label>
+    <input [(ngModel)]="productObj.PRATE_A"  type="number">
+</div>
+<div style="margin-top: 5px; margin-left: 50px;" class="row">
+    <label>Selling Price</label>
+    <input type="text" style="width:200px" [(ngModel)]="productObj.sellingPrice"  (input)="marginCalculation()" 
+            [ngModelOptions]="{standalone: true}" (change)="changeSellingPrice()" />
+    <label> Supplier Name </label>
+    <input type="text" (change)="changeSupplier()" style="width: 200px;">
+    <label>Manufactrer</label>
+    <input type="text" (change)="changeMFR()" style="width: 200px;">
+    <!-- <select name="cat1" id="cat1" style="width:200px" [(ngModel)]="productObj.MCAT1">
+        <option *ngFor="let cat of MCat1List" value="{{cat.MENUCAT}}">{{cat?.MENUCAT}}</option>
+    </select> -->
+    
+    <!-- <div class="col-md-1">
+        <label style="margin-left: 20px;">Institutional Price</label>
+    </div>
+    <div class="col-md-3">
+        <input type="text" class="form-control" style="width: 250px;margin-left: 5px;" [(ngModel)]="productObj.intercompanyPrice">
+    </div> -->
+    <!-- <div class="col-md-1">
+        <label>Tax Inclusive</label>
+    </div>
+    <div class="col-md-3">
+        <select style="color:black;width:80px" class="form-control" [(ngModel)]="productObj.InclusiveOfTax">
+            <option value=0>No</option>
+            <option value=1>Yes</option>
+        </select>
+    </div> -->
+</div>

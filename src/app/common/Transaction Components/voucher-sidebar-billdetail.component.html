@@ -1,0 +1,160 @@
+<style>
+  .toggable-sidebar {
+    position: fixed;
+    right: -20vw;
+    transition: 0.3s;
+    width: 280px;
+    text-decoration: none;
+    font-size: 20px;
+    border-radius: 0 5px 5px 0;
+    background: #0496a9;
+    color: #ffffff;
+    height: 100%;
+    width: 20%;
+    margin: 0px;
+    border: 1px dashed #8199a5;
+
+  }
+
+  .mySidenav-show {
+    right: 0 !important;
+  }
+
+
+
+  .btn-toggler {
+    position: absolute;
+    left: -65px;
+    top: -1px;
+    padding: 12px 14px !important;
+    font-size: 13px !important;
+    width: 60px !important;
+    font-weight: 600;
+    background-color: rgb(4 150 169) !important;
+    border: none;
+    border-radius: 0;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+  }
+
+  .toggler-btn-icon-reverse {
+    transform: rotate(180deg);
+  }
+
+  .table-summary>tbody>tr>td:first-child {
+    text-align: left !important;
+  }
+</style>
+
+<div class="plainBackGround toggable-sidebar" [ngClass]="{ 'mySidenav-show': hideShow }">
+  <button class="btn btn-info btn-toggler" (click)="hideShow = !hideShow"> F10
+    <i class="fa fa-angle-double-left" [ngClass]="{ 'toggler-btn-icon-reverse': hideShow }"></i>
+  </button>
+  <table class="table table-summary">
+    <tr *ngIf="appSetting.enableMultiSeriesInSales==1 &&  _trnMainService.TrnMainObj.VoucherType==14">
+      <td>Bill Series</td>
+      <td>
+        <select (change)="_trnMainService.salesvoucherserieschange()"
+          [(ngModel)]="_trnMainService.TrnMainObj.VoucherPrefix" style="width: 100%;">
+          <option *ngFor="let p of salesprefixes" [ngValue]="p.vseries_id">{{p.vseries_id}}</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td>{{_trnMainService.voucherNoHeader}}:</td>
+      <td *ngIf="appSetting.hideSuffixInBill==1 &&  _trnMainService.TrnMainObj.VoucherType==14">{{
+        _trnMainService.TrnMainObj.CHALANNO }}</td>
+      <td *ngIf="appSetting.hideSuffixInBill!=1 || _trnMainService.TrnMainObj.VoucherType!=14">{{
+        _trnMainService.TrnMainObj.VCHRNO }}</td>
+    </tr>
+    <tr>
+      <td>Bill Date <span>:</span></td>
+      <td>{{ _trnMainService.TrnMainObj.TRNDATE | date: "dd-MM-yyyy" }}</td>
+    </tr>
+
+    <ng-container
+      *ngIf="_trnMainService.AppSettings.BILLWISEDISCOUNTRIGHTS &&  _trnMainService.TrnMainObj.VoucherType!=3">
+      <tr>
+        <td>Disc% <span>:</span></td>
+        <td>
+          <input [disabled]="
+              _trnMainService.TrnMainObj.Mode == 'VIEW' &&
+              _trnMainService.TrnMainObj.VoucherType == 61
+            " style="height: 23px;width: 90px;" type="number" [(ngModel)]="_trnMainService.TrnMainObj.DCRATE"
+            (change)="_trnMainService.FlatDiscountPercentChange()" />
+        </td>
+      </tr>
+      <tr>
+        <td>Disc Amt <span>:</span></td>
+        <td>
+          <input [disabled]="
+              _trnMainService.TrnMainObj.Mode == 'VIEW' &&
+              _trnMainService.TrnMainObj.VoucherType == 61
+            " style="height: 23px;width: 90px;" type="number"
+            [(ngModel)]="_trnMainService.TrnMainObj.ALT_TOTFLATDISCOUNT"
+            (change)="_trnMainService.FlatDiscountAmountChange()" />
+        </td>
+      </tr>
+    </ng-container>
+
+    <tr>
+      <td>Total Disc <span>:</span></td>
+      <td *ngIf="_trnMainService.userProfile.CompanyInfo.companyType != 'retailer'">
+        {{ _trnMainService.TrnMainObj.TOTALDISCOUNT | twoDigitNumber }}
+      </td>
+      <td *ngIf="_trnMainService.userProfile.CompanyInfo.companyType == 'retailer'">
+        {{_trnMainService.TrnMainObj.TOTALDISCOUNT_VATINCLUDED | twoDigitNumber}}
+      </td>
+    </tr>
+
+    <tr>
+      <td>Taxable Amt <span>:</span></td>
+      <td>{{ _trnMainService.TrnMainObj.TAXABLE | twoDigitNumber }}</td>
+    </tr>
+    <tr>
+      <td>Total GST <span>:</span></td>
+      <td>{{ _trnMainService.TrnMainObj.VATAMNT | twoDigitNumber }}</td>
+    </tr>
+    <tr>
+      <td>Total Cess <span>:</span></td>
+      <td>{{ _trnMainService.TrnMainObj.AdditionalObj?.TOTALEXTRACESS | twoDigitNumber }}</td>
+    </tr>
+    <tr
+      *ngIf="_trnMainService.TrnMainObj.VoucherType==14 || _trnMainService.TrnMainObj.VoucherType==57 ||
+    (_trnMainService.TrnMainObj.VoucherType==3 && _trnMainService.TrnMainObj.AdditionalObj.CREATION_TYPE!='MANUAL_PI')">
+      <td>Tcs Per <span>:</span></td>
+      <td>{{ _trnMainService.TrnMainObj.AdditionalObj?.TCS_PER }}</td>
+    </tr>
+    <tr
+      *ngIf="_trnMainService.TrnMainObj.VoucherType==3 && _trnMainService.TrnMainObj.AdditionalObj.CREATION_TYPE=='MANUAL_PI' ">
+      <td>Tcs Per <span>:</span></td>
+      <td>
+        <input style="height: 23px;width: 90px;" type="number"
+          [(ngModel)]="_trnMainService.TrnMainObj.AdditionalObj.TCS_PER"
+          (change)="_trnMainService.TCSPercentageChange()" />
+      </td>
+    </tr>
+    <tr
+      *ngIf="_trnMainService.TrnMainObj.VoucherType==14 || _trnMainService.TrnMainObj.VoucherType==57 ||
+    (_trnMainService.TrnMainObj.VoucherType==3 && _trnMainService.TrnMainObj.AdditionalObj.CREATION_TYPE!='MANUAL_PI')">
+      <td>Tcs Amt <span>:</span></td>
+      <td>{{ _trnMainService.TrnMainObj.AdditionalObj?.TCS_AMT | twoDigitNumber }}</td>
+    </tr>
+    <tr
+      *ngIf="_trnMainService.TrnMainObj.VoucherType==3 && _trnMainService.TrnMainObj.AdditionalObj.CREATION_TYPE=='MANUAL_PI'">
+      <td>Tcs Amt <span>:</span></td>
+      <td>
+        <input style="height: 23px;width: 90px;" type="number"
+          [(ngModel)]="_trnMainService.TrnMainObj.AdditionalObj.TCS_AMT" (change)="_trnMainService.TCSAmountChange()" />
+      </td>
+    </tr>
+    <tr>
+      <td>Rounding Adj <span>:</span></td>
+      <td>{{ _trnMainService.TrnMainObj.ROUNDOFF | twoDigitNumber }}</td>
+    </tr>
+    <tr>
+      <td>Net Amt <span>:</span></td>
+      <td>{{ _trnMainService.TrnMainObj.NETAMNT | twoDigitNumber }}</td>
+    </tr>
+  </table>
+</div>

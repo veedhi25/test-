@@ -1,0 +1,672 @@
+<style>
+  .modal-content {
+    padding: 1px;
+    margin: 0px;
+    float: right;
+  }
+
+  .table-scroll {
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+
+  tbody>tr:hover {
+    background-color: #f3f5f4;
+    cursor: pointer;
+  }
+
+  tr {
+    font-size: 11px;
+  }
+
+  .selected-row {
+    background-color: #ced6d3 !important;
+  }
+
+  td {
+    padding: 2px
+  }
+
+  .modal-sticky {
+    position: fixed;
+    bottom: 45px;
+    right: 25%;
+    width: 85%;
+    height: 80%;
+    z-index: 2;
+  }
+
+  .input {
+    width: 80%
+  }
+
+  td {
+    line-height: 0px !important
+  }
+
+  .table>tbody>tr>td {
+    border-top: 0px solid gainsboro !important;
+  }
+
+  .TopMargin {
+    Margin-Top: 10px
+  }
+
+  .table>tbody>tr>td:first-child {
+    text-align: left !important;
+  }
+
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  label {
+    height: 21px;
+    font-weight: normal;
+    width: 100px;
+    margin: 2px;
+    vertical-align: middle;
+    font-size: 13px;
+    padding-top: 6px;
+  }
+</style>
+<div class="modal-sticky" [class.modal-sticky-hide]="!isActive" style="display : block; padding: 0px;">
+  <!-- Modal content -->
+  <div class="modal-content" style="background-color: #f1f1f1; width:75% !important">
+    <div class="modal-header" style="padding: 0px;background: #f1f1f1;;">
+
+      <div class="clearfix">
+        <div class="col-md-4">
+          <h4 class="modal-title" style="text-align: left;">
+            Tender
+          </h4>
+        </div>
+        <div class="col-md-5" *ngIf="_trnMainService.TrnMainObj.PARAC">
+          <strong>Bill Reminder Days</strong>
+          <input type="number" name="billreminderdays" id="billreminderdays"
+            [(ngModel)]="_trnMainService.TrnMainObj.AdditionalObj.BILLREMINDERDAYS">
+        </div>
+        <div class="col-md-3" *ngIf="enableCentralTenderSelection()">
+
+          <label style=" width: 100%">
+            <input style="vertical-align: middle" type="checkbox" name="ISGLOBALPAYMENT" id="ISGLOBALPAYMENT"
+              [(ngModel)]="_trnMainService.TrnMainObj.AdditionalObj.ISCENTRALPAYMENT" />
+            Is Central Payment? </label>
+        </div>
+      </div>
+    </div>
+    <form class="row" class="form-horizontal" [formGroup]="form">
+      <div class="col-md-5 plainBackGround"
+        style="height:135px;overflow-y:scroll;overflow-x:hidden;margin : 0px;  border-bottom: 1px solid silver;padding-top: 0px;">
+        <table class="table table-summary TopMargin" style="text-align: left">
+          <tr>
+            <td><label>Cash</label></td>
+            <td>
+              <input type="number" formControlName="CASH" readonly=true />
+            </td>
+          </tr>
+          <tr>
+            <td><label>Credit </label></td>
+            <td>
+              <input type="number" formControlName="CREDIT" readonly=true />
+            </td>
+          </tr>
+          <tr>
+            <td><label>Cheque</label></td>
+
+            <td>
+              <input type="number" formControlName="CHEQUE" readonly=true />
+            </td>
+
+          </tr>
+          <tr>
+            <td><label>Wallet</label>
+            <td>
+              <input type="number" formControlName="WALLET" readonly=true />
+            </td>
+          </tr>
+          <tr>
+            <td><label>Card</label></td>
+            <td>
+              <input type="number" formControlName="CARD" readonly=true />
+            </td>
+          </tr>
+          <!-- <tr>
+            <td><label>Samridhi Card</label></td>
+            <td>
+              <input type="number" formControlName="SAMRIDHICARD" readonly=true />
+            </td>
+          </tr> -->
+          <tr>
+            <td><label>Coupon</label></td>
+            <td>
+              <input type="number" formControlName="COUPON" />
+            </td>
+          </tr>
+          <tr>
+            <td><label>Loyalty</label></td>
+            <td>
+              <input type="number" formControlName="LOYALTY" />
+            </td>
+          </tr>
+          <tr>
+            <td><label>Advance</label></td>
+            <td>
+              <input type="number" formControlName="ADVANCE" />
+            </td>
+          </tr>
+          <tr>
+            <td><label>RRN</label></td>
+            <td>
+              <input type="number" formControlName="RETURN_NOTE" />
+            </td>
+          </tr>
+
+        </table>
+      </div>
+      <!-- Cash -->
+      <div *ngIf="PaymentMode=='cash'" class="col-md-7 plainBackGround"
+        style="height:135px; overflow-y: scroll;overflow-x: hidden; margin : 0px;border-bottom: 1px solid silver;">
+        <table class="table table-summary TopMargin" style="text-align: left">
+
+          <tr>
+            <td><label>Cash Tender</label> </td>
+            <td>
+              <input type="number" id="CASHTENDER" formControlName="CASHTENDER"
+                (keydown.enter)="EnterTenderAmt('cash')" />
+            </td>
+          </tr>
+          <tr>
+            <td><label>Cash Amount</label> </td>
+            <td>
+              <!-- <input #CASHAMT_Native id="CASHAMT_Native" type="number" formControlName="CASHAMT"
+                (change)="onAmntChange('cash')" (keydown.enter)="EnterAmt('cash')" /> -->
+              <input #CASHAMT_Native id="CASHAMT_Native" type="number" formControlName="CASHAMT" readonly />
+            </td>
+          </tr>
+          <tr>
+            <td><label>Cash Return</label> </td>
+            <td>
+              <input type="text" readonly formControlName="CASHAMTRETURN" />
+            </td>
+          </tr>
+
+
+        </table>
+      </div>
+
+      <!-- Cheque -->
+      <div *ngIf="PaymentMode=='cheque'" class="col-md-7 plainBackGround"
+        style="height:135px; overflow-y: scroll;overflow-x: hidden; margin : 0px;border-bottom: 1px solid silver;padding-top: 0px;">
+        <table class="table table-summary TopMargin" style="text-align: left">
+
+          <tr>
+            <td><label>Cheque Amount</label></td>
+            <td>
+              <input #CHEQUEAMT_Native id="CHEQUEAMT_Native" type="number" formControlName="CHEQUEAMT"
+                (change)="onAmntChange('cheque')" (keyup.enter)="EnterAmt('cheque')"
+                (keyup)="changeChequeAmt($event.target.value)" />
+            </td>
+          </tr>
+          <tr>
+            <td><label>ChequeNo</label></td>
+            <td>
+              <input type="text" formControlName="CHEQUENO" />
+            </td>
+          </tr>
+          <tr>
+            <td><label>Bank</label></td>
+            <td>
+              <input type="text" formControlName="BANK" />
+            </td>
+          </tr>
+          <tr>
+            <td><label>Date</label></td>
+
+            <td>
+              <input style="height:30px" type="date" formControlName="DATE" style="line-height:1" />
+            </td>
+
+
+          </tr>
+
+
+        </table>
+      </div>
+
+      <!-- Card  -->
+      <div *ngIf="PaymentMode=='card'" class="col-md-7 plainBackGround"
+        style="height:135px; overflow-y: scroll;overflow-x: hidden; margin : 0px;border-bottom: 1px solid silver;padding-top: 0px;">
+        <table class="table table-summary TopMargin" style="text-align: left">
+
+          <tr>
+            <td><label>Card Amount</label></td>
+            <td>
+              <input #CARDAMT_Native id="CARDAMT_Native" type="number" formControlName="CARDAMT"
+                (change)="onAmntChange('card')" (keyup.enter)="EnterAmt('card')"
+                (keyup)="changeCardAmt($event.target.value)" />
+            </td>
+          </tr>
+          <tr>
+            <td><label>Card No</label></td>
+            <td>
+              <input type="text" formControlName="CARDNO" />
+            </td>
+          </tr>
+          <tr>
+            <td><label>Card Name</label></td>
+            <td>
+              <select name="cardtype" formControlName="CARDNAME" style="width:99%">
+                <option *ngFor="let i of cardList" value="{{i.PAYMENTMODENAME}}">{{i.PAYMENTMODENAME}}</option>
+
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td><label>Approval Code</label></td>
+            <td>
+              <input type="text" formControlName="APPROVALCODE" />
+            </td>
+          </tr>
+          <tr>
+            <td><label>Card Holder Name</label></td>
+            <td>
+              <input type="text" formControlName="CARDHOLDERNAME" />
+            </td>
+          </tr>
+
+        </table>
+      </div>
+
+      <!-- Samridhi Card  -->
+      <!-- <div *ngIf="PaymentMode=='samridhicard'" class="col-md-7 plainBackGround"
+       style="height:135px; overflow-y: scroll;overflow-x: hidden; margin : 0px;border-bottom: 1px solid silver;padding-top: 0px;">
+       <table class="table table-summary TopMargin" style="text-align: left">
+         <tr>
+           <td><label style="width: 135px;">Samridhi Card Amount</label></td>
+           <td>
+             <input #SAMRIDHICARDAMT_Native id="SAMRIDHICARDAMT_Native" type="number" formControlName="SAMRIDHICARDAMT"
+               (change)="onAmntChange('samridhicard')" (keyup.enter)="EnterAmt('samridhicard')"
+               (keyup)="changeSamridhiCardAmt($event.target.value)" />
+           </td>
+         </tr>
+         <tr>
+           <td><label style="width: 135px;">Card No</label></td>
+           <td>
+             <input type="text" formControlName="SAMRIDHICARDNO" />
+           </td>
+         </tr>
+         <tr>
+           <td><label style="width: 135px;">Card Holder Name</label></td>
+           <td>
+             <input type="text" formControlName="SAMRIDHICARDHOLDERNAME" />
+           </td>
+         </tr>
+
+       </table>
+     </div> -->
+
+      <!-- Paytm  -->
+      <div *ngIf="PaymentMode=='paytm'" class="col-md-7 plainBackGround"
+        style="height:135px; overflow-y: scroll;overflow-x: hidden; margin : 0px;border-bottom: 1px solid silver;padding-top: 0px;">
+        <table class="table table-summary TopMargin" style="text-align: left">
+          <tr>
+            <td><label style="width: 135px;">Paytm Amount</label></td>
+            <td>
+              <input #PAYTMAMT_Native id="PAYTMAMT_Native" type="number" formControlName="PAYTMAMT"
+                (change)="onAmntChange('paytm')" (keyup.enter)="EnterAmt('paytm')"
+                (keyup)="changePaytmAmt($event.target.value)" />
+            </td>
+          </tr>
+          <tr>
+            <td><label style="width: 135px;">Mobile No</label></td>
+            <td>
+              <input type="text" formControlName="PAYTMPHONENUMBER" />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <button type="button" class="btn" (click)="sendPaytmRequest()">Send Request</button>
+
+            </td>
+            <td>
+              <button type="button" class="btn" (click)="checkPaytmRequestStatus()">Check Status</button>
+
+            </td>
+          </tr>
+
+        </table>
+      </div>
+
+      <!-- Coupon -->
+      <div *ngIf="PaymentMode=='coupon'" class="col-md-7 plainBackGround"
+        style="height:135px; overflow-y: scroll;overflow-x: hidden; margin : 0px;border-bottom: 1px solid silver;padding-top: 0px;">
+        <table class="table table-summary TopMargin" style="text-align: left">
+
+          <!-- <tr>
+            <td><label>Coupon Amount</label> </td>
+            <td>
+              <input #COUPONAMT_Native id="COUPONAMT_Native" type="number" formControlName="COUPONAMT"
+                (change)="onAmntChange('coupon')" (keyup.enter)="EnterAmt('coupon')"
+                (keyup)="changeCouponAmt($event.target.value)" />
+            </td>
+          </tr> -->
+          <tr>
+            <td><label>Coupon Code</label> </td>
+            <td>
+              <input type="text" style="text-transform:uppercase" formControlName="COUPONNAME" />
+
+              <button (click)="validateCoupon()" class="btn btn-warning ">Apply</button>
+              <!-- <select name="CoutonType" id="Type" formControlName="COUPONNAME" style="width:99%">
+                <option *ngFor="let i of couponList" value="{{i.PAYMENTMODENAME}}">{{i.PAYMENTMODENAME}}</option>
+
+              </select> -->
+
+            </td>
+          </tr>
+
+          <tr>
+            <td>Coupon Name</td>
+            <td>Amount</td>
+            <td>Expiry Date</td>
+          </tr>
+          <tr *ngFor="let i of _trnMainService.UserCouponList" (click)="setCouponValue(i.CouponListValue)">
+            <td>{{i.CouponListValue}}</td>
+            <td>{{i.MaxDiscount}}</td>
+            <td>{{i.Expiry}}</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Wallet -->
+      <div *ngIf="PaymentMode=='wallet'" class="col-md-7 plainBackGround"
+        style="height:135px; overflow-y: scroll;overflow-x: hidden; margin : 0px;border-bottom: 1px solid silver;padding-top: 0px;">
+        <table class="table table-summary TopMargin" style="text-align: left">
+
+          <tr>
+            <td><label>Wallet Amount</label> </td>
+            <td>
+              <input #WALLETAMT_Native id="WALLETAMT_Native" type="number" formControlName="WALLETAMT"
+                (change)="onAmntChange('wallet')" (keyup.enter)="EnterAmt('wallet')"
+                (keyup)="changeWalletAmt($event.target.value)" />
+            </td>
+          </tr>
+          <tr>
+            <td><label>Wallet Type</label> </td>
+            <td>
+              <select name="wallettype" id="Type" formControlName="WALLETTYPE" style="width:99%">
+                <option *ngFor="let i of walletList" value="{{i.PAYMENTMODENAME}}">{{i.PAYMENTMODENAME}}</option>
+
+              </select>
+
+            </td>
+          </tr>
+          <tr>
+            <td><label>Card No</label> </td>
+            <td>
+              <input type="text" formControlName="WALLETCARDNO" />
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div *ngIf="PaymentMode=='credit'" class="col-md-7 plainBackGround"
+        style="height:135px; overflow-y: scroll;overflow-x: hidden; margin : 0px;border-bottom: 1px solid silver;padding-top: 0px;">
+        <!-- <table class="table table-summary TopMargin" style="text-align: left">
+
+          <tr>
+            <td><label>Credit Amount</label> </td>
+            <td>
+              <input #CREDIT_Native id="CREDIT_Native" type="number" formControlName="CREDITAMT"
+                (change)="onAmntChange('credit')" (keyup.enter)="EnterAmt('credit')"
+                (keyup)="changeCreditAmt($event.target.value)" />
+            </td>
+          </tr>
+          <tr *ngIf="customer">
+            <td><label>Customer</label> </td>
+            <td style="vertical-align: middle;">
+              <span>{{_trnMainService.TrnMainObj.BILLTO}}</span>
+            </td>
+          </tr>
+        </table> -->
+
+
+        <div class="clearfix">
+          <label class="col-md-2" style="width: inherit;">Credit Amount</label>
+
+          <input class="col-md-8" #CREDIT_Native id="CREDIT_Native" type="number" formControlName="CREDITAMT"
+            (change)="onAmntChange('credit')" (keyup.enter)="EnterAmt('credit')"
+            (keyup)="changeCreditAmt($event.target.value)" />
+        </div>
+        <div class="clearfix" *ngIf="customer">
+          <label class="col-md-2">Customer</label>
+
+          <p class="col-md-8" style="word-break: break-all;padding: 5px;">{{_trnMainService.TrnMainObj.BILLTO}}</p>
+        </div>
+
+
+
+
+      </div>
+      <div *ngIf="PaymentMode=='loyalty'" class="col-md-7 plainBackGround"
+        style="height:135px; overflow-y: scroll;overflow-x: hidden; margin : 0px;border-bottom: 1px solid silver;padding-top: 0px;">
+        <table class="table table-summary TopMargin" style="text-align: left">
+
+          <tr>
+            <td>
+              <label for="LOYALTY_Native3">LoyaltyTender</label>
+            </td>
+            <td>
+              <input #LOYALTY_Native id="LOYALTY_Native3" type="number" formControlName="LoyaltyTender"
+                (keydown.Enter)="EnterLoyaltyTenderAmt()">
+
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="LOYALTY_Native">LoyaltyAmtAvailable</label>
+            </td>
+            <td>
+              <input #LOYALTY_Native id="LOYALTY_Native" type="number" formControlName="LOYALTYAMT1" readonly>
+              <!-- <input #LOYALTY_Native id="LOYALTY_Native" type="number"
+                [value]="this._trnMainService.TrnMainObj.CUS_PREVlOYALTY" readonly> -->
+
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="LOYALTY_Native2">CurrentBillLoyaltyAmt</label>
+            </td>
+            <td>
+              <input #LOYALTY_Native id="LOYALTY_Native2" type="number" formControlName="LOYALTYAMT2" readonly>
+
+              <!-- <input #LOYALTY_Native id="LOYALTY_Native2" type="number"
+                [(ngModel)]="this._trnMainService.TrnMainObj.CurrentBillLoyatly" readonly> -->
+
+
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="">LoyaltyCard</label>
+            </td>
+            <td>
+              <input type="text">
+            </td>
+          </tr>
+
+        </table>
+      </div>
+      <div *ngIf="PaymentMode=='advance'" class="col-md-7 plainBackGround"
+        style="height:135px; overflow-y: scroll;overflow-x: hidden; margin : 0px;border-bottom: 1px solid silver;padding-top: 0px;">
+        <table class="table table-summary TopMargin" style="text-align: left">
+
+          <tr>
+            <td>
+              <label for="advance_Native3">Adjusted Advance</label>
+            </td>
+            <td>
+              <input #advance_Native3 id="advance_Native3" type="number" formControlName="ADVANCE"
+                (change)="onAmntChange('advance')" (keyup.enter)="EnterAmt('advance')"
+                (keyup)="changeAdvanceAmt($event.target.value)">
+
+            </td>
+          </tr>
+          <tr>
+            <td><label>Advance</label> </td>
+            <td style="vertical-align: middle;">
+              <span>{{_trnMainService.TrnMainObj.totalAdvanceAvailable}}</span>
+            </td>
+          </tr>
+          <tr *ngIf="customer">
+            <td><label>Customer</label> </td>
+            <td style="vertical-align: middle;">
+              <span>{{_trnMainService.TrnMainObj.BILLTO}}</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div *ngIf="PaymentMode=='return_note'" class="col-md-7 plainBackGround"
+        style="height:135px; overflow-y: scroll;overflow-x: hidden; margin : 0px;border-bottom: 1px solid silver;padding-top: 0px;">
+        <table class="table table-summary TopMargin" style="text-align: left">
+
+          <tr>
+            <td>
+              <label for="return_note_Native3">Return Note</label>
+            </td>
+            <td class="cell-with-comment">
+              <input #return_note_Native3 id="return_note_Native3" type="text" (keydown)="$event.preventDefault();"
+                (keydown.Enter)="onRRNEnterCommand($event)">
+              <!-- <input #return_note_Native3 id="return_note_Native3" type="number" formControlName="RETURN_NOTE"
+                (change)="onAmntChange('return_note')" (keyup.enter)="EnterAmt('return_note')"
+                > -->
+
+              <span class="cell-comment">Press Enter or Tab to select Return Note</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-md-12 plainBackGround" style="margin : 0px; border-bottom: 1px solid silver;padding-top: 0px;
+          background-color: white;">
+        <table class="table table-summary TopMargin" style="text-align: left">
+          <!-- Total -->
+          <tr>
+            <td><label>Total</label></td>
+            <td style="width: 20%">
+              <input type="text" style="width:80%" formControlName="TOTAL" readonly=true />
+            </td>
+          </tr>
+          <tr>
+            <td><label>Out Standing </label></td>
+            <td>
+              <input type="text" style="width:80%" formControlName="OUTSTANDING" readonly=true />
+            </td>
+          </tr>
+          <tr>
+            <td style="width: 5%"><label>Advance</label></td>
+
+            <td>
+              <input type="text" style="width:80%" formControlName="ADVANCE" readonly=true />
+            </td>
+
+          </tr>
+          <tr>
+            <td><label>TenderAmount</label></td>
+            <td>
+              <input type="number" style="width:80%" formControlName="TENDERAMT" readonly=true />
+            </td>
+          </tr>
+          <tr>
+            <td><label>Balance</label></td>
+            <td>
+              <input type="number" style="width:80%" formControlName="BALANCE" readonly=true />
+            </td>
+          </tr>
+
+        </table>
+      </div>
+    </form>
+
+    <div class="Tender-popupbtn">
+      <button type="button" class="btn" (click)="Cash()">Cash [Shift+A]</button>
+      <button type="button" class="btn" (click)="Card()">Card [Shift+S]</button>
+      <button type="button" class="btn" (click)="Cheque()">Cheque [Shift+D]</button>
+      <button type="button" class="btn" (click)="Coupon()">Coupon [Shift+F]</button>
+      <button type="button" class="btn" (click)="Wallet()">Wallet [Shift+G]</button>
+      <!-- <button type="button" class="btn" (click)="SamridhiCard()">Samridhi Card [SHIFT+M]</button> -->
+      <button *ngIf="customer" type="button" class="btn" (click)="credit()">Credit [Shift+H]</button>
+      <button type="button" class="btn" (click)="Paytm()">Paytm [Shift+N]</button>
+      <button *ngIf="customer && _trnMainService.AppSettings.ENABLELOYALTY" type="button" class="btn"
+        (click)="LoyaltyButtonClicked()">Loyalty[Shift+I]</button>
+      <button *ngIf="customer && _trnMainService.AppSettings.enableAdvanceOptionInSalesOrder" type="button" class="btn"
+        (click)="AdvanceClicked()">Advance[Shift+V]</button>
+      <button type="button" class="btn" (click)="RRNCLICKED()">RRN[Shift+U]</button>
+    </div>
+
+    <div class="footer-popupbtn">
+      <button type="button" class="btn btn-info TopMargin" (click)="OK()">
+        OK[Shift+X]</button>
+      <button type="button" class="btn btn-info btn-warning TopMargin" (click)="hide()">Cancel
+        [Shift+C]</button>
+    </div>
+  </div>
+
+
+
+
+  <div class="modal-sticky" *ngIf="PaymentMode=='return_note' && activeRRNList && activeRRNList.length" style="display : block; padding: 0px;  margin-bottom: 25px;height: fit-content;
+  position: absolute;right: -20%;top: 0px;width:285px;z-index: 9999999">
+    <div class="modal-content modal-content-main-area" style="width: 100%;">
+      <div class="modal-header" style="padding: 5px;">
+        <h4 class="modal-title" class="text-center" id="myModalLabel">Return Note List</h4>
+      </div>
+
+
+
+      <div class="modal-body">
+        <ng-container>
+          <div class="transaction-table-custom">
+            <div class="table-container ims-scrollable-table">
+              <table id="BlueHeaderResizableTable" #reportHtmlTable class="reportTabel" style="table-layout: fixed; overflow-x:scroll;height: 50vh;    font-size: 12px;
+              font-family: sans-serif;">
+                <thead style="width: calc(100% - 1em);">
+                  <tr>
+                    <th width="60px">Return Note</th>
+                    <th width="60px">Amount</th>
+                    <th width="60px">Adjustment</th>
+                  </tr>
+                </thead>
+                <tbody style="width: fit-content;">
+
+                  <tr *ngFor="let col of activeRRNList;let i=index">
+                    <td width="60px">{{col?.RETURN_NOTE}}</td>
+                    <td width="60px">{{col?.AMOUNT}}</td>
+                    <td width="60px">
+
+                      <input type="number" name="adjustment" style="width: 100%;" id="adjustment{{i}}" [(ngModel)]="col.ADJUSTMENT"
+                        (keydown.Enter)="onRRNAdjustmentAmountEnter(col,i)" />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </ng-container>
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+  <generic-popup-grid #genericGridCustomer [popupsettings]="gridPopupSettingsForCustomer"
+    (onItemDoubleClick)="onCustomerSelected($event)">
+  </generic-popup-grid>

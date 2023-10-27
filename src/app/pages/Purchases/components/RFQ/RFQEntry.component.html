@@ -1,0 +1,125 @@
+<div class="form-inner">
+  <div class="top-forms">
+    <div class="col-md-4">
+      <h3 class="main-heading">{{_trnMainService.pageHeading}} [{{_trnMainService.TrnMainObj.Mode |titlecase}}]</h3>
+    </div>
+    <div class="col-md-8 form-right-btn">
+      <voucher-master-toggler></voucher-master-toggler>
+      <voucher-master-action (onIndentForRFQEmit)="onShowIndentLoadForRFQ()" (onCancelEmit)="onCancel()"
+        (ViewRfqSupplierHistry)="onViewRFQSuppliersMailEdiSentorNot($event)" (onSaveClickedEmitted)="SaveRfq()"
+        (onVoucherDoubleClicked)="onVoucherDoubleClickedForView($event)" (onResetClicked)="onResetClicked()">
+      </voucher-master-action>
+    </div>
+  </div>
+</div>
+<div class="content-areaform">
+  <!-- <div *ngIf="masterService.ShowMore" class=""> -->
+  <div class="">
+    <trnmain-purchase-entry></trnmain-purchase-entry>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table" id="BlueHeaderResizableTable" #reportHtmlTable>
+        <thead style="background-color: #c5c4c4;">
+          <th>SNO</th>
+          <th>Item Code</th>
+          <th>Item Name</th>
+          <th>UOM</th>
+          <th>Order Qty</th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let tList of rfqItemList;let i=index" style="border: 1px solid #e6e6e6; max-height: 25px"
+            (click)="activerowIndex=i" (keydown.delete)="deleteRow()">
+            <!-- START OF SNO -->
+            <td id="sno{{i}}">{{i+1}}</td>
+            <!-- END OF SNO -->
+
+            <!-- START OF ITEM CODE -->
+            <td class="CellWithComment">
+              <input id="menucode{{i}}" type="text" [(ngModel)]="tList.MCODE" (keydown.Tab)="ItemkeyEvent(i)"
+                (keydown.enter)="ItemkeyEvent(i)" class="form-control" readonly />
+            </td>
+            <!-- END OF ITEM CODE -->
+
+            <!-- START OF ITEM DESCA -->
+            <td class="CellWithComment">
+              {{tList.DESCA}}
+            </td>
+            <!-- END OF ITEM DESCA -->
+
+            <!-- START OF ITEM ALTUNIT -->
+            <td *ngIf="tList.AlternateUnits !=null || tList.AlternateUnits!=undefined">
+              <select id="alternateunit{{i}}" [(ngModel)]="tList.ALTUNIT" class="form-control">
+                <option *ngFor="let u of tList.AlternateUnits" value="{{u.ALTUNIT}}">
+                  {{u.ALTUNIT}}
+                </option>
+              </select>
+            </td>
+            <td *ngIf="tList.AlternateUnits ==null || tList.AlternateUnits==undefined">
+              <select name="" id="altunit" [(ngModel)]="tList.ALTUNIT" class="form-control" disabled>
+                <option value="{{tList.ALTUNIT}}">{{tList.ALTUNIT}}</option>
+              </select>
+            </td>
+            <!-- END OF ITEM ALTUNIT -->
+
+
+            <!-- START OF ITEM ORDER QUANTITY -->
+            <td class="CellWithComment">
+              <input id="indent{{i}}" type="number" [(ngModel)]="tList.Indent" class="form-control"
+                (keydown.Enter)="OnQuantityEnter(i)" readonly />
+            </td>
+            <!-- END OF ITEM ORDER QUANTITY -->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="sticky-bottom">
+  <voucher-total-area></voucher-total-area>
+</div>
+<generic-popup-grid #genericgridIndentForRFQ [popupsettings]="gridPopupSettingsForRFQIndent"
+  (onItemDoubleClick)="onRFQIndentDoubleClick($event)" (onButtonClick)="onRFQIntendMultipleSelect($event)">
+</generic-popup-grid>
+<div *ngIf="RFQSuppliersMailEdiSentorNotGrid" class="modal-sticky customsidebar-modal "
+  [class.modal-sticky-hide]="!RFQSuppliersMailEdiSentorNotGrid" style="display : block;">
+  <div class="modal-content modal-content-main-area">
+    <div class="modal-header">
+      <button class="close" aria-label="Close" (click)="hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="modal-title">Mail And Notification Info</h4>
+    </div>
+
+    <table class="table notification-table">
+      <thead>
+        <tr>
+          <th>supplier name</th>
+          <th>mail sent</th>
+          <th>notification sent</th>
+          <th>mail not sent reason</th>
+          <th>notification not sent reason</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let r of RFQSupplierdata ">
+          <td>{{r.acname}}</td>
+          <td>{{r.mailsent}}</td>
+          <td>{{r.notificationsent}}</td>
+          <td>{{r.mailnotsentreason}}</td>
+          <td>{{r.notificationnotsentreason}}</td>
+        </tr>
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+<style>
+  .notification-table {
+    height: 300px;
+    overflow-y: scroll;
+    display: block;
+  }
+</style>

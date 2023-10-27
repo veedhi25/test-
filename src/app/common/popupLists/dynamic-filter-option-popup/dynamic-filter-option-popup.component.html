@@ -1,0 +1,102 @@
+<div [class.modal-sticky-hide]="!isActive" class="advance-filtermodal">
+  <!-- Modal content -->
+  <div class="modal-content modal-content-main-area">
+    <div *ngIf="dynamicFilterSettings">
+      <div class="modal-header">
+        <button class="close" aria-label="Close" (click)="hide()">
+        <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">{{ dynamicFilterSettings.title }}</h4>
+      </div>
+     
+      <div class="advance-body">
+        <div class="advance-advform">
+          <div class="row">
+            <div class="col-md-6">
+              <select name="filterOptions" class="form-control"
+              [formControl]="key" (change)="onFilterOptionChanged($event.target.value)">
+              <ng-container *ngFor="let item of dynamicFilterSettings.filterOptions">
+                <option *ngIf="!item.isSelected" value="{{item.key}}">{{item.title}}</option>
+              </ng-container>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <select #filterOperatorKey name="filterOperatorKey"  class="form-control"
+              [(ngModel)]="currentFilterOption.filterOperatorDefaultValue">
+              <ng-container *ngFor="let item of currentFilterOption.filterOperatorOptions">
+                <option [ngValue]="item.value">{{
+                  item.title
+                  }}
+                </option>
+              </ng-container>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <ng-container *ngIf="currentFilterOption.filterType.type=='dropdown'">
+                <select #filterValue name="filterValue"  class="form-control"
+                [(ngModel)]="currentFilterOption.filterType.value">
+                <ng-container *ngFor="let item of currentFilterOption.filterType.options">
+                  <option [ngValue]="item.value">{{
+                    item.title
+                    }}
+                  </option>
+                </ng-container>
+                </select>
+              </ng-container>
+              <ng-container #filterValue *ngIf="currentFilterOption.filterType.type=='text'">
+                <input type="text" name="filterValue" class="form-control"
+                [(ngModel)]="currentFilterOption.filterType.value" />
+              </ng-container>
+            </div>
+            <div class="col-md-6">
+              <button class="btn add-btn" (click)="addFilterOption('AND')">ADD</button>
+            </div>
+          </div>
+        </div>
+        <div class="row" *ngFor="let filterOption of dynamicFilterSettings.filterOptions;let i=index">
+            <ng-container *ngIf="filterOption.isSelected">
+              <div class="col-md-2">
+                <label class="form-control-label starus">{{filterOption?.title}}</label>
+              </div>
+              <div class="col-md-4">
+                <select [(ngModel)]="filterOption.filterOperatorDefaultValue"  class="form-control"
+                name="filterOperatorKey">
+                <ng-container *ngFor="let item of filterOption.filterOperatorOptions">
+                  <option [value]="item.value">{{
+                    item.title
+                    }}
+                  </option>
+                </ng-container>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <ng-container *ngIf="filterOption.filterType.type=='dropdown'">
+                  <select [(ngModel)]="filterOption.filterType.value" name="filterValue"  class="form-control">
+                  <ng-container *ngFor="let item of filterOption.filterType.options">
+                    <option [value]="item.value">{{
+                      item.title
+                      }}
+                    </option>
+                  </ng-container>
+                  </select>
+                </ng-container>
+                <ng-container #filterValue *ngIf="filterOption.filterType.type=='text'">
+                  <input type="text" name="filterValue" class="form-control" [(ngModel)]="filterOption.filterType.value" />
+                </ng-container>
+              </div>
+              <div class="col-md-2">
+                <button class="btn remove-btn" *ngIf="!filterOption.isDefaultFixed" (click)="deletFilterOption(i)">
+                <i class="fa fa-times"></i>
+                </button>
+              </div>
+            </ng-container>
+        </div>
+      </div>
+      
+      <div class="advac-footer">
+        <button class="btn add-btn" (click)="applyClicked()">Apply</button>
+        <button class="btn cancel-btn" (click)="popupClose()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,351 @@
+<style>
+  input,
+  select,
+  option {
+    height: 23px;
+    vertical-align: middle;
+    font-size: 13px;
+    border: 1px solid #cbcbcb;
+    border-radius: 3px;
+    color: black;
+  }
+
+  .plainBackGround {
+    border: 2px solid #E6E6E6;
+    margin-bottom: 5px;
+    padding: 10px;
+  }
+
+  label {
+    height: 28px;
+    font-weight: normal;
+    width: 90px;
+    margin: 2px;
+    vertical-align: middle;
+    font-size: 13px;
+    padding-top: 4px;
+  }
+
+  button:disabled {
+    cursor: not-allowed !important;
+  }
+
+  button {
+    margin-left: 3px;
+  }
+
+  .btn-add-focus:focus {
+    transform: scale(1.2);
+    -webkit-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -o-transform: scale(1.2);
+  }
+
+  tr th {
+    font-weight: bold;
+  }
+
+
+  .tableBorder {
+    border: 1px solid;
+    border-color: #dcdcdc
+  }
+
+  input {
+    padding-left: 4px;
+    height: 10
+  }
+
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .containter {
+    display: flex;
+    justify-content: center;
+  }
+
+
+  input:disabled,
+  select:disabled,
+  textarea:disabled {
+    cursor: not-allowed !important;
+    color: black !important;
+    background-color: #EBEBE4 !important;
+  }
+
+  table {
+    border-collapse: inherit;
+    background-color: transparent;
+  }
+
+  select {
+    height: 100%;
+  }
+
+  input {
+    height: 100%
+  }
+
+  .dateClass {
+    height: 65%;
+  }
+
+  .popupDateClass {
+    left: calc(50% - 349px) !important;
+  }
+
+  .popUpClass {
+    position: absolute;
+    top: 15%;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+  }
+
+
+
+  .tableTd {
+    padding: 0.10rem !important;
+    line-height: 23px;
+  }
+
+  td {
+    padding: 5px !important;
+  }
+</style>
+
+
+<div class="content-wrapper">
+  <div class="user-topbtn">
+    <h4 class="hder-hding">Price Drop</h4>
+    <div class="col-md-4">
+
+      <angular4-multiselect [data]="outletList" class="form-control" [(ngModel)]="selectedOutLets"
+        [settings]="multiselectOutLetSetting" (onSelect)="onMultiSelect($event)" (onDeSelect)="onMultiSelect($event)"
+        (onSelectAll)="onMultiSelect($event)" (onDeSelectAll)="onMultiSelect($event)">
+      </angular4-multiselect>
+
+    </div>
+    <div class="col-md-4 form-inline">
+      <label style="width:auto;">Tag:</label>
+      <input type="text" *ngIf="mode!='edit'" style="height: 32px;" [(ngModel)]="remarks">
+      <label *ngIf="mode=='edit'" style="width:auto;">{{remarks}}</label>
+
+      <button class="btn add-btn" (click)="onClickSave()">
+        Save
+      </button>
+      <button class="btn btn-back" (click)="reset()">
+        Reset
+      </button>
+
+    </div>
+  </div>
+</div>
+
+<div class="clearfix">
+  <div *ngIf="itemList && itemList.length" class="transaction-table-custom" #prodlistTable id="prodlistTable">
+    <div class="table-container scroll-tablee table-scrollsales">
+      <table id="BlueHeaderResizableTable" #reportHtmlTable class="reportTabel"
+        style="table-layout: fixed;border-spacing: unset;">
+        <thead>
+          <tr>
+            <th width=" 65px;">S.No</th>
+            <th width=" 100px;">Code</th>
+            <th width="300px;">Item Description</th>
+            <th width="100px;">Purchase Rate</th>
+            <th width="100px;">Amt/Perc</th>
+            <th width="100px;">Drop(Per Qty)</th>
+            <th width="100px">New Rate</th>
+          </tr>
+        </thead>
+        <tbody style="width: fit-content;">
+          <tr *ngFor="let item of itemList;let i=index">
+            <td width="65px">{{i+1}}</td>
+            <td width="100px">{{item.mcode}}</td>
+            <td width="300px">{{item.desca}}</td>
+            <td width="100px">{{item.rate}}</td>
+            <td width="100px">{{item.priceDropMode}}</td>
+            <td width="100px">{{item.dropValue}}</td>
+            <td width="100px">{{item?.newrate}}</td>
+          </tr>
+        </tbody>
+
+      </table>
+
+
+    </div>
+    <div class="col-md-4"></div>
+  </div>
+</div>
+<div *ngIf="(itemList && !itemList.length) || mode == 'edit'" class="clearfix">
+  <div class="col-md-4">
+    <table class='tableBorder' style="height:fit-content;width:fit-content;">
+      <tr>
+        <th colspan="6" style="text-align: center;background-color: #2bade5;;">Price Drop Filter</th>
+      </tr>
+      <tr>
+        <td style="background-color: #f0f3f4;" >
+          Select
+
+        </td>
+        <td>
+          <select [(ngModel)]="priceDropObj.priceDropDaysOrDate" style="height: 30px;">
+            <option>
+              No.Of Days
+            </option>
+            <option>
+              Date
+            </option>
+          </select>
+
+        </td>
+
+        <td *ngIf="priceDropObj.priceDropDaysOrDate!='Date'" colspan="4">
+
+          <input type="number" style="width: 100%;" placeholder="Enter no. of Days" [(ngModel)]="priceDropObj.NOOFDAYS">
+        </td>
+        <td *ngIf="priceDropObj.priceDropDaysOrDate=='Date'" colspan="2">
+          <label style="width:auto;">From:</label>
+          <input type="date" [(ngModel)]="priceDropObj.FROMDATE" style="height: 65%;width: 150px;">
+        </td>
+        <td *ngIf="priceDropObj.priceDropDaysOrDate=='Date'" colspan="2">
+          <label style="width:auto;">To:</label>
+          <input type="date" [(ngModel)]="priceDropObj.TODATE" style="height: 65%;width: 150px;">
+        </td>
+        
+      </tr>
+      <tr>
+        <td style="background-color: #f0f3f4;;" >
+          Price Drop
+        </td>
+        <td>
+          <select style="width: 100%;" [(ngModel)]="priceDropObj.PriceDropMode">
+            <option>
+              Perc(%)
+            </option>
+            <option>
+              Value
+            </option>
+          </select>
+        </td>
+        <td>
+          <select style="width: 100px;" [(ngModel)]="priceDropObj.PriceChangeNature">
+            <option>
+              Decrease
+            </option>
+            <option>
+              Increase
+            </option>
+          </select>
+        </td>
+        <td style="background-color: #f0f3f4;;" style="height: 14%;">
+          <label style="width: 100px;"> Value(Per Qty)</label>
+        </td>
+        <td>
+          <input type="number" [(ngModel)]="priceDropObj.DropValue" placeholder="10">
+        </td>
+       
+      </tr>
+      <tr>
+      
+        <td style="background-color: #f0f3f4;">
+          Rate Type
+        </td>
+        <td>
+          <select [(ngModel)]="priceDropObj.DROP_BASED_ON">
+            <option>MRP</option>
+            <option>Selling Price</option>
+
+          </select>
+
+        </td>
+        <td style="background-color: #f0f3f4;;" >
+          Item Name
+        </td>
+        <td class="cell-with-comment" colspan="3">
+          <!-- <angular4-multiselect [data]="menuitemList" class="form-control" [(ngModel)]="selecteditemList"
+                [settings]="multiselectSetting" (onSelect)="onMultiSelect($event)" (onDeSelect)="onMultiSelect($event)"
+                (onSelectAll)="onMultiSelect($event)" (onDeSelectAll)="onMultiSelect($event)">
+              </angular4-multiselect> -->
+          <input type="text" style="width: 100%;" (keydown)="$event.preventDefault()" (keydown.Tab)="showPopup()"
+            (keydown.enter)="showPopup()">
+          <span class="cell-comment">Press Enter or Tab to select Item</span>
+
+        </td>
+        </tr><tr>
+        <td style="background-color: #f0f3f4;;">
+          Category
+        </td>
+        <td class="cell-with-comment">
+          <input [(ngModel)]="categoryType" style="width: 100%;" (keydown)="$event.preventDefault()"
+            (keydown.Enter)="categoryChanged()" (keydown.Tab)="categoryChanged()" />
+          <span class="cell-comment">Press Enter or Tab to select category</span>
+
+        </td>
+
+        <td style="background-color: #f0f3f4;;">
+          Value
+        </td>
+        <td>
+          <input type="text" [(ngModel)]="category" placeholder="category">
+        </td>
+      </tr>
+
+
+
+
+      <tr style='height:15px'>
+        <td><button class="btn btn-info" style="width:100%" (click)="onClickedApply()">Apply</button></td>
+
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div *ngIf="(itemList && !itemList.length) || mode == 'edit'" class="clearfix">
+  <div class="col-md-4">
+    <div class="transaction-table-custom" #prodlistTable id="prodlistTable">
+      <div class="table-container scroll-tablee table-scrollsales">
+        <table id="BlueHeaderResizableTable" #reportHtmlTable class="reportTabel"
+          style="table-layout: fixed;border-spacing: unset;">
+          <thead>
+
+            <tr>
+              <th colspan="4" width="160px">Selected Items</th>
+            </tr>
+          </thead>
+          <thead>
+
+            <tr>
+              <th width="20px">S.No.</th>
+              <th width="40px">Mcode</th>
+              <th width="80px">Description</th>
+              <th width="20px">Action</th>
+
+            </tr>
+          </thead>
+          <tbody style="width: fit-content;height: 300px;">
+            <tr *ngFor="let item of selecteditemList;let i=index">
+              <td width="20px">{{i+1}}</td>
+              <td width="40px">{{item.MENUCODE}}</td>
+              <td width="80px">{{item.DESCA}}</td>
+              <td width="20x"><i class="fa fa-trash" (click)="removeSelectedItem(i)"></i></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<generic-popup-grid #genericGridCustomer [popupsettings]="gridPopupSettingsForCustomer"
+  (onItemDoubleClick)="dblClickPopupItem($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericGridCatValue [popupsettings]="gridPopupSettingsForCategoryValue"
+  (onItemDoubleClick)="dblClickOnCatValue($event)">
+</generic-popup-grid>

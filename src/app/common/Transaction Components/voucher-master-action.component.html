@@ -1,0 +1,1075 @@
+﻿<style>
+  .modal-content {
+    padding: 1px;
+    margin: 0px;
+    float: right;
+  }
+
+  tbody>tr:hover {
+    background-color: #f3f5f4;
+    cursor: pointer;
+  }
+
+  tr {
+    font-size: 11px;
+  }
+
+  .selected-row {
+    background-color: #ced6d3 !important;
+  }
+
+  .table>tbody>tr>td {
+    line-height: 30px !important;
+  }
+
+  .table>thead>tr>th {
+    line-height: 5px !important;
+  }
+
+  .table>tbody>tr>td:first-child {
+    text-align: left !important;
+    padding: 0px 0px 0px 11px !important;
+  }
+
+  .modal-content {
+    box-shadow: -10px 0px 10px 1px #aaaaaa;
+  }
+
+  .modal-content-main-area {
+    max-height: 100%;
+    height: 100%;
+    overflow: auto;
+    overflow-x: hidden;
+  }
+
+  .modal-content-summary-area {
+    max-height: 20%;
+    height: 20%;
+    overflow: auto;
+    overflow-x: hidden;
+  }
+
+  .ellipsis {
+    white-space: nowrap;
+  }
+</style>
+<button class="btn recall-btn" (click)="GetUnbilledItem()" *ngIf="_trnMainService.TrnMainObj.VoucherType===20">
+  Get Unbilled Item
+</button>
+<button (click)="onRecallClick()" class="btn btn-info"
+  *ngIf="_trnMainService.TrnMainObj.VoucherType==14 && showButton('recall')">
+  RECALL[ALT+R]
+</button>
+<button (click)="onHoldClick()" class="btn btn-info"
+  *ngIf="_trnMainService.TrnMainObj.VoucherType==14 && showButton('hold')">
+  HOLD[ALT+C]
+</button>
+<button class="btn btn-info" id="J" (click)="stockSettlementApprovalLoad()"
+  *ngIf="activeurlpath == 'StockSettlementEntryApproval' && showButton('unapproved list')">
+  [ALT+U] UNAPPROVED LIST
+</button>
+<button class="btn btn-info" (click)="fromTransferOut()" *ngIf="showButton('From Transfer')">
+  From Transfer
+</button>
+<button class="btn btn-info" (click)="onLoadInterCompanyTransferInCancel()" *ngIf="showButton('IR Cancel')">
+  IR Cancel
+</button>
+<button class="btn btn-info" (click)="onLoadInterCompanyTransferOutCancel()" *ngIf="showButton('IC Cancel')">
+  IC Cancel
+</button>
+<button class="btn btn-info" (click)="showShippingAddressClick()"
+  *ngIf=" !showSecondaryButtons && (_trnMainService.TrnMainObj.VoucherType==14 || _trnMainService.TrnMainObj.VoucherType==16)  &&   (this._trnMainService.userProfile.CompanyInfo.ORG_TYPE== 'superdistributor' || this._trnMainService.userProfile.CompanyInfo.ORG_TYPE== 'distributor')">
+  [ALT+H] SHIP TO
+</button>
+<button class="btn btn-info" data-toggle="modal" data-target="#InvoiceNewPrint" id="Proforma Request"
+  (click)="onLoadFromHOPerformaInvoiceClick()" [disabled]="checkstatus != true"
+  *ngIf=" (_trnMainService.TrnMainObj.VoucherType==3 || _trnMainService.TrnMainObj.VoucherType==110) && showButton('Proforma Request')">
+  F9 Proforma Request
+</button>
+<button (click)="rejectPerformInvoice()" *ngIf="_trnMainService.showPerformaApproveReject && showSecondaryButtons"
+  class="btn btn-info">
+  Reject
+</button>
+<button (click)="approvePerformInvoice()" *ngIf="_trnMainService.showPerformaApproveReject && showSecondaryButtons"
+  class="btn btn-info">
+  Approve
+</button>
+<button id="From Proforma" class="btn btn-info " data-toggle="modal" (click)="onLoadFromPerformaInvoice()"
+  [disabled]="checkstatus != true"
+  *ngIf="(!_trnMainService.showPerformaApproveReject && _trnMainService.TrnMainObj.VoucherType == 14) && showButton('From Proforma')">
+  From Proforma
+</button>
+<button id="From Proforma" class="btn btn-info " data-toggle="modal" (click)="onLoadFromDeliveryChallaan()"
+  [disabled]="checkstatus != true"
+  *ngIf="(!_trnMainService.showPerformaApproveReject && _trnMainService.TrnMainObj.VoucherType == 14) && showButton('From Proforma')">
+  From DC
+</button>
+<!-- id="C" -->
+<button id="FROM SI" class="btn btn-info" (click)="onLoadFromHoTaxInvoiceClick()" [disabled]="checkstatus != true"
+  *ngIf="(_trnMainService.TrnMainObj.VoucherType==3) && showButton('FROM SI')">
+  F7 FROM SI
+</button>
+<button id="FROMMR" class="btn btn-info" (click)="onLoadFromMR()"
+  *ngIf="_trnMainService.TrnMainObj.VoucherType==3 && showButton('FROM MR')">
+  FROM MR
+</button>
+<!-- id="C" -->
+<button id="Import PI" class="btn btn-info" (click)="onImportPurchaseInvoice()" [disabled]="checkstatus != true"
+  *ngIf=" (_trnMainService.TrnMainObj.VoucherType==3) && showButton('Import PI')">
+  F2 IMPORT PI
+</button>
+<button id="Import OP" class="btn btn-info" (click)="onImportMatrixinputOpeningStockEnrty()"
+  [disabled]="checkstatus != true" *ngIf=" (_trnMainService.TrnMainObj.VoucherType==24) && showButton('Import OP')">
+  IMPORT Matrix OP
+</button>
+
+<button id="Import PI" class="btn btn-info" (click)="onImportMatrixinputPurchaseInvoice()"
+  [disabled]="checkstatus != true" *ngIf=" (_trnMainService.TrnMainObj.VoucherType==3) && showButton('Import PI')">
+  IMPORT Matrix PI
+</button>
+
+<button id="ImportAICODPI" class="btn btn-info" (click)="onImportAICODPurchaseInvoice()"
+  *ngIf=" (_trnMainService.TrnMainObj.VoucherType==3 && _trnMainService.AppSettings.CompanyNature == 1)">
+  F2 IMPORT AICOD
+</button>
+<button id="Import PR" class="btn btn-info" (click)="onImportPurchaseInvoiceReturn()" [disabled]="checkstatus != true"
+  *ngIf=" (_trnMainService.TrnMainObj.VoucherType==16 ) && showButton('IMPORT PR')">
+  IMPORT PR
+</button>
+<button
+  *ngIf=" (_trnMainService.TrnMainObj.VoucherType==14 || _trnMainService.TrnMainObj.VoucherType==3) && showButton('Load Cust Invoice')"
+  id="loadcustinvoices" (click)="loadcustCaret(_trnMainService.TrnMainObj.VoucherType)" class="btn btn-info" id="Cst"
+  data-toggle="modal">
+  Add Crate
+</button>
+<button *ngIf=" _trnMainService.TrnMainObj.VoucherType==14 && showButton('Load Cust Invoice')" id="loadcustinvoices"
+  (click)="loadcustinvoices()" class="btn btn-info" id="Cst" data-toggle="modal">
+  F9 Load Cust Invoice
+</button>
+
+<button id="LOAD SAP" class="btn btn-info" id="C" data-toggle="modal" data-target="#InvoiceNewPrint"
+  (click)="onLoadFromSAPFTPClick()" [disabled]="checkstatus != true"
+  *ngIf="('LOAD SAP'|buttonShow:0) && showButton('LOAD SAP')">
+  F12 LOAD SAP
+</button>
+<button id="From so" class="btn btn-info" id="C" data-toggle="modal" data-target="#InvoiceNewPrint"
+  (click)="onLoadFromSalesOrder()" [disabled]="checkstatus != true" *ngIf="((!_trnMainService.showPerformaApproveReject && _trnMainService.TrnMainObj.VoucherType==57) ||
+  _trnMainService.TrnMainObj.VoucherType==14) && showButton('From so')">
+  FROM SO
+</button>
+
+<button id="Read Weight" *ngIf="_trnMainService.TrnMainObj.VoucherType==14 && showButton('Read Weight')"
+  class="btn btn-info" id="Read Weight" data-toggle="modal" (click)="onReadWeight()"> Read Weight
+</button>
+<button id="cancel si" class="btn btn-info" id="C" data-toggle="modal" id="cancel si" data-target="#InvoiceNewPrint"
+  (click)="onLoadSalesCancel()" [disabled]="checkstatus != true"
+  *ngIf=" _trnMainService.TrnMainObj.VoucherType==14 && showButton('cancel si')">
+  Cancel SI
+</button>
+<button class="btn btn-info" id="C" data-toggle="modal" data-target="#InvoiceNewPrint" (click)="onLoadRNCancel()"
+  [disabled]="checkstatus != true" *ngIf=" _trnMainService.TrnMainObj.VoucherType==65 && showSecondaryButtons">
+  Cancel RN
+</button>
+<button class="btn btn-info" id="C" data-toggle="modal"
+  *ngIf="('PRODUCTS'|buttonShow:0) && showButton('Products') && (_trnMainService.userProfile.CompanyInfo.isHeadoffice==1  || _trnMainService.userProfile.CompanyInfo.companycode == null || _trnMainService.userProfile.CompanyInfo.companycode == '')"
+  (click)="onClickProducts()" [disabled]="checkstatus != true" id="products">
+  Products
+</button>
+<button id="supplier"
+  *ngIf="(_trnMainService.TrnMainObj.VoucherType==3 || _trnMainService.TrnMainObj.VoucherType==110) &&  showButton('supplier')"
+  class="btn btn-info" id="C" data-toggle="modal" (click)="onClickSupplier()" [disabled]="checkstatus != true">
+  Supplier
+</button>
+<button id="Supplier" class="btn btn-info" data-toggle="modal" (click)="onLoadRcvdDeliveryChallaan()"
+  [disabled]="checkstatus != true" *ngIf="( _trnMainService.TrnMainObj.VoucherType == 110)">
+  Received DC
+</button>
+<!-- 'BARCODE_OPTION'|active:0 -->
+
+<button id="cn to cancel"
+  *ngIf="(_trnMainService.TrnMainObj.VoucherType==15 || _trnMainService.TrnMainObj.VoucherType==63) && showButton('cn to cancel')"
+  class="btn btn-info" id="C" (click)="onLoadSalesReturnCancel()">
+  CN TO CANCEL
+</button>
+<button id="Pr cancel"
+  *ngIf="(_trnMainService.TrnMainObj.VoucherType==16 || _trnMainService.TrnMainObj.VoucherType==64)&& showButton('Pr cancel')"
+  class="btn btn-info" (click)="onLoadPurchaseReturnCancel()">
+  PR CANCEL
+</button>
+<button class="btn btn-info" id="C" data-toggle="modal" (cliFrck)=" onShowImportFromMobile()"
+  [disabled]="checkstatus != true"
+  *ngIf="(_trnMainService.TrnMainObj.VoucherType==20 && !showSecondaryButtons && (_trnMainService.userProfile.CompanyInfo.ORG_TYPE== 'distributor' || _trnMainService.userProfile.CompanyInfo.ORG_TYPE== 'wdb' || masterService.userProfile.CompanyInfo.ORG_TYPE=='superstockist') )">
+  IMPORT FROM MOBILE [ALT+M]
+</button>
+<button id="Import so" class="btn btn-info" data-toggle="modal" (click)="onShowImportSO()"
+  [disabled]="checkstatus != true" *ngIf="(_trnMainService.TrnMainObj.VoucherType==20 ) && showButton('Import so')">
+  IMPORT SO
+</button>
+<button id="From po" class="btn btn-info" data-toggle="modal" data-target="#InvoiceNewPrint"
+  (click)="onLoadFromPurchaseOrder()" [disabled]="checkstatus != true"
+  *ngIf="(_trnMainService.TrnMainObj.VoucherType==20 || _trnMainService.TrnMainObj.VoucherType==58|| _trnMainService.TrnMainObj.VoucherType==3 || _trnMainService.TrnMainObj.VoucherType==110) && showButton('From po')">
+  FROM PO
+</button>
+<button id="Import PO" class="btn btn-info" data-toggle="modal" (click)="onShowImport()"
+  *ngIf="(_trnMainService.TrnMainObj.VoucherType==19 && showButton('Import PO'))">
+  Import PO
+</button>
+<button id="From Quotations" class="btn view-btn" data-toggle="modal" (click)="ShowQuotations()"
+  *ngIf="(_trnMainService.TrnMainObj.VoucherType==19 && showButton('From Quotations'))">
+  From Quotations
+</button>
+<button *ngIf="(!_trnMainService.showPerformaApproveReject && ('VIEW'|buttonShow:0) && showButton('view'))"
+  (click)="onViewClicked()" class="btn btn-info">
+  F4 VIEW
+</button>
+<button id="edit" *ngIf="('EDIT'|buttonShow:0) && showButton('edit')" (click)="onEditClicked()" class="btn btn-info">
+  F5 EDIT
+</button> 
+<button id="Transport"
+  *ngIf="(_trnMainService.TrnMainObj.VoucherType ==5  || _trnMainService.TrnMainObj.VoucherType ==14) && showButton('Transport')"
+  (click)="onTransportClick()" class="btn  Transport-btn">
+  [ALT+T] Transport
+</button>
+<button id="issueto" *ngIf="_trnMainService.TrnMainObj.VoucherType ==5 && showButton('Issue To')"
+  (click)="onIssueToClick()" class="btn btn-info Issue-btn">
+  Issue To
+</button>
+<button
+  *ngIf="((_trnMainService.TrnMainObj.Mode != 'VIEW' || !_trnMainService.showPerformaApproveReject) && !showSecondaryButtons) && (_trnMainService.TrnMainObj.VoucherType !=63) && showButton('save')"
+  (click)="onSaveClicked()" class="btn btn-info">
+  F6 SAVE
+</button>
+<button (click)="onNewClick()" class="btn btn-info" *ngIf="('RESET'|buttonShow:0) && showButton('reset')">
+  F3 RESET
+</button>
+<button (click)="cancel()" class="btn btn-info"
+  *ngIf="(((_trnMainService.TrnMainObj.VoucherType ==3 || _trnMainService.TrnMainObj.VoucherType ==114 || _trnMainService.TrnMainObj.VoucherType ==65 ||  _trnMainService.TrnMainObj.VoucherType==110 ||_trnMainService.TrnMainObj.VoucherType ==65 || activeurlpath == 'StockSettlementEntry' || _trnMainService.TrnMainObj.VoucherType ==19 || _trnMainService.TrnMainObj.VoucherType ==20 || _trnMainService.TrnMainObj.VoucherType ==57 )&& _trnMainService.TrnMainObj.Mode == 'VIEW') || (_trnMainService.TrnMainObj.VoucherType ==63)) && showSecondaryButtons">
+  CANCEL
+</button>
+<button class="btn view-btn" id="Q" (click)="onViewQuotationClicked()"
+  *ngIf="this.mode =='View' && _trnMainService.TrnMainObj.VoucherType==114">
+  View Quotations
+</button>
+<!-- && showButton('Intend') -->
+<button id="Intend" class="btn btn-info" data-toggle="modal" (click)="onShowIndentLoadForPO()"
+  *ngIf="_trnMainService.TrnMainObj.VoucherType==19 && showButton('Intend')">
+  Indent
+</button>
+<!-- && showButton('Intend') -->
+<button id="Intend" class="btn btn-info" data-toggle="modal" (click)="onShowIndentLoadForRFQ()"
+  *ngIf="_trnMainService.TrnMainObj.VoucherType==114 && showButton('Intend')">
+  Indent
+</button>
+<!-- && showButton('From dn') -->
+<button id="From dn" class="btn btn-info" data-toggle="modal" (click)="onFromDebitNoteClicked()"
+  *ngIf="_trnMainService.TrnMainObj.VoucherType==15 && showButton('From dn')">
+  From DN
+</button>
+<button id="From cn" class="btn btn-info" data-toggle="modal" (click)="onFromCreditNoteClicked()"
+  *ngIf="_trnMainService.TrnMainObj.VoucherType==16 && showButton('From cn')">
+  From CN
+</button>
+<!-- && showButton('') -->
+<!-- && showButton('Import From SO') -->
+<button id="Import From SO" *ngIf="_trnMainService.TrnMainObj.VoucherType==19 && showButton('Import From SO')"
+  class="btn btn-info" id="Import so" data-toggle="modal" (click)="onImportFromSalesOrderInPO()"> Import From
+  SO
+</button>
+<button id="Generate Bar Code" *ngIf="_trnMainService.TrnMainObj.VoucherType==19 && showButton('Generate Bar Code')"
+  class="btn btn-info" id="Generate code bar" data-toggle="modal" (click)="generateItemBarCode()"> Generate Bar Code
+</button>
+<button class="btn btn-info" id="J" data-toggle="modal" data-target="#InvoiceNewPrint" (click)="onPrintClicked()"
+  [disabled]="checkstatus != true" *ngIf="showButton('Print')&& _trnMainService.TrnMainObj.VoucherType!=61">
+  F8 PRINT
+</button>
+<button (click)="onNewCustomerClick()" class="btn pink-btn"
+  *ngIf="(_trnMainService.TrnMainObj.VoucherType==14 && showButton('new cust')) && (_trnMainService.userProfile.CompanyInfo.ORG_TYPE=='retailer' || _trnMainService.userProfile.CompanyInfo.ORG_TYPE=='ak' || _trnMainService.userProfile.CompanyInfo.ORG_TYPE=='ck' || _trnMainService.userProfile.CompanyInfo.ORG_TYPE=='gak' || _trnMainService.userProfile.CompanyInfo.ORG_TYPE=='pms') ">
+  [ALT+N]New Cust
+</button>
+<button class="btn btn-info" id="im" data-toggle="modal"
+  *ngIf="showButton('load itemimage')"
+  (click)="onClickItemImage()" [disabled]="checkstatus != true" id="itemimage">
+  Load ItemImage
+</button>
+
+<generic-popup-grid #genericGrid [popupsettings]="gridPopupSettings" (onItemDoubleClick)="onItemDoubleClick($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericGridEdit [popupsettings]="gridPopupSettingsForEdit"
+  (onItemDoubleClick)="onItemDoubleClickFroEdit($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericGridForFromQuotations [popupsettings]="genericPopupSettingsForFromQuotations"
+  (onItemDoubleClick)="onItemDoubleClickFromQuotations($event)">
+</generic-popup-grid>
+
+<generic-popup-grid #genericGridHoldBill [popupsettings]="gridPopupSettingsForHoldBill"
+  (onItemDoubleClick)="onHoldBillDoubleClick($event)" (onDeleteClicked)="cancelHoldBill($event)"></generic-popup-grid>
+
+<generic-popup-Tender *ngIf="_trnMainService.TrnMainObj.VoucherType==14" #genericTender (okClicked)="okClicked($event)">
+</generic-popup-Tender>
+<Transport-Popup #Transport
+  *ngIf="_trnMainService.TrnMainObj.VoucherType ==5 || _trnMainService.TrnMainObj.VoucherType ==14 "
+  (okClicked)="TenderOkClick($event)">
+</Transport-Popup>
+<popup-addnewcust #AddNewCustomerPopup (okClicked)="okAddNewClicked($event)"></popup-addnewcust>
+
+<generic-popup-grid #genericGridIntend [popupsettings]="gridPopupSettingsForIntend"
+  (onItemDoubleClick)="onIntendDoubleClick($event)" (onButtonClick)="onIntendMultipleSelect($event)">
+</generic-popup-grid>
+
+<generic-popup-grid #genericGridTransferOut [popupsettings]="gridPopupSettingsForTransferOut"
+  (onItemDoubleClick)="onTransferOutDoubleClick($event)"></generic-popup-grid>
+
+
+<generic-popup-grid #genericGridItem [popupsettings]="gridPopupSettingsForItem"
+  (onItemDoubleClick)="onProductOutDoubleClick($event)"></generic-popup-grid>
+
+
+
+<div class="print-modal-sticky" *ngIf="promptPrintDevice" style="display : block; padding: 0px;  margin-bottom: 25px;height: auto;
+  position: absolute;right: 65%;top: 5px;width: 50%;z-index: 9999999">
+
+  <div class="modal-content modal-content-main-area">
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel">Available Printing Device Supported</h4>
+    </div>
+    <div class="modal-body">
+      <ng-container *ngIf="formWisePrintProfile && (!formWisePrintProfile.length)">
+        <form>
+          <ng-container
+            *ngIf="(_trnMainService.TrnMainObj.VoucherType == 14 || _trnMainService.TrnMainObj.VoucherType == 15 || _trnMainService.TrnMainObj.VoucherType == 20) && ( _trnMainService.userProfile.CompanyInfo.ORG_TYPE=='retailer' || _trnMainService.userProfile.CompanyInfo.ORG_TYPE=='ak' || _trnMainService.userProfile.CompanyInfo.ORG_TYPE=='ck' || _trnMainService.userProfile.CompanyInfo.ORG_TYPE=='gak' || _trnMainService.userProfile.CompanyInfo.ORG_TYPE=='pms')">
+            <input type="radio" [formControl]="printControl" name="printOption" value=0>[ALT+1]POS Printer [3mm]
+            <input style=" width: 50px;" type="number" [(ngModel)]="_trnMainService.posPrintCount "
+              name="posPrintCount">
+            <br>
+            <input type="radio"  [formControl]="printControl"  name="printOption"
+               value=5>POS Printer without GST [3mm]<br>
+
+            <input type="radio"  [formControl]="printControl"  name="printOption"  value=6>POS Printer [2mm]<br>
+          </ng-container>
+          <input type="radio"  [formControl]="printControl"  name="printOption"  value=58>POS Printer Matrix [3mm]<br>
+
+          <input type="radio" [formControl]="printControl" name="printOption" value=1 checked>[ALT+2]Laser
+          printer[A4]<br>
+          <ng-container
+            *ngIf="_trnMainService.TrnMainObj.VoucherType == 14 &&(_trnMainService.userProfile.CompanyInfo.ORG_TYPE=='superstockist' || _trnMainService.userProfile.CompanyInfo.ORG_TYPE=='distributor'|| _trnMainService.userProfile.CompanyInfo.ORG_TYPE=='superdistributor' || _trnMainService.userProfile.CompanyInfo.ORG_TYPE=='retailer' || _trnMainService.userProfile.CompanyInfo.ORG_TYPE=='ak'|| _trnMainService.userProfile.CompanyInfo.ORG_TYPE=='ck'|| _trnMainService.userProfile.CompanyInfo.ORG_TYPE=='pms' || _trnMainService.userProfile.CompanyInfo.ORG_TYPE=='gak')">
+            <input type="radio" [formControl]="printControl" name="printOption" value=2 checked>[ALT+3]A5 print<br>
+          </ng-container>
+          <ng-container
+            *ngIf="_trnMainService.TrnMainObj.VoucherType == 14 &&(_trnMainService.userProfile.CompanyInfo.ORG_TYPE=='superstockist' || _trnMainService.userProfile.CompanyInfo.ORG_TYPE=='distributor'|| _trnMainService.userProfile.CompanyInfo.ORG_TYPE=='superdistributor' || _trnMainService.userProfile.CompanyInfo.ORG_TYPE=='retailer' || _trnMainService.userProfile.CompanyInfo.ORG_TYPE=='ak'|| _trnMainService.userProfile.CompanyInfo.ORG_TYPE=='ck'|| _trnMainService.userProfile.CompanyInfo.ORG_TYPE=='pms' || _trnMainService.userProfile.CompanyInfo.ORG_TYPE=='gak')">
+            <input type="radio" [formControl]="printControl" name="printOption" value=3 checked>[ALT+3]A5 print(NON
+            GST)<br>
+          </ng-container>
+
+          <input type="radio" [formControl]="printControl" name="printOption" value=10>Customized KW print<br>
+          <input type="radio" [formControl]="printControl" name="printOption" value=11>Customized ITC print<br>
+          <input type="radio" [formControl]="printControl" name="printOption" value=21>Customized GT print<br>
+          <input type="radio" [formControl]="printControl" name="printOption" value=12>Download Excel File<br>
+          <input type="radio" [formControl]="printControl" name="printOption" value=13>A4 Ashoka Wholesale<br>
+          <input type="radio" [formControl]="printControl" name="printOption" value=14>A5 Ashoka Wholesale<br>
+          <input type="radio" [formControl]="printControl" name="printOption" value=20>3 MM Html WITHOUT GST<br>
+
+        </form>
+      </ng-container>
+
+
+
+      <ng-container *ngIf="formWisePrintProfile && formWisePrintProfile.length">
+        <ng-container *ngFor="let profile of formWisePrintProfile">
+          <input type="radio" [formControl]="printControl" name="printOption"
+            value="{{profile.controlValue}}">{{profile?.profileNameLabel}}<br>
+        </ng-container>
+
+      </ng-container>
+
+
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cancelprint()">[Esc]Cancel</button>
+      <!-- setPrinterAndprint() -->
+      <button type="button" class="btn btn-primary" (click)="sendToPrint()">[ALT+P]Print</button>
+    </div>
+
+  </div>
+</div>
+<div class="print-modal-sticky" *ngIf="enableBarcodePrintOption" style="display : block; padding: 0px;  margin-bottom: 25px;height: auto;
+  position: absolute;right: 65%;top: 5px;width: 50%;z-index: 9999999">
+
+  <div class="modal-content modal-content-main-area">
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel">Barcode Printing</h4>
+    </div>
+    <div class="modal-body">
+      <form>
+
+
+        <input type="radio" [(ngModel)]="_trnMainService.trnMainForBarcodePrint.BARCODEPRINTMULTIPLIER"
+          name="BARCODEPRINTMULTIPLIER" value=1>1 times QTY<br>
+        <input type="radio" [(ngModel)]="_trnMainService.trnMainForBarcodePrint.BARCODEPRINTMULTIPLIER"
+          name="BARCODEPRINTMULTIPLIER" value=2>2 times Quantity<br>
+
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal"
+        (click)="enableBarcodePrintOption=false">Cancel</button>
+      <button type="button" class="btn btn-primary"
+        (click)="printBarcode();enableBarcodePrintOption=false">[ALT+P]Print</button>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+<div class="print-modal-sticky" *ngIf="showPosPrinterPreview" style="display : block; padding: 0px;  margin-bottom: 25px;height: auto;
+  position: absolute;right: 65%;top: 5px;width: 50%;z-index: 9999999">
+  <div class="modal-content modal-content-main-area" style="width: 100%;">
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel">Print Preview</h4>
+    </div>
+    <div class="modal-body" style="height: 420px;overflow:scroll;text-align: left;">
+
+      <pre>
+        {{_trnMainService.TrnMainObj.printStringForPos}}
+      </pre>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cancelprint()">Close</button>
+      <button type="button" class="btn btn-primary" (click)="printPosBill()">Print</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="modal-sticky" *ngIf="showAdvanceAdjustmentPopUp" style="display : block; padding: 0px;  margin-bottom: 25px;height: 210px;
+  position: absolute;right: 50%;top: 5px;width: 600px;z-index: 9999999">
+  <div class="modal-content modal-content-main-area" style="width: 100%;">
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel">Please choose the Option for advance Adjustment to this bill...</h4>
+    </div>
+    <div class="modal-body">
+      <div class="col-md-12">
+        <div class="row">
+          <label style="width: 30%;">Adjustment Type:</label>
+          <select style="width:60%;" [(ngModel)]="_trnMainService.TrnMainObj.AdvanceAdjustmentObj.AdjustmentType">
+            <option value="full">Full Adjustment</option>
+            <option value="partial">Partial Adjustment</option>
+
+          </select>
+        </div>
+
+        <div class="row" *ngIf="_trnMainService.TrnMainObj.AdvanceAdjustmentObj.AdjustmentType=='partial'">
+          <label style="width: 30%;">Partial Amount :</label>
+          <input type="number" style="width:60%;"
+            [(ngModel)]="_trnMainService.TrnMainObj.AdvanceAdjustmentObj.PartialAmount" />
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" style="margin-top: 5px;" class="btn btn-default" data-dismiss="modal"
+          (click)="cancelAdvanceAdjustment()">Cancel</button>
+        <button type="button" style="margin-top: 5px;" class="btn btn-primary"
+          (click)="OkAdvanceAdjustment()">Adjust</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div *ngIf="showShippingAddress" style="display: block;
+padding: 0px;
+margin-bottom: 0;
+height: auto;
+position: absolute;
+right: 65%;
+top: 0px;
+width: 50%;
+z-index: 9999999">
+  <div class="modal-content modal-content-main-area" style="width: 100%;">
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel">Shipping Address</h4>
+    </div>
+    <div class="modal-body">
+      <div class="clearfix">
+        <div class="form-inline">
+          <label for="shipname">Name</label>
+          <input [(ngModel)]="_trnMainService.TrnMainObj.shipToDetail.ACNAME" type="text" id='shipname'
+            class="form-control" #shipname (keydown.enter)="address1.focus()">
+        </div>
+        <div class="form-inline">
+          <label for="address1">Address 1</label>
+          <input [(ngModel)]="_trnMainService.TrnMainObj.shipToDetail.ADDRESS" type="text" id='address1'
+            class="form-control" #address1 (keydown.enter)="address2.focus()">
+        </div>
+        <div class="form-inline">
+          <label for="address2">Address 2</label>
+          <input [(ngModel)]="_trnMainService.TrnMainObj.shipToDetail.ADDRESS2" type="text" id='address2'
+            class="form-control" #address2 (keydown.enter)="landmark.focus()">
+        </div>
+        <div class="form-inline">
+          <label for="landmark">Landmark</label>
+          <input [(ngModel)]="_trnMainService.TrnMainObj.shipToDetail.LANDMARK" type="text" id='landmark'
+            class="form-control" #landmark (keydown.enter)="area.focus()">
+        </div>
+        <div class="form-inline">
+          <label for="area">Area</label>
+          <input [(ngModel)]="_trnMainService.TrnMainObj.shipToDetail.AREA" type="text" id='area' class="form-control"
+            #area (keydown.enter)="city.focus()">
+        </div>
+        <div class="form-inline">
+          <label for="city">City</label>
+          <input [(ngModel)]="_trnMainService.TrnMainObj.shipToDetail.CITY" type="text" id='city' class="form-control"
+            #city (keydown.enter)="pincode.focus()">
+        </div>
+        <div class="form-inline">
+          <label for="pincode">Pincode</label>
+          <input [(ngModel)]="_trnMainService.TrnMainObj.shipToDetail.PINCODE" type="text" id='pincode'
+            class="form-control" #pincode (keydown.enter)="emailid.focus()">
+        </div>
+        <div class="form-inline">
+          <label for="emailid">Email</label>
+          <input [(ngModel)]="_trnMainService.TrnMainObj.shipToDetail.EMAIL" type="text" id='emailid'
+            class="form-control" #emailid (keydown.enter)="mobile.focus()">
+        </div>
+        <div class="form-inline">
+          <label for="mobile">Mobile</label>
+          <input [(ngModel)]="_trnMainService.TrnMainObj.shipToDetail.MOBILE" type="text" id='mobile'
+            class="form-control" #mobile (keydown.enter)="ctype.focus()" OnlyNumber=true>
+        </div>
+        <div class="form-inline">
+          <label for="ctype">Customer Type</label>
+          <select class="form-control" name="scode" id="scode" #ctype
+            [(ngModel)]="_trnMainService.TrnMainObj.shipToDetail.CUSTOMERTYPE">
+            <option value="">Select Customer Type</option>
+            <option *ngFor="let ctype of customerTypeList" value="{{ctype.OrgTypeCode}}">{{ctype.OrgTypeName}}</option>
+          </select>
+        </div>
+        <div class="form-inline">
+          <label for="scode">State Code</label>
+          <select class="form-control" name="scode" id="scode" #scode
+            [(ngModel)]="_trnMainService.TrnMainObj.shipToDetail.STATE">
+            <option value="">Select State</option>
+            <option *ngFor="let state of stateCodeList" value="{{state.StateCode}}">{{state.StateName}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" style="margin-top: 5px;" class="btn btn-info"
+        (click)="showShippingAddress=!showShippingAddress;onShippingCancel()">Cancel</button>
+      <button type="button" style="margin-top: 5px;" class="btn btn-info" (click)="onShippingOk()">oK</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div *ngIf="showProducts" class="showproducts-modal">
+  <div class="modal-content modal-content-main-area" style="width: 100%;">
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel">Products</h4>
+    </div>
+    <div class="modal-body">
+      <div class="showproducts-body">
+        <div class="form-inline">
+          <label class="form-control-label" for="productname">Name:</label>
+          <input type="text" id='productname' class="form-control" [(ngModel)]="product.DESCA">
+        </div>
+        <div class="form-inline">
+          <label class="form-control-label" for="prodbarcode">Barcode:</label>
+          <input type="text" id='prodbarcode' class="form-control" #prodbarcode [(ngModel)]="product.BARCODE">
+        </div>
+        <div class="form-inline">
+          <label class="form-control-label" for="address1">GST:</label>
+          <select [(ngModel)]="product.GST">
+            <option value="-1">Exempted</option>
+            <option value=0>0 %</option>
+            <option value=5>5 %</option>
+            <option value=12>12 %</option>
+            <option value=18>18 %</option>
+            <option value="28">28 %</option>
+          </select>
+        </div>
+        <div class="form-inline">
+          <label class="form-control-label" for="address2">MRP:</label>
+          <input type="number" id='address2' class="form-control" #address2 [(ngModel)]="product.MRP">
+        </div>
+        <div class="form-inline">
+          <label class="form-control-label" for="openingStockP">Opening Stock:</label>
+          <input type="number" id='openingStockP' class="form-control" #address2 [(ngModel)]="product.OpeningStock">
+        </div>
+
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-info" (click)="saveProducts()">Save</button>
+      <button type="button" class="btn cancel-btn" (click)="cancelProducts()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="showItemImage" class="showItemImage-modal" style="top:5px; width: 95%; max-height: 450px; right: 30%">
+  <div class="modal-content modal-content-main-area" style="width: 100%;">
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel">Item Image</h4>
+    </div>
+    <div class="modal-body" style="height: 400px; overflow-x: scroll;">
+      <div class="showItemImage-body">
+        <div class="row">
+          <div class="col-md-6" style="width: 25%;"*ngFor="let i of itemDetailsWithImage">
+            <img src="{{i.imageUrl}}" width="200" height="200" class="img-thumbnail" alt="image not found" />
+            <label class="form-control-label" for="productname">{{i.itemName}}</label>          
+          </div>
+        </div>      
+
+      </div>
+    </div>
+    <div class="modal-footer" style="float: right; margin-right: 5px;">
+      <button type="button" class="btn cancel-btn" (click)="cancelItemImage()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showSupplier" style="display: block;
+padding: 0px;
+margin-bottom: 0;
+height: 80vh;
+position: absolute;
+right: 65%;
+top: 0px;
+width: 50%;
+z-index: 9999999">
+  <div class="modal-content modal-content-main-area" style="width: 100%;">
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel">Supplier</h4>
+    </div>
+    <div class="modal-body">
+      <div class="clearfix">
+        <div class="form-inline">
+          <label for="name">Name *:</label>
+          <input type="text" id='name' class="form-control" [(ngModel)]="SupplierName">
+        </div>
+        <div class="form-inline">
+          <label for="address">Address *:</label>
+          <input type="text" id='address' class="form-control" #address1 [(ngModel)]="SupplierAddress">
+        </div>
+
+        <div class="form-inline">
+          <label for="city">City *:</label>
+          <input type="text" id='city' class="form-control" [(ngModel)]="SupplierCity" #area>
+        </div>
+        <div class="form-inline">
+          <label for="mobile">Mobile *:</label>
+          <input type="number" id='mobile' class="form-control" [(ngModel)]="SupplierMobile" #area>
+        </div>
+
+        <div class="form-inline">
+          <label for="state">State *:</label>
+          <select id='state' class="form-control" style="width:46%;" [(ngModel)]="SupplierState">
+            <option *ngFor="let i of StateList" [ngValue]="i.StateCode">
+              {{i.StateName}}
+            </option>
+          </select>
+          <!-- <input type="text" id='state' class="form-control" [(ngModel)]="SupplierState" #area> -->
+        </div>
+        <div class="form-inline">
+          <label for="pan">Postal Code *:</label>
+          <input type="text" id='pan' class="form-control" [(ngModel)]="supplierPostalCode" #area>
+        </div>
+
+        <div class="form-inline">
+          <label for="pan">GST Type *:</label>
+          <select class="form-control" [(ngModel)]="SupplierGSTTYPE" style="width:46%;">
+            <option value="Regular">Regular</option>
+            <option value="Composite">Composite</option>
+            <option value="Un-Register">Un-Register</option>
+          </select>
+        </div>
+        <div class="form-inline">
+          <label for="landmark">Landmark :</label>
+          <input type="text" id='landmark' class="form-control" #address2 [(ngModel)]="SupplierLandmark">
+        </div>
+        <div class="form-inline">
+          <label for="area">Area :</label>
+          <input type="text" id='area' class="form-control" #landmark [(ngModel)]="SupplierArea">
+        </div>
+        <div class="form-inline">
+          <label for="emailID">Email ID :</label>
+          <input type="text" id='emailID' class="form-control" [(ngModel)]="SupplierEmail" #area>
+        </div>
+        <div class="form-inline">
+          <label for="type">CustomerType :</label>
+          <input type="text" id='type' class="form-control" #area>
+        </div>
+        <div class="form-inline">
+          <label for="invoiceType">InvoiceType :</label>
+          <input type="text" id='invoiceType' class="form-control" [(ngModel)]="SupplierInvoiceType" #area>
+        </div>
+        <div class="form-inline">
+          <label for="gst">GST No :</label>
+          <input type="text" id='gst' class="form-control" [(ngModel)]="SupplierGST" #area>
+        </div>
+        <div class="form-inline">
+          <label for="pan">PAN No :</label>
+          <input type="text" id='pan' class="form-control" [(ngModel)]="SupplierPan" #area>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" style="margin-top: 5px;" class="btn btn-info" (click)="cancelSupplier()">Cancel</button>
+      <button type="button" style="margin-top: 5px;" class="btn btn-info" (click)="saveSupplier()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showSalesBillPopUp" style="display: block;
+    top: 150px;
+    display: block;
+    padding: 0px;
+    margin-bottom: 0;
+    height: 36vh;
+    position: absolute;
+    left: calc(40% - 201px);
+    /* top: 135%; */
+    width: 40%;
+    z-index: 1;">
+
+  <div class="modal-content modal-content-main-area" style="width: 100%;text-align:left;">
+    <!-- <div  style="
+    position: absolute;
+    right: 0;
+    z-index: 11111;">
+    <h1>Load invoices</h1>
+      <button class="close" aria-label="Close" (click)="onCloseSalesBill()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+
+    </div> -->
+    <div class="modal-header" style="text-align: left;
+    height: 40px;
+    position: relative;padding: 9px;">
+      <h4 class="modal-title m-0" id="myModalLabel">Load invoices</h4>
+      <button class="close" aria-label="Close" style="
+    position: absolute;
+    clear: both;
+    z-index: 1;
+    right: 16px;
+    top: 10px;" (click)="onCloseSalesBill()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+
+      <div class="clearfix">
+        <div class="form-inline">
+          <label for="dateFrom" style="width: 35%;">Date From :</label>
+          <input type="date" id='dateFrom' [(ngModel)]="dateFrom" name="dateFrom" style="width:57%;"
+            class="form-control">
+        </div>
+        <div class="form-inline">
+          <label for="dateTo" style="width: 35%;">Date To :</label>
+          <input type="date" id='dateTo' [(ngModel)]="dateTo" name="dateTo" style="width:57%;" class="form-control">
+        </div>
+        <div class="form-inline">
+          <label for="customerName" style="width: 35%;">Customer Name :</label>
+          <input type="text" id='customerName' [(ngModel)]="_trnMainService.TrnMainObj.BILLTO" readonly name="cusName"
+            style="width:57%;" class="form-control">
+        </div>
+        <div class="form-inline">
+          <label for="billno" style="width: 35%;">Bill No :</label>
+          <input type="text" style="width:57%;" placeholder="press enter to select bill"
+            (keydown.Enter)="showBillPopup()" id='billNo' class="form-control">
+        </div>
+        <div class="form-inline">
+          <label for="item" style="width: 35%;">Item :</label>
+          <input type="text" style="width:57%;" placeholder="press enter to select item"
+            (keydown.Enter)="showItemPoup()" id='item' class="form-control">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showCaretPopUp" style="display: block;
+    top: 150px;
+    display: block;
+    padding: 0px;
+    margin-bottom: 0;
+    height: 36vh;
+    position: absolute;
+    left: calc(40% - 201px);
+    /* top: 135%; */
+    width: 40%;
+    z-index: 1;">
+
+  <div class="modal-content modal-content-main-area" style="width: 100%;text-align:left;">
+    <div class="modal-header" style="text-align: left;
+    height: 40px;
+    position: relative;padding: 9px;">
+      <h4 class="modal-title m-0" id="myModalLabel">Load Crate</h4>
+      <button class="close" aria-label="Close" style="
+    position: absolute;
+    clear: both;
+    z-index: 1;
+    right: 16px;
+    top: 10px;" (click)="onCloseCaret()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>Balance : {{crateBalance}}</p>
+      <div class="clearfix">
+        <div class="form-inline">
+          <label for="dateFrom" style="width: 35%;">Date :</label>
+          <input type="date" id='caretDate' [(ngModel)]="caretDate" name="caretDate" style="width:57%;"
+            class="form-control">
+        </div>
+
+        <div class="form-inline">
+          <label for="customerName" style="width: 35%;">Name :</label>
+          <input type="text" id='customerName' [(ngModel)]="_trnMainService.TrnMainObj.BILLTO" readonly name="cusName"
+            style="width:57%;" class="form-control">
+        </div>
+        <div class="form-inline">
+          <label for="billno" style="width: 35%;">Assign Crate :</label>
+          <input type="text" style="width:57%;" placeholder="Assign Crate" [(ngModel)]="assignCaret"
+            class="form-control" (keypress)="numberOnly($event)">
+        </div>
+        <div class="form-inline">
+          <label for="billno" style="width: 35%;">Return Crate :</label>
+          <input type="text" style="width:57%;" placeholder="Return Crate" [(ngModel)]="returnCaret"
+            class="form-control" (keypress)="numberOnly($event)">
+        </div>
+        <div class="form-inline">
+          <button type="button" [disabled]="saveCaretStatus" (click)="saveCaret(_trnMainService.TrnMainObj.VoucherType)"
+            title="onSave" class="btn btn-success">
+            Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-sticky" *ngIf="showBillDetails == true;" style="
+    display: block;
+    padding: 0px;
+    margin-bottom: 25px;
+    height: 500px;
+    position: fixed;
+    right: 0%;
+    top: 20%;
+    width: 44%;
+    z-index: 9999999;
+  ">
+  <div class="modal-content modal-content-main-area" style="width: 100%;">
+    <div class="modal-header" style="text-align: left;
+    height: 40px;
+    position: relative;background: #ecad79;padding: 9px;">
+      <h4 class="modal-title m-0" id="myModalLabel">Bill Details</h4>
+      <button class="close" aria-label="Close" style="
+    position: absolute;
+    clear: both;
+    z-index: 1;
+    right: 16px;
+    top: 10px;" (click)="hideBillsPopup()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="col-md-12" style="height: 300px;padding:0px;overflow-x: auto">
+      <table class="table">
+        <thead style="background:#b5e26a;">
+          <tr>
+            <th scope="col">S.No</th>
+            <th scope="col" style="text-align: center;">Date</th>
+            <th scope="col" style="text-align: center;">No</th>
+            <th scope="col">Amount</th>
+            <th scope="col" style="text-align: center;">Customer</th>
+            <th scope="col" style="text-align: center;">User</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of (this.invoiceDetailsList);let i = index;" (dblclick)="onShowInvoiceDetailsPopUp(item)"
+            [class.selected-row]="showBillDetailsSelectedIndex == i">
+            <td style="width:20%;text-align: right;">{{i+1}}</td>
+            <td style="width:20%;">{{item.TRNDATE}}</td>
+            <td style="width:20%;">{{item.VCHRNO}}</td>
+            <td style="width:20%;text-align: right;">{{item.NETAMNT}}</td>
+            <td style="width:20%;">{{item.BILLTO}}</td>
+            <td style="width:20%;">{{item.TRNUSER}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+<div class="modal-sticky" *ngIf="showInvoiceDetails == true;" style="
+    display: block;
+    padding: 0px;
+    margin-bottom: 25px;
+    height: 500px;
+    position: fixed;
+    right: 0%;
+    top: 20%;
+    width: 34%;
+    z-index: 1;
+  ">
+  <div class="modal-content modal-content-main-area" style="width: 100%;">
+    <div class="modal-header" style="text-align: left;
+    height: 40px;
+    position: relative;background: #ecad79;padding: 9px;">
+      <h4 class="modal-title m-0" id="myModalLabel">Invoice Details</h4>
+      <button class="close" aria-label="Close" style="
+    position: absolute;
+    clear: both;
+    z-index: 1;
+    right: 16px;
+    top: 10px;" (click)="hideInvoicePopup()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <!-- <button class="btn btn-info" (click)="onInvoiceSelectedApply()">Apply</button> -->
+    </div>
+    <div class="col-md-12" style="height: 300px;padding:0px;overflow-x: auto">
+      <table class="table">
+        <thead style="background:#b5e26a;">
+          <tr>
+            <!-- <th scope="col"><input type="checkbox" name="invoiceselectall" id="invoiceselectall"
+                (change)="invoiceselectallchange($event)"></th> -->
+            <th scope="col">S.No</th>
+            <th scope="col" style="text-align: center;">Date</th>
+            <th scope="col" style="text-align: center;">Vchrno</th>
+            <th scope="col" style="text-align: center;">Name</th>
+            <th scope="col" style="text-align: center;">Code</th>
+            <th scope="col">Qty</th>
+            <th scope="col">DISC%</th>
+            <th scope="col" style="text-align: center;">Stock</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of billDetailsLList;let i = index;" (keydown.Enter)="onInvoiceDetailsApply(item,i)"
+            (dblclick)="onInvoiceDetailsApply(item,i);" [class.selected-row]="invoiceDetailSelectedIndex == i">
+            <!-- <td style="width:6%;text-align: right;"><input type="checkbox" name="invoiceselectall{{i}}" id="invoiceselectall{{i}}"
+                [(ngModel)]="item.isSelected"></td> -->
+            <td style="width:6%;text-align: right;">{{i+1}}</td>
+            <td style="width:38%;text-align: left;">{{item.TRNDATE}}</td>
+            <td style="width:38%;text-align: left;">{{item.VCHRNO}}</td>
+            <td style="width:38%;text-align: left;">{{item.ITEMDESC}}</td>
+            <td style="width:16%;text-align: left;">{{item.MCODE}}</td>
+            <td style="width:8%;text-align: right;">{{item.QTY}}</td>
+            <td style="width:8%;text-align: right;">{{item.INDDISCOUNTRATE}}</td>
+            <td style="width:13%;">{{item.STOCK}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+<div class="modal-sticky" *ngIf="showIssuesto" style="
+    display: block;
+    padding: 0px;
+    margin-bottom: 25px;
+    height: 500px;
+    position: fixed;
+    right: 0%;
+    top: 20%;
+    width: 34%;
+    z-index: 1;
+    text-align: left;
+  ">
+  <div class="modal-content modal-content-main-area" style="width: 100%;">
+    <div class="modal-header" style="text-align: left;
+    height: 40px;
+    position: relative;background: #ecad79;padding: 9px;">
+      <h4 class="modal-title m-0" id="myModalLabel">Issue Details</h4>
+      <button class="close" aria-label="Close" style="
+    position: absolute;
+    clear: both;
+    z-index: 1;
+    right: 16px;
+    top: 10px;" (click)="showIssuesto=false">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="col-md-12" style="height: 300px;padding:0px;overflow-x: auto">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label style="width: 100% !important;">Status</label>
+
+          <select name="retstatus" id="retstatus" [(ngModel)]="_trnMainService.TrnMainObj.RETTO" class="form-control">
+            <option value="0">Non Returnable</option>
+            <option value="1">Returnable</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label style="width: 100% !important;">Employee Name</label>
+
+          <select name="empname" id="empname" (change)="onEmployeeChange()"
+            [(ngModel)]="_trnMainService.TrnMainObj.RECEIVEBY" class="form-control">
+            <option *ngFor="let emp of employeeList" value="{{emp.ACID}}">{{emp.ACNAME}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label style="width: 100% !important;">Employee Mobile</label>
+          <input type="text" name="emobile" [(ngModel)]="_trnMainService.TrnMainObj.BILLTOMOB" class="form-control"
+            (keydown)="$event.preventDefault()">
+
+        </div>
+        <div class="form-group">
+          <label style="width: 100% !important;">Employee Email</label>
+
+          <input type="text" name="emobile" [(ngModel)]="_trnMainService.TrnMainObj.BILLTOTEL" class="form-control"
+            (keydown)="$event.preventDefault()">
+
+
+        </div>
+        <div class="form-group">
+          <label style="width: 100% im !important;">Return Date</label>
+
+          <input type="date" id="retdate" name="retdate" class="form-control"
+            [(ngModel)]="_trnMainService.TrnMainObj.BSDATE">
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<scheme-offer [activeIndex]="activerowIndex" [showScheme]="_trnMainService.showSchemeOffer"
+  (onSchemeApplyEmitted)="onSchemeApplyEmitted($event)">
+
+</scheme-offer>
+
+
+<div class="modal-sticky" *ngIf="showAdvancePopUpForSalesOrder" style="display : block; padding: 0px;  margin-bottom: 25px;height: 210px;
+  position: absolute;right: 50%;top: 5px;width: 550px;z-index: 9999999">
+  <div class="modal-content modal-content-main-area" style="width: 100%;">
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel">Please provide advance amount if any and press Ok.</h4>
+    </div>
+
+    <div class="row" style="margin: 30px;">
+      <label style="width: 30%;">Advance Amount :</label>
+      <input type="number" style="width:40%;" [(ngModel)]="_trnMainService.TrnMainObj.ADVANCE" />
+    </div>
+
+    <div class="modal-footer">
+
+      <button type="button" style="margin-top: 5px;" class="btn btn-primary"
+        (click)="OkAdvanceFromSalesOrder()">OK</button>
+    </div>
+
+
+  </div>
+
+</div>

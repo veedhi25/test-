@@ -1,0 +1,151 @@
+<div class="content-wrapper transporter-form">
+    <div class="user-topbtn">
+        <h3 class="page-title">{{ modeTitle }}</h3>
+        <div class="right-btn">
+            <button *ngIf='this.mode !="view"' (click)="onSave()" class="btn add-btn">
+                Save
+            </button>
+            <button type="button " class="btn btn-back" (click)="cancel()">
+                Back
+            </button>
+
+        </div>
+    </div>
+
+    <div class="full-width">
+        <div class="tap-tabbable General-inofo">
+            <div class="tabbable" id="warehouse-tabs">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item" (click)="NAME.focus()">
+                        <a class="nav-link active" href="#general-info" #generalInfo data-toggle="tab">General </a>
+                    </li>
+                    <li class="nav-item" (click)="GSTNO.focus()">
+                        <a class="nav-link" href="#gst" data-toggle="tab" #gst>GST</a>
+                    </li>
+
+                </ul>
+
+                <form class="row" class="form-horizontal" [formGroup]="form">
+                    <div class="tab-content">
+
+                        <div class="tab-pane active" id="general-info">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-md-4 form-control-label">Name:</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" id="NAME" name="NAME" #NAME
+                                            formControlName="NAME" placeholder="Enter Transporter Name"
+                                            (keydown.enter)="ADDRESS.focus()" />
+                                        <div *ngIf="!form.controls['NAME'].valid && form.controls['NAME']?.touched"
+                                            class="text-danger">
+                                            <span *ngIf="form.get('NAME').hasError('required')">
+                                                Transporter name is required.
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-4 form-control-label">Address Line 1:</label>
+                                    <div class="col-md-8">
+                                        <input #ADDRESS type="text" class="form-control" formControlName="ADDRESS"
+                                            placeholder="Enter Address Line 1" (keydown.enter)="PHONE.focus()" />
+
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-4 form-control-label">Phone:</label>
+                                    <div class="col-md-8">
+                                        <input type="text" #PHONE class="form-control" formControlName="PHONE"
+                                            placeholder="Enter Phone Number" (keydown.enter)="STATUS.focus()" />
+
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-4 form-control-label">Status:</label>
+                                    <div class="col-md-8">
+                                        <select class="form-control" #STATUS formControlName="STATUS"
+                                            (keydown.enter)="TRANSMODE.focus()">
+                                            <option value=0>Inactive</option>
+                                            <option value=1>Active</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+
+                                <div class="form-group row">
+                                    <label class="col-md-4 form-control-label">Trans Mode:</label>
+                                    <div class="col-md-8">
+                                        <select class="form-control" #TRANSMODE formControlName="TRANSMODE"
+                                            (keydown.enter)="AREA.focus()">
+                                            <option value=1>Road</option>
+                                            <option value=2>Rail</option>
+                                            <option value=3>Air</option>
+                                            <option value=4>Ship</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-4 form-control-label">Area:</label>
+                                    <div class="col-md-8">
+                                        <input type="text" #AREA class="form-control" formControlName="AREA"
+                                            placeholder="Enter Area Name" (keydown.enter)="EMAIL.focus()" />
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-md-4 form-control-label">Vehicle No.:</label>
+                                    <div class="col-md-8">
+                                        <input type="email" class="form-control" id="brandTypeName" name="brandTypeName"
+                                            formControlName="VEHICLENO" placeholder="Enter VehicleNo" />
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-md-4 form-control-label">Email:</label>
+                                    <div class="col-md-8">
+                                        <input type="email" #EMAIL class="form-control" id="brandTypeName"
+                                            name="brandTypeName" formControlName="EMAIL" placeholder="Enter Email"
+                                            (keydown.enter)="gst.click();GSTNO.focus()" />
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="tab-pane" id="gst">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-md-4 form-control-label">GST No:</label>
+                                    <div class="col-md-8">
+                                        <input type="text" #GSTNO class="form-control" formControlName="GSTNO"
+                                            placeholder="Enter GST Number" (keydown.enter)="PANNO.focus()" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-md-4 form-control-label">PAN No:</label>
+                                    <div class="col-md-8">
+                                        <input type="text" #PANNO class="form-control" formControlName="PANNO"
+                                            placeholder="Enter the PAN Number"
+                                            (keydown.enter)="generalInfo.click();NAME.focus()" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>

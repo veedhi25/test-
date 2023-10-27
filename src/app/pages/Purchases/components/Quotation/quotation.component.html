@@ -1,0 +1,113 @@
+<div class="form-inner">
+
+    <div class="top-forms">
+        <div class="col-md-4">
+            <h3 class="main-heading">{{transactionService.pageHeading}} [{{transactionService.TrnMainObj.Mode
+                |titlecase}}]
+            </h3>
+        </div>
+        <div class="col-md-8 form-right-btn">
+            <voucher-master-toggler></voucher-master-toggler>
+            <voucher-master-action (onCancelEmit)="onCancel()" (onSaveRfq)="SaveQuotation()">
+            </voucher-master-action>
+        </div>
+    </div>
+
+
+    <div class="content-areaform">
+        <!-- <div *ngIf="masterService.ShowMore" class=""> -->
+        <div class="">
+            <trnmain-purchase-entry></trnmain-purchase-entry>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table" id="BlueHeaderResizableTable" #reportHtmlTable>
+
+                    <thead style="background-color: #c5c4c4;">
+                        <th>SNO</th>
+                        <th>Item Code</th>
+                        <th>Item Name</th>
+                        <th>UOM</th>
+                        <th>Order Qty</th>
+                        <th>Your Quantity</th>
+                        <th>Your Rate</th>
+                        <th>Discount Rate</th>
+                        <th>Discount Amount</th>
+                        <th>Remarks</th>
+
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let tList of ItemList;let i=index"
+                            style="border: 1px solid #e6e6e6; max-height: 25px" (click)="activerowIndex=i"
+                            (keydown.delete)="deleteRow()">
+                            <!-- START OF SNO -->
+                            <td id="sno{{i}}">{{i+1}}</td>
+                            <!-- END OF SNO -->
+
+                            <!-- START OF ITEM CODE -->
+                            <td class="CellWithComment">
+                                <input id="menucode{{i}}" type="text" [(ngModel)]="tList.MCODE"
+                                    (keydown.Tab)="ItemkeyEvent(i)" (keydown.enter)="ItemkeyEvent(i)"
+                                    class="form-control" />
+                            </td>
+                            <!-- END OF ITEM CODE -->
+
+
+
+                            <!-- START OF ITEM DESCA -->
+                            <td class="CellWithComment">
+                                {{tList.DESCA}}
+                            </td>
+                            <!-- END OF ITEM DESCA -->
+
+                            <!-- START OF ITEM ALTUNIT -->
+                            <td *ngIf="tList.AlternateUnits !=null || tList.AlternateUnits!=undefined">
+                                <select id="alternateunit{{i}}" [(ngModel)]="tList.ALTUNIT" class="form-control">
+                                    <option *ngFor="let u of tList.AlternateUnits" value="{{u.ALTUNIT}}">
+                                        {{u.ALTUNIT}}
+                                    </option>
+                                </select>
+                            </td>
+                            <td *ngIf="tList.AlternateUnits ==null || tList.AlternateUnits==undefined">
+                                <select name="" id="altunit" [(ngModel)]="tList.ALTUNIT" class="form-control">
+                                    <option value="{{tList.ALTUNIT}}">{{tList.ALTUNIT}}</option>
+                                </select>
+                            </td>
+                            <!-- END OF ITEM ALTUNIT -->
+
+                            <!-- START OF ITEM ORDER QUANTITY -->
+                            <td class="CellWithComment">
+                                <input id="indent{{i}}" type="number" [(ngModel)]="tList.Indent" class="form-control"
+                                    readonly />
+                            </td>
+                            <!-- END OF ITEM ORDER QUANTITY -->
+                            <td class="CellWithComment">
+                                <input id="YourQuantity{{i}}" type="text" [(ngModel)]="tList.YourQuantity"
+                                    class="form-control" />
+                            </td>
+                            <td class="CellWithComment">
+                                <input id="remarks{{i}}" type="text" [(ngModel)]="tList.Remarks" class="form-control" />
+                            </td>
+                            <td class="CellWithComment">
+                                <input id="Dcrate{{i}}" type="text" [(ngModel)]="tList.Dcrate" class="form-control" />
+                            </td>
+                            <td class="CellWithComment">
+                                <input id="Dcamnt{{i}}" type="text" [(ngModel)]="tList.Dcamnt" class="form-control" />
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="sticky-bottom">
+    <voucher-total-area></voucher-total-area>
+</div>
+<generic-popup-grid #genericgridIndentForRFQ [popupsettings]="gridPopupSettingsForRFQIndent"
+    (onItemDoubleClick)="onRFQIndentDoubleClick($event)" (onButtonClick)="onRFQIntendMultipleSelect($event)">
+</generic-popup-grid>

@@ -1,0 +1,48 @@
+﻿<div class="top-forms">
+  <div class="row">
+    <div class="col-md-3">
+      <h3 class="main-heading">
+        <!-- <i class="fa fa-th" (click)="onTransactionConfigureClick()" style="color: #2bade5;
+          cursor: pointer; font-size: 20px;" title="Click to configure grid"></i> -->
+        {{_trnMainService.pageHeading}} [{{_trnMainService.TrnMainObj.Mode |titlecase}}]
+      </h3>
+    </div>
+    <div class="col-md-8 form-right-btn">
+      <voucher-master-toggler></voucher-master-toggler>
+      <voucher-master-action (onPurchaseReturnCancel)="onPurchaseReturnCancelClick()"
+        (onPRnvoieFileUploadPopupEmit)="showPurchaseInvoiceReturnPopup($event)"
+        (onFromCreditNoteClickedEvent)="showCreditNote($event)"
+        (onPurchaseReturnCancelSave)="onPurchaseReturnCancelSave()"></voucher-master-action>
+    </div>
+  </div>
+</div>
+
+
+<div class="content-areaform">
+  <div *ngIf="masterService.ShowMore">
+    <trnmain-purchase-entry></trnmain-purchase-entry>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <productentry></productentry>
+    </div>
+  </div>
+</div>
+
+<div class="sticky-bottom">
+  <voucher-total-area></voucher-total-area>
+</div>
+<generic-popup-grid #genericPurchaseReturnCancel [popupsettings]="gridcancelPurchasePopupSettings"
+  (onItemDoubleClick)="onPurchaseReturnCancelSelect($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericCreditNoteGrid [popupsettings]="genericCreditNotePopupSetting"
+  (onItemDoubleClick)="onCreditNoteSelect($event)">
+</generic-popup-grid>
+
+<file-uploader-popup #fileUploadPopup [popupsettings]="fileUploadPopupSettings"
+  (onUploaded)="fileUploadSuccess($event)">
+</file-uploader-popup>
+
+
+<user-wise-transaction-form-configuration #userwisetransactionformconfig
+  (updateGridConfigAfterSave)="updateGridConfig($event)"></user-wise-transaction-form-configuration>

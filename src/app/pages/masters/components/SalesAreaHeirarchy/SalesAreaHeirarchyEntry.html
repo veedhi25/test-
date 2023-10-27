@@ -1,0 +1,218 @@
+<div class="sticky-top">
+        <div class="row clearfix" style=" padding: 0px 20px;">
+          <div class="col-md-6">
+            <h3 class="page-title">{{ modeTitle }}</h3>
+          </div>
+          <div class="col-md-6" style="float: right;">
+            <button
+              type="button "
+              class="btn btn-info pull-right"
+              (click)="cancel()"
+              style="margin-right : 10px;"
+            >
+              Back
+            </button>
+            <button
+              *ngIf="mode == 'add' || mode=='edit'"
+              (click)="onSave()"
+              class="btn btn-info pull-right"
+              style="margin-right : 10px;"
+              [disabled]="!form.valid"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="main-container" style="padding-top : 10px; margin-bottom: 0px">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="tabbable" id="warehouse-tabs">
+              <ul class="nav nav-tabs">
+                <li class="nav-item">
+                  <a class="nav-link active" href="#general-info" data-toggle="tab"
+                    >General Info</a
+                  >
+                </li>
+              
+              </ul>
+              <div class="tab-content">
+                <div class="tab-pane active" id="general-info">
+                  <form class="row" class="form-horizontal" [formGroup]="form">
+                  
+                    <div class="form-group row">
+                      <label class="col-sm-2 form-control-label">Sales Area Name:</label>
+                      <div class="col-sm-6">
+                        <input
+                          type="text"
+                          [style.background-color]="disabled()"
+                          [style.background-color]="editDisabled()"
+                          style="color:black"
+                          class="form-control"
+                          [readOnly]="mode == 'view' ? true : false"
+                          id="salesareaname"
+                          name="salesareaname"
+                          formControlName="SalesAreaName"
+                          placeholder="Sales Area Name"
+                        />
+                        <div
+                          *ngIf="
+                            !form.controls['SalesAreaName'].valid &&
+                            form.controls['SalesAreaName']?.touched
+                          "
+                          class="text-danger"
+                        >
+                          <span *ngIf="form.get('SalesAreaName').hasError('required')">
+                            Sales Area name is required.
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                 
+                    <div class="form-group row">
+                            <label class="col-sm-2 form-control-label">Sales Area Address:</label>
+                            <div class="col-sm-6">
+                              <input
+                                type="text"
+                                [style.background-color]="disabled()"
+                                [style.background-color]="editDisabled()"
+                                style="color:black"
+                                class="form-control"
+                                [readOnly]="mode == 'view' ? true : false"
+                                id="salesareaaddress"
+                                name="salesareaaddress"
+                                formControlName="SalesAreaAddress"
+                                placeholder="Sales Area Address"
+                              />
+                              <div
+                                *ngIf="
+                                  !form.controls['SalesAreaAddress'].valid &&
+                                  form.controls['SalesAreaAddress']?.touched
+                                "
+                                class="text-danger"
+                              >
+                                <span *ngIf="form.get('SalesAreaAddress').hasError('required')">
+                                  Sales Area Address is required.
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="form-group row">
+                                <label class="col-sm-2 form-control-label">Sales Area Type:</label>
+                                <div class="col-sm-6">
+                                  <select
+                                    class="form-control"
+                                    style="color:black"
+                                    [style.background-color]="disabled()"
+                                    name="salesareatype"
+                                    id="salesareatype"
+                                    formControlName="SalesAreaTypeCode"
+                                    (change)="SalesAreaTypeChange()"
+                                  >
+                                    <option *ngFor="let sa of salesAreaTypeList" [value]="sa.SalesAreaTypeCode">{{sa.SalesAreaTypeName}}</option>
+                                   
+                                  </select>
+                                  <div
+                                    *ngIf="
+                                      !form.controls['SalesAreaTypeCode'].valid &&
+                                      form.controls['SalesAreaTypeCode']?.touched
+                                    "
+                                    class="text-danger"
+                                  >
+                                    <span
+                                      *ngIf="form.get('SalesAreaTypeCode').hasError('required')"
+                                    >
+                                      Sales Area type is required.
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-group row">
+                                    <label class="col-sm-2 form-control-label">Parent:</label>
+                                    <div class="col-sm-6">
+                                      <select
+                                        class="form-control"
+                                        style="color:black"
+                                        [style.background-color]="disabled()"
+                                        name="salesareaparent"
+                                        id="salesareaparent"
+                                        formControlName="ParentSalesAreaCode"
+                                        (change)="parentChangeEvent($event.target.value)"
+                                      >
+                                      <option *ngFor="let sa of salesAreaList" [value]="sa.SalesAreaCode">{{sa.SalesAreaName}}</option>
+                                       
+                                      </select>
+                                      <div
+                                        *ngIf="
+                                          !form.controls['ParentSalesAreaCode'].valid &&
+                                          form.controls['ParentSalesAreaCode']?.touched
+                                        "
+                                        class="text-danger"
+                                      >
+                                        <span
+                                          *ngIf="form.get('ParentSalesAreaCode').hasError('required')"
+                                        >
+                                         Parent Sales Area is required.
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="form-group row">
+                                        <label class="col-sm-2 form-control-label">PCL:</label>
+                                        <div class="col-sm-6">
+                                          <select
+                                            class="form-control"
+                                            style="color:black"
+                                            [style.background-color]="disabled()"
+                                            name="pcl"
+                                            id="pcl"
+                                            formControlName="PCL"
+                                            (change)="PCLChangeEvent($event.target.value)"
+                                          >
+                                            <option *ngFor="let p of PCLList" [value]="p.PCL">{{p.COMPANYNAME}}</option>
+                                           
+                                          </select>
+                                          <div
+                                            *ngIf="
+                                              !form.controls['PCL'].valid &&
+                                              form.controls['PCL']?.touched
+                                            "
+                                            class="text-danger"
+                                          >
+                                            <span
+                                              *ngIf="form.get('PCL').hasError('required')"
+                                            >
+                                            PCL is required.
+                                            </span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="form-group row">
+                                            <label class="col-sm-2 form-control-label">Status</label>
+                                            <div class="col-sm-6">
+                                              <select
+                                                class="form-control"
+                                                style="color:black"
+                                                [style.background-color]="disabled()"
+                                                name="status"
+                                                id="status"
+                                                formControlName="STATUS"
+                                              >
+                                                <option  value=1>Active</option>
+                                                <option  value=0>Inactive</option>
+                                              </select>
+                                             
+                                            </div>
+                                      </div>
+                
+                   
+                  </form>
+                </div>
+               
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      

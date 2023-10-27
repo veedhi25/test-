@@ -1,0 +1,86 @@
+<div class="user-topbtn">
+    <h3 class="page-title">Device Setting</h3>
+    <div class="right-btn">
+        <button class="btn add-btn" (click)="saveDeviceSetting()">Save</button>
+        <button class="btn btn-back" (click)="onBack()">Back</button>
+    </div>
+</div>
+
+<div class="Device-Setting-list">
+    <div class="row">
+        <div class="col-md-12 ng-tableinner">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Device Setting List</h3>
+                </div>
+
+                <div class="card-body" style="overflow-x: hidden !important;">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr style="position: sticky; top:0;line-height: 1.5rem;">
+                                <th scope="col" style="width:8%;text-align:left; font-size: 15px;font-weight: 600;">
+                                    Profile Type</th>
+                                <th scope="col" style="width:21%; font-size: 15px;font-weight: 600;">Profile Name</th>
+                                <th scope="col" style="width:7%; font-size: 15px;font-weight: 600;">Confirm</th>
+                                <th scope="col" style="width:7%; font-size: 15px;font-weight: 600;">Is DefaultPrint</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let setting of deviceSettings;let i = index;"
+                                style="line-height:15px !important;">
+                                <td style="width:8%;text-align:left;line-height: 30px;">
+                                    <select name="profilename" id="profilename" [(ngModel)]="setting.profileTypeLabel"
+                                        (change)="onFormChange(i)">
+                                        <option *ngFor="let profile of formList" value="{{profile.profileTypeLabel}}">
+                                            {{profile.profileTypeLabel}}</option>
+                                    </select>
+                                </td>
+                                <td style="width:21%"><input type="text" class="form-control" name="printerName"
+                                        id="printName{{i}}" [(ngModel)]="setting.profileNameLabel" style="width:50%;"
+                                        (keydown.space)="onShowPopUp(setting,$event)" (click)="onSettingRowClicked(i)"
+                                        placeholder="Press Space to Select" (keydown.Enter)="addNewRow(i)"></td>
+                                <td scope="col" style="width:7%"><input type="checkbox"
+                                        [(ngModel)]="setting.confirmShow"></td>
+                                <td scope="col" style="width:7%"><input type="checkbox" (change)="onchangeDefaultPrint(i,$event)"
+                                        [(ngModel)]="setting.DefaultPrint"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="popUpDeviceSetting" class="popUpForDeviceSetting print-modal" *ngIf="showDeviceSettingPopUp">
+    <div class="popUp-wrap">
+        <div class="heading-wrap">
+            <h4>Print Profile Selection</h4>
+            <button class="close" aria-label="Close" (click)="closeDeviceSettingPopUp()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="filter-wrap">
+            <input type="text" name="deviceSettingFilter" placeholder="Keywords to filter" [(ngModel)]="filter"
+                class="form-control">
+        </div>
+        <div class="table-wrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width: 100px;">S.No</th>
+                        <th>Profile Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of (profilesList | searchData:filter:searchByName);let i = index;"
+                        [class.highlighted]="i === selectedRowIndex" class="highlight"
+                        (dblclick)="dblClickProfile(item)" (click)="RowClickEvent(i)">
+                        <td style="width: 100px;">{{i+1}}</td>
+                        <td>{{item.profileNameLabel}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

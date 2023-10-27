@@ -1,0 +1,214 @@
+<style>
+  label {
+    width: 150px;
+    font-size: 15px;
+    color: #403c3c;
+  }
+
+  input {
+    height: 30px;
+  }
+</style>
+<!-- begin form here -->
+<div class="sticky-top">
+  <div class="row clearfix" style="padding: 0px 20px">
+    <div class="col-md-6">
+      <h3 class="page-title">Party Master</h3>
+    </div>
+    <div class="col-md-6" style="float: right">
+      <div class="col-md-6" style="display: contents">
+        <button style="float: right" type="button" (click)="back()" title="Cancel" class="btn btn-info">
+          Back
+        </button>
+      </div>
+      <button style="float: right; margin-right: 10px" type="button" (click)="SumbitSave()" title="onSave"
+        *ngIf='this.MODE !="VIEW"' class="btn btn-info">
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+<div class="main-container" style="padding-top: 10px; margin-bottom: 0px">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="tabbable" id="warehouse-tabs">
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" href="#general-info" data-toggle="tab">General Info</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#contact-details" data-toggle="tab">Contact Details</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="general-info">
+            <!-- General Info -->
+            <div class="form-group row">
+              <div class="col-sm-12">
+                <div class="form-group row col-sm-6">
+                  <label class="col-sm-2 form-control-label">TITLE:</label>
+                  <div class="col-sm-6">
+                    <select [(ngModel)]="aclist.TITLE" class="form-control" style="height: 30px; padding-bottom: 0px">
+                      <option value="Mr">Mr.</option>
+                      <option value="Mrs">Mrs.</option>
+                      <option value="Dr">Dr.</option>
+                      <option value="Others">Others</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group row col-sm-6">
+                  <label class="col-sm-2 form-control-label">Name*:</label>
+                  <div class="col-sm-6">
+                    <input [(ngModel)]="aclist.ACNAME" type="text" class="form-control" id="ACNAME" placeholder="Name"
+                      id="ACNAME" />
+                  </div>
+                </div>
+                <div class="form-group row col-sm-6">
+                  <label class="col-sm-2 form-control-label">Customer ID:</label>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control" placeholder="SAP-CODE" [(ngModel)]="aclist.customerID" />
+                  </div>
+                </div>
+                <div class="form-group row col-sm-6">
+                  <label class="col-sm-2 form-control-label">Category:</label>
+                  <div class="col-sm-6">
+                    <select [(ngModel)]="aclist.GEO" class="form-control" style="height: 30px; padding-bottom: 0px">
+                      <option>None</option>
+                      <option *ngFor="let i of GeoList" value="{{ i.OrgTypeCode }}">
+                        {{ i.OrgTypeName }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-12">
+                <div class="form-group row col-sm-6">
+                  <label class="col-sm-2 form-control-label">GST Type:</label>
+                  <div class="col-sm-6">
+                    <select [(ngModel)]="aclist.GSTTYPE" class="form-control" style="height: 30px; padding-bottom: 0px">
+                      <option value="Regular">Regular</option>
+                      <option value="Composite">Composite</option>
+                      <option value="Un-Register">Un-Register</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group row col-sm-6">
+                  <label class="col-sm-2 form-control-label">GST No:</label>
+                  <div class="col-sm-6">
+                    <input [(ngModel)]="aclist.GSTNO" type="text" class="form-control" />
+                  </div>
+                </div>
+                <div class="form-group row col-sm-6">
+                  <label class="col-sm-2 form-control-label">PANNO:</label>
+                  <div class="col-sm-6">
+                    <input type="text" [(ngModel)]="aclist.VATNO" class="form-control" />
+                  </div>
+                </div>
+                <div class="form-group row col-sm-6">
+                  <label class="col-sm-2 form-control-label">Integration Type:</label>
+                  <div class="col-sm-6">
+                    <select [(ngModel)]="aclist.MAILTYPE" class="form-control"
+                      style="height: 30px; padding-bottom: 0px">
+                      <option value="None">None</option>
+                      <option value="SAP">SAP</option>
+                      <option value="CSV">CSV</option>
+                      <option value="EDI">EDI</option>
+                      <option value="Inline HTML">Inline HTML</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-12">
+                <div class="form-group row col-sm-6">
+                  <label class="col-sm-2 form-control-label">DisContinue:</label>
+                  <div class="col-sm-6">
+                    <select [(ngModel)]="aclist.ISDISCONTINUED" class="form-control"
+                      style="height: 30px; padding-bottom: 0px">
+                      <option value="1">YES</option>
+                      <option value="0">NO</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="contact-details">
+            <!-- Contact Details -->
+            <div class="form-group row">
+              <div class="col-sm-12">
+                <div class="form-group row col-sm-6">
+                  <label class="col-sm-6 form-control-label">Address:</label>
+                  <div class="col-sm-6">
+                    <input [(ngModel)]="aclist.ADDRESS" type="text" class="form-control" placeholder="Temp Address" />
+                  </div>
+                </div>
+                <div class="form-group row col-sm-6">
+                  <label class="col-sm-6 form-control-label">Address2:</label>
+                  <div class="col-sm-6">
+                    <input [(ngModel)]="aclist.TEMPADDRESS" type="text" class="form-control"
+                      placeholder="Parmanent Address" />
+                  </div>
+                </div>
+                <div class="form-group row col-sm-6">
+                  <label class="col-sm-6 form-control-label">State:</label>
+                  <div class="col-sm-6">
+                    <select class="form-control" style="color: black" name="STATE" id="STATE"
+                      [(ngModel)]="aclist.STATE">
+                      <option *ngFor="let i of StateList" [ngValue]="i.StateCode">
+                        {{ i.StateName }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group row col-sm-6">
+                  <label class="col-sm-2 form-control-label">City:</label>
+                  <div class="col-sm-6">
+                    <input [(ngModel)]="aclist.CITY" type="text" class="form-control" />
+                  </div>
+                </div>
+                <div class="form-group row col-sm-6">
+                  <label class="col-sm-2 form-control-label">District:</label>
+                  <div class="col-sm-6">
+                    <input [(ngModel)]="aclist.DISTRICT" id="districtselectid" type="text"
+                      (keydown.enter)="DistrictTabCommand($event)" (keydown.tab)="DistrictTabCommand($event)"
+                      (keydown)="preventInput($event)" autocomplete="off" title="Enter or Tab to select"
+                      class="form-control" />
+                  </div>
+                </div>
+
+                <div class="form-group row col-sm-6">
+                  <label class="col-sm-2 form-control-label">Mobile </label>
+                  <div class="col-sm-6">
+                    <input type="text" OnlyNumber="true" class="form-control" [(ngModel)]="aclist.MOBILE" />
+                  </div>
+                </div>
+
+                <div class="form-group row col-sm-6">
+                  <label class="col-sm-2 form-control-label">Email </label>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control" [(ngModel)]="aclist.EMAIL" />
+                  </div>
+                </div>
+
+                <div class="form-group row col-sm-6">
+                  <label class="col-sm-2 form-control-label">Pin Code: </label>
+                  <div class="col-sm-6">
+                    <input type="text" class="form-control" [(ngModel)]="aclist.POSTALCODE" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<generic-popup-grid #genericGridDistrict [popupsettings]="gridPopupSettingsForDistrict"
+  (onItemDoubleClick)="onDistrictSelected($event)">
+</generic-popup-grid>

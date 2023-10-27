@@ -1,0 +1,65 @@
+<div style="background-color : #ffffff; padding :1%; height : auto; ">
+          <div class="row">
+              <div class="modal-header" >
+                   <button type="button" class="close" data-dismiss="modal" (click)="hide()">&times;</button>
+                   <h4 class="modal-title">Minimum Stock Position</h4> 
+              </div>
+                <div class="_left_section col-md-6">
+                    <fieldset style="width:352px">
+                        <legend style="font-size:11px;font-weight: bold; width:auto">Date Range Selection :</legend>                   
+                            <table>
+                              <tr>
+                                 <td><label class="smallBoldLabel">From:(AD)</label></td>
+                                 <td><label class="smallBoldLabel">To:(AD)</label></td>   
+                              </tr>
+                               <tr>
+                                    <td>                                                 
+                                      <label class="smallBoldLabel"><input  type="date"  style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]="MinStockPosition.DATE1"  (change)="changeEntryDate($event.target.value,'AD')"  ></label>
+                                    </td>
+                                    <td>                                                 
+                                       <label class="smallBoldLabel"><input  type="date" style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]="MinStockPosition.DATE"  (change)="changeEndDate($event.target.value,'AD')"   ></label>
+                                     </td>
+                                  </tr>
+                                  <tr>
+                                        <td>
+                                               <label class="smallBoldLabel"> <input id="nepaliDate" style="width:152px;height:25px;text-align:center" class="nepali-calendar ndp-nepali-calendar" [(ngModel)]="MinStockPosition.BSDATE1"
+                                                 type="text" (change)="changeEntryDate($event.target.value,'BS')"
+                                                placeholder="yyyy-mm-dd" />
+                                            </label>  
+                                                                
+                                           </td>
+                                           <td>
+                                               <label class="smallBoldLabel">
+                                                <input id="nepaliDate" style="width:152px;height:25px;text-align:center" class="nepali-calendar ndp-nepali-calendar" [(ngModel)]="MinStockPosition.BSDATE2"
+                                                type="text" (change)="changeEndDate($event.target.value,'BS')"
+                                               placeholder="yyyy-mm-dd" />
+                                            </label>                     
+                                           </td>                              
+                                   </tr>
+                            </table>
+                </fieldset>
+                </div>
+                <div class="_right_section col-md-6">
+                        <fieldset>
+                                <legend >Warehouse Selection :</legend>                                      
+                               <div class="col-md-12">
+                                  <select [(ngModel)]="MinStockPosition.SelectedWarehouse"  style="width:95%;" >
+                                      <option *ngFor="let wareList of WarehouseList"  value="wareList.NAME" >{{wareList.NAME}} </option>
+                                  </select>
+                              </div>                                                                                    
+                        </fieldset>
+                        <div>
+                            <input type="checkbox" name="vehicle1" value="Bike"> Cost Center Collection<br>
+                        </div>
+                        <div>
+                            <button class="btn btn-info confirm-btn" type="button"  (click)=onload()>RUN</button> 
+                            <button type="button" (click)="cancel()" title="Cancel" class="btn btn-info">Close</button>   
+                        </div>
+                </div>
+            </div>
+            <!-- <hr>
+            <div> 
+                <button type="button" (click)="onSaveClicked()" title="onSave" class="btn btn-info">Run</button>   
+                <button type="button" (click)="cancel()" title="Cancel" class="btn btn-info">Close</button>
+            </div> -->
+</div>

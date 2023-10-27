@@ -1,0 +1,21 @@
+<style>
+  .button-row {
+    margin: 0 5px !important;
+  }
+</style>
+
+<div class="content-wrapper">
+  <div class="right-btn">
+    <button class="btn btn-info" style="margin: 5px" (click)="onAddClick()"
+      *ngIf="(outletconfigChild() || outletconfigParentandIndividual())">
+      New
+    </button>
+  </div>
+  <div class="full-width">
+    <div class="ng-tableinner">
+      <ims-grid #accountGenericGrid [imsGridSettings]="imsGridSettingsEntity" (onEditClicked)="onEditClicked($event)"
+        (onViewClicked)="onViewClicked($event)" (onDeleteClicked)="onAccountDelete($event)"></ims-grid>
+      <!-- <ng2-smart-table [settings]="settings" [source]="source" (edit)="onEditClick($event)"
+        (delete)="onDeleteConfirm($event)" (view)="onViewClick($event)"></ng2-smart-table> -->
+    </div>
+  </div>

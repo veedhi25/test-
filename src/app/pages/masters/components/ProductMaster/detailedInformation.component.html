@@ -1,0 +1,53 @@
+<div class="col-md-4">
+    <div style="margin-left:5px">
+      <label style="width:110px">BaseUnit </label>
+      <label style="font-weight: 600;width: 50px">{{productObj.BASEUNIT}}</label>
+    </div>
+    <div style="margin-left:5px">
+      <div class="unit-conversion">
+        <div>
+          <label style="width:110px">Alternate Unit </label>
+          <input style="width:200px" type="text" (keyDown.enter)="onaltUnitClicked()" placeholder="Enter to Select UOM">
+        </div>
+        <div>
+          <label style="font-weight: 600;width:100px">1 {{CurAltUnit.ALTUNIT}}</label>
+          <label style="width:10px">=</label>
+          <input type="number" style="width:100px" [(ngModel)]="CurAltUnit.CONFACTOR">
+          <label style="width:18px;font-weight: 600;">{{productObj.BASEUNIT}}</label>
+        </div>
+      </div>
+      <div class="each-case-add-btn">
+        <button class="btn btn-info" (click)="AddAltUnit()"
+          [disabled]="CurAltUnit.ALTUNIT==null || CurAltUnit.CONFACTOR==null ||CurAltUnit.ALTUNIT=='' || CurAltUnit.CONFACTOR==0">Add</button>
+      </div>
+    </div>
+  
+  
+  </div>
+  <div class="col-md-7">
+    <table id="BlueHeaderResizableTable" style="margin-left:5px;    border: 1px solid #cbcbcb;width: 100%">
+      <tr style="border-bottom: 2px solid #E6E6E6; border-top: 2px solid #E6E6E6;    height: 30px;
+      background: silver !important;
+      color: black;">
+  
+        <th>Alternate Unit</th>
+        <th>Conversion Factor</th>
+        <th>Actions </th>
+      </tr>
+      <tbody
+        style="height:150px;overflow:auto;scrollbar-3dlight-color:#FFFFFF;scrollbar-arrow-color:#000000;scrollbar-base-color:#FF9999;scrollbar-darkshadow-color:#000000;scrollbar-face-color:#000000;scrollbar-highlight-color:#000000;scrollbar-shadow-color:#0033CC;">
+        <tr *ngFor="let au of AlternateUnits;let i=index">
+          <td>{{au.ALTUNIT}}</td>
+          <td>{{au.CONFACTOR}}</td>
+          <td><button class="glyphicon glyphicon-remove btn btn-info" (click)="removeAU(i)">
+            </button>
+            <button class="glyphicon glyphicon-edit btn btn-info" (click)="editAU(i)">
+            </button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  
+  <generic-popup-grid #genericUnitGrid [popupsettings]="unitgridPopupSettings" (onItemDoubleClick)="dblClickPopupItem($event)">
+  </generic-popup-grid>

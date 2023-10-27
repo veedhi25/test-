@@ -1,0 +1,93 @@
+<div style="background-color : #ffffff; padding :1%; height : auto;width:auto; ">
+
+        <div class=row>
+                <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" (click)="hide()">&times;</button>
+                        <h4 class="modal-title">Stock Analysis-Major Group Wise </h4>
+                </div>
+            <div class="_left_section col-md-6">
+                   
+                    <fieldset>
+                            <legend >As on Dated :</legend>           
+                             <table>
+                                 <tr>
+                                     <td><label class="smallBoldLabel">From:(AD)</label></td>
+                                     <td></td>
+                                 </tr>
+                                 <tr>
+                                    <td>                                                 
+                                        <label class="smallBoldLabel"><input  type="date"  style="width:152px; min-width:50%;"  placeholder="Year Start Date"  [(ngModel)]="ProductMajorGroup.DATE"  (change)="changeEntryDate($event.target.value,'AD',Date1)" ></label>
+                                    </td>
+                                    <td>                                                 
+                                            <label class="smallBoldLabel"> <input id="nepaliDate" style="width:152px;height:25px;text-align:center" class="nepali-calendar ndp-nepali-calendar" [(ngModel)]="ProductMajorGroup.BSDATE1"
+                                                type="text" (change)="changeEntryDate($event.target.value,'BS')"
+                                               placeholder="yyyy-mm-dd" />
+                                           </label>
+                                    </td>
+                                 </tr>
+                             
+                             </table>                                                                                   
+                    </fieldset>                                 
+                    <fieldset>
+                            <legend >Supplier Selection :</legend>          
+                            <div class="col-md-12">                               
+                                <select [(ngModel)]="ProductMajorGroup.selectedSupplier" style="width:95%;" >
+                                        <option *ngFor="let supName of suppliersName" value={{supName.ACNAME}}  >{{supName.ACNAME}} </option>
+                                </select>
+                            </div>                                                                                                                     
+                    </fieldset>
+                    <!-- <fieldset>
+                        <legend>Output To:</legend>
+                        <div class="col-md-4">
+                                <div class="radio">
+                                    <label><input type="radio" name="Lmpradio" [(ngModel)]=" ProductMajorGroup.OPT_FIFO" value="0"  checked>Screen</label>
+                                </div>                                                                
+                        </div>
+                        <div class="col-md-4">
+                                <div class="radio">
+                                    <label><input type="radio" name="Lmpradio" [(ngModel)]="ProductMajorGroup.OPT_FIFO" value="0"  checked>Printer</label>
+                                </div>                                                                
+                        </div>
+                        <div class="col-md-4">
+                                <div class="radio">
+                                    <label><input type="radio" name="Lmpradio" [(ngModel)]="ProductMajorGroup.OPT_FIFO" value="0"  checked>File</label>
+                                </div>                                                                
+                        </div>
+
+                    </fieldset> -->
+
+            </div>
+           <div class="._right_section col-md-6">
+                <fieldset>
+                        <legend >Product Major Group Selection:</legend>          
+                          <div class="col-md-6" style="margin-top:11px">
+                                <input type="checkbox" name="vehicle1" [(ngModel)]="ProductMajorGroup.SHOWVALUATIONRATE"  value="1"> All Group<br>
+                         </div>
+
+                         <div class="col-md-6">                                               
+                             <label style="width:100%;" class="smallBoldLabel">Group Code :</label>      
+                             <input tabindex="-1" type="text" style="width:100%"  (keydown.enter)="menucodeChanged($event.target.value)" [(ngModel)]="itemCode" >                                
+                       </div> 
+                       <div class="col-md-12">                                                     
+                                  <label class="smallBoldLabel">Group Name :</label>                                       
+                                    <div>
+                                        <input ngui-auto-complete [source]="dropListItem.bind(this)" max-num-list="25" [(ngModel)]="selectedProd" (ngModelChange)="itemChanged($event)"
+                                            style="width:250px;height:25px" list-formatter="DESCA" 
+                                            display-property-name="DESCA">
+                                    </div>
+                         </div>                           
+                </fieldset>
+               
+                <div> 
+                        <button class="btn btn-info confirm-btn" type="button"  (click)=onload()>RUN</button>   
+                        <button type="button" (click)="cancel()" title="Cancel" class="btn btn-info">Close</button>
+                </div>
+            </div> 
+        </div>
+
+        <!-- <hr>
+        <div> 
+            <button type="button" (click)="onSaveClicked()" title="onSave" class="btn btn-info">Run</button>   
+            <button type="button" (click)="cancel()" title="Cancel" class="btn btn-info">Close</button>
+        </div> -->
+    </div>

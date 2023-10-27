@@ -1,0 +1,63 @@
+<div class="sticky-top">
+    <div class="row clearfix">
+
+        <div class="col-md-4">
+            <h2 style="color: black;">Inventory Migration</h2>
+        </div>
+
+
+
+    </div>
+    <div class="row clearfix">
+        <div class="col-md-8">
+            <div class="form-group pull-right">
+            <label>Choose type : </label>
+            <select [(ngModel)]="selectedTagName" (ngModelChange)="changeSource($event)">
+                <option *ngFor="let tag of this.tagList" [ngValue]="tag.TagNameValue">
+                    {{tag.TagName}}</option>
+            </select>
+            </div>
+        </div>
+    </div>
+    <div class="row clearfix" >
+        <div class="col-md-11">
+            <button style="margin: 0px 4px;" class="btn btn-info pull-right" (click)="Migration('directsales')">
+                Sales Migration
+            </button>
+            <button style="margin: 0px 4px;" class="btn btn-info pull-right" (click)="Migration('directpurchase')">
+                Purchase Migration
+            </button>
+            <button style="margin: 0px 4px;" class="btn btn-info pull-right" (click)="Migration('directpurchasereturn')">
+                Purchase Return Migration
+            </button>
+            <button style="margin: 0px 4px;" class="btn btn-info pull-right" (click)="Migration('directsalesreturn')">
+                Sales Return Migration
+            </button>
+            <!-- <button style="margin: 0px 4px;" class="btn btn-info pull-right" (click)="Migration('stockupdate')">
+                Stock Update Migration
+            </button>
+            <button style="margin: 0px 4px;" class="btn btn-info pull-right" (click)="UpdateBatch()">
+                Batch Update
+            </button> -->
+        </div>
+    </div>
+    <div class="row clearfix">
+        <div class="col-md-12">
+            <ng2-smart-table [settings]="settings" [source]="source1"></ng2-smart-table>
+            <!-- <uploadedlist [source]="source"></uploadedlist> -->
+        </div>
+    </div>
+
+    <!-- <div class="row clearfix">
+        <div class="col-md-8">
+            <label>Choose the Fiscal Year</label>
+            <select [(ngModel)]="selectedPhiscalid">
+                <option *ngFor="let p of masterService.userProfile.PhiscalIDList" [ngValue]="p.PhiscalID">
+                    {{p.PhiscalID}}</option>
+            </select>
+        </div>
+    </div> -->
+</div>
+<file-uploader-popup #fileUploadPopup [popupsettings]="fileUploadPopupSettings"
+    (onUploaded)="fileUploadSuccessStatus($event)">
+</file-uploader-popup>

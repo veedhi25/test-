@@ -1,0 +1,46 @@
+<!-- Modal content -->
+<div style="height: 500px;;">
+    <div class="modal-content modal-content-main-area" style="width: 50% !important">
+        <div class="modal-header" style="padding: 0px;background: #ecad79;">
+            <button class="close" aria-label="Close" (click)="closeReportBox()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">Purchase Order Detail Central Report Filter</h4>
+        </div>
+        <div class="modal-body">
+            <div class="clearfix">
+                <div class="col-md-12">
+                    <div class="col-md-12 form-group">
+                        <div class="report-filter"
+                            *ngIf="masterService.fiscalYearList && masterService.fiscalYearList.length">
+                            <label>Phiscal Year</label>
+                            <select class="form-control" [(ngModel)]="reportFilterService.repObj.reportparam.PHISCALID">
+                                <option *ngFor="let f of masterService.fiscalYearList;let i=index"
+                                    value="{{f.PhiscalID}}">
+                                    {{f.PhiscalID}}</option>
+                            </select>
+                        </div>
+                        <div class="report-filter">
+                            <label>Date Selection</label>
+                            <form [formGroup]="reportFilterService.calendarForm">
+                                <input type="text" ngxDaterangepickerMd formControlName="selectedDate"
+                                    class="form-control" placeholder="Choose date" [showDropdowns]="true"
+                                    showCancel="true" [ranges]="masterService.dateFilterRange"
+                                    [alwaysShowCalendars]="true" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <hr style="margin-bottom: 0px !important">
+        <div class="clearfix" style="padding: 10px;">
+
+            <button class="btn btn-info pull-right" style="margin-left: 10px;" (click)=onload()>RUN</button>
+            <button class="btn btn-info pull-right" (click)="closeReportBox()">Close</button>
+        </div>
+    </div>
+</div>
+

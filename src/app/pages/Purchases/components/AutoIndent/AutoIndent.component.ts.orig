@@ -1,0 +1,865 @@
+import { Component, ViewChild } from "@angular/core";
+import { AutoIndentService } from "./AutoIndent.service";
+import { ActivatedRoute, Router } from "@angular/router";
+import { MasterRepo } from "../../../../common/repositories/masterRepo.service";
+import { AlertService } from "../../../../common/services/alert/alert.service";
+import { SpinnerService } from "../../../../common/services/spinner/spinner.service";
+import { AuthService } from "../../../../common/services/permission";
+import { GenericPopUpSettings, GenericPopUpComponent } from "../../../../common/popupLists/generic-grid/generic-popup-grid.component";
+import { TransactionService } from "../../../../common/Transaction Components/transaction.service";
+import { FormControl } from "@angular/forms";
+import { FormGroup, FormBuilder } from "@angular/forms";
+import { ReportMainSerVice } from "../../../../pages/Reports/Report.service";
+import * as moment from 'moment'
+
+@Component({
+  selector: "AutoIndent",
+  templateUrl: "./AutoIndent.component.html",
+
+  providers: [AutoIndentService],
+  styleUrls: ["../../../modal-style.css"]
+})
+export class AutoIndentComponent {
+
+  calendarForm: FormGroup;
+  ranges: any;
+  filterparam: any = {
+    from: "",
+    to: ""
+  };
+  filter: any;
+  public mode: string = "NEW";
+  activerowIndex: number = 0;
+  IndentMain: any = <any>{};
+
+  IndentList: any[] = [];
+  TempIndList: any[] = [];
+  userProfile: any = <any>{};
+  gridPopupSettingsOutletIndents: GenericPopUpSettings = new GenericPopUpSettings();
+  @ViewChild("genericGridOutletIndents") genericGridOutletIndents: GenericPopUpComponent;
+  gridPopupSettings: GenericPopUpSettings = new GenericPopUpSettings();
+  @ViewChild("genericGrid") genericGrid: GenericPopUpComponent;
+  @ViewChild("genericEditGrid") genericEditGrid: GenericPopUpComponent;
+  gridPopupSettingsItem: GenericPopUpSettings = new GenericPopUpSettings();
+  @ViewChild("genericGridItem") genericGridItem: GenericPopUpComponent;
+
+  @ViewChild("genericGridSupplier") genericGridSupplier: GenericPopUpComponent;
+  gridPopupSettingsForSupplier: GenericPopUpSettings = new GenericPopUpSettings();
+  public promptPrintDevice: boolean = false;
+  public printControl = new FormControl(0);
+  promptIndentOption: boolean;
+  selectedDate: { startDate: moment.Moment, endDate: moment.Moment };
+  selectedDate2: { startDate: moment.Moment, endDate: moment.Moment };
+  fromDate: any;
+  toDate: any;
+  noofdays: string;
+  noofdaysforsalesorder: string;
+  private selectedLink: string = 'a';
+  IndentsReceivedFromOutlet: any[] = [];
+  reorderFilter: ReOrderFilter = <ReOrderFilter>{};
+  allowSupplierInIndent: number;
+  currentSupplierObj: any;
+  currentMenuObj: any;
+
+  constructor(
+    private alertService: AlertService,
+    private loadingService: SpinnerService,
+    protected masterService: MasterRepo,
+    public reportFilterService: ReportMainSerVice,
+    protected service: AutoIndentService,
+    public _trnMainService: TransactionService,
+    private _transactionService: TransactionService,
+    private _alertService: AlertService,
+    private router: Router,
+    private aroute: ActivatedRoute,
+    private fb: FormBuilder,
+    authservice: AuthService
+  ) {
+    this.allowSupplierInIndent = this._trnMainService.AppSettings.allowSupplierInIndent;
+    this.reorderFilter.ORDERLISTBASEDON = <IORDERLISTBASEDON>{};
+    this.reorderFilter.ORDERLISTBASEDON.BASEDONCURRENTSTOCKPARAM = <IBASEDONCURRENTSTOCKPARAM>{};
+    this.ranges = this.masterService.dateFilterRange;
+    this._trnMainService.initialFormLoad(59);
+    this.userProfile = JSON.parse(localStorage.getItem("USER_PROFILE"));
+    this.gridPopupSettings =
+    {
+      title: "Intend List",
+      apiEndpoints: `/getAllIndentPagedListForEdit`,
+      defaultFilterIndex: 0,
+      columns: [
+        {
+          key: 'INDENTNO',
+          title: 'Indent No.',
+          hidden: false,
+          noSearch: false
+        },
+        {
+          key: 'TRNDATE',
+          title: 'DATE',
+          hidden: false,
+          noSearch: false
+        },
+        {
+          key: 'TRNSTATUS',
+          title: 'Status',
+          hidden: false,
+          noSearch: false
+        }
+
+      ]
+    };
+
+    this.gridPopupSettingsOutletIndents = {
+      title: "Indents Received From Outlets",
+      apiEndpoints: `/ShowReceivedIndentFromOutlet`,
+      defaultFilterIndex: 0,
+      columns: [
+        {
+          key: 'OutletDomainId',
+          title: 'OutletDomainId',
+          hidden: false,
+          noSearch: false
+        },
+        {
+          key: 'VoucherNumber',
+          title: 'OutletIndentNo',
+          hidden: false,
+          noSearch: false
+        },
+        {
+          key: 'IsConverted',
+          title: 'Converted',
+          hidden: false,
+          noSearch: false
+        },
+        {
+          key: 'HQVoucherNumber',
+          title: 'HQINDENTNO',
+          hidden: false,
+          noSearch: false
+        }
+      ]
+    }
+
+    this.gridPopupSettingsItem = {
+      title: "ITEMS",
+      apiEndpoints: `/getMasterPagedListOfAny`,
+      defaultFilterIndex: 0,
+      columns: [
+        {
+          key: 'DESCA',
+          title: 'DESCRIPTION',
+          hidden: false,
+          noSearch: false
+        },
+        {
+          key: 'MCODE',
+          title: 'ITEM CODE',
+          hidden: false,
+          noSearch: false
+        },
+        {
+          key: 'STOCK',
+          title: 'STOCK',
+          hidden: false,
+          noSearch: false
+        }
+
+
+      ]
+    };
+
+    this.aroute.queryParams.subscribe(params => {
+      if (params.voucher) {
+        let voucherNo = params.voucher;
+        this.loadingService.show("Please wait.Getting Data...");
+        this.masterService.masterGetmethod(`/loadIndentFromOutlet?voucherNo=${voucherNo}&fromCompanyid=${params.FROMCOMPANY}`).subscribe(
+          (res) => {
+
+            this.loadingService.hide();
+            if (res.status == "ok") {
+              this.IndentMain = res.result;
+              this.IndentList = res.result.IndentList;
+              this.IndentsReceivedFromOutlet = [{
+                OutletDomainId: params.FROMCOMPANY,
+                VoucherNumber: params.voucher,
+                IsConverted: false,
+                HQVoucherNumber: ''
+              }];
+              this.promptIndentOption = false;
+            }
+            else {
+              this.alertService.error(res.message);
+            }
+          },
+          (error) => {
+            this.alertService.error(error.message);
+
+          },
+          () => {
+
+          }
+        );
+      }
+    });
+
+    this.gridPopupSettingsForSupplier = Object.assign(new GenericPopUpSettings, {
+      title: "Supplier",
+      apiEndpoints: `/getAccountPagedListByPType/PA/V`,
+      defaultFilterIndex: 0,
+      columns: [
+        {
+          key: "ACNAME",
+          title: "NAME",
+          hidden: false,
+          noSearch: false
+        },
+        {
+          key: "ERPPLANTCODE",
+          title: "CODE",
+          hidden: false,
+          noSearch: false
+        },
+        {
+          key: "ADDRESS",
+          title: "ADDRESS",
+          hidden: false,
+          noSearch: false
+        },
+        {
+          key: "PRICELEVEL",
+          title: "TYPE",
+          hidden: false,
+          noSearch: false
+        }
+      ]
+    });
+  }
+  ngOnInit() {
+
+    this.ResetIndent()
+
+  }
+  LoadIndentsFromOutlet() {
+    let url = this.router.url.split('?')[0];
+    this.router.navigateByUrl(url)
+    this.genericGridOutletIndents.show();
+  }
+  onOutletIndentDoubleClick(event) {
+    this.IndentsReceivedFromOutlet = [];
+    this.IndentsReceivedFromOutlet.push(event);
+    this.loadingService.show("Please Wait Getting Indents...");
+    this.masterService.masterGetmethod(`/loadIndentFromOutlet?voucherNo=${event.VoucherNumber}&fromCompanyid=${event.OutletDomainId}`).subscribe(
+      (res) => {
+        this.loadingService.hide();
+        if (res.status == "ok") {
+          this.IndentMain = res.result;
+          // this.IndentMain.MODE = "FromOutlet";
+          this.IndentList = res.result.IndentList;
+          this.promptIndentOption = false;
+        }
+        else {
+          this.alertService.error(res.message);
+        }
+      },
+      (error) => {
+        this.alertService.error(error.message);
+      },
+      () => {
+      }
+    );
+  }
+  onOutletIndentButtonClick(event) {
+    this.IndentsReceivedFromOutlet = [];
+    this.IndentsReceivedFromOutlet = event;
+    console.log('this.IndentsReceivedFromOutlet', this.IndentsReceivedFromOutlet);
+    let body: {
+      OutletDomainId: string,
+      VoucherNumber: string
+    }[] = [];
+    event.forEach(e => {
+      let b: {
+        OutletDomainId: string,
+        VoucherNumber: string
+      };
+      b = {
+        OutletDomainId: e.OutletDomainId,
+        VoucherNumber: e.VoucherNumber
+      };
+      body.push(b);
+    });
+    this.loadingService.show("Please wait loading indent data...");
+    this.masterService.masterPostmethod(`/loadMultipleIndentFromOutlet`, body).subscribe(
+      (res) => {
+        this.loadingService.hide();
+        if (res.status == "ok") {
+          this.IndentMain = res.result;
+          this.IndentList = res.result.IndentList;
+          this.promptIndentOption = false;
+        }
+        else {
+          this.alertService.error(res.message);
+        }
+      },
+      (error) => {
+        this.alertService.error(error.message);
+      },
+      () => {
+
+      }
+    );
+  }
+
+  indentOptions: any = <any>{
+    from: "",
+    to: ""
+  };
+  IndentConfig() {
+    this.indentOptions.noofdaysforsalesorder = 0;
+    this.indentOptions.noofdaysforsalesorder = 0;
+    this.promptIndentOption = true;
+  }
+  noofdayscalc(date) {
+
+    if (this.selectedDate.startDate != null) {
+      this.fromDate = moment(this.selectedDate.startDate);
+      this.toDate = moment(this.selectedDate.endDate);
+      var date1: any = this.fromDate;
+      var date2: any = this.toDate;
+      var diffDays: any = Math.floor((date2 - date1) / (1000 * 60 * 60 * 24));
+      this.indentOptions.noofdays = diffDays + 1;
+
+    }
+  }
+  noofdayscalcOrd(date) {
+
+    if (this.selectedDate2.startDate != null) {
+      this.fromDate = moment(this.selectedDate2.startDate);
+      this.toDate = moment(this.selectedDate2.endDate);
+      var date1: any = this.fromDate;
+      var date2: any = this.toDate;
+      var diffDays: any = Math.floor((date2 - date1) / (1000 * 60 * 60 * 24));
+      this.indentOptions.noofdaysforsalesorder = diffDays + 1;
+
+    }
+
+  }
+  selectedButton(e: string) {
+
+    this.selectedLink = e;
+
+
+    if (this.selectedLink === 'a') {
+      this.indentOptions.noofdays = 0;
+    }
+    else {
+      this.indentOptions.noofdaysforsalesorder = 0;
+    }
+
+  }
+
+  loadIndent() {
+    this.loadingService.show("Please wait.Getting Data.");
+    this.masterService.masterPostmethod_NEW("/v1/getAllIndent", this.reorderFilter).subscribe((res) => {
+      this.loadingService.hide();
+      if (res.status == "ok") {
+        this.promptIndentOption = false;
+        this.IndentList = res.result;
+      }
+    }, error => {
+      this.loadingService.hide();
+      this.alertService.error(error._body);
+    })
+
+  }
+
+  resetFilter() {
+    this.reorderFilter.ORDERLISTBASEDON = <IORDERLISTBASEDON>{};
+    this.reorderFilter.ORDERLISTBASEDON.BASEDONCURRENTSTOCKPARAM = <IBASEDONCURRENTSTOCKPARAM>{};
+  }
+
+  EditIndent() {
+    this.genericEditGrid.show();
+  }
+
+  ViewIndent() {
+    this.genericGrid.show();
+  }
+
+  deleteRow(obj) {
+    this.IndentList.splice(this.IndentList.indexOf(x => x = obj), 1);
+  }
+
+
+  deliverIndentToCenter() {
+    this.loadingService.show("Please Wait. Getting Data");
+    this.masterService.masterGetmethod(`/DeliverIndent`).subscribe((res) => {
+      this.loadingService.hide();
+      if (res.status == "ok") {
+        alert(res.result);
+      }
+      else {
+        alert(res.result);
+      }
+
+    },
+      (error) => {
+        this.loadingService.hide();
+        alert(error);
+
+      });
+
+
+  }
+
+  onMultipleIndentSelect(event) {
+
+    let indentnos: string[] = [];
+    event.forEach(element => {
+      indentnos.push(element.INDENTNO);
+    });
+
+    this.loadingService.show("Please wait.Getting Data.");
+    this.masterService.masterPostmethod(`/getMultipleIndentDetail`, indentnos).subscribe(
+      (res) => {
+        this.loadingService.hide();
+
+        if (res.status == "ok") {
+          this.mode = "VIEW";
+          this._trnMainService.TrnMainObj.Mode = "VIEW";
+          this.IndentMain = res.result;
+          this.IndentList = res.result.IndentList;
+        } else {
+          console.log(res.result);
+          alert(res.result);
+        }
+      }, err => {
+        this.loadingService.hide();
+        alert(err);
+      },
+      () => {
+        this.loadingService.hide();
+      }
+    )
+  }
+
+
+  onItemDoubleClick(event) {
+    this.loadingService.show("Please wait.Getting Data.");
+    this.masterService.masterGetmethod(`/getIndentDetail?INDENTNO=${event.INDENTNO}`).subscribe((res) => {
+      this.loadingService.hide();
+
+      if (res.status == "ok") {
+        this.mode = "VIEW";
+        this._trnMainService.TrnMainObj.Mode = "VIEW";
+        this.IndentMain = res.result;
+        this.IndentMain.TRNSTATUS = event.TRNSTATUS;
+        this.IndentList = res.result.IndentList;
+      } else {
+        alert(res.result);
+      }
+    }, err => {
+      this.loadingService.hide();
+      alert(err);
+    })
+  }
+
+  onItemEditDoubleClick(event) {
+
+    if (event.TRNSTATUS && event.TRNSTATUS != "ACTIVE") return;
+    this.loadingService.show("Please wait.Getting Data.");
+    this.masterService.masterGetmethod(`/getIndentDetail?INDENTNO=${event.INDENTNO}`).subscribe((res) => {
+      this.loadingService.hide();
+      if (res.status == "ok") {
+        this.mode = "EDIT";
+        this._trnMainService.TrnMainObj.Mode = "EDIT";
+        this.IndentMain = res.result;
+        this.IndentMain.TRNSTATUS = event.TRNSTATUS;
+        this.IndentList = res.result.IndentList;
+      } else {
+        alert(res.result);
+      }
+    }, err => {
+      this.loadingService.hide();
+      alert(err);
+    })
+  }
+
+  onItemDoubleClickItem = (event): void => {
+    // this.IndentList[this.activerowIndex].MCODE = event.MCODE;
+    // this.IndentList[this.activerowIndex].ALTUNIT = event.ALTUNIT;
+    // this.IndentList[this.activerowIndex].DESCA = event.DESCA;
+    // this.IndentList[this.activerowIndex].STOCK = event.STOCK;
+    // this.IndentList[this.activerowIndex].LASTPURCHASEDATE = event.LASTPURCHASEDATE;
+    // this.IndentList[this.activerowIndex].LASTPURCHASEQTY = event.LASTPURCHASEQTY;
+    this.currentMenuObj.MCODE = event.MCODE;
+    this.currentMenuObj.ALTUNIT = event.ALTUNIT;
+    this.currentMenuObj.DESCA = event.DESCA;
+    this.currentMenuObj.STOCK = event.STOCK;
+    this.currentMenuObj.LASTPURCHASEDATE = event.LASTPURCHASEDATE;
+    this.currentMenuObj.LASTPURCHASEQTY = event.LASTPURCHASEQTY;
+    this.masterService
+      .masterGetmethod(
+        "/getAltUnitsOfItem/" +
+        this.currentMenuObj.MCODE
+      )
+      .subscribe(
+        res => {
+          if (res.status == "ok") {
+            this.currentMenuObj.AlternateUnits = JSON.parse(res.result);
+          }
+        },
+        error => {
+        }
+      );
+    this.masterService.focusAnyControl("indent" + this.activerowIndex);
+  }
+  GetIndentList() {
+    this.loadingService.show("Getting Data, please wait...");
+    this.service.getAllIndent().subscribe(res => {
+      this.IndentList.push(res);
+      if (this.IndentList == null) {
+        this.loadingService.hide();
+        this.alertService.info("Indent were not found");
+      }
+
+    }, (error) => {
+      this.loadingService.hide();
+    }
+      , () => {
+        this.loadingService.hide();
+
+      });
+  }
+
+  cancelIndent() {
+    if (this.IndentMain.INDENTNO == "" || this.IndentMain.INDENTNO == null || this.IndentMain.INDENTNO == undefined) return;
+    this.loadingService.show("Cancelling invoice.Please wait");
+    this.masterService.masterGetmethod_NEW("/cancelIndent?vchrno=" + this.IndentMain.INDENTNO).subscribe((res) => {
+      this.loadingService.hide();
+      this.alertService.success(res.message);
+    }, error => {
+      this.loadingService.hide();
+
+    })
+  }
+  saveIndentList: any[] = [];
+  GenerateIndent() {
+    if (!this.IndentMain.MODE)
+      this.IndentMain.MODE = this.mode;
+    let filterIndent = this.IndentList.filter(x => x.MCODE)
+    if (this._transactionService.TrnMainObj.Mode.toLowerCase() == "view") {
+      this.alertService.error("You cannot save in view mode");
+      return;
+    }
+    if (filterIndent.length == 0) {
+      this.alertService.error("please select item to raise indent");
+      this.ResetIndent();
+      return;
+    }
+    this.loadingService.show("Saving data, please wait...");
+    this.service.saveIndent(this.IndentMain, this.IndentList, this.IndentsReceivedFromOutlet).subscribe(res => {
+      this.loadingService.hide();
+
+      if (res.status == 'ok') {
+        this.alertService.success("Data Saved Successfully");
+        this.ResetIndent();
+      }
+      else {
+        this.loadingService.hide();
+      }
+    })
+  }
+  ResetIndent() {
+    this.IndentList = [];
+    this.addRow();
+    this.currentMenuObj = {};
+    this.currentSupplierObj = {};
+  }
+
+  addRow = (): boolean => {
+    if (this.IndentList.some(x => x.MCODE == null && x.MENUCODE == null)) { return true; }
+    if (this.IndentList.some(x => x.Indent == null || x.Indent == 0 || x.Indent == undefined)) { return true; }
+    var newRow = <any>{};
+    newRow.inputMode = true;
+    newRow.MCODE = null;
+    newRow.DESCA = null;
+    newRow.ALTUNIT = null;
+    newRow.LASTPURCHASEDATE = null;
+    newRow.LASTPURCHASEQTY = null;
+    newRow.STOCK = null;
+    newRow.Indent = null;
+    this.IndentList.push(newRow);
+    return true;
+  }
+
+  OnQuantityEnter = (index: number) => {
+    if (this._transactionService.TrnMainObj.Mode.toLowerCase() == "view") {
+      return;
+    }
+    if (this._trnMainService.nullToZeroConverter(this.IndentList[index].Indent) <= 0) {
+      return false;
+    } else {
+      if (this.addRow()) {
+        this.activerowIndex = index + 1;
+        let nextIndex = index + 1;
+        setTimeout(() => {
+          if (document.getElementById("parac" + nextIndex)) {
+            document.getElementById("parac" + nextIndex).focus();
+          } else {
+            if (document.getElementById("menucode" + nextIndex)) {
+              document.getElementById("menucode" + nextIndex).focus();
+            }
+          }
+        }, 5);
+      }
+    }
+  }
+
+  ItemkeyEvent = (index: number, MenuObj) => {
+    this.currentMenuObj = MenuObj;
+    this.activerowIndex = index;
+    this.genericGridItem.show("", false, "itemforindent");
+  }
+<<<<<<< HEAD
+  supplierkeyEvent = (index: number, supplierObj) => {
+    this.currentSupplierObj = supplierObj;
+    this.activerowIndex = index;
+    this.genericGridSupplier.show();
+  }
+
+
+
+  onSupplierSelected(data) {
+    // this.IndentList[this.activerowIndex].PARAC = data.ACID;
+    // this.IndentList[this.activerowIndex].ACNAME = data.ACNAME;
+    this.currentSupplierObj.PARAC = data.ACID;
+    this.currentSupplierObj.ACNAME = data.ACNAME;
+
+    if (document.getElementById("menucode" + this.activerowIndex)) {
+      document.getElementById("menucode" + this.activerowIndex).focus();
+    }
+=======
+  transformDate(date) {
+    return moment(date).format('DD/MM/YYYY')
+>>>>>>> 514c92c171f91ea4b8a39bb372b4a23aac377a79
+  }
+  private companyProfile: any
+
+
+  transformDate(date) {
+    return moment(date).format('DD/MM/YYYY')
+  }
+  public headCustomize(data) {
+    this.companyProfile = this.userProfile.CompanyInfo;
+    let thead = "";
+    thead = thead + `
+              <thead>
+              <tr>
+                <td colspan='7' style='text-align:center' >${this.companyProfile.NAME}<br>${this.companyProfile.ADDRESS}<br>
+                ${this.companyProfile.TELA},${this.companyProfile.EMAIL},${this.companyProfile.GSTNO}<br>                
+                <h3>Purchase Requisition</h3>
+                </td>
+                <td colspan='2' style='border-bottom:1px solid #000;'>Date : ${this.transformDate(this.IndentMain.TRNDATE)}<br>
+                Requisition No. : ${this.IndentList[0].INDENTNO}</td>
+              </tr>
+                <tr>                  
+                  <td style='border:1px solid #000;'>Sno</td>
+                  <td style='border:1px solid #000;'>Item Code</td>
+                  <td style='border:1px solid #000;'>Item Name</td>
+                  <td style='border:1px solid #000;'>Last Purchase Date</td>
+                  <td style='border:1px solid #000;'>Last Purchase Qty</td>
+                  <td style='border:1px solid #000;'>Stock Qty</td>
+                  <td style='border:1px solid #000;'>Order Qty</td>
+                  <td style='border:1px solid #000;'>UOM</td>
+                  <td style='border:1px solid #000;'>Receive Date</td>
+                </tr>
+              </thead>`
+
+    return thead
+  }
+
+  public bodyCustomize(data) {
+    let body = '<tbody>'
+    for (let i in this.IndentList) {
+      body = body + `
+                <tr>
+                    <td style='border:1px solid #000;'>${this._transactionService.nullToZeroConverter(i) + 1}</td>
+                    <td style='border:1px solid #000;'>${this.IndentList[i].MCODE ? this.IndentList[i].MCODE : ''}</td>
+                    <td style='border:1px solid #000;'>${this.IndentList[i].DESCA ? this.IndentList[i].DESCA : ''}</td>
+                    <td style='border:1px solid #000;'>${this.IndentList[i].LASTPURCHASEDATE ? this.IndentList[i].LASTPURCHASEDATE : ''}</td>
+                    <td style='border:1px solid #000;'>${this.IndentList[i].LASTPURCHASEQTY ? this.IndentList[i].LASTPURCHASEQTY : ''}</td>
+                    <td style='border:1px solid #000;'>${this.IndentList[i].STOCK ? this.IndentList[i].STOCK : ''}</td>
+                    <td style='border:1px solid #000;'>${this.IndentList[i].Indent ? this.IndentList[i].Indent : ''}</td>
+                    <td style='border:1px solid #000;'>${this.IndentList[i].ALTUNIT ? this.IndentList[i].ALTUNIT : ''}</td>
+                    <td style='border:1px solid #000;'>${this.transformDate(this.IndentList[0].TRNDATE)}</td>
+                </tr>`
+    }
+
+    return body + `</tbody>`
+
+  }
+  private footerCustomize(data) {
+
+    let tfoot = ""
+    tfoot = tfoot + `
+                    <tfoot>
+                    <tr>
+                        <td colspan='9'>&nbsp;</td>                    
+                    </tr>
+                    <tr>
+                        <td colspan='9'>&nbsp;</td>                    
+                    </tr>
+                    <tr>
+                        <td colspan='3'>Prepared By</td>
+                        <td colspan='3'>Approved By Department HOD</td>
+                        <td colspan='3'>Approved By Purchase Committee</td>                    
+                    </tr>
+                    </tfoot>`
+
+    return tfoot;
+
+  }
+
+  printLoadSheetCustomize(loadSheetData) {
+
+    let popupWin;
+    let tableData = `<table *ngIf="itemDetail" style='width: 100%;font-size: 12px;
+            border-collapse: collapse;border-top: none;border: 1px solid black;'>`
+    let head = this.headCustomize(loadSheetData)
+    let body = this.bodyCustomize(loadSheetData)
+    let footer = this.footerCustomize(loadSheetData)
+    tableData = tableData + head + body + footer + `</table>`
+
+    popupWin = window.open('', '_blank', 'top=0,left=0,height=100%,width=auto');
+    popupWin.document.write(`
+        <html> <head>
+        <title>Indent</title>
+        <style>
+        td{
+          padding:2px;
+        }
+        </style>
+        </head>
+        <body onload="window.print();window.close()">
+        ${tableData}
+
+        </body>
+          </html>`
+    );
+    popupWin.document.close();
+  }
+
+  print() {
+    this.promptPrintDevice = false;
+    console.log(this.IndentList);
+    if (this.IndentList[0].ALTUNIT == null) {
+      this._alertService.warning("Please Load Voucher or save new voucher to print")
+    }
+    else {
+      this.printLoadSheetCustomize('')
+    }
+  }
+
+
+  sendToPrint() {
+    this.promptPrintDevice = true;
+
+  }
+
+  printSeletcted() {
+    this.print();
+  }
+
+  cancelprint() {
+    this.promptPrintDevice = false;
+  }
+
+
+  convertToPO() {
+    if (!this.IndentList.length) {
+      this.alertService.error("No Valid data found to convert Purchase Order.");
+      return;
+    }
+
+    if (this.IndentMain.TRNSTATUS && (this.IndentMain.TRNSTATUS.toLowerCase() == "cancelled") || this.IndentMain.TRNSTATUS.toLowerCase() == "converted") {
+      this._alertService.error(`You cannot convert ${this.IndentMain.TRNSTATUS.toLowerCase()} indent to purchase order`);
+      return;
+    }
+    let indentno = this.IndentList[0].INDENTNO;
+    if (this._transactionService.TrnMainObj.Mode && (this._transactionService.TrnMainObj.Mode.toLowerCase() == "view" || this._transactionService.TrnMainObj.Mode.toLowerCase() == "edit")) {
+      this.loadingService.show(`Please wait while converting Indent to Purchase Order`);
+      this.masterService.masterGetmethod_NEW("/convertIndentToPO?indentno=" + indentno).subscribe((res) => {
+        console.log(res)
+        if (res.status == "ok") {
+          this.loadingService.hide();
+          this._alertService.success("Converted Successfully.");
+          this.ResetIndent();
+        }
+      }, error => {
+        this.loadingService.hide();
+        this._alertService.error(error._body);
+      })
+    }
+
+  }
+}
+
+
+
+
+
+
+
+export interface ReOrderFilter {
+  DAY: string;
+  DAYBASEDON: string;
+  TRANSACTION: string;
+  MANUFACTURER: string;
+  ORDERLISTBASEDON: IORDERLISTBASEDON;
+}
+
+
+export interface IORDERLISTBASEDON {
+  BASEDON: string;
+  ORDERCRITERIA: string;
+  BASEDONCURRENTSTOCKPARAM: IBASEDONCURRENTSTOCKPARAM;
+  ISAPPLICABLE: string;
+  DATE1: string | Date;
+  DATE2: string | Date;
+  BASEDONFIXEDMINQTYLEVELAPPLICABLE: string;
+  BASEDONCALCMINQTYLEVELAPPLICABLE: string;
+  BASEDONFIXEDMINQTYLEVELVALUE: number;
+  BASEDONCALCMINQTYLEVELVALUE: number;
+  BASEDONSALESAPPLICABLE: string;
+  BASEDONPURCHASEAPPLICABLE: string;
+  BASEDONSALESAPPLICABLEFROM: Date;
+  BASEDONSALESAPPLICABLETO: Date;
+  BASEDONOTHERAPPLICABLE: string;
+  LISTTOPNITEMSQTYVALUE: number;
+  LISTTOPNITEMSQTYVALUEFROM: string | Date;
+  LISTTOPNITEMSQTYVALUETO: string | Date;
+  ORDERFORNDAYSSTOCK: number
+  ORDERFORNDAYSSTOCKFROM: string | Date;
+  ORDERFORNDAYSSTOCKTO: string | Date
+  ORDERFORNDAYSSALEQUANTITYAPPLICABLE: string;
+  ORDERFORNDAYSSALEQUANTITYVALUE: number;
+  BEATFREQUENCY: number;
+  AVERAGESALESQUANTITYFROM: string | Date;
+  AVERAGESALESQUANTITYTO: string | Date;
+  NOOFDAYSFORSALESORDER: number;
+  NOOFDAYSFORSALESORDERFROM: Date;
+  NOOFDAYSFORSALESORDERTO: string;
+
+
+}
+
+
+export interface IBASEDONCURRENTSTOCKPARAM {
+  CURRENTSTOCKPARAM: string;
+  DATE1: string | Date;
+  DATE2: string | Date;
+  ITEMWITHZEROSTOCK: string;
+  STOCKLESSTHANFIXEDMINQTYLEVEL: string;
+  STOCKLESSTHANCALCMINQTYLEVEL: string;
+}

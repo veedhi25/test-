@@ -1,0 +1,185 @@
+<div *ngIf="isActive" class="modal-sticky" [class.modal-sticky-hide]="!isActive"
+  style="display : block; padding: 0px;  margin-bottom: 25px;">
+  <!-- Modal content -->
+  <div class="modal-content modal-content-main-area">
+    <div class="modal-header" style="padding: 0px;background: #ecad79;">
+      <button class="close" aria-label="Close" (click)="hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="modal-title" style="text-align: center;">
+        Serial Numbers
+      </h4>
+    </div>
+    <div class="modal-body" style="min-height: 60vh;">
+      <div class="row">
+        <div class="col-md-12">
+
+          <div class="col-md-6" style="padding: 0;">
+            <div class="col-md-12">
+              <label style="font-size: 13px; width: 100%">
+                <input style="vertical-align: middle" type="checkbox" name="autogenerate" id="autogenerate"
+                  [(ngModel)]="serialisedItem.AUTOGENERATE" />
+                <span style="margin: 5px;">Auto
+                  Generate Serial Number</span>
+              </label>
+            </div>
+            <div class="col-md-12">
+              <label style="font-size: 13px; width: 100%">
+                <input [disabled]="!serialisedItem.AUTOGENERATE" style="vertical-align: middle" type="checkbox"
+                  name="havingprefix" id="havingprefix" [(ngModel)]="serialisedItem.HAVINGPREFIX" /><span
+                  style="margin: 5px;">Auto
+                  number having prefix</span>
+              </label>
+            </div>
+            <!-- <div class="col-md-12">
+              <label style="font-size: 13px; width: 100%">
+                <input [disabled]="!serialisedItem.AUTOGENERATE" style="vertical-align: middle" type="checkbox"
+                  name="Formatserial" id="Formatserial" [(ngModel)]="serialisedItem.FORMATSERIAL" /><span
+                  style="margin: 5px;">Format
+                  serial number based on item count length</span>
+              </label>
+            </div> -->
+            <div class="col-md-12 form-group" style="padding: 0;">
+              <em style="font-size: 12px;margin-left: 15px;width: 25%;font-weight: 600;">
+                Item Count
+              </em>
+              <input [disabled]="!serialisedItem.AUTOGENERATE"
+                style="vertical-align: middle; width: 60%; display: inline-block;    border: 1px solid #bfbdbd;"
+                type="number" name="itemcount" id="itemcount" [(ngModel)]="serialisedItem.ITEMCOUNT" />
+            </div>
+          </div>
+
+          <div class="col-md-6" style="padding: 0;">
+            <div class="col-md-12 form-group" style="padding: 0;">
+              <label style="font-size: 13px; width: 27%">
+
+              </label>
+              <em *ngIf="serialisedItem.HAVINGPREFIX"
+                style="vertical-align: middle; width: 30%; display: inline-block;font-weight: 600;">
+                Prefix
+              </em>
+              <em style="vertical-align: middle; width: 40%; display: inline-block; font-weight: 600;">
+                Start From
+              </em>
+
+            </div>
+            <div class="col-md-12 form-group" style="padding: 0;">
+              <label style="font-size: 13px; width: 27%">
+                Serial No 1:
+              </label>
+              <input *ngIf="serialisedItem.HAVINGPREFIX" [disabled]="disableSerialNumber(1)"
+                [(ngModel)]="serialisedItem.PREFIX1"
+                style="vertical-align: middle; width: 30%; display: inline-block;     border: 1px solid #bfbdbd;"
+                type="text" name="PREFIX1" id="PREFIX1" />
+              <input [disabled]="disableSerialNumber(1)" [(ngModel)]="serialisedItem.SERIAL1"
+                style="vertical-align: middle; width: 40%; display: inline-block;     border: 1px solid #bfbdbd;"
+                type="text" name="serial1" id="serial1" (keydown.enter)="SerialInputEnterkeyEvent(1)"/>
+            </div>
+            <div class="col-md-12 form-group" style="padding: 0;">
+              <label style="font-size: 13px; width: 27%">
+                Serial No 2:
+              </label>
+              <input *ngIf="serialisedItem.HAVINGPREFIX" [disabled]="disableSerialNumber(2)"
+                [(ngModel)]="serialisedItem.PREFIX2"
+                style="vertical-align: middle; width: 30%; display: inline-block;     border: 1px solid #bfbdbd;"
+                type="text" name="PREFIX2" id="PREFIX2" />
+              <input [disabled]="disableSerialNumber(2)" [(ngModel)]="serialisedItem.SERIAL2"
+                style="vertical-align: middle; width: 40%; display: inline-block;     border: 1px solid #bfbdbd;"
+                type="text" name="serial2" id="serial2" (keydown.enter)="SerialInputEnterkeyEvent(2)"/>
+            </div>
+            <div class="col-md-12 form-group" style="padding: 0;">
+              <label style="font-size: 13px; width: 27%">
+                Serial No 3:
+              </label>
+              <input *ngIf="serialisedItem.HAVINGPREFIX" [disabled]="disableSerialNumber(3)"
+                [(ngModel)]="serialisedItem.PREFIX3"
+                style="vertical-align: middle; width: 30%; display: inline-block;     border: 1px solid #bfbdbd;"
+                type="text" name="PREFIX3" id="PREFIX3" />
+              <input [disabled]="disableSerialNumber(3)" [(ngModel)]="serialisedItem.SERIAL3"
+                style="vertical-align: middle; width: 40%; display: inline-block;     border: 1px solid #bfbdbd;"
+                type="text" name="serial3" id="serial3" (keydown.enter)="SerialInputEnterkeyEvent(3)"/>
+            </div>
+            <div class="col-md-12 form-group" style="padding: 0;">
+              <label style="font-size: 13px; width: 27%">
+                Serial No 4:
+              </label>
+              <input *ngIf="serialisedItem.HAVINGPREFIX" [disabled]="disableSerialNumber(4)"
+                [(ngModel)]="serialisedItem.PREFIX4"
+                style="vertical-align: middle; width: 30%; display: inline-block;     border: 1px solid #bfbdbd;"
+                type="text" name="PREFIX4" id="PREFIX4" />
+              <input [disabled]="disableSerialNumber(4)" [(ngModel)]="serialisedItem.SERIAL4"
+                style="vertical-align: middle; width: 40%; display: inline-block;     border: 1px solid #bfbdbd;"
+                type="text" name="serial4" id="serial4" (keydown.enter)="SerialInputEnterkeyEvent(4)"/>
+            </div>
+            <div class="col-md-12 form-group" style="padding: 0;">
+              <label style="font-size: 13px; width: 27%">
+                Serial No 5:
+              </label>
+              <input *ngIf="serialisedItem.HAVINGPREFIX" [disabled]="disableSerialNumber(5)"
+                [(ngModel)]="serialisedItem.PREFIX5"
+                style="vertical-align: middle; width: 30%; display: inline-block;     border: 1px solid #bfbdbd;"
+                type="text" name="PREFIX5" id="PREFIX5" />
+              <input [disabled]="disableSerialNumber(5)" [(ngModel)]="serialisedItem.SERIAL5"
+                style="vertical-align: middle; width: 40%; display: inline-block;     border: 1px solid #bfbdbd;"
+                type="text" name="serial5" id="serial5" (keydown.enter)="SerialInputEnterkeyEvent(5)"/>
+            </div>
+            <div class="col-md-12 form-group" style="padding: 0;">
+
+              <button type="button" class="btn btn-info" (click)="validateSerialNumber()">Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <div class="row">
+        <table id="BlueHeaderResizableTable" #reportHtmlTable style="font-size: 12px; width: 98%; overflow-x: auto"
+          class="matrix-table">
+          <thead>
+            <tr
+              style="border-bottom: 2px solid #e6e6e6;border-top: 2px solid #e6e6e6;height: 30px;background: silver;color: black;">
+              <th width="100px">Serial No1</th>
+              <th width="100px">Serial No2</th>
+              <th width="100px">Serial No3</th>
+              <th width="100px">Serial No4</th>
+              <th width="100px">Serial No5</th>
+            </tr>
+          </thead>
+          <tbody style="width: fit-content">
+            <tr style="border: 1px solid #e6e6e6; max-height: 25px"
+              *ngFor="let tList of transactionService.TrnMainObj.ProdList[this.activeRowIndex].serialItemList;let i=index"
+              (click)="SELECTEDINDEX=i">
+              <td width="100px">
+                {{tList.SERIAL1}}
+              </td>
+              <td width="100px">
+                {{tList.SERIAL2}}
+              </td>
+              <td width="100px">
+                {{tList.SERIAL3}}
+              </td>
+              <td width="100px">
+                {{tList.SERIAL4}}
+              </td>
+              <td width="100px">
+                {{tList.SERIAL5}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+
+
+    </div>
+
+
+    <div class="modal-footer">
+      <button class="btn btn-info pull-right" (click)="applyclicked()">Apply</button>
+      <button class="btn btn-info pull-right" style="margin-right: 5px;" (click)="hide()">cancel</button>
+    </div>
+  </div>
+</div>

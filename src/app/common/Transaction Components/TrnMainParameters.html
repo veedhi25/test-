@@ -1,0 +1,582 @@
+<div class="plainBackGround transaction-sc">
+
+  <div class="row"
+    *ngIf=" _trnMainService.TrnMainObj.VoucherType == 14 && _trnMainService.AppSettings.CompanyNature == 1">
+    <div class="col-md-4">
+      <div class="form-group">
+        <label class="form-control-label">Product Type :</label>
+        <input id="cusPriceLevel" type="text" [(ngModel)]="_trnMainService.TrnMainObj.VARIANTNAME"
+          (keydown)="$event.preventDefault()" (keydown.Enter)="onVariantEnterClicked()"
+          placeholder="Press enter to select Category" />
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4" style="height: 275px;
+    overflow-y: scroll;">
+      <div class="form-group cell-with-comment">
+        <label class="form-control-label">Customer :</label>
+        <input id="customerselectid" [disabled]="CustomerFieldDisabled()" type="text" (change)="customerFieldChange()"
+          autocomplete="off" title="Enter Or Tab to Select" [(ngModel)]="_trnMainService.TrnMainObj.BILLTO"
+          (keydown.tab)="customerTabCommand($event)" (keydown.enter)="customerEnterCommand($event)" OnlyNumber="true" />
+        <span class="cell-comment">
+          Press Enter Or Tab to Select Customer
+        </span>
+      </div>
+      <div class="form-group" *ngIf="_trnMainService.TrnMainObj.VoucherType==14">
+        <label class="form-control-label">Mobile No:</label>
+        <input type="text" [(ngModel)]="_trnMainService.TrnMainObj.BILLTOMOB" />
+      </div>
+      <div class="form-group" *ngIf="_trnMainService.TrnMainObj.VoucherType != 65">
+        <label class="form-control-label">Address :</label>
+        <input type="text" [ngModel]="_trnMainService.TrnMainObj.BILLTOADD" readonly />
+      </div>
+
+      <div class="form-group cell-with-comment" *ngIf="
+        _trnMainService.TrnMainObj.VoucherType == 1 ||
+        _trnMainService.TrnMainObj.VoucherType == 14  ||
+        _trnMainService.TrnMainObj.VoucherType == 20">
+        <label class="form-control-label">Balance :</label>
+        <input type="text" [ngModel]="_trnMainService.TrnMainObj.BALANCE  | number : '1.2-2'"
+          (keydown)="$event.preventDefault()" (keydown.space)="onBalanceKeySpace()"
+          (keydown.Enter)="onBalanceKeyEnter()" />
+        <span class="cell-comment">
+          Press Space for ledger report Or Enter to receive payment
+        </span>
+      </div>
+      <div class="form-group" *ngIf="_trnMainService.TrnMainObj.VoucherType !=65">
+        <label class="form-control-label">Invoice Type:</label>
+        <select [(ngModel)]="_trnMainService.TrnMainObj.INVOICETYPE"
+          [disabled]="_trnMainService.userProfile.CompanyInfo.ORG_TYPE== 'retailer'">
+          <option value="RETAIL INVOICE">RETAIL INVOICE</option>
+          <option value="E-COMMERCE">E-COMMERCE</option>
+          <option value="EXEMPTED">EXEMPTED</option>
+          <option value="TAX INVOICE">TAX INVOICE</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-control-label">Remarks :</label>
+        <input type="text" [(ngModel)]="_trnMainService.TrnMainObj.REMARKS" />
+      </div>
+      <div class="form-group" *ngIf="_trnMainService.TrnMainObj.VoucherType == 65">
+        <label class="form-control-label">DeliveryDate :</label>
+        <ims-date-picker [ID]='"QuotationDeliveryDate"' class="dropdownRfq"
+          (onDateChange)="setQuotationDeliveryDate($event)" [index]="'QuotationDeliveryDate'"
+          [date]="getQuotationDeliveryDate()">
+        </ims-date-picker>
+      </div>
+      <div class="form-group"
+        *ngIf="_trnMainService.TrnMainObj.VoucherType == 14 || _trnMainService.TrnMainObj.VoucherType == 57|| _trnMainService.TrnMainObj.VoucherType == 113 ">
+        <label class="form-control-label">Warehouse :</label>
+
+        <select name="mwarehouse" id="mwarehouse" (change)="onwarehouseChangeinSales()"
+          [(ngModel)]="_trnMainService.TrnMainObj.MWAREHOUSE">
+          <option *ngFor="let warehouse of userwarehouse" value="{{warehouse.NAME}}">{{warehouse.NAME}}</option>
+        </select>
+      </div>
+      <div class="form-group" *ngIf="_trnMainService.TrnMainObj.VoucherType == 15 ">
+        <label class="form-control-label">Warehouse :</label>
+        <input id="warehouseId" type="text" autocomplete="off" [(ngModel)]="_trnMainService.TrnMainObj.MWAREHOUSE"
+          (keydown.enter)="WarehouseEnterCommand($event)" (keydown.tab)="WarehouseEnterCommand($event)"
+          (keydown)="preventInput($event)" />
+      </div>
+    </div>
+    <div class="col-md-4" style="height: 275px;
+    overflow-y: scroll;">
+      <div
+        *ngIf="_trnMainService.TrnMainObj.VoucherType == 20 && (_trnMainService.userProfile.CompanyInfo.ORG_TYPE=='distributor' || _trnMainService.userProfile.CompanyInfo.ORG_TYPE=='wdb' || masterService.userProfile.CompanyInfo.ORG_TYPE=='superstockist')"
+        class="form-group cell-with-comment">
+        <label class="form-control-label">DSM :</label>
+        <input id="dsmid" type="text" autocomplete="off" [(ngModel)]="_trnMainService.TrnMainObj.AdditionalObj.DSMNAME"
+          (keydown.tab)="dsmCommand($event)" (keydown.enter)="dsmCommand($event)" (keydown)="preventInput($event)" />
+        <span class="cell-comment">
+          Press Enter or Tab to Select DSM
+        </span>
+      </div>
+
+      <div class="form-group" *ngIf="_trnMainService.TrnMainObj.VoucherType != 65">
+
+        <label class="form-control-label">Customer ID :</label>
+        <input type="text" [ngModel]="_trnMainService.TrnMainObj.CUSTOMERID" readonly />
+      </div>
+      <div class="form-group" *ngIf="_trnMainService.TrnMainObj.VoucherType==14">
+        <label class="form-control-label">Delivery Date:</label>
+        <input type="date" [(ngModel)]="_trnMainService.TrnMainObj.DeliveryDate" />
+      </div>
+
+      <div class="form-group cell-with-comment" *ngIf="
+        _trnMainService.TrnMainObj.VoucherType == 2 ||
+        _trnMainService.TrnMainObj.VoucherType == 15||
+        _trnMainService.TrnMainObj.VoucherType == 14||
+        _trnMainService.TrnMainObj.VoucherType == 57||
+        _trnMainService.TrnMainObj.VoucherType == 63 ||
+        _trnMainService.TrnMainObj.VoucherType == 113 
+        ">
+        <label class="form-control-label">Ref Bill No :</label>
+        <input id="refbill" [disabled]="RefBillFieldDisabled()" type="text"
+          [(ngModel)]="_trnMainService.TrnMainObj.REFBILL" (keydown.enter)="RefBillEnterCommand($event)"
+          (keydown.tab)="RefBillEnterCommand($event)" (keydown)="preventInputInSalesInvoiceForSalesOrder($event)" />
+        <span class="cell-comment">Press Enter or Tab to select bill</span>
+      </div>
+      <div class="form-group" *ngIf="
+        _trnMainService.TrnMainObj.VoucherType == 15 ||
+        _trnMainService.TrnMainObj.VoucherType == 63
+        ">
+        <label class="form-control-label">Ref Bill Date :</label>
+        <input id="refbill" [disabled]="RefBillFieldDisabled()" type="text"
+          [(ngModel)]="_trnMainService.TrnMainObj.REFBILLDATE" />
+      </div>
+      <div class="row" *ngIf="_trnMainService.TrnMainObj.VoucherType == 65 ">
+        <label class="form-control-label">Ref Date:</label>
+        <input class="form-control" type="text" id="refdate" [(ngModel)]="_trnMainService.TrnMainObj.TRN_DATE" readonly>
+      </div>
+      <div class="row" *ngIf="_trnMainService.TrnMainObj.VoucherType == 65 ">
+        <label class="form-control-label">Ref No:</label>
+        <ng-container *ngIf="_trnMainService.TrnMainObj.VoucherType == 65">
+          <input class="form-control" type="text" id="invNo" [(ngModel)]="_trnMainService.TrnMainObj.REFBILL"
+            readonly />
+        </ng-container>
+      </div>
+      <div class="row" *ngIf="_trnMainService.TrnMainObj.VoucherType == 65">
+        <label class="form-control-label">RFQValidity:</label>
+        <ng-container>
+          <input class="form-control" type="text" id="RFQValidity" [(ngModel)]="_trnMainService.TrnMainObj.RFQValidity"
+            readonly />
+        </ng-container>
+      </div>
+      <div class="row" *ngIf="_trnMainService.TrnMainObj.VoucherType == 65">
+        <label class="form-control-label">Expected Delivery Date:</label>
+        <ng-container *ngIf="_trnMainService.TrnMainObj.VoucherType == 65">
+          <input class="form-control" type="text" id="expdeliverydate"
+            [(ngModel)]="_trnMainService.TrnMainObj.ExpectedDeliveryDate" readonly />
+        </ng-container>
+      </div>
+      <div class="form-group" *ngIf="
+        _trnMainService.TrnMainObj.VoucherType == 2 ||
+        _trnMainService.TrnMainObj.VoucherType == 15||
+        _trnMainService.TrnMainObj.VoucherType == 63
+        ">
+        <label class="form-control-label">Return Mode :</label>
+        <select [(ngModel)]="_trnMainService.TrnMainObj.TRNMODE">
+          <option value="credit">Credit</option>
+          <option value="cash">Cash</option>
+          <option *ngIf="_trnMainService.TrnMainObj.VoucherType == 15" value="return_note">RRN</option>
+        </select>
+      </div>
+      <div class="form-group" *ngIf="_trnMainService.TrnMainObj.VoucherType !=65">
+        <label class="form-control-label">Sales Type :</label>
+        <select [disabled]="disableSalesType()" [(ngModel)]="_trnMainService.TrnMainObj.AdditionalObj.TRNTYPE">
+          <option value="local">Local</option>
+          <option value="interstate">Interstate</option>
+        </select>
+      </div>
+      <div class="form-group" *ngIf="ShowTransactionMode">
+        <label class="form-control-label">Payment Type :</label>
+        <select [(ngModel)]="_trnMainService.TrnMainObj.TRNMODE" disabled>
+          <option value="credit">Credit</option>
+          <option value="cash">Cash</option>
+          <option value="cashandcredit">Cash and Credit</option>
+        </select>
+      </div>
+      <div class="form-group"
+        *ngIf=" _trnMainService.TrnMainObj.VoucherType == 113 ||_trnMainService.TrnMainObj.VoucherType == 57">
+        <label class="form-control-label">Hold Stock Or Not :</label>
+        <div class="checkbox Holdcheckbox">
+          <input type="checkbox" [(ngModel)]="_trnMainService.TrnMainObj.holdstock" />
+        </div>
+      </div>
+      <div class="form-group" *ngIf="_trnMainService.TrnMainObj.VoucherType == 14">
+        <label class="form-control-label">Cus. Category : </label>
+        <input id="" type="text" [ngModel]="_trnMainService.TrnMainObj.CUS_CATEGORY_NAME" readonly disabled />
+      </div>
+      <div class="form-group cell-with-comment" *ngIf=" _trnMainService.TrnMainObj.VoucherType == 14">
+        <label class="form-control-label">Price Level :</label>
+        <input id="cusPriceLevel" type="text" [(ngModel)]="_trnMainService.TrnMainObj.CUS_CATEGORY_PRICELEVEL_LABEL"
+          (keydown.enter)="CUS_CATEGORY_PRICELEVELEnterCommand()"
+          (keydown.Tab)="CUS_CATEGORY_PRICELEVELEnterCommand()" />
+        <span class="cell-comment">
+          Press Enter to select price Level
+        </span>
+      </div>
+      <div class="form-group"
+        *ngIf=" _trnMainService.TrnMainObj.VoucherType == 14 && _trnMainService.AppSettings.ENABLELOYALTY">
+        <label class="form-control-label">Loyalty Amt:</label>
+        <input type="text" [ngModel]="_trnMainService.TrnMainObj.CUS_PREVlOYALTY" readonly />
+      </div>
+
+      <!-- && this.settings == 1 -->
+      <div class="form-group cell-with-comment"
+        *ngIf=" _trnMainService.TrnMainObj.VoucherType == 14 && (_trnMainService.AppSettings.CompanyNature == 1 || _trnMainService.AppSettings.CompanyNature == 3)">
+        <label class="form-control-label">Doctor :</label>
+        <input id="cusPriceLevel" type="text" [(ngModel)]="_trnMainService.TrnMainObj.AdditionalObj.DOCTORNAME"
+          (keydown)="$event.preventDefault()" (keydown.Enter)="onDoctorEnter()" (keydown.Tab)="onDoctorEnter()" />
+        <span class="cell-comment">
+          Press Enter to select doctor
+        </span>
+      </div>
+      <!-- setting for deliveryboy selection  added nby roshan-->
+
+      <div class="form-group" *ngIf="_trnMainService.TrnMainObj.PARTY_ORG_TYPE=='fitindia' &&
+        _trnMainService.TrnMainObj.Mode=='VIEW' 
+        &&  _trnMainService.TrnMainObj.VoucherType == 14 
+        && ( _trnMainService.userProfile.CompanyInfo.ORG_TYPE == 'retailer' ||
+        _trnMainService.userProfile.CompanyInfo.ORG_TYPE == 'ak' ||
+        _trnMainService.userProfile.CompanyInfo.ORG_TYPE== 'ck' ||
+        _trnMainService.userProfile.CompanyInfo.ORG_TYPE== 'pms' ||
+        _trnMainService.userProfile.CompanyInfo.ORG_TYPE == 'gak')">
+        <label style="width: 25%;" (click)="fitindia3mmClick()">Print 3mm(FitIndia)</label>
+        <label style="width: 25%;" (click)="fitindiaA4Click()">Print A4(FitIndia)</label>
+      </div>
+    </div>
+    <div class="col-md-4" style="height: 275px;
+    overflow-y: scroll;">
+      <div class="form-group" *ngIf=" _trnMainService.TrnMainObj.VoucherType == 14">
+        <label class="form-control-label">Home Delivery:</label>
+        <select [(ngModel)]="_trnMainService.TrnMainObj.RETTO">
+          <option value="1">Yes</option>
+          <option value="0">No</option>
+        </select>
+      </div>
+      <div class="form-group"
+        *ngIf=" _trnMainService.TrnMainObj.VoucherType == 14 && _trnMainService.AppSettings.ShowDeliveryBoy == 1">
+        <label class=" form-control-label">Delivery Boy :</label>
+        <input id="cusPriceLevel" type="text" [(ngModel)]="_trnMainService.TrnMainObj.AdditionalObj.DELIVERYBOYNAME"
+          (keydown)="$event.preventDefault()" (keydown.Enter)="onDeliveryBoySelect()" />
+      </div>
+
+      <div class="form-group"
+        *ngIf="(_trnMainService.TrnMainObj.VoucherType == 14 || _trnMainService.TrnMainObj.VoucherType == 20) && (_trnMainService.AppSettings.CompanyNature == 1 || _trnMainService.AppSettings.CompanyNature == 3)">
+        <ng-container>
+          <label style="width: 45%;">Upload Prescription</label>
+          <strong>
+            <em>
+              <a (click)="loadExistingPrescription()" style="color: #2ca8dd;">View
+                Existing Prescription</a>
+            </em>
+          </strong>
+          <div class="row col-md-12">
+            <input type="file" #fileSelect name="input-file-preview" (change)="onFileChange($event)"
+              accept=".png, .jpg, .jpeg" style="width: fit-content !important;height: fit-content !important;" />
+          </div>
+          <div class="row col-md-12" *ngIf="_trnMainService.TrnMainObj.AdditionalObj.IMAGEURL">
+            <img src="{{_trnMainService.TrnMainObj.AdditionalObj.IMAGEURL}}" width="200" height="250"
+              class="img-thumbnail" alt="image not found" />
+          </div>
+
+        </ng-container>
+      </div>
+
+
+
+
+      <div class="form-group" style="margin-top: 50px;"
+        *ngIf="(_trnMainService.TrnMainObj.VoucherType == 14 || _trnMainService.TrnMainObj.VoucherType == 20) &&  _trnMainService.AppSettings.CompanyNature == 3">
+        <!-- <strong>
+          <em>
+            <a style="color: #2ca8dd;" type="button" data-toggle="modal" data-target="#eyedetail"
+              title="please click to view customer eyes details">View Eye
+              Details
+            </a>
+          </em>
+        </strong> -->
+
+
+        <table class="table table-border"
+          *ngIf="_trnMainService.TrnMainObj.OpticalEyeDetails && _trnMainService.TrnMainObj.OpticalEyeDetails.length">
+          <thead>
+            <tr>
+              <th class="text-left"></th>
+              <th class="text-left">LEFT</th>
+              <th class="text-left">RIGHT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let opt of _trnMainService.TrnMainObj.OpticalEyeDetails;let i=index">
+              <td class="text-left">
+                <b>
+                  <em>
+                    {{opt.LABEL}}
+                  </em>
+                </b>
+              </td>
+              <td class="text-left">
+                <input type="text" name="left{{i}}" id="left{{i}}" [(ngModel)]="opt.LEFT">
+              </td>
+              <td class="text-left">
+                <input type="text" name="right{{i}}" id="right{{i}}" [(ngModel)]="opt.RIGHT">
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <generic-popup-grid #genericGridCustomer [popupsettings]="gridPopupSettingsForCustomer"
+    (onItemDoubleClick)="onCustomerSelected($event)">
+  </generic-popup-grid>
+  <generic-popup-grid #genericdsmgrid [popupsettings]="gridPopupSettingsFordsm"
+    (onItemDoubleClick)="onDSMselected($event)">
+  </generic-popup-grid>
+  <generic-popup-grid #genericGridRefBill [popupsettings]="gridPopupSettingsForRefBill"
+    (onItemDoubleClick)="onRefBillSelected($event)">
+  </generic-popup-grid>
+  <generic-popup-grid #genericGridWarehouse [popupsettings]="gridPopupSettingsForWarehouse"
+    (onItemDoubleClick)="onWarehouseSelected($event)">
+  </generic-popup-grid>
+  <!-- pop up for delivery boy selection added by roshan  -->
+  <generic-popup-grid #genericGridForDeliveryBoy [popupsettings]="gridPopupSettingsForDeliveryBoy"
+    (onItemDoubleClick)="onDeliverySelected($event)">
+  </generic-popup-grid>
+</div>
+<generic-popup-grid #genericGridItemPricesPopup1 [popupsettings]="gridPopupSettingsForItemPrices"
+  (onItemDoubleClick)="dblClickPopupPartItemPrices($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericGridDoctor [popupsettings]="gridPopupSettingsForDoctor"
+  (onItemDoubleClick)="dblClickPopupDoctor($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericvariantGrid [popupsettings]="gridPopupSettingsForVariant"
+  (onItemDoubleClick)="dblClickPopupVariant($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericvariantAttrGrid [popupsettings]="gridPopupSettingsForVariantAttr"
+  (onItemDoubleClick)="dblClickPopupVariantAttr($event)">
+</generic-popup-grid>
+
+
+<style>
+
+</style>
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="padding: 0;">
+  <div class="modal-dialog" role="document" style="margin: 0px 200px;">
+    <div class="modal-content" style="width:1000px;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="genericModalLabel">Ledger Report</h4>
+      </div>
+      <div class="modal-body">
+
+
+        <div class="row" *ngIf="customerLedgerData.details && customerLedgerData.details.length">
+          <div class="col-md-12">
+            <ng-container>
+              <div class="transaction-table-custom">
+                <div class="table-container scroll-tablee table-scrollsales">
+                  <table id="BlueHeaderResizableTable" #reportHtmlTable class="reportTabel" style="table-layout: fixed; overflow-x: hidden;height: 50vh;    font-size: 12px;
+                    font-family: sans-serif;">
+                    <thead>
+                      <tr>
+                        <th width="300px">PARTICULARS</th>
+                        <th width="150px">VCHR NO</th>
+                        <th width="150px">DEBIT</th>
+                        <th width="150px">CREDIT</th>
+                        <th width="150px">BALANCE</th>
+                        <th width="60px">DR/CR</th>
+
+                      </tr>
+                    </thead>
+                    <tbody style="width: fit-content;">
+
+                      <ng-container *ngIf="customerLedgerData.details && customerLedgerData.details.length">
+                        <tr *ngFor="let det of customerLedgerData.details;let i=index">
+                          <td width="300px" style="padding: 5px;">{{det.PARTICULARS}}</td>
+                          <td width="150px" style="padding: 5px;">{{det['VCH NO']}}</td>
+                          <td width="150px" style="padding: 5px;" class="text-right">{{det.DEBIT}}</td>
+                          <td width="150px" style="padding: 5px;" class="text-right">{{det.CREDIT}}</td>
+                          <td width="150px" style="padding: 5px;" class="text-right">{{det.BALANCE}}</td>
+                          <td width="60px" class="text-right"><em><strong>{{det.BL_DRCR}}</strong></em></td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+
+                    <tfoot *ngIf="customerLedgerData.totals && customerLedgerData.totals.length">
+                      <tr *ngFor="let tot of customerLedgerData.totals;let i=index">
+                        <th width="300px">{{tot?.PARTICULARS}}</th>
+                        <th width="150px"></th>
+                        <th width="150px" class="text-right">{{tot?.DRAMNT | number:'1.2-2'}}</th>
+                        <th width="150px" class="text-right">{{tot?.CRAMNT | number:'1.2-2'}}</th>
+                        <th width="150px"></th>
+                        <th width="60px"></th>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="modal fade" id="myPayment" tabindex="-1" role="dialog" aria-labelledby="myPaymentLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="genericModalLabel">Payment Details</h4>
+      </div>
+      <div class="modal-body">
+
+
+        <div class="form-group cell-with-comment">
+          <label for="paymentamount">Amount</label>
+          <input type="number" min="0" name="paymentamount" id="paymentamount" [(ngModel)]="paymentamount">
+        </div>
+        <div class="form-group cell-with-comment">
+          <label for="paymentamount">Cash/Bank</label>
+          <input type="text" name="cashbank" id="cashbank" (keydown)="$event.preventDefault()"
+            (keydown.Enter)="onCashBankEnter()" (keydown.Tab)="onCashBankEnter()" [(ngModel)]="paymentData.TRNACName">
+          <span class="cell-comment">
+            Press Enter Or Tab to Select Payment A/C
+          </span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="catclosebtn" class="btn btn-info" data-dismiss="modal">Close</button>
+        <button type="button" id="savebtn" class="btn btn-info pull-right" (click)="onsavePayment()">Save
+          Payment</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="modal fade" id="eyedetail" tabindex="-1" role="dialog" aria-labelledby="eyedetailLabel"
+  *ngIf="_trnMainService.TrnMainObj.OpticalEyeDetails && _trnMainService.TrnMainObj.OpticalEyeDetails.length">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="genericModalLabel">Eyes Details</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12">
+
+            <table class="table table-border">
+              <thead>
+                <tr>
+                  <th class="text-left"></th>
+                  <th class="text-left">LEFT</th>
+                  <th class="text-left">RIGHT</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let opt of _trnMainService.TrnMainObj.OpticalEyeDetails;let i=index">
+                  <td class="text-left">
+                    <b>
+                      <em>
+                        {{opt.LABEL}}
+                      </em>
+                    </b>
+                  </td>
+                  <td class="text-left">
+                    <input type="text" name="left{{i}}" id="left{{i}}" [(ngModel)]="opt.LEFT">
+                  </td>
+                  <td class="text-left">
+                    <input type="text" name="right{{i}}" id="right{{i}}" [(ngModel)]="opt.RIGHT">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="catclosebtn" class="btn btn-info" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<generic-popup-grid #genericGridACListParty [popupsettings]="gridACListPartyPopupSettings"
+  (onItemDoubleClick)="oncashbankSelect($event)"></generic-popup-grid>
+
+
+<style>
+  .plainBackGround.transaction-sc .checkbox.Holdcheckbox input {
+    width: 6% !important;
+  }
+</style>
+
+
+
+
+<div class="modal fade" id="myPrescription" tabindex="-1" role="dialog" aria-labelledby="myPrescriptionLabel"
+  style="margin-top: -200px;">
+  <div class="modal-dialog" role="document" style="max-width: 800px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="genericModalLabel">Prescription list</h4>
+      </div>
+      <div class="modal-body">
+
+
+        <div class="row">
+          <div class="col-md-12">
+            <ng-container>
+              <div class="transaction-table-custom">
+                <div class="table-container ims-scrollable-table">
+                  <table id="BlueHeaderResizableTable" #reportHtmlTable class="reportTabel" style="table-layout: fixed; overflow-x:scroll;height: 50vh;    font-size: 12px;
+                  font-family: sans-serif;">
+                    <thead style="width: calc(100% - 1em);">
+                      <tr>
+                        <th width="100px">Voucher</th>
+                        <th width="100px">Date</th>
+                        <th width="200px">Customer</th>
+                        <th width="100px">Doctor</th>
+                        <th width="100px">Prescription</th>
+                        <th width="100px"></th>
+                      </tr>
+                    </thead>
+                    <tbody style="width: fit-content;">
+
+                      <tr *ngFor="let col of existingPrescription;let i=index">
+                        <td width="100px" style="padding: 5px;">{{col?.VCHRNO}}</td>
+                        <td width="100px" style="padding: 5px;">{{col?.TRNDATE}}</td>
+                        <td width="200px" style="padding: 5px;">{{col?.BILLTO}}</td>
+                        <td width="100px" style="padding: 5px;">
+                          {{col?.DOCTORNAME}}
+                        </td>
+                        <td width="100px" style="padding: 5px;">
+                          <a href="{{masterService.imageServer}}/{{col.IMAGEURL}}" target="_blank">{{col.IMAGEURL}}</a>
+                        </td>
+                        <td width="100px" style="padding: 5px;">
+                          <button class="btn btn-info" (click)="downloadImage(col.IMAGEURL)">Download</button>
+                        </td>
+
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>

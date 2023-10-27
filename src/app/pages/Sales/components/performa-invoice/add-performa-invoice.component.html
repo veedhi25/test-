@@ -1,0 +1,36 @@
+<div class="form-inner">
+  <div class="top-forms">
+  <div class="row">
+    <div class="col-md-3">
+      <h3 class="main-heading">{{ _trnMainService.pageHeading }} [{{_trnMainService.TrnMainObj.Mode |titlecase}}]</h3>      
+    </div>
+    <div class="col-md-9 form-right-btn">
+      <voucher-master-toggler></voucher-master-toggler>
+      <voucher-master-action
+        (onLoadFromSOClickEmit)="showLoadFromSOPopup($event)">
+      </voucher-master-action>
+      <generic-popup-grid
+        #genericGridSO
+        [popupsettings]="gridPopupSettings"
+        (onItemDoubleClick)="onSalesOrderSelect($event)">
+      </generic-popup-grid>
+     
+    </div>
+  </div>
+  </div>
+  <div class="content-areaform">
+    <div class="col-md-12">
+      <div *ngIf="masterService.ShowMore" class="row">
+        <trnmain-parameters-master></trnmain-parameters-master>
+      </div>
+      <div class="row">
+        <productentry></productentry>
+      </div>
+    </div>
+    <!-- SIDE NAV -->
+    <voucher-sidebar-billdetail></voucher-sidebar-billdetail>
+  </div>
+</div>
+<div class="sticky-bottom">
+  <voucher-total-area></voucher-total-area>
+</div> 

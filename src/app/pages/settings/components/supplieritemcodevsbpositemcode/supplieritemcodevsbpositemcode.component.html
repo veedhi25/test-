@@ -1,0 +1,75 @@
+<div class="clearfix">
+    <div class="fixed-top">
+        <div class="col-md-4">
+            <h3>
+                Supplier Item Code Vs BPOS Item Code
+            </h3>
+        </div>
+        <div class="col-md-8">
+            <button class="btn btn-info pull-right" title="click to save mapping" (click)="onSaveClicked()">Save</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="clearfix" style="padding: 10px;">
+    <div class="col-md-4">
+        <div class="col-md-4">
+            <label for="supplier">Supplier</label>
+        </div>
+        <div class="col-md-8 cell-with-comment">
+            <input type="text" [(ngModel)]="supplierName" (keydown)="$event.preventDefault()"
+                (keydown.Enter)="onSupplierEnterCommand()" (keydown.Tab)="onSupplierEnterCommand()">
+            <span class="cell-comment">Press Enter or Tab to select supplier</span>
+        </div>
+
+    </div>
+</div>
+
+<div class="clearfix">
+    <div class="col-md-4 pull-right">
+        <input #inputBox type="text" style="width: 100%;" placeholder="Enter keyword to search" [(ngModel)]="filter" />
+    </div>
+</div>
+<div class="clearfix">
+    <div class="row">
+        <div class="col-md-12">
+            <ng-container>
+                <div class="transaction-table-custom">
+                    <div class="table-container ims-scrollable-table">
+                        <table id="BlueHeaderResizableTable" #reportHtmlTable class="reportTabel" style="table-layout: fixed; overflow-x:scroll;height: 60vh;    font-size: 12px;
+                font-family: sans-serif;">
+                            <thead style="width: calc(100% - 1em);">
+                                <tr>
+                                    <th width="60px" class="text-left">S.No</th>
+                                    <th width="200px" class="text-left">BPOS Item Code</th>
+                                    <th width="200px" class="text-left">Item Description</th>
+                                    <th width="200px" class="text-left">Supplier Item Code</th>
+                                </tr>
+                            </thead>
+                            <tbody style="width: fit-content;">
+
+                                <tr
+                                    *ngFor="let item of itemList | filter:filter | paginate: { itemsPerPage: 20, currentPage: p };let i = index">
+                                    <td width="60px" class="text-left">{{i+1}}</td>
+                                    <td width="200px" class="text-left">{{item.MCODE}}</td>
+                                    <td width="200px" class="text-left">{{item.DESCA}}</td>
+                                    <td width="200px" style="overflow: hidden;">
+                                        <input type="text" style="width: 100%;" [(ngModel)]="item.SUPPLIERITEMCODE">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+<generic-popup-grid #genericGridSupplier [popupsettings]="gridPopupSettingsForSupplier"
+    (onItemDoubleClick)="onSupplierSelected($event)">
+</generic-popup-grid>

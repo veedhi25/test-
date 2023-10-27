@@ -1,0 +1,63 @@
+<!-- <div class=".prefixSetting"> working</div> -->
+<div class="col-md-12" style="margin-top:10px;">
+  <div class="col-md-8">
+    <h4>Multi Series Sales</h4>
+  </div>
+
+  <div class="right-btn">
+    <button class="btn btn-info" style="font-size: 13px;" (click)="saveVoucher()">Save</button>
+  </div>
+</div>
+
+<div class="col-md-12">
+  <div class="col-md-8" style="margin-top: 5px;">
+    <div class="row">
+      <div class="col-md-12">
+        <label class="col-md-2">Prefix:</label>
+        <input type="text" class="form-control col-md-2" [(ngModel)]="Prefix" maxlength="3" style="width: 25%;" />
+        <label class="col-md-2">Series Name:</label>
+        <input type="text" class="form-control col-md-2" [(ngModel)]="SeriesName" style="width: 25%;" />
+        <button class="btn btn-info col-md-1" (click)="addVoucher()">ADD</button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ***********************table********************* -->
+<div class="col-md-12" style="margin-top: 20px;">
+  <div class="bgcover-form depatvscat">
+    <div #prodlistTable id="prodlistTable">
+      <div class="table-container">
+        <table #reportHtmlTable class="table reportTabel">
+          <thead>
+            <tr>
+              <th>Prefix</th>
+              <th>Voucher Series</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let i of prefixList; let x = index" (click)="rowClick(x)">
+              <td>
+                <input type="text" [(ngModel)]="i.vseries_id" class="form-control" />
+              </td>
+              <td>
+                <input type="text" [(ngModel)]="i.vseries_name" class="form-control" />
+              </td>
+              <td style="text-align: center;">
+                <a style="width: 60px; margin-left: 10px; color: white;" class="btn btn-sm btn-info mr-1 btn-sm"
+                  (click)="Delete(x)"><i class="glyphicon glyphicon-trash"></i></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>

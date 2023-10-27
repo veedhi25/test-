@@ -1,0 +1,1211 @@
+<div class="modal fade" bsModal #childModal="bs-modal" style="top:0" [config]="{ backdrop: 'static' }" tabindex="-1"
+  role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" aria-label="Close" (click)="hideChildModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Information</h4>
+      </div>
+      <div class="modal-body">
+        {{ DialogMessage }}
+      </div>
+    </div>
+  </div>
+</div>
+<div bsModal #smBrand="bs-modal" style="top:0" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" aria-label="Close" (click)="smBrand.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Add Brand</h4>
+      </div>
+      <div class="modal-body">
+        <label>Brand Name</label>
+        <input style="width:130px" type="text" [(ngModel)]="BName" />
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-info confirm-btn" (click)="SaveBrand(BName)" [disabled]="BName == null || BName == ''">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div bsModal #smModel="bs-modal" style="top:0" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" aria-label="Close" (click)="smModel.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Add Model</h4>
+      </div>
+      <div class="modal-body">
+        <label>Brand Name</label>
+        <select style="width:130px" [(ngModel)]="SelectedDialogBrand">
+          <option *ngFor="let bl of BrandList" [ngValue]="bl.BrandId">{{
+            bl.BrandName
+            }}</option>
+        </select>
+        <label>Model Name</label>
+        <input style="width:130px" type="text" [(ngModel)]="MName" />
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-info confirm-btn" (click)="SaveModel(MName, SelectedDialogBrand)" [disabled]="
+        SelectedDialogBrand == null || MName == null || MName == ''
+        ">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="tap-tabbable edit-customer">
+  <div class="card Product-master">
+    <fieldset [disabled]="tab.mode == 'view'">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" href="#general-info" data-toggle="tab">
+                General
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#alternativeUnits" data-toggle="tab">
+                Alternative Units
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#Sales" data-toggle="tab">
+                Sales
+              </a>
+            </li>
+            <li class="nav-item">
+              <a style="text-align: center;" class="nav-link" href="#GST" data-toggle="tab">
+                GST
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#Category" data-toggle="tab">
+                Category
+              </a>
+            </li>
+            <li class="nav-item" *ngIf="setting.COMPANYNATURE==2">
+              <a class="nav-link" href="#restaurantCategory" data-toggle="tab">
+                Fixed Category
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#Others" data-toggle="tab">
+                Others
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#Price" data-toggle="tab">
+                Price
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#uploadImg" data-toggle="tab">
+                Upload Image
+              </a>
+            </li>
+          </ul>
+
+          <div class="tab-content">
+            <p *ngIf="tab.mode != 'view'">Product Name : <b>{{productObj.DESCA}}</b></p>
+            <div class="tab-pane active" id="general-info">
+              <div class="p-master-form">
+
+
+                <!-- MCODE BLOCK -->
+                <ng-container *ngIf="'MCode'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">MCode: <span class="mandatory">*</span></label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" type="text" readonly [(ngModel)]="productObj.MCODE">
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- End of MCODE BLOCK -->
+
+
+
+                <!-- ALIAS CODE Block -->
+                <ng-container *ngIf="'Alias Code'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Alias Code: <span class="mandatory">*</span></label>
+                    </div>
+                    <div class="col-sm-8" *ngIf="setting.ENABLEAUTOALIASCODE==0">
+                      <input class="form-control" type="text" [(ngModel)]="productObj.MENUCODE"> 
+                    </div>
+                    <div class="col-sm-8" *ngIf="setting.ENABLEAUTOALIASCODE==1">
+                      {{productObj.MCODE}}
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- End of ALIAS CODE Block -->
+
+
+
+
+                <!-- ITEM NAME Block -->
+                <ng-container *ngIf="'Product Name'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Name:<span class="mandatory">*</span></label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" type="text" [(ngModel)]="productObj.DESCA" />
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- End of ITEM NAME Block -->
+
+
+                <!-- DESCRIPTION Block -->
+                <ng-container *ngIf="'Description'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Description:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" type="text" [(ngModel)]="productObj.DESCB" />
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- End of DESCRIPTION Block -->
+
+                <!-- DRUG TYPE Block -->
+                <ng-container *ngIf="setting.COMPANYNATURE==1 && ('DRUG TYPE'|ControlShowHide:formSetting)">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Drug Type</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <select class="form-control" name="generic" id="generic" [(ngModel)]="productObj.GENERIC">
+                        <option value="no">Other</option>
+                        <option value="h1drug">Scheduled H1</option>
+                        <option value="hdrug">Scheduled H</option>
+                        <option value="narcotic">Narcotic</option>
+                      </select>
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- End of DRUG TYPE Block -->
+
+
+
+                <!-- PRODUCT TYPE Block -->
+                <ng-container *ngIf="'Product Type'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Product Type:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" type="text" [(ngModel)]="productObj.PTYPE_NAME"
+                        (keyDown.enter)="onPTypeClicked()" placeholder="Enter to Select Product Type">
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- End of PRODUCT TYPE Block -->
+
+
+
+
+                <!-- NO OF SERIAL Block -->
+                <ng-container *ngIf="productObj.PTYPE==6 && ('NO OF SERIAL'|ControlShowHide:formSetting)">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">No Of Serial:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <select class="form-control" name="productserial" id="productserial"
+                        [(ngModel)]="productObj.NOOFSERIAL">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                      </select>
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- End of NO OF SERIAL Block -->
+
+
+
+                <!-- PARENT Block -->
+                <ng-container *ngIf="productObj.PTYPE!=6  && ('PARENT'|ControlShowHide:formSetting)">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Parent Item:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" type="text" placeholder="Press enter to select items"
+                        [(ngModel)]="productObj.BULKparentItem" (keyup.enter)="showRepackPopup()">
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- End of PARENT Block -->
+
+
+
+
+                <!-- BASE UNIT Block -->
+                <ng-container *ngIf="'Base Unit'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Base Unit: <span class="mandatory">*</span></label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" type="text" [(ngModel)]="productObj.BASEUNIT"
+                        (keyDown.enter)="onUnitClicked()" placeholder="Enter to Select UOM">
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- End of BASE UNIT Block -->
+
+                <!-- BATCH & EXPIRY Block -->
+                <ng-container *ngIf="'BatchExpiry'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Batch & Expiry:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <select class="form-control" [(ngModel)]="productObj.BatchExpiry">
+                        <option value="1"> Yes </option>
+                        <option value="0"> No </option>
+                      </select>
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- End of BATCH & EXPIRY Block -->
+
+
+                <!-- WEIGHT IN GRAMS Block -->
+                <div class="form-group" *ngIf="'Weight'|ControlShowHide:formSetting">
+                  <div class="col-sm-4">
+                    <label class="form-control-label">Weight (In Grams):</label>
+                  </div>
+                  <div class="col-sm-8">
+                    <input class="form-control" type="number" decimalPlacesRestriction="2"
+                      [(ngModel)]="productObj.GWEIGHT" />
+                  </div>
+                </div>
+                <!-- End of WEIGHT IN GRAMS Block -->
+
+
+                <!-- FOCUS ON PACKING BLOCK -->
+                <ng-container *ngIf="'FocusPacking'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Focus On Packing:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <select class="form-control" [(ngModel)]="productObj.FOCUSONPACKING">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                      </select>
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- End of FOCUS ON PACKING -->
+
+
+                <!-- EAN Block -->
+                <ng-container *ngIf="'Bar Code'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label ">
+                        EAN:
+                      </label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" type="text" [(ngModel)]="productObj.BARCODE">
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- End of EAN Block -->
+
+
+
+
+
+                <!-- ALLOW NEGATIVE Block -->
+                <ng-container *ngIf="'Allow Negative'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Allow Negative Stock:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <select class="form-control" [(ngModel)]="productObj.ALLOWNEGATIVE">
+                        <option value=0>No</option>
+                        <option value=1>Yes</option>
+                      </select>
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- End of ALLOW NEGATIVE Block -->
+
+
+
+
+                <!-- DISCONTINUE Block -->
+                <ng-container *ngIf="'Discontinue'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Discontinue</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <select class="form-control" [(ngModel)]="productObj.DISCONTINUE">
+                        <option value=0>No</option>
+                        <option value=1>Yes</option>
+                      </select>
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- End of DISCONTINUE Block  -->
+
+
+                <!-- SHELFLIFE Block -->
+                <ng-container *ngIf="'SHELFLIFE'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label"> Shelf Life(In Day)</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input type="number" min="0" class="form-control" name="shelflife"
+                        [(ngModel)]="productObj.SHELFLIFE" />
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- End of SHELFLIFE Block  -->
+
+              </div>
+            </div>
+
+            <div class="tab-pane" id="alternativeUnits">
+              <div class="row">
+                <div style="margin-left:5px" class="form-group row col-sm-6">
+                  <label style="width:110px"> BaseUnit </label>
+                  <label style="font-weight: 600;width: 50px">{{productObj.BASEUNIT}}</label>
+                </div>
+              </div>
+              <div class="row">
+                <div style="margin-left:5px" class="col-md-4">
+                  <div class="unit-conversion">
+                    <div>
+                      <label style="width:110px">Alternate Unit </label>
+                      <input type="text" (keyDown.enter)="onaltUnitClicked()" placeholder="Enter to Select UOM">
+                    </div>
+                    <div>
+                      <label style="width:100px;font-weight: 600;">1 {{CurAltUnit.ALTUNIT}}</label>
+                      <label style="width:10px">=</label>
+                      <input type="number" [(ngModel)]="CurAltUnit.CONFACTOR">
+                      <label style="width:18px;font-weight: 600;">{{productObj.BASEUNIT}}</label>
+                    </div>
+                  </div>
+                  <div class="each-case-add-btn" style="margin-top: 5px; margin-bottom: 5px;">
+                    <button class="btn btn-info" (click)="AddAltUnit()"
+                      [disabled]="CurAltUnit.ALTUNIT==null || CurAltUnit.CONFACTOR==null ||CurAltUnit.ALTUNIT=='' || CurAltUnit.CONFACTOR==0">Add</button>
+                  </div>
+                </div>
+                <div class="col-md-7">
+                  <table id="BlueHeaderResizableTable"
+                    style="margin-left:5px;    border: 1px solid #cbcbcb;width: 100%">
+                    <tr style="border-bottom: 2px solid #E6E6E6; border-top: 2px solid #E6E6E6;    height: 30px;
+                        background: silver !important;
+                        color: black;">
+                      <th>Alternate Unit</th>
+                      <th>Conversion Factor</th>
+                      <th>Actions </th>
+                    </tr>
+                    <tbody
+                      style="height:150px;overflow:auto;scrollbar-3dlight-color:#FFFFFF;scrollbar-arrow-color:#000000;scrollbar-base-color:#FF9999;scrollbar-darkshadow-color:#000000;scrollbar-face-color:#000000;scrollbar-highlight-color:#000000;scrollbar-shadow-color:#0033CC;">
+                      <tr *ngFor="let au of AlternateUnits;let i=index">
+                        <td>{{au.ALTUNIT}}</td>
+                        <td>{{au.CONFACTOR}}</td>
+                        <td><button class="glyphicon glyphicon-remove btn btn-info" (click)="removeAU(i)">
+                          </button>
+                          <button class="glyphicon glyphicon-edit btn btn-info" (click)="editAU(i)">
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="tab-pane" id="Sales">
+              <div class="master-sales">
+
+
+
+                <!-- DECIMAL PLACE Block -->
+                <ng-container *ngIf="'RequiredQTY'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Decimals Required Qty:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" [(ngModel)]="productObj.DigitsAfterDecimal " type="number">
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- End of DECIMAL PLACE Block -->
+
+                <!-- ITEM OFFER Block  -->
+                <ng-container *ngIf="'ItemOffer'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Item Offer:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" [(ngModel)]="productObj.ItemOffer" type="text">
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- End of ITEM OFFER Block -->
+
+
+                <!-- LOYALTY ALLOWED Block  -->
+                <ng-container *ngIf="'Loyalty Allowed'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Loyalty Allowed</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <select class="form-control" type="number" [(ngModel)]="productObj.loyaltyAllowed">
+                        <option value="0">Yes</option>
+                        <option value="1">No</option>
+                      </select>
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- End of LOYALTY ALLOWED Block -->
+
+
+                <!-- ITEM DISCOUNT Block -->
+                <ng-container *ngIf="'Discount'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Item Dicount %:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" [(ngModel)]="productObj.DISRATE" type="number">
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- End of ITEM DISCOUNT Block -->
+
+
+                <!-- KEEP FOCUS ON RATE Block -->
+                <ng-container *ngIf="'FocusRate'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Keep Focus On Rate:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <select class="form-control" [(ngModel)]="productObj.FOCUSONRATE" type="number">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                      </select>
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- End of KEEP FOCUS ON RATE Block -->
+              </div>
+            </div>
+
+
+            <div class="tab-pane" id="GST">
+              <div class="maste-gst">
+
+
+                <!-- GST Block -->
+                <ng-container *ngIf="'GST'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">GST Rate: <span class="mandatory">*</span></label>
+                    </div>
+                    <div class="col-sm-8">
+                      <div class="col-sm-4">
+                        <select class="form-control" [(ngModel)]="productObj.GST" (change)="changeGST()">
+                          <option value=0>0 %</option>
+                          <option value=3>3 %</option>
+                          <option value=5>5 %</option>
+                          <option value=12>12 %</option>
+                          <option value=18>18 %</option>
+                          <option value="28">28 %</option>
+                        </select>
+                      </div>
+                      <div class="col-sm-8">
+                        <select class="form-control" [(ngModel)]="productObj.ISEXEMPTED">
+                          <option value=0>regular</option>
+                          <option value=1>exempted</option>
+                          <option value=2>nil rated</option>
+                          <option value=3>zero rated</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- End of GST Block -->
+
+
+                <!-- HSN CODE Block  -->
+                <ng-container *ngIf="'HSN Code'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">HSN Code: <span class="mandatory">*</span></label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" type="text" [(ngModel)]="productObj.HSNCode">
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- End of HSN CODE Block  -->
+
+
+
+                <!-- CESS Block -->
+                <ng-container *ngIf="'Cess'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Cess%:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" type="number" [(ngModel)]="productObj.CESS">
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- End of CESS Block -->
+
+
+                <!-- TAX SLAB Block -->
+                <ng-container *ngIf="'Tax Slab'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Tax Slab</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" type="text" placeholder="Press Enter to select tax slab"
+                        (keydown)="$event.preventDefault()" (keydown.Enter)="onTaxSlabEnterKey()"
+                        [(ngModel)]="productObj.TaxSlabName">
+                    </div>
+                  </div>
+                </ng-container>
+                <!-- End of TAX SLAB Block -->
+
+
+                <ng-container *ngIf="'Inclusive'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Inclusive Tax:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <select class="form-control" (change)="changeInclusive()" [(ngModel)]="productObj.InclusiveOfTax">
+                        <option value=0>No</option>
+                        <option value=1>Yes</option>
+                      </select>
+                    </div>
+                  </div>
+                </ng-container>
+
+              </div>
+            </div>
+
+
+
+
+
+
+
+            <div class="tab-pane" id="restaurantCategory">
+
+              <!-- RESTAURANT CATEGORY Block -->
+              <ng-container *ngIf="'Restaurant Category'|ControlShowHide:formSetting">
+                <label style="width: 100%;">Select Category</label>
+                <div class="row col-md-12">
+                  <select name="cat3" id="cat3" style="width:200px" [(ngModel)]="productObj.MCAT"
+                    class="form-control col-md-4">
+                    <option *ngFor="let cat of MCatList" value="{{cat.MENUCAT}}">{{cat?.MENUCAT}}</option>
+                  </select>
+                  <button type="button" (click)="categoryType='CAT'" class="btn btn-sm btn-info" data-toggle="modal"
+                    data-target="#myModal">
+                    Add Category
+                  </button>
+                </div>
+              </ng-container>
+              <!-- End of RESTAURANT CATEGORY Block -->
+
+            </div>
+
+
+
+
+            <div class="tab-pane" id="Category">
+
+              <!-- VARIANT Block -->
+              <ng-container *ngIf="'variant'|ControlShowHide:formSetting">
+                <div class="form-group" *ngFor="let category of categorywiseConfigurationdetails;let i=index">
+                  <div class="col-sm-4">
+                    <label class="form-control-label">{{category?.VARIANTNAME}} :</label>
+                  </div>
+                  <div class="col-md-8">
+                    <angular4-multiselect [data]="category.VARIANTVALUES" [(ngModel)]="category.SELECTEDMCAT"
+                      class="form-control"
+                      [settings]="(productObj.PTYPE==2 || productObj.PTYPE==14)?matrixSelectSetting:otherSelectSetting"
+                      (onSelect)="onMultiSelect($event)" (onDeSelect)="onMultiSelect($event)"
+                      (onSelectAll)="onMultiSelect($event)" (onDeSelectAll)="onMultiSelect($event)">
+                    </angular4-multiselect>
+                  </div>
+                </div>
+                <div class="form-group" *ngIf="__SYSTEMSETTINGMENU.IsEnableHCategory===true">
+                  <div class="col-md-4">
+                    <label class="form-control-label">
+                    Hierarchical Category
+                  </label>
+                  </div>
+                  <div class="col-md-8">
+                    <select class="form-control" name="ddlhCategory" [(ngModel)]="productObj.HCategory">
+                      <option value="">Select Hierarchical Category</option>
+                        <option *ngFor="let col of lstHCategory;let i=index" value="{{col.CategoryId}}">{{col.CategoryName}}</option>
+                    </select>
+                  </div>
+              </div>
+
+              </ng-container>
+              <!-- End of VARIANT Block -->
+            </div>
+
+
+
+
+
+
+            <div class="tab-pane" id="Others">
+              <div class="master-other">
+                <ng-container *ngIf="'Warehouse'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Warehouse:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" [(ngModel)]="productObj.WHOUSE" type="text"
+                        (keydown.Enter)="genericWarehouseGrid.show()">
+                    </div>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="'RackNumber'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Rack Number:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" [(ngModel)]="productObj.Rack" type="text">
+                    </div>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="'LevelFormula'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Price Level Formula:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" [(ngModel)]="productObj.Pricelevel" type="text">
+                    </div>
+                  </div>
+                </ng-container>
+
+
+                <ng-container *ngIf="'Default Sell Unit'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Default Sell Unit:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <select class="form-control" [(ngModel)]="productObj.DefaultSellUnit" name="defaultsellunit"
+                        id="defaultpurchaseunit">
+                        <option *ngFor="let unit of Units" value="{{unit.UNITS}}">{{unit.UNITS}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </ng-container>
+
+
+                <ng-container *ngIf="'Default Purchase Unit'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Default purchase Unit:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <select class="form-control" [(ngModel)]="productObj.DefaultPurchaseUnit" name="defaultsellunit"
+                        id="defaultpurchaseunit">
+                        <option *ngFor="let unit of Units" value="{{unit.UNITS}}">{{unit.UNITS}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="'Allow Indent Raise'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Allow Indent Raise?</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <select class="form-control" [(ngModel)]="productObj.ALLOWINDENTRAISE" name="ALLOWINDENTRAISE"
+                        id="ALLOWINDENTRAISE">
+                        <option value="1">YES</option>
+                        <option value="0">NO</option>
+                      </select>
+                    </div>
+                  </div>
+                </ng-container>
+
+
+                <ng-container *ngIf="'Can Sales'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Can Sale?</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <select class="form-control" [(ngModel)]="productObj.CANSALE" name="CANSALE" id="CANSALE">
+                        <option value="1">YES</option>
+                        <option value="0">NO</option>
+                      </select>
+                    </div>
+                  </div>
+                </ng-container>
+
+
+                <ng-container *ngIf="'Can Purchase'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Can Purchase?</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <select class="form-control" [(ngModel)]="productObj.CANPURCHASE" name="CANPURCHASE"
+                        id="CANPURCHASE">
+                        <option value="1">YES</option>
+                        <option value="0">NO</option>
+                      </select>
+                    </div>
+                  </div>
+                </ng-container>
+
+
+                <ng-container *ngIf="'Maximum Stock'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Maximum stock:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" [(ngModel)]="productObj.MAXQTY" type="number" name="MAXQTY"
+                        id="MAXQTY">
+                    </div>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="'Minimum Stock'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Minimum stock:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" [(ngModel)]="productObj.MINQTY" name="MINQTY" type="number"
+                        id="MINQTY">
+                    </div>
+                  </div>
+                </ng-container>
+
+
+                <ng-container *ngIf="'Minimum Order Qty'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Minimum Order Qty:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" [(ngModel)]="productObj.ROLEVEL" name="ROLEVEL" type="number"
+                        id="ROLEVEL">
+                    </div>
+                  </div>
+                </ng-container>
+
+                <ng-container>
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Is Price Editable:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <select class="form-control" [(ngModel)]="productObj.IsEditable" name="IsEditable" type="number"
+                      id="IsEditable">
+                        <option selected="selected" [ngValue]=0>No</option>
+                        <option [ngValue]=1>Yes</option>
+                      </select>
+                    </div>
+                  </div>
+                </ng-container>
+
+              </div>
+            </div>
+
+
+
+
+            <div class="tab-pane" id="Price">
+              <div class="master-Price">
+                <ng-container *ngIf="'MRP'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">MRP: <span class="mandatory">*</span></label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" type="text" [(ngModel)]="productObj.MRP" (input)="changeMRP()"
+                        [ngModelOptions]="{standalone: true}" />
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="'Selling Price'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Selling Price: <span class="mandatory">*</span></label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" type="text" [(ngModel)]="productObj.sellingPrice"
+                        (input)="marginCalculation()" [ngModelOptions]="{standalone: true}" />
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="'Landing Price'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Landing Cost:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" type="text" [(ngModel)]="productObj.PRATE_A"
+                        (input)="marginCalculation()" [ngModelOptions]="{standalone: true}" />
+                    </div>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="'Purchase Price'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Purchase Price:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" [(ngModel)]="productObj.PRATE_A" type="number">
+                    </div>
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="'Wholesale Price'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Wholesale Price:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" type="number" [(ngModel)]="productObj.wholesalePrice">
+                    </div>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="'Inter Company Price'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Inter Company Price:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" type="number" [(ngModel)]="productObj.intercompanyPrice">
+                    </div>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="'Supplier'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Supplier Name:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" type="text" [(ngModel)]="productObj.SupplierName"
+                        (keydown.Enter)="keydownSupplier()" (change)="supplierchangeevent()">
+                    </div>
+                  </div>
+                </ng-container>
+
+
+                <ng-container *ngIf="'Manufacturer'|ControlShowHide:formSetting">
+                  <div class="form-group">
+                    <div class="col-sm-4">
+                      <label class="form-control-label">Manufacturer:</label>
+                    </div>
+                    <div class="col-sm-8">
+                      <input class="form-control" type="text" [(ngModel)]="productObj.Manufacturer">
+                    </div>
+                  </div>
+                </ng-container>
+
+
+              </div>
+            </div>
+
+            <div class="tab-pane" id="uploadImg">
+
+              <!-- Upload Image Block -->
+              <ng-container>
+                <label style="width: 100%;">Upload Image</label>
+                <div class="row col-md-6">
+                  <input type="file" #fileSelect accept=".csv, .xlsx" name="input-file-preview"
+                    (change)="onFileChange($event)" accept=".png, .jpg, .jpeg" />
+                </div>
+                <div class="row col-md-6" *ngIf="imageshowFlag">
+                  <img src="{{imageUrl}}" width="200" height="250" class="img-thumbnail" alt="image not found" />
+                </div>
+
+              </ng-container>
+              <!-- End of Upload Image Block -->
+
+            </div>
+
+
+            <!-- TAB CONTENT CLOSE -->
+          </div>
+
+          <productmastertab [productObj]="productObj" [AlternateUnits]="AlternateUnits" [RGLIST]="RGLIST"
+            [PBarCodeCollection]="PBarCodeCollection" [BrandModelList]="BrandModelList"
+            [EnableMultiStockLevel]="EnableMultiStockLevel" [MRP]="MRP" (changedRequire)=changedRequire($event)
+            (changedDiscount)=changedDiscount($event) (changedOffer)=changedOffer($event)
+            (changedFocus)=changedFocus($event) (changedLoyalty)=changedLoyalty($event) (changedTax)=changedTax($event)
+            (changedVAT)=changedVAT($event) (changedHSN)=changedHSN($event) (changedInclusive)=changedInclusive($event)
+            (changedGst)=changedGst($event) (changedWarehouse)="changedWarehouse($event)"
+            (changedRack)="changedRack($event)" (changedFormula)="changedFormula($event)"></productmastertab>
+        </div>
+      </div>
+    </fieldset>
+    <div>
+      <div class="form-btninner">
+        <button type="button" class="btn add-btn" *ngIf="tab.mode != 'view'" (click)="onSave()">Save</button>
+        <!-- <button type="button" class="btn cancel-btn" (click)="onCancel()">Cancel</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+<generic-popup-grid #genericGrid [popupsettings]="gridPopupSettings" (onItemDoubleClick)="dblClickPopupItem($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericGridCustomer [popupsettings]="gridPopupSettingsForCustomer"
+  (onItemDoubleClick)="dblClickPopupItems($event)">
+</generic-popup-grid>
+<!-- repack parent item grid -->
+<generic-popup-grid #repackItemGrid [popupsettings]="repackItemGridSettings"
+  (onItemDoubleClick)="dblClickrepackItems($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericGridPType [popupsettings]="gridPopupSettingsForPType"
+  (onItemDoubleClick)="dblClickPopupPType($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericWarehouseGrid [popupsettings]="genericWarehouseSettings"
+  (onItemDoubleClick)="dblClickwarehouseItems($event)">
+</generic-popup-grid>
+<!-- Unit -->
+<generic-popup-grid #genericUnitGrid [popupsettings]="unitgridPopupSettings"
+  (onItemDoubleClick)="dblClickUnitItem($event)">
+</generic-popup-grid>
+<!-- AlternateUnits -->
+<generic-popup-grid #altgenericUnitGrid [popupsettings]="altunitgridPopupSettings"
+  (onItemDoubleClick)="altdblClickPopupItem($event)">
+</generic-popup-grid>
+<generic-popup-grid #suppliergenericUnitGrid [popupsettings]="suppliergridPopupSettings"
+  (onItemDoubleClick)="supplierdblClickPopupItem($event)">
+</generic-popup-grid>
+
+
+<style>
+  fieldset {
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .Product-master label.form-control-label {
+    text-align: left;
+    float: left;
+    margin: 4px 0 0;
+    ;
+  }
+
+  .Alternate-table thead tr th {
+    background: #4c4c4c;
+    color: #fff !important;
+    border: 1px solid #ccc;
+  }
+
+  .alternatunitss label {
+    height: auto;
+    width: auto;
+    font-size: 14px;
+    margin: 0;
+    padding: 4px 0 4px;
+    font-weight: 600;
+  }
+
+  .unit-conversion {
+    display: inline-block;
+    width: 50%;
+  }
+
+  .alterunbits- input.form-control {
+    width: 70%;
+  }
+
+  .alternatunitss {
+    margin: 0 0 14px;
+  }
+
+  .Alternate-table table {
+    border: 1px solid #ccc;
+  }
+
+  .Alternate-table table tr td {
+    border: 1px solid #ccc;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #616161;
+  }
+
+  .Alternate-table table tr th {
+    text-align: center;
+  }
+
+  .table-btndlt {
+    background: #f00;
+    padding: 4px 6px !important;
+    margin: 0;
+    color: #fff;
+    border-radius: 3px;
+  }
+
+  .table-btn {
+    background: #11cdef;
+    padding: 4px 8px !important;
+    border-radius: 3px;
+    color: #fff;
+  }
+</style>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="top: -15%;;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="genericModalLabel">Add New {{categoryType}}</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="cat" style="width: 100%;">Category Name</label>
+          <input type="text" name="cat" id="cat" #cat class="form-control" [(ngModel)]="categoryName">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="catclosebtn" class="btn btn-info" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-info" (click)="saveCategory()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+<div *ngIf="enbaleVariantCombinationPopUp" style="display : block; padding: 0px;  margin-bottom: 10vh;position: fixed;
+  bottom: 0;
+  right: 0vw;
+  width: 100%;
+  height: 80%;
+  z-index: 9999999;">
+  <!-- Modal content -->
+  <div class="modal-content modal-content-main-area">
+    <div class="modal-header" style="padding: 0px;background: #ecad79;">
+      <button class="close" aria-label="Close" (click)="enbaleVariantCombinationPopUp=false">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="modal-title" style="text-align: center;">
+        {{itemname}}
+      </h4>
+    </div>
+    <div class="modal-body" style="min-height: 60vh;">
+      <table id="BlueHeaderResizableTable" #reportHtmlTable style="font-size: 12px; width: 98%; overflow-x: auto"
+        class="matrix-table">
+        <thead>
+          <tr
+            style="border-bottom: 2px solid #e6e6e6;border-top: 2px solid #e6e6e6;height: 30px;background: silver;color: black;">
+            <ng-container *ngFor="let head of variantCombination[0].combination;let i=index">
+              <th width="100px">{{head?.VARIANTNAME}}</th>
+            </ng-container>
+            <th width="100px">BARCODE</th>
+            <th width="100px">MRP</th>
+            <th width="100px">PRATE</th>
+
+          </tr>
+        </thead>
+        <tbody style="width: fit-content">
+          <tr style="border: 1px solid #e6e6e6; max-height: 25px" *ngFor="let variant of variantCombination;let i=index"
+            (click)="SELECTEDINDEX=i">
+
+            <ng-container *ngFor="let key of variant.combination;let j=index">
+              <td width="100px">
+                {{key?.NAME}}
+              </td>
+            </ng-container>
+            <td width="400px">
+              {{variant?.BARCODE}}
+            </td>
+            <td width="100px">
+              <input type="number" class="form-control" [(ngModel)]="variant.MRP">
+            </td>
+            <td width="100px">
+              <input type="number" class="form-control" [(ngModel)]="variant.PRATE">
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <div class="modal-footer">
+      <button class="btn btn-info pull-right" (click)="onvariantcombinationapply()">Apply</button>
+      <button class="btn btn-info pull-right" (click)="enbaleVariantCombinationPopUp=false"
+        style="margin-right: 5px;">cancel</button>
+    </div>
+  </div>
+</div>
+
+
+
+<generic-popup-grid #genericTaxSlabGridEdit [popupsettings]="genericTaxSlabGridSettingsEdit"
+  (onItemDoubleClick)="dblClicktaxSlabRateEdit($event)">
+</generic-popup-grid>

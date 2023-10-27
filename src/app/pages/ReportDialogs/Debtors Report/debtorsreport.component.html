@@ -1,0 +1,115 @@
+<div id="debtorsReportId" style="background-color : #ffffff; padding :1%; height : auto;  ">
+   <div class="row">
+      <div class="modal-header" style="width : 97%; margin : 0px auto;">
+         <button type="button" class="close" data-dismiss="modal" (click)="closeReportBox()">&times;</button>
+         <h4 class="modal-title">Debtors Report</h4>
+      </div>
+      <!-- Left Column -->
+      <div class="col-md-6">
+         <fieldset style="width : 99%;">
+            <legend>Date Range Selection :</legend>
+
+            <table>
+               <tr>
+                  <td><label class="smallBoldLabel">From(AD):</label></td>
+                  <td><label class="smallBoldLabel">To(AD):</label></td>
+               </tr>
+               <tr>
+                  <td>
+                     <label class="smallBoldLabel"><input type="date" style="width:152px; min-width:50%;"
+                           placeholder="Year Start Date" [(ngModel)]="ReportParameters.DATE1"
+                           (change)="changestartDate($event.target.value,'AD')"></label>
+                  </td>
+                  <td>
+                     <label class="smallBoldLabel"><input type="date" style="width:152px; min-width:50%;"
+                           placeholder="Year Start Date" [(ngModel)]="ReportParameters.DATE2"
+                           (change)="changeEndDate($event.target.value,'AD')"></label>
+                  </td>
+               </tr>
+               <tr>
+                  <td>
+                     <label class="smallBoldLabel"><input id="nepaliDate"
+                           style="width:152px;height:25px;text-align:center" class="nepali-calendar ndp-nepali-calendar"
+                           [(ngModel)]="ReportParameters.BSDATE1" type="text"
+                           (change)="changestartDate($event.target.value,'BS')" placeholder="yyyy-mm-dd" /> </label>
+                  </td>
+                  <td>
+                     <label class="smallBoldLabel"><input id="nepaliDate"
+                           style="width:152px;height:25px;text-align:center" class="nepali-calendar ndp-nepali-calendar"
+                           [(ngModel)]="ReportParameters.BSDATE2" type="text"
+                           (change)="changeEndDate($event.target.value,'BS')" placeholder="yyyy-mm-dd" /> </label>
+                  </td>
+               </tr>
+            </table>
+         </fieldset>
+
+         <fieldset>
+            <legend>
+               <input type="checkbox" name="showDueAge"
+                  (change)="$event.target.checked?(ReportParameters.CHK_SHOWAGEINGREPORT=1 ):(ReportParameters.CHK_SHOWAGEINGREPORT=0)"
+                  [checked]="ReportParameters.CHK_SHOWAGEINGREPORT == 1">&nbsp;Show Due Ageing
+            </legend>
+            <input type="text" style="width : 25%; float : left;" [(ngModel)]="ReportParameters.D1">
+            <input type="text" style="width : 25%; float : left;" [(ngModel)]="ReportParameters.D2">
+            <input type="text" style="width : 25%; float : left;" [(ngModel)]="ReportParameters.D3">
+            <input type="text" style="width : 25%; float : left;" [(ngModel)]="ReportParameters.D4">
+         </fieldset>
+
+         <fieldset>
+            <legend>Division Selection:</legend>
+            <select [(ngModel)]="ReportParameters.DIVISION" style="width : 100%;">
+               <option value="%">ALL</option>
+               <option *ngFor="let div of division" value="{{ div.INITIAL }}">
+                  {{ div.NAME }}
+               </option>
+            </select>
+         </fieldset>
+
+
+
+      </div>
+      <!-- Right Column -->
+      <div class="col-md-6">
+         <fieldset>
+            <legend>Report Format:</legend>
+            <label class="smallBoldLabel"><input type="radio" name="reportFormat"
+                  [(ngModel)]="ReportParameters.OPT_TREE" value="0" >&nbsp;Ledgerwise Format</label>
+            <label class="smallBoldLabel"><input type="radio" name="reportFormat"
+                  [(ngModel)]="ReportParameters.OPT_TREE" value="1">&nbsp;Groupwise Format</label>
+         </fieldset>
+         <fieldset>
+            <legend>Balance View Option</legend>
+            <label class="smallBoldLabel"><input type="radio" name="BalViewOpt"
+                  [(ngModel)]="ReportParameters.OPT_EXNEGETIVE" value=0>&nbsp;Show Not Equal to Zero Balance</label>
+            <label class="smallBoldLabel"><input type="radio" name="BalViewOpt"
+                  [(ngModel)]="ReportParameters.OPT_EXNEGETIVE" value=1>&nbsp;Exclude Negative Creditors
+               Balance</label>
+            <label class="smallBoldLabel"><input type="radio" name="BalViewOpt"
+                  [(ngModel)]="ReportParameters.OPT_EXNEGETIVE" value=2>&nbsp;Show Negative Creditors Balance</label>
+            <label class="smallBoldLabel" style="clear : both;"><input type="radio" name="BalViewOpt"
+                  [(ngModel)]="ReportParameters.OPT_EXNEGETIVE" value=10>&nbsp;Show All</label>
+         </fieldset>
+
+         <label class="smallBoldLabel"><input type="checkbox" name="showCred"
+               (change)="$event.target.checked?(ReportParameters.CHK_OPNINGONLY=1):(ReportParameters.CHK_OPNINGONLY=0)"
+               [checked]="ReportParameters.CHK_OPNINGONLY == 1">&nbsp;Show Creditors Opening B/L Only</label><br>
+         <label class="smallBoldLabel"><input type="checkbox" name="showOpening"
+               (change)="$event.target.checked?(ReportParameters.CHK_STATUS=1):(ReportParameters.CHK_STATUS=0)"
+               [checked]="ReportParameters.CHK_STATUS == 1">&nbsp;Show Opening With Status</label>
+         <label class="smallBoldLabel" style="clear : both;"><input type="checkbox" name="showCredCont"
+               (change)="$event.target.checked?(ReportParameters.CHK_SHOWDETAIL=1):(ReportParameters.CHK_SHOWDETAIL=0)"
+               [checked]="ReportParameters.CHK_SHOWDETAIL == 1">&nbsp;Show Creditors Contact Detail Also</label>
+
+         <label class="smallBoldLabel" style="clear : both;"><input type="checkbox" name="costCenter">&nbsp;Cost Center
+            Selection</label>
+
+
+
+      </div>
+      <div class="btn" style="float : right;">
+         <!-- <button type="button"  title="onSave" class="btn btn-info">Run</button>    -->
+         <button class="btn btn-info confirm-btn" type="button" (click)=onload()>RUN</button>
+         <button type="button" title="Cancel" class="btn btn-info" (click)="closeReportBox()">Close</button>
+      </div>
+
+   </div>

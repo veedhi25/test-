@@ -1,0 +1,74 @@
+<!-- Modal content -->
+<div style="height: 500px;;">
+  <div class="modal-content modal-content-main-area" style="width: 50% !important">
+    <div class="modal-header" style="padding: 0px;background: #ecad79;">
+      <button class="close" aria-label="Close" (click)="closeReportBox()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="modal-title">Purchase Register Central Report Filter</h4>
+
+    </div>
+    <div class="modal-body">
+      <div class="clearfix">
+        <div class="col-md-12">
+          <div class="col-md-12 form-group">
+            <div class="report-filter" *ngIf="masterService.fiscalYearList && masterService.fiscalYearList.length">
+              <label>Phiscal Year</label>
+              <select class="form-control" [(ngModel)]="reportFilterService.repObj.reportparam.PHISCALID">
+                <option *ngFor="let f of masterService.fiscalYearList;let i=index" value="{{f.PhiscalID}}">
+                  {{f.PhiscalID}}</option>
+              </select>
+            </div>
+            <!-- <div class="report-filter">
+              <label>Enter SapCode</label>
+              <input type="text" class="form-control" id="sapcode"
+                [(ngModel)]="reportFilterService.repObj.reportparam.COMPANYID">
+            </div> -->
+            <div class="report-filter">
+              <label>Company Model Selection</label>
+              <angular4-multiselect [data]="modelListinit" class="form-control" [(ngModel)]="modelList"
+                  [settings]="multiselectmodelSetting" (onSelect)="onModelListMultiSelect($event)"
+                  (onDeSelect)="onModelListMultiSelect($event)"
+                  (onSelectAll)="onModelListMultiSelect($event)"
+                  (onDeSelectAll)="onModelListMultiSelect($event)">
+              </angular4-multiselect>
+          </div>
+          <div class="report-filter">
+              <label>Outlet Selection</label>
+              <angular4-multiselect [data]="outletList" class="form-control"
+                  [(ngModel)]="reportFilterService.repObj.reportparam.COMPANYID"
+                  [settings]="multiselectOutLetSetting" (onSelect)="onMultiSelect($event)"
+                  (onDeSelect)="onMultiSelect($event)" (onSelectAll)="onMultiSelect($event)"
+                  (onDeSelectAll)="onMultiSelect($event)">
+              </angular4-multiselect>
+          </div>
+            <div class="report-filter">
+              <label>Date Selection</label>
+              <form [formGroup]="reportFilterService.calendarForm">
+                <input type="text" ngxDaterangepickerMd formControlName="selectedDate" class="form-control"
+                  placeholder="Choose date" [showDropdowns]="true" showCancel="true"
+                  [ranges]="masterService.dateFilterRange" [alwaysShowCalendars]="true" />
+              </form>
+            </div>
+            <div class="report-filter">
+              <label>Division Selection</label>
+              <select class="form-control" [(ngModel)]="reportFilterService.repObj.reportparam.division">
+                <option value="%" selected>ALL</option>
+                <option *ngFor="let divs of masterService.AllDivisions;let i=index" value="{{divs.INITIAL}}">
+                  {{divs.NAME}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <hr style="margin-bottom: 0px !important">
+    <div class="clearfix" style="padding: 10px;">
+
+      <button class="btn btn-info pull-right" style="margin-left: 10px;" (click)=onload()>RUN</button>
+      <button class="btn btn-info pull-right" (click)="closeReportBox()">Close</button>
+    </div>
+  </div>
+</div>

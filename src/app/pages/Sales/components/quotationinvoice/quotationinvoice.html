@@ -1,0 +1,172 @@
+<div class="form-inner">
+
+  <div class="top-forms">
+    <div class="col-md-4">
+      <h3 class="main-heading">{{_trnMainService.pageHeading}} [{{_trnMainService.TrnMainObj.Mode
+        |titlecase}}]
+      </h3>
+    </div>
+    <div class="col-md-8 form-right-btn">
+      <voucher-master-toggler></voucher-master-toggler>
+      <voucher-master-action (onCancelEmit)="onCancel()" (onSaveClickedEmitted)="saveQuotation()"
+        (onResetClicked)="onResetClicked()" (onVoucherDoubleClicked)="onVoucherDoubleClicked($event)">
+      </voucher-master-action>
+    </div>
+  </div>
+  <div class="content-areaform">
+    <!-- <div *ngIf="masterService.ShowMore" class=""> -->
+    <div *ngIf="this.masterService.ShowMore" class="">
+      <trnmain-parameters-master></trnmain-parameters-master>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <table class="table" id="BlueHeaderResizableTable" #reportHtmlTable>
+
+          <thead style="background-color: #c5c4c4;">
+            <th>S.NO.</th>
+            <th>Code</th>
+            <th>Description</th>
+            <th>UOM</th>
+            <th>Order Qty</th>
+            <th>Qty</th>
+            <th>Rate</th>
+            <th>Disc %</th>
+            <th>Disc Amnt</th>
+            <th>Net Amnt</th>
+            <th>Remarks</th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let tList of ItemList;let i=index" style="border: 1px solid #e6e6e6; max-height: 25px"
+              (click)="activerowIndex=i" (keydown.delete)="deleteRow()">
+              <!-- START OF SNO -->
+              <td id="sno{{i}}">{{i+1}}</td>
+              <!-- END OF SNO -->
+
+              <!-- START OF ITEM CODE -->
+              <td class="CellWithComment">
+                <input id="menucode{{i}}" type="text" [(ngModel)]="tList.MCODE" (keydown.Tab)="ItemkeyEvent(i)"
+                  (keydown.enter)="ItemkeyEvent(i)" class="form-control" />
+              </td>
+              <!-- END OF ITEM CODE -->
+
+              <!-- START OF ITEM DESCA -->
+              <td class="CellWithComment ">
+                {{tList.DESCA}}
+              </td>
+              <!-- END OF ITEM DESCA -->
+
+              <!-- START OF ITEM ALTUNIT -->
+              <td class="CellWithComment">
+                <input id="altunit" type="text" [(ngModel)]="tList.ALTUNIT" class="form-control" readonly />
+              </td>
+              <!-- END OF ITEM ALTUNIT -->
+
+              <!-- START OF ITEM ORDER QUANTITY -->
+              <td class="CellWithComment">
+                <input id="ORDERQTY{{i}}" type="number" [(ngModel)]="tList.ORDERQTY" class="form-control" readonly />
+              </td>
+              <!-- END OF ITEM ORDER QUANTITY -->
+
+              <td class="CellWithComment">
+                <input id="Quantity{{i}}" type="number" [(ngModel)]="tList.QUANTITY" class="form-control"
+                  (keydown.Tab)="onEnterQuantity(i)" (keydown.enter)="onEnterQuantity(i)"
+                  (keydown.change)="onEnterQuantity(i)" autocomplete="off" />
+              </td>
+              <td class="CellWithComment">
+                <input id="Rate{{i}}" type="number" [(ngModel)]="tList.RATE" class="form-control"
+                  (keydown.Tab)="onEnterRate(i)" (keydown.enter)="onEnterRate(i)" (keydown.change)="onEnterRate(i)" />
+              </td>
+              <td class="CellWithComment">
+                <input id="Dcrate{{i}}" type="number" [(ngModel)]="tList.DCRATE" class="form-control"
+                  (keydown.Tab)="onEnterDcrate(i)" (keydown.enter)="onEnterDcrate(i)"
+                  (keydown.change)="onEnterDcrate(i)" />
+              </td>
+              <td class="CellWithComment">
+                <input id="Dcamnt{{i}}" type="number" [(ngModel)]="tList.DCAMNT" class="form-control"
+                  (keydown.Tab)="onEnterDcamnt(i)" (keydown.enter)="onEnterDcamnt(i)"
+                  (keydown.change)="onEnterDcamnt(i)" readonly />
+              </td>
+              <td class="CellWithComment">
+                <input id="NetAmnt{{i}}" type="number" [(ngModel)]="tList.NETAMOUNT" class="form-control"
+                  (keydown.enter)="onEnterRemarks(i)" disabled />
+              </td>
+              <td class="CellWithComment">
+                <input id="remarks{{i}}" type="text" [(ngModel)]="tList.REMARKS" class="form-control" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="top:15%;right:-20%;position: absolute;">
+  <voucher-sidebar-billdetail></voucher-sidebar-billdetail>
+</div>
+<div class="sticky-bottom">
+  <voucher-total-area></voucher-total-area>
+</div>
+<generic-popup-grid #genericgridIndentForRFQ [popupsettings]="gridPopupSettingsForRFQIndent"
+  (onItemDoubleClick)="onRFQIndentDoubleClick($event)" (onButtonClick)="onRFQIntendMultipleSelect($event)">
+</generic-popup-grid>
+
+
+
+
+
+
+
+
+<!-- <div class="col-md-2 plainBackGround"
+        style="height:440px;width:20%;overflow: scroll; margin : 0px; border: 1px solid #f1ebeb;">
+        <table class="table table-summary" style="text-align: left; white-space: nowrap;">
+          <tr>
+            <td>Bill No:</td>
+            <td>{{ _trnMainService.TrnMainObj.CHALANNO }}</td>
+          </tr>
+          <tr>
+            <td>Bill Date:</td>
+            <td>{{ _trnMainService.TrnMainObj.TRN_DATE | date: 'dd-MM-yyyy'}}</td>
+          </tr>
+  
+          <tr>
+            <td>Disc%</td>
+            <td>
+              <input style="height: 23px;width: 90px;" type="number" [(ngModel)]="_trnMainService.TrnMainObj.DCRATE"
+                (change)="_trnMainService.FlatDiscountPercentChange()" />
+            </td>
+          </tr>
+          <tr>
+            <td>Disc Amt</td>
+            <td>
+              <input style="height: 23px;width: 90px;" type="number"
+                [(ngModel)]="_trnMainService.TrnMainObj.TOTALFLATDISCOUNT"
+                (change)="_trnMainService.FlatDiscountAmountChange()" />
+            </td>
+          </tr>
+          <tr>
+            <td>Total Disc</td>
+            <td>{{ _trnMainService.TrnMainObj.TOTALDISCOUNT | twoDigitNumber }}</td>
+          </tr>
+          <tr>
+            <td>Round off Amount:</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Taxable Amt:</td>
+            <td>{{ _trnMainService.TrnMainObj.TAXABLE | twoDigitNumber }}</td>
+          </tr>
+          <tr>
+            <td>Non-Taxable:</td>
+            <td>{{ _trnMainService.TrnMainObj.NONTAXABLE | twoDigitNumber }}</td>
+          </tr>
+          <tr>
+            <td>Rounding Adj:</td>
+            <td>{{ _trnMainService.TrnMainObj.ROUNDOFF | twoDigitNumber }}</td>
+          </tr>
+          <tr>
+            <td>Net Amt</td>
+            <td>{{ _trnMainService.TrnMainObj.NETAMNT | twoDigitNumber }}</td>
+          </tr>
+        </table>
+      </div> -->

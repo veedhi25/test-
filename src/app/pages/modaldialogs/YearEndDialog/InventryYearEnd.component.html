@@ -1,0 +1,11 @@
+<div class="modal-content modal-content-main-area" style="width: 100%;">
+    <div class="modal-header">
+      <h4 *ngIf="masterService.userSetting.ENABLEOFFLINESALE!=1" class="modal-title" id="myModalLabel">Your Fiscal Year is Changed. Year End Process will generate new sequence for transaction. Would you like to start Inventry year Ending Process ? </h4>
+      <h4 *ngIf="masterService.userSetting.ENABLEOFFLINESALE==1" class="modal-title" id="myModalLabel">Your Fiscal Year is Changed.Please do year end process from Online portal and sync the transaction.If you want do back date Sales invoice Click Ok to continue.Thank you... </h4>
+    </div>
+    <div class="modal-body" >
+      <button *ngIf="masterService.userSetting.ENABLEOFFLINESALE!=1" class="btn btn-info" (click)="YesClick()">Yes</button>
+      <button *ngIf="masterService.userSetting.ENABLEOFFLINESALE!=1" class="btn btn-info" (click)="NoClick()">No</button>
+      <button *ngIf="masterService.userSetting.ENABLEOFFLINESALE==1" class="btn btn-info" (click)="offlinelineOK()">OK</button>
+    </div>
+  </div>

@@ -1,0 +1,74 @@
+<div class="row" style="
+padding: 5px;
+background: #e2eaea !important;
+">
+  <div class="col-md-12">
+    <div class="col-md-4">
+      <h3>
+        Tax-Slab Rate Master [{{taxSlabMain.Mode}}]
+      </h3>
+    </div>
+    <div class="col-md-8">
+      <button class="btn btn-info pull-right" (click)="onsaveClicked()">Save</button>
+      <button class="btn btn-info pull-right" (click)="onViewClicked()">View</button>
+      <button class="btn btn-info pull-right" (click)="onEditClicked()">Edit</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="col-md-4">
+      <label for="taxslabname" style="width: 30%;display: inline;">Tax Slab Name</label>
+      <input type="text" class="form-control" id="taxslabname" name="taxslabname" [(ngModel)]="taxSlabMain.TaxSlabName"
+        style="    width: 70%;
+      display: inline-block;">
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-12">
+    <table class="table">
+      <thead style="background: #b7b7b7;">
+        <th>SNo</th>
+        <th>Rate From</th>
+        <th>Rate TO</th>
+        <th>Tax</th>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let tList of taxSlabMain.TaxSlabList;let i=index">
+          <td class="text-right">{{i+1}}</td>
+          <td class="text-right"><input type="number" id="ratefrom{{i}}" min="0" class="form-control" name="ratefrom" (keydown.Enter)="onRateFromChange(i)"
+              [(ngModel)]="tList.RateFrom">
+          </td>
+          <td class="text-right"><input type="number" min="0" id="rateto{{i}}" class="form-control" name="rateto" (keydown.Enter)="onRateToChange(i)"
+              [(ngModel)]="tList.RateTo"></td>
+          <td class="text-right"><input type="text" class="form-control" id="tax{{i}}" name="tax" (keydown)="$event.preventDefault()" (keydown.Enter)="onTaxEnterKey(i)"
+              [(ngModel)]="tList.TaxGroupName"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+
+
+<generic-popup-grid #genericGridview [popupsettings]="genericGridviewSettings"
+  (onItemDoubleClick)="dblClicktaxSlabRate($event)">
+</generic-popup-grid>
+
+<generic-popup-grid #genericTaxSlabGrid [popupsettings]="genericTaxSlabGridSettings"
+  (onItemDoubleClick)="dblClicktax($event)">
+</generic-popup-grid>
+
+<generic-popup-grid #genericTaxSlabGridEdit [popupsettings]="genericTaxSlabGridSettingsEdit"
+  (onItemDoubleClick)="dblClicktaxSlabRateEdit($event)">
+</generic-popup-grid>

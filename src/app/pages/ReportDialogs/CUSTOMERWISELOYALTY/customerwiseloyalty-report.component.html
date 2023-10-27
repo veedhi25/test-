@@ -1,0 +1,19 @@
+<!-- Modal content -->
+<div style="height: 500px;;">
+    <div class="modal-content modal-content-main-area" style="width: 50% !important">
+        <div class="modal-header" style="padding: 0px;background: #ecad79;">
+            <button class="close" aria-label="Close" (click)="closeReportBox()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title" style="text-align: center;">
+                Customer Wise Loyalty Report Filter
+            </h4>
+        </div>
+        <hr style="margin-bottom: 0px !important">
+        <div class="clearfix" style="padding: 10px;">
+
+            <button class="btn btn-info pull-right" style="margin-left: 10px;" (click)=onload()>RUN</button>
+            <button class="btn btn-info pull-right" (click)="closeReportBox()">Close</button>
+        </div>
+    </div>
+</div>

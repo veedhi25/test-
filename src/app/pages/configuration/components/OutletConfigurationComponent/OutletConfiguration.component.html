@@ -1,0 +1,372 @@
+<style>
+    input,
+    select {
+        border: 1px solid;
+        height: 22px;
+    }
+
+    .functionKeyHeading {
+        font-size: 18px;
+    }
+
+    .functionKey {
+        font-size: 14px;
+    }
+
+    .active {
+        background-color: white !important;
+        color: black !important;
+    }
+
+    .appcon-container {
+        height: 85vh;
+        background: white;
+        margin-top: 5px;
+        padding: 10px;
+    }
+
+    .tab-button {
+        width: inherit;
+        background-color: #2bade5;
+        margin: 0;
+        border-radius: 0;
+        color: white;
+        font-size: 12;
+        text-align: left;
+        font-weight: 600;
+    }
+
+
+    label {
+        font-size: 14px;
+        font-weight: 500;
+    }
+</style>
+
+<div class="clearfix">
+    <h3>Outlet Configuration</h3>
+</div>
+
+<div class="appcon-container">
+
+    <div class="col-md-2" style="padding: 0;
+height: inherit;
+background-color: #2bade5;">
+        <ul class="nav nav-tabs" role="tablist" style="background-color: #2bade5;">
+            <li role="presentation" class="nav-item col-md-12" style="padding:5px 0px;margin-left: 0;"><button
+                    href="#master" class="btn btn-tab tab-button active" aria-controls="master" role="tab"
+                    data-toggle="tab">Inventory Management</button>
+            </li>
+            <li role="presentation" class="nav-item col-md-12" style="padding:5px 0px;margin-left: 0;"><button
+                    href="#outletManagement" class="btn btn-tab tab-button" aria-controls="outletManagement" role="tab"
+                    data-toggle="tab">Outlet Management</button>
+            </li>
+            <li role="presentation" class="nav-item col-md-12" style="padding:5px 0px;margin-left: 0;"><button
+                    href="#itemPriceConfiguration" class="btn btn-tab tab-button" aria-controls="itemPriceConfiguration"
+                    role="tab" data-toggle="tab">Item Price Config</button>
+            </li>
+            <!-- <li role="presentation" class="nav-item col-md-12" style="padding:5px 0px;margin-left: 0;"><button
+        href="#userManagement" class="btn btn-tab tab-button" aria-controls="userManagement" role="tab"
+        data-toggle="tab">User Management</button>
+</li> -->
+        </ul>
+    </div>
+
+    <div class="col-md-10" style="padding: 0;height: inherit;">
+        <div class="tab-content" style="padding: 0 0 0 5px;">
+            <div role="tabpanel" class="tab-pane fade in active" id="master">
+                <div class="clearfix">
+                    <div class="col-md-4" style="padding: 20px;">
+                        <label>Allow Negative Inventory For Selected Store</label>
+                        <angular4-multiselect [data]="outletList" class="form-control"
+                            [(ngModel)]="outletListForNegativeBilling" [settings]="multiselectSetting"
+                            (onSelect)="onMultiSelect($event)" (onDeSelect)="onMultiSelect($event)"
+                            (onSelectAll)="onMultiSelect($event)" (onDeSelectAll)="onMultiSelect($event)">
+                        </angular4-multiselect>
+                    </div>
+                    <div class="col-md-4">
+                        <label for=""></label>
+                        <button type="button" class="btn btn-info" (click)="saveOutletSetting()">Save</button>
+                    </div>
+                </div>
+                <div class="clearfix">
+                    <h3 style="padding: 10px 25px;">Inventory Control For Outlets</h3>
+                    <div class="clearfix">
+                        <div class="col-md-12">
+                            <label class="col-md-2">Select outlet</label>
+                            <div class="col-md-4">
+                                <angular4-multiselect [data]="outletList" class="form-control"
+                                    [(ngModel)]="outletMain.outletList" [settings]="multiselectSetting"
+                                    (onSelect)="onMultiSelect($event)" (onDeSelect)="onMultiSelect($event)"
+                                    (onSelectAll)="onMultiSelect($event)" (onDeSelectAll)="onMultiSelect($event)">
+                                </angular4-multiselect>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+
+                        <button class=" btn btn-info" (click)="saveInventoryConfiguration()">Save
+                            Outlet Configuration</button>
+                        <button class="btn btn-info" (click)="initialiseForm()">Reset</button>
+                        <button class=" btn btn-info" (click)="controlInventory('ALLOWNEGATIVE')">Allow Negative For All
+                            Item</button>
+                        <button class=" btn btn-info" (click)="controlInventory('ALLOWSALE')">Allow Sale For All
+                            Item</button>
+                        <button class=" btn btn-info" (click)="controlInventory('ALLOWPURCHASE')">Allow Purchase For All
+                            ITem</button>
+                        <button class=" btn btn-info" (click)="controlInventory('DISABLENEGATIVE')">Disable Negative For
+                            All Item</button>
+                        <button class=" btn btn-info" (click)="controlInventory('DISABLESELL')">Disable Sale For All
+                            Item</button>
+                        <button class=" btn btn-info" (click)="controlInventory('DISABLEPURCHASE')">Disable Purchase For
+                            All ITem</button>
+
+                    </div>
+
+                    <div class="transaction-table-custom col-md-12" style="padding-left: 25px; margin-top: 2rem;"
+                        #prodlistTable id="prodlistTable">
+                        <div class="table-container scroll-tablee table-scrollsales">
+                            <table id="BlueHeaderResizableTable" #reportHtmlTable class="reportTabel"
+                                style="table-layout: fixed;">
+                                <thead>
+                                    <tr>
+                                        <th width="65px">S.No.</th>
+                                        <th width="100px">Item Code</th>
+                                        <th width="300px">Description</th>
+                                        <th width="100px">Allow Negative</th>
+                                        <th width="100px">Allow Sales</th>
+                                        <th width="100px">Allow Purchase</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="width: fit-content;">
+                                    <tr *ngFor="let prod of outletMain.prodList;let i =index;">
+
+                                        <td width="65px">{{i+1}}</td>
+                                        <td width="100px" class="cell-with-comment"><input type="text"
+                                                class="form-control" style="width: 100%;" id="mcode{{i}}"
+                                                name="mcode{{i}}" [(ngModel)]="prod.MCODE"
+                                                (keydown)="$event.preventDefault()" (keydown.Enter)="onItemSelect(i)"
+                                                (keydown.Tab)="onItemSelect(i)">
+                                            <span class="cell-comment">Enter or Tab to select Item</span>
+                                        </td>
+                                        <td width="300px">{{prod.ITEMDESC}}</td>
+                                        <td width="100px"><input type="checkbox" class="form-control"
+                                                style="width: 100%;height: 20px !important;" name="allownegative{{i}}"
+                                                id="allownegative{{i}}" [(ngModel)]="prod.ALLOWNEGATIVE"></td>
+                                        <td width="100px"><input type="checkbox" class="form-control"
+                                                style="width: 100%;height: 20px !important;" name="cansale{{i}}"
+                                                id="cansale{{i}}" [(ngModel)]="prod.CANSALE"></td>
+                                        <td width="100px"><input type="checkbox" class="form-control"
+                                                style="width: 100%;height: 20px !important;" name="canpurchase{{i}}"
+                                                id="canpurchase{{i}}" [(ngModel)]="prod.CANPURCHASE"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade in" id="outletManagement">
+                <div class="clearfix">
+                    <div class="clearfix">
+                        <div class="col-md-12">
+                            <label class="col-md-2">Select outlet</label>
+                            <div class="col-md-4">
+                                <select style="width: 100%;" [(ngModel)]="selectedOutletForCompanyConfig">
+                                    <option [value]="" selected>Select Outlet</option>
+                                    <option [value]="item.COMPANYID" *ngFor="let item of outletList">{{ item.COMPANYID
+                                        }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12" style="padding-left: 25px; margin-top: 2rem; height:200px;">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#general-info" data-toggle="tab">
+                                    General Info
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#userManagement" data-toggle="tab">
+                                    User Info
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#permissionSettings" data-toggle="tab">
+                                    Permission Settings
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="general-info">
+                                <CompanyFormSelector [targetCompanyId]="selectedOutletForCompanyConfig">
+                                </CompanyFormSelector>
+                            </div>
+                            <div class="tab-pane" id="permissionSettings">
+
+                                <outlet-permission [targetCompanyId]="selectedOutletForCompanyConfig">
+                                </outlet-permission>
+                                <div class="transaction-table-custom col-md-12"
+                                    style="padding-left: 25px; margin: 2rem 0;" #prodlistTable id="prodlistTable">
+                                    <!-- <div class="table-container scroll-tablee table-scrollsales" style="margin-bottom: 2rem;">
+                                    <table id="BlueHeaderResizableTable" #reportHtmlTable class="reportTabel"
+                                       >
+                                        <thead>
+                                            <tr>
+                                                <th>TypeName</th>
+                                                <th>DomainId</th>
+                                                <th>Setting TypeId</th>
+                                                <th>Create</th>
+                                                <th>View</th>
+                                                <th>Update</th>
+                                                <th>Delete</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="width: fit-content;">
+                                        <tr *ngFor="let item of permissionArray">
+                                            <td>{{item.TypeName}}</td>
+                                            <td>{{item.DomainId}}</td>
+                                            <td>{{item.SettingTypeId}}</td>
+                                            <td><input type="checkbox" [(ngModel)]="item.CanCreate" /></td>
+                                            <td><input type="checkbox" [(ngModel)]="item.CanView" /></td>
+                                            <td><input type="checkbox" [(ngModel)]="item.CanUpdate" /></td>
+                                            <td><input type="checkbox" [(ngModel)]="item.CanDelete" /></td>
+                                        </tr>
+                            
+                                        </tbody>
+                                        
+                                    </table>
+                                </div> -->
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="userManagement">
+                                <user-list [targetCompanyId]="selectedOutletForCompanyConfig"></user-list>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane fade in" id="itemPriceConfiguration">
+
+                <div class="clearfix">
+                    <h3 style="padding: 10px 25px;">Items Price Control For Outlets</h3>
+                    <div class="clearfix">
+                        <div class="col-md-12">
+                            <label class="col-md-2">Select outlet</label>
+                            <div class="col-md-4">
+                                <angular4-multiselect [data]="outletList" class="form-control"
+                                    [(ngModel)]="priceChangeOutlets.outletList" [settings]="multiselectSetting"
+                                    (onSelect)="onMultiSelect($event)" (onDeSelect)="onMultiSelect($event)"
+                                    (onSelectAll)="onMultiSelect($event)" (onDeSelectAll)="onMultiSelect($event)">
+                                </angular4-multiselect>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-12" style="margin: 5px;">
+
+                        <button class=" btn btn-info" (click)="SyncPriceToOutlet()">Sync Price To Outlet</button>
+                        <button class="btn btn-info" (click)="initialiseForm()">Reset</button>
+
+
+                    </div>
+
+                    <div class="transaction-table-custom col-md-12" style="padding-left: 25px; margin-top: 2rem;"
+                        #prodlistTable id="prodlistTable">
+                        <div class="table-container scroll-tablee table-scrollsales">
+                            <table id="BlueHeaderResizableTable" #reportHtmlTable class="reportTabel"
+                                style="table-layout: fixed;">
+                                <thead>
+                                    <tr>
+                                        <th width="65px">S.No.</th>
+                                        <th width="100px">Item Code</th>
+                                        <th width="300px">Description</th>
+                                        <th width="100px">MRP</th>
+                                        <th width="100px">Selling Price</th>
+                                        <th width="100px">Inclusive Of Tax</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody style="width: fit-content;">
+                                    <tr *ngFor="let prod of priceChangeOutlets.prodList;let i =index;">
+
+                                        <td width="65px">{{i+1}}</td>
+                                        <td width="100px" class="cell-with-comment"><input type="text"
+                                                class="form-control" style="width: 100%;" id="mcode{{i}}"
+                                                name="mcode{{i}}" [(ngModel)]="prod.MCODE"
+                                                (keydown)="$event.preventDefault()"
+                                                (keydown.Enter)="onItemSelectpriceChange(i)"
+                                                (keydown.Tab)="onItemSelectpriceChange(i)">
+                                            <span class="cell-comment">Enter or Tab to select Item</span>
+                                        </td>
+                                        <td width="300px">{{prod.ITEMDESC}}</td>
+                                        <td width="100px"><input type="number" class="form-control" style="width: 100%;"
+                                                id="mrp{{i}}" name="mrp{{i}}" [(ngModel)]="prod.MRP"
+                                                (keydown.Enter)="mrpenterkey(i)"></td>
+                                        <td width="100px"><input type="number" class="form-control" style="width: 100%;"
+                                                id="sellingprice{{i}}" name="sellingprice{{i}}"
+                                                [(ngModel)]="prod.SELLINGPRICE" (keydown.Enter)="pricechangeNexRow(i)">
+                                        </td>
+                                        <td width="100px">
+                                            <select class="form-control" [(ngModel)]="prod.InclusiveOfTax">
+                                                <option value=0>No</option>
+                                                <option value=1>Yes</option>
+                                            </select>
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div role="tabpanel" class="tab-pane fade in" id="userManagement">
+                <div class="clearfix">                 
+                    <div class="clearfix">
+                        <div class="col-md-12">
+                            <label class="col-md-2">Select outlet</label>
+                            <div class="col-md-4">
+                                <select
+                                    style="width: 100%;" [(ngModel)]="selectedOutletForCompanyConfig"
+                                >
+                                    <option [value]="" selected>Select Outlet</option>
+                                    <option
+                                    [value]="item.COMPANYID"
+                                    *ngFor="let item of outletList"
+                                    >{{ item.COMPANYID }}</option
+                                    >
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12" style="padding-left: 25px; margin-top: 2rem; height:200px;">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                              <a class="nav-link active" href="#user-info" data-toggle="tab">
+                                User info
+                              </a>
+                            </li>
+                                                    
+                          </ul>
+                          <div class="tab-content">
+                            <div class="tab-pane active" id="user-info">
+                            <user-list [targetCompanyId]="selectedOutletForCompanyConfig" ></user-list> 
+                        </div>
+                          
+                          </div>
+                        </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+
+<generic-popup-grid #genericGrid [popupsettings]="gridPopupSettings" (onItemDoubleClick)="dblClickPopupItem($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericGrid_itempricechange [popupsettings]="gridPopupSettings"
+    (onItemDoubleClick)="dblClickPopupItem_itempricechange($event)">
+</generic-popup-grid>

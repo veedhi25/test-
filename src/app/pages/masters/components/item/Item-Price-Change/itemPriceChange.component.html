@@ -1,0 +1,128 @@
+<style>
+  table {
+    font-family: 'Montserrat', sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th {
+    text-align: center;
+    padding: 8px;
+    border: 1px solid #dddddd;
+  }
+
+  td {
+    border: 1px solid #dddddd;
+    padding: 8px;
+  }
+
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+</style>
+
+
+<!-- <form [formGroup]="itemPriceChangeForm"> -->
+<form>
+  <!-- <ng-container *ngFor="let controls of itemPriceChangeForm.controls.formFields.controls;let i=index"
+    formArrayName="formFields"> -->
+  <ng-container>
+    <!-- <ng-container [formGroupName]="i"> -->
+    <ng-container>
+      <ba-card title="{{DESCA}}">
+        <table>
+          <colgroup>
+            <col style="width:20%">
+            <col style="width:80%">
+          </colgroup>
+
+          <tr>
+            <th>Batch</th>
+
+            <th>
+              <input id="batchChoose" type="text" class="form-control" style="width: 20%;"
+                (keydown.enter)="batchTabClick()" (keydown.tab)="batchTabClick()"
+                placeholder="Enter or Tab to select Batch" name="a" [(ngModel)]='formModel.BATCH'>Price
+            </th>
+          </tr>
+          <tr>
+            <td>
+              <label style="margin-left:55px" class=" form-control-label ">{{company}}</label>
+            </td>
+
+            <td>
+              <table>
+                <tr>
+                  <td>
+
+                    <div class="col-md-3">
+                      <label for="description " style="margin-left:55px" class=" form-control-label ">MRP</label>
+                    </div>
+                    <div class="col-md-3">
+                      <input style="color:black; width:100%;  " OnlyNumber=true type="text " class="form-control "
+                        name="n" id="description" placeholder="MRP" [(ngModel)]="formModel.MRP">
+                    </div>
+                    <div class="col-md-3">
+                      <label for="description " style="margin-left:55px" class=" form-control-label ">Cost Price</label>
+                    </div>
+                    <div class="col-md-3">
+                      <input style="color:black; width:100%;  " OnlyNumber=true type="text " class="form-control "
+                        name="na" id="description" placeholder="Cost Price" [(ngModel)]="formModel.COSTPRICE" readonly>
+                    </div>
+                    <div class="col-md-3">
+                      <label for="description " style="margin-left:55px" class=" form-control-label ">Mfg Date</label>
+                    </div>
+                    <div class="col-md-3">
+                      <!-- <input type="text" readonly class="form-control" name="mfg" [(ngModel)]="formModel.MFGDATE"> -->
+                      <span>{{formModel.MFGDATE}}</span>
+                    </div>
+                    <div class="col-md-3">
+                      <label for="description " style="margin-left:55px" class=" form-control-label ">Exp Date</label>
+                    </div>
+                    <div class="col-md-3">
+                      <!-- <input type="text" readonly class="form-control" name="exp" [(ngModel)]="formModel.EXPDATE"> -->
+                      <span>{{formModel.EXPDATE}}</span>
+                    </div>
+
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="col-md-3">
+                      <label for="description " style="margin-left:55px" class=" form-control-label ">Landing
+                        Cost</label>
+                    </div>
+                    <div class="col-md-3">
+                      <input style="color:black; width:100%;  " type="text " class="form-control " name="lnd"
+                        id="description" placeholder="Landing Cost" [(ngModel)]="formModel.LANDINGCOST" readonly>
+                    </div>
+                    <div class="col-md-3">
+                      <label for="description " style="margin-left:55px" class=" form-control-label ">Sell Price</label>
+                    </div>
+                    <div class="col-md-3">
+                      <input style="color:black; width:100%;  " type="text " class="form-control " name="sp"
+                        name="description" placeholder="Sell Price" [(ngModel)]="formModel.SELLINGPRICE">
+                    </div>
+
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+
+        </table>
+
+      </ba-card>
+    </ng-container>
+  </ng-container>
+  <button type="button" (click)="onSave()" title="Save" class="btn btn-info"
+    style="margin: 10px 10px 10px 0px">Update</button>
+  <button type="button" (click)="cancel()" title="Save" class="btn btn-info">Cancel</button>
+
+</form>
+
+<div *ngIf="PlistTitle=='Batch List'" class="PList" style="position: absolute;top:0%;right:20%;">
+  <PBatchListOld (dbClickEvent)="dblClickPopupBatch($event)" [title]="PlistTitle" [BList]="batchlist"
+    (BatchClosedClick)="batchTabClose()"></PBatchListOld>
+</div>

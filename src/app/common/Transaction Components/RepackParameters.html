@@ -1,0 +1,53 @@
+<div class="row plainBackGround">
+  <div class="row" style="margin-left: 10px">
+    <div
+      class="col-md-4"
+      style="
+        max-height: 150px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        margin: 10px;
+      "
+    >
+      <div class="row">
+        <label style="width: 25%">Issue Date:</label>
+        <td style="float: right; width: 70%; margin-top: 7px">
+          {{ _trnMainService.TrnMainObj.TRNDATE | date: 'dd/MM/yyyy'}}
+        </td>
+      </div>
+      <div class="row">
+        <label style="width: 25%">Issue No:</label>
+        <td style="float: right; width: 70%; margin-top: 7px">
+          <input type="number" class="form-control" style="width: 50%" />
+        </td>
+      </div>
+    </div>
+
+    <div
+      class="col-md-4"
+      style="
+        max-height: 150px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        margin: 10px;
+      "
+    >
+      <div class="row">
+        <label style="width: 25%; margin-top: 6px">Repack No:</label>
+        <td style="float: right; width: 70%; margin-top: 7px">
+          {{ _trnMainService.TrnMainObj.VCHRNO}}
+        </td>
+      </div>
+    </div>
+    <div
+      class="col-md-4"
+      style="
+        max-height: 150px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        margin: 10px;
+      "
+    ></div>
+  </div>
+</div>
+<!-- *ngIf="masterService.ShowMore == true" -->

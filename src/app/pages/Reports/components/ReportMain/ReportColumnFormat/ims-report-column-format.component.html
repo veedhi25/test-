@@ -1,0 +1,129 @@
+<style>
+  .modal-content {
+    padding: 1px;
+    margin: 0px;
+    float: right;
+    width: 100% !important;
+  }
+
+  tbody>tr:hover {
+    background-color: #f3f5f4;
+    cursor: pointer;
+  }
+
+  tr {
+    font-size: 11px;
+  }
+
+  .selected-row {
+    background-color: #ced6d3 !important;
+  }
+
+
+  .table>thead>tr>th {
+    line-height: 5px !important;
+  }
+
+  .table>tbody>tr>td:first-child {
+    text-align: left !important;
+  }
+
+  .modal-content-main-area {
+    max-height: 100%;
+    width: 80% !important;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .modal-content-summary-area {
+    max-height: 20%;
+    height: 20%;
+    overflow: auto;
+    overflow-x: hidden;
+  }
+
+  .table td,
+  .table th {
+    padding: 10px !important;
+    width: 200px;
+  }
+
+  input,
+  select {
+    height: 25px !important;
+    padding: 0px 5px !important;
+  }
+</style>
+<div *ngIf="isActive && Headerlist.length" class="modal-sticky" [class.modal-sticky-hide]="!isActive" style="display : block; padding: 0px;  margin-bottom: 25px;width: 100%;position: absolute;
+  right: 17%;">
+  <div class="modal-content modal-content-main-area">
+    <div style="float:right;width:100%" class="report-table">
+      <div class="col-md-12 table-container" style="padding:0">
+        <table id="BlueHeaderResizableTable" #reportHtmlTable style="font-size:12px; width: 100%; overflow-x :auto;"
+          class="reportTabel">
+          <thead>
+            <tr style="background: #D5D5D5;">
+              <th width="100px">Mapping Name</th>
+              <th width="150px">Column Header</th>
+              <th width="70px">Column position</th>
+              <th width="70px">Show Column</th>
+              <th width="70px">Export In Excel</th>
+              <th width="70px">Alignment</th>
+              <th width="70px">Column Width</th>
+              <th width="70px">Show Total</th>
+              <th width="70px">Format</th>
+            </tr>
+          </thead>
+          <tbody style="width: fit-content;">
+            <tr *ngFor="
+                  let itemObj of Headerlist;
+                  let i = index">
+              <td width="100px">{{itemObj.mappingName}}</td>
+              <td width="150px"><input class="form-control" type="text" [(ngModel)]="itemObj.colHeader"></td>
+              <td width="70px"><input class="form-control" type="text" [(ngModel)]="itemObj.colPosition"></td>
+              <td width="70px">
+                <select class="form-control" name="visible" [(ngModel)]="itemObj.visible">
+                  <option value="1">Show Column</option>
+                  <option value="0">Hide Column</option>
+                </select>
+              </td>
+              <td width="70px">
+                <select class="form-control" name="visible" [(ngModel)]="itemObj.showhideinexcel">
+                  <option value="0">Export In Excel</option>
+                  <option value="1">Hide In Excel</option>
+                </select>
+              </td>
+              <td width="70px">
+                <select class="form-control" name="visible" [(ngModel)]="itemObj.alignment">
+                  <option value="1">Right</option>
+                  <option value="0">Left</option>
+                </select>
+              </td>
+              <td width="70px">
+                <input class="form-control" type="text" [(ngModel)]="itemObj.size">
+              </td>
+              <td width="70px">
+                <select class="form-control" name="visible" [(ngModel)]="itemObj.totalCalculation">
+                  <option value="1">Show Total</option>
+                  <option value="0">Hide Total</option>
+                </select>
+              </td>
+              <td width="70px">
+                <select class="form-control" name="visible" [(ngModel)]="itemObj.stringFormat">
+                  <option value="NUMERIC">Numeric</option>
+                  <option value="Date#dd/MM/yyyy">DD/MM/YYYYT</option>
+                  <option value="Date#MM/dd/yyyy">MM/dd/YYYYT</option>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-md-12">
+        <button class="btn btn-info" (click)="update()">save</button>
+        <button class="btn btn-danger btn-info" (click)="hide()">close</button>
+      </div>
+    </div>
+  </div>
+</div>

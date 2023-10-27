@@ -1,0 +1,87 @@
+<div class="clearfix sticky-top">
+  <div class="col-md-6">
+    <h3>
+      Quick Email Scheduler 
+    </h3>
+  </div>
+  <div class="col-md-6">
+    <button type="button" (click)="onSaveClicked()" title="schedule now" class="btn btn-info pull-left">
+      Schedule Now
+    </button>
+    
+  </div>
+</div>
+
+<div class="row">
+  <form class="form-horizontal" [formGroup]="form">
+    <div class="col-md-12" style="height: 550px; overflow: scroll;margin: 50px 5px;">
+      <div class="form-group clearfix">
+        <label class="col-sm-2 form-control-label">Scheduler Name*</label>
+        <div class="col-sm-5">
+          <input type="text" style="font-size:25px;" formControlName="SCHEDULERNAME" class="form-control" placeholder="Scheduler Name" >
+        </div>
+      </div>
+      <div class="form-group clearfix">
+        <label class="col-sm-2 form-control-label">Scheduler Date*</label>
+        <div class="col-sm-2">
+         <input type="date" class="form-control" formControlName="SCHEDULERDATE"/>
+        </div>
+        <div class="col-sm-2">
+          <select formControlName="HOURS" class="form-control">
+         <option value="" [selected]="isSelected"> Hours</option>
+         <option *ngFor='let in of counter(25) ;let i = index'  [ngValue]="i">{{i}}</option>
+          </select>
+        </div>
+        <div class="col-sm-2">
+          <select formControlName="MINUTES" class="form-control">
+         <option value="" [selected]="isSelected"> Minutes</option>
+         <option *ngFor='let in of counter(61) ;let i = index'  [ngValue]="i">{{i}}</option>
+      </select>
+        </div>
+      </div>
+      <div class="form-group clearfix">
+        <label class="col-sm-2 form-control-label">Recipient Email*</label>
+        <div class="col-sm-5">
+          <textarea type="text" style="font-size:25px;" formControlName="RECIPIENTEMAIL" class="form-control" placeholder="Recipient Email" ></textarea>
+        </div>
+      </div>
+      <div class="form-group clearfix">
+        <label class="col-sm-2 form-control-label">Email Subject*</label>
+        <div class="col-sm-5">
+          <input style="font-size:25px;" formControlName="RECIPIENTSUBJECT" class="form-control" placeholder="Recipient Subject" />
+        </div>
+      </div>
+      
+        <div class="form-group clearfix">
+          <label class="col-sm-2 form-control-label">Message Content*</label>
+          <div class="col-sm-5">
+            <textarea type="text" style="font-size:25px;" id="editor1" name="editor1" formControlName="EMAILCONTENT" class="form-control" placeholder="SMS Content" ></textarea>
+         
+         
+          </div>
+        </div>
+    </div>
+
+   
+  
+    <div class="modal fade" bsModal #childModal="bs-modal" [config]="{ backdrop: 'static' }" tabindex="-1" role="dialog"
+      aria-labelledby="mySmallModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" aria-label="Close" (click)="hideChildModal()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">Information</h4>
+          </div>
+          <div class="modal-body">
+            {{ DialogMessage }}
+          </div>
+  
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+

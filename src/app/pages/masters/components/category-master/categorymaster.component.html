@@ -1,0 +1,83 @@
+<div class="content-wrapper">
+  <h4 class="hder-hding">Category Master</h4>
+  <div class="right-btn">
+    <button class="btn btn-info" (click)="onSaveClicked()">Save</button>
+    <button class="btn btn-info" (click)="onReset()">Reset</button>
+
+    <button class="btn btn-info" *ngIf="(isHeadoffice==1 || CNAME==null || CNAME=='')"
+      (click)="ImportProductCategoryFromExcel()">
+      Import Category
+    </button>
+    <button class="btn btn-info" *ngIf="(isHeadoffice ==1 && CNAME!==null && CNAME!=='') " (click)="onSynctoCategory()">
+      Category Sync to outlet
+    </button>
+  </div>
+  <div class="full-width compony-infoouter catgory-master">
+    <div class="inner-wrap">
+      <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-4">
+          <label for="type" class="form-control-label">Code: <span class="mandatory">*</span> </label>
+          <input type="number" id="code" [(ngModel)]="categoryObj.CODE" class="form-control" id="code"
+            (keydown.ENTER)="cat.focus()" />
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4">
+          <label for="type" class="form-control-label">Category: <span class="mandatory">*</span></label>
+          <select #cat class="form-control" id="category" [(ngModel)]="categoryObj.VARIANTNAME"
+            (change)="onBrandChange($event.target.value)">
+            <option *ngFor="let item of catLists;" value="{{item.VARIANTNAME}}">{{item.VARIANTNAME}}
+            </option>
+          </select>
+        </div>
+
+        <div class="col-xs-12 col-sm-6 col-md-4">
+          <label for="type" class="form-control-label">Category Name: <span class="mandatory">*</span></label>
+          <input type="text" [(ngModel)]="categoryObj.NAME" class="form-control" id="categoryName"
+            (keydown.ENTER)="onAddCategory(categoryObj)" />
+        </div>
+      </div>
+
+    </div>
+    <div class="Category-table" #prodlistTable id="prodlistTable">
+      <div class="widgets">
+        <div class="table-container">
+          <table id="BlueHeaderResizableTable" #reportHtmlTable class="table reportTabel">
+            <thead>
+              <tr>
+                <th width="100px">SNO</th>
+                <th width="100px">Code</th>
+                <th width="100px">Name</th>
+                <th width="100px">Cat Barcode</th>
+                <th width="100px">Alias Code</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let tList of categoryList;let i=index">
+                <td width="100px">
+                  {{i+1}}
+                </td>
+                <td width="100px">
+                  <input type="text" [(ngModel)]="tList.CODE" class="form-control"
+                    (keydown)="$event.preventDefault()" />
+                </td>
+                <td width="100px">
+                  <input type="text" [(ngModel)]="tList.NAME" class="form-control" />
+                </td>
+                <td width="100px">
+                  <input type="text" [(ngModel)]="tList.VARIANTBARCODE" class="form-control"
+                    (keydown)="$event.preventDefault()" />
+                </td>
+                <td width="100px">
+                  <input type="text" [(ngModel)]="tList.ALIASCODE" class="form-control" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<file-uploader-popup #fileUploadPopup [popupsettings]="fileUploadPopupSettings"
+  (onUploaded)="fileUploadSuccess($event)">
+</file-uploader-popup>

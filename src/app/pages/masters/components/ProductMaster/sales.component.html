@@ -1,0 +1,31 @@
+<div class="row" style="margin-left: 50px;">
+            <label> Decimal Required Qty. : </label>
+            <input (change)="changeRequiredQTY()" [(ngModel)]="productObj.RequiredQTY" style="width: 200px;" type="number">
+        
+       
+            <label> Item Discount % : </label>
+            <input (change)="changeDiscount()" [(ngModel)]="productObj.ItemRateDiscount" style="width: 200px;" type="number">
+        
+     
+            <label> Item Offer: </label>
+            <input (change)="changeOffer()" [(ngModel)]="productObj.ItemOffer" style="width: 200px;" type="text">
+      
+</div>
+        
+<div style="margin-top: 5px; margin-left: 50px;">
+      
+            <label> Keep Focus on Rate </label>
+            <select (change)="onFocusChange()" [(ngModel)]="focusRate" style="width: 200px;" type="number" >
+                <option value="0">Yes</option>
+                <option value="1">No</option>
+            </select>
+       
+            <label> Loyalty Allowed </label>
+            <select (change)="onLoyaltyChange()" style="width: 200px;" type="number" [(ngModel)]="loyaltyAllowed" >
+                <option value="0">Yes</option>
+                <option value="1">No</option>
+            </select>
+        
+    
+</div>
+

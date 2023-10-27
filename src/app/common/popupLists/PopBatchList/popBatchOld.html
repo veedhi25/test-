@@ -1,0 +1,78 @@
+<div>
+
+    <!-- Modal content -->
+    <div class="modal-content" style="    padding: 2px !important;
+      box-shadow: -10px 0px 10px 1px #aaaaaa;
+      font-size: 12px;
+      margin-left: 26pc !important;
+      width: 80% !important;
+      min-height: 200px !important;
+      margin-top: 10pc !important;
+      max-height: 375px;
+      overflow-y: scroll;">
+      <div class="modal-header" style="padding: 0px;    background: #ecad79;">
+        <button class="close" aria-label="Close" (click)="itemBatchClosed()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" style="text-align: center;">{{title}}</h4>
+  
+      </div>
+    
+      <div class="col-md-12" style="padding: 0px;">
+  
+        <input #inputBox type="text" id="batchFilterPopup" autofocus
+          style="width: 100%;/* padding: 1px; */padding-left: 0px;" [(ngModel)]="filter">
+      </div>
+      <table style="padding: 0px;margin-top: 2px;width: 100%;overflow: scroll" class="Table1">
+        <tr style="background: #b5e26a;">
+  
+          <ng-container *ngFor="let head of headerKeys;let i=index">
+            <th>{{head}}</th>
+          </ng-container>
+  
+          <th *ngIf="_trnMainService.AppSettings.HideBatch == false">Batch No.</th>
+          <th *ngIf="_trnMainService.AppSettings.HideExpDate == false">Expiry</th>
+          <th *ngIf="_trnMainService.AppSettings.HideMfgDate == false">MFG</th>
+          <th>Stock</th>
+          <th>Sell Rate</th>
+          <th *ngIf="_trnMainService.AppSettings.HideCostpriceInBatch == false">Cost Price</th>
+          <th>Holding Stock</th>
+          <th>MRP</th>
+        </tr>
+        <tbody>
+          <tr aria-disabled="true" *ngFor="let BObject of BList | filter:filter;let i=index" (click)="RowClickEvent(i)"
+            (dblclick)="dblClickBatchObj(BObject)" [class.highlighted]="i === selectedRowIndex" class="highlight">
+            <ng-container *ngFor="let key of keys;let j=index">
+              <td style="border-bottom: 1px solid #ddd;height: 23px;width:100px">
+                {{getAttributeValues(BObject,key)}}
+              </td>
+            </ng-container>
+  
+  
+  
+  
+            <td style="padding-top:2px;border-bottom: 1px solid #ddd;height: 23px;width:150px"
+              *ngIf="_trnMainService.AppSettings.HideBatch == false">
+              {{BObject.BATCH}}</td>
+            <td style="border-bottom: 1px solid #ddd;height: 23px;width:100px"
+              *ngIf="_trnMainService.AppSettings.HideExpDate == false">{{BObject.EXPIRY | date}}</td>
+            <td style="border-bottom: 1px solid #ddd;height: 23px;width:100px"
+              *ngIf="_trnMainService.AppSettings.HideMfgDate == false">{{BObject.MFGDATE |date}}</td>
+            <td style="border-bottom: 1px solid #ddd;height: 23px;width:50px">{{BObject.STOCK}}</td>
+            <td style="border-bottom: 1px solid #ddd;height: 23px;width:50px">{{BObject.BATCHSELLARATE |twoDigitNumber}}
+            </td>
+            <td *ngIf="_trnMainService.AppSettings.HideCostpriceInBatch == false"
+              style="padding-top:2px;border-bottom: 1px solid #ddd;height: 23px;width:100px">
+              {{BObject.PRATE |twoDigitNumber}}</td>
+            <td style="border-bottom: 1px solid #ddd;height: 23px;width:50px">{{BObject.HOLDINGSTOCK}}</td>
+  
+            <!-- <td style="padding-top:2px;border-bottom: 1px solid #ddd;height: 23px;width:100px">
+              {{BObject.SRATE  |twoDigitNumber}}</td> -->
+  
+            <td style="border-bottom: 1px solid #ddd;height: 23px;width:100px">{{BObject.MRP}}</td>
+          </tr>
+        </tbody>
+  
+      </table>
+    </div>
+  </div>

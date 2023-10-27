@@ -1,0 +1,92 @@
+
+<div class="content-wrapper">
+<div class="row Multiple-inner">
+  <div class="col-md-12">
+    <h4 class="hder-hding">Multiple VoucherPrint </h4>
+  </div>
+  <div class="VoucherPrint-btn">
+    <div class="VoucherPrint-select">
+      <select name="multiple-print" class="form-control" [(ngModel)]="voucherType" (change)="voucherChanged($event)">
+        <option value="">Select Transaction Type</option>
+        <option value="PI">Purchase Invoice</option>
+        <option value="PO">Purchase Order</option>
+        <option value="RFQ">RFQ</option>
+        <option value="PP">Proforma Invoice</option>
+        <option value="API">Active Proforma</option>
+        <option value="DNI">Purchase Return</option>
+        <option value="SO">Sales Order</option>
+        <option value="TI">Tax Invoice</option>
+        <option value="CNI">Sales Return</option>
+      </select>
+    </div>
+    <div class="VoucherPrint-select">
+      <input class="form-control" type="text" ngxDaterangepickerMd [(ngModel)]="selectedDate" [showDropdowns]="true"
+        [showCustomRangeLabel]="true" [alwaysShowCalendars]="true" [locale]="locale" [ranges]="masterService.dateFilterRange"
+        [linkedCalendars]="true" [showCancel]="true" placeholder="Date Range..."
+        (ngModelChange)="dateChanged($event)" />
+
+    </div>
+    <div class="VoucherPrint-select">
+      <select name="multiple-print" class="form-control" [(ngModel)]="printStatus"
+        (change)="PrintStatusChanged($event)">
+        <option value="All">Print All</option>
+        <option value="Printed">Printed</option>
+        <option value="NonPrinted">Non Printed</option>
+        <option value="Remove">Remove All</option>
+      </select>
+    </div>
+    <div class="right-btn">
+      <button class="btn add-btn" (click)="showList()">Show List</button>
+      <button class="btn btn-download"  (click)="print()">Print</button>
+      <button class="btn btn-load" (click)="customisedPrint()">Customised KW Print</button>
+      <button class="btn btn-load" (click)="customisedITCPrint()">Customised ITC Print</button>
+    </div>
+  </div>
+</div>
+
+<div class="VoucherPrint-table">
+  <div class="row">
+    <div class="col-md-12" style="min-height:500px; max-height: 500px; overflow-y: scroll;">
+      <table class="Print-tablehead" style="table-layout: fixed; width:100%; position: sticky; top:0;">
+        <thead>
+          <tr>
+            <th colspan="3">Selected Invoice List</th>
+            <th style="text-align: center">
+              <p>Number of items : {{selectedVoucherList.length}}</p>
+            </th>
+          </tr>
+          <tr style="background: #e3e3e3;">
+            <th>Invoice No</th>
+            <th>Customer</th>
+            <th>IsPrinted</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+      </table>
+      <table class="Print-tablebody" style="width: 100%;table-layout:fixed;">
+        <tbody>
+          <ng-container *ngIf="selectedVoucherList.length">
+            <tr *ngFor="let itm of selectedVoucherList;let i=index">
+              <td>
+                {{itm?.VCHRNO}}
+              </td>
+              <td>
+                {{itm?.BILLTO}}
+              </td>
+              <td>
+                {{itm?.ISPRINTED}}
+              </td>
+              <td><i class="fa fa-trash" (click)="removeFromSelectedList(i)"></i></td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div>
+
+
+<generic-popup-grid #genericGrid [popupsettings]="gridPopupSettings" (onItemDoubleClick)="onItemDoubleClick($event)">
+</generic-popup-grid>

@@ -1,0 +1,118 @@
+<div style="background-color : #ffffff; padding :1%; height : auto;width:auto; ">
+        <div class=row>
+                <div class="modal-header" style="width: 97%; margin:0px auto;">
+                        <button type="button" class="close" data-dismiss="modal" (click)="hide()">&times;</button>
+                        <h4 class="modal-title">Stock Valuation Report </h4>
+                </div>
+            <div class="_left_section col-md-6">
+                    <fieldset>
+                            <legend style="font-size:11px;font-weight: bold; width:auto">Report Type:</legend>           
+                              <div class="col-md-6">
+                                  <div class="radio">
+                                      <label class="smallBoldLabel"><input type="radio" name="optradio" [(ngModel)]="StockValuation.OPT_SHOWSUMMARY_REPORT" value="0" checked>Detail Report </label>
+                                  </div>                                                                
+                             </div>
+                             <div class="col-md-6">
+                                <div class="radio">
+                                    <label class="smallBoldLabel"><input type="radio" name="optradio" [(ngModel)]="StockValuation.OPT_SHOWSUMMARY_REPORT" value="1" checked>Summary Report</label>
+                                </div>                                                                
+                           </div>                                                                                    
+                    </fieldset>
+                    <fieldset>
+                            <legend style="font-size:11px;font-weight: bold; width:auto">As on Dated :</legend>           
+                             <table>
+                                 <tr>
+                                     <td><label class="smallBoldLabel">   From:(AD)</label></td>
+                                     <td></td>
+                                 </tr>
+                                 <tr>
+                                    <td>                                                 
+                                        <input  type="date"  style="width:152px; min-width:50%;"  placeholder="Year Start Date"  [(ngModel)]="StockValuation.DATE2"  (change)="changeEntryDate($event.target.value,'AD',Date1)" >
+                                        <input id="nepaliDate" style="width:152px;height:25px;text-align:center" class="nepali-calendar ndp-nepali-calendar" [(ngModel)]="StockValuation.BSDATE2"
+                                        type="text" (change)="changeEntryDate($event.target.value,'BS')"
+                                       placeholder="yyyy-mm-dd" /> 
+                                    </td>
+                                    <!-- <td> 
+                                            <input id="nepaliDate" style="width:152px;height:25px;text-align:center" class="nepali-calendar ndp-nepali-calendar" [(ngModel)]="StockValuation.BSDATE2"
+                                            type="text" (change)="changeEntryDate($event.target.value,'BS')"
+                                           placeholder="yyyy-mm-dd" />                                                
+                                       
+                                    </td> -->
+                                 </tr>
+                             
+                             </table>                                                                                   
+                    </fieldset>                
+                   
+                    <fieldset>
+                            <legend style="font-size:11px;font-weight: bold; width:auto">Division Selection :</legend>          
+                            <div class="col-md-12">
+                                    <select [(ngModel)]="StockValuation.selectedDivision"  style="width:95%;" >
+                                            <option>--All--</option>
+                                            <option *ngFor="let div of division" [value]="div.INITIAL" >{{div.NAME}} </option>
+                                    </select>
+                            </div>                                                                                                                     
+                       </fieldset> 
+            </div>
+           <div class="._right_section col-md-6">
+                <fieldset>
+                        <legend style="font-size:11px;font-weight: bold; width:auto">Item Selection:</legend>          
+                          <div class="col-md-6">
+                              <!-- <label style="width:105.5px;">Barcode</label> -->
+                              <div class="smalllabeldiv">
+                                    <label class="smallBoldLabel">Barcode :</label>
+                               </div>
+                               <div class="smalllabeldiv">
+                                    <input type="text"  class="form-control input-sm" style="min-width:80%; height: 25px;" placeholder="Barcode" >                                                                                                                                                    
+                               </div>
+                             
+                         </div>
+
+                         <div class="col-md-6">                                               
+                             <!-- <label style="width:100%;">Item Code :</label>  -->
+                             <div class="smalllabeldiv">
+                                    <label class="smallBoldLabel">Item Code:</label>
+                             </div>
+                             <div class="smallBoldLabel">
+                                    <input tabindex="-1" type="text" style="width:120px"  (keydown.enter)="menucodeChanged($event.target.value)" [(ngModel)]="itemCode" >                                
+                             </div>
+                               
+                       </div> 
+                       <div class="col-md-12">                                                     
+                                  <!-- <label>Item Name :</label>    -->
+                                  <div class="smalllabeldiv">
+                                        <label class="smallBoldLabel">Item Name:</label>
+                                   </div>
+                                    <div class="smallBoldLabel">
+                                        <input ngui-auto-complete [source]="dropListItem.bind(this)" max-num-list="25" [(ngModel)]="selectedProd" (ngModelChange)="itemChanged($event)"
+                                            style="width:284px;height:25px" list-formatter="DESCA" 
+                                            display-property-name="DESCA">
+                                    </div>
+                    </div>                           
+                   </fieldset>
+
+                <fieldset>
+                        <legend style="font-size:11px;font-weight: bold; width:auto">Stock Valuation Options:</legend>           
+                          <div class="col-md-6">
+                              <div class="radio">
+                                  <label class="smallBoldLabel" style="width: 95%"><input type="radio" name="Lmpradio" [(ngModel)]="StockValuation.OPT_FIFO" value="F" checked>Latest Market Price </label>
+                              </div>                                                                
+                         </div>
+                         <div class="col-md-6">
+                            <div class="radio">
+                                <label class="smallBoldLabel" style="width: 95%"><input type="radio" name="Lmpradio" [(ngModel)]="StockValuation.OPT_FIFO" value="0"  checked>FIFO valuation Rate</label>
+                            </div>                                                                
+                       </div>                                                                                    
+                </fieldset>
+                <div style="margin-top:5px"> 
+                        <button class="btn btn-info confirm-btn" type="button"  (click)=onload()>RUN</button>   
+                        <button type="button" (click)="cancel()" title="Cancel" class="btn btn-info">Close</button>
+                </div>
+            </div> 
+        </div>
+
+        <!-- <hr>
+        <div> 
+            <button type="button" (click)="onSaveClicked()" title="onSave" class="btn btn-info">Run</button>   
+            <button type="button" (click)="cancel()" title="Cancel" class="btn btn-info">Close</button>
+        </div> -->
+</div>

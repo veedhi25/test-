@@ -1,0 +1,43 @@
+<div class="clearfix">
+    <button class="btn btn-info pull-right" (click)="onSaveClicked()" *ngIf='this.doctor.MODE !="view"'>save</button>
+    <button class="btn btn-info pull-right" (click)="back()">Back</button>
+</div>
+
+<div class="row clearfix">
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>Doctor Name</label>
+            <input type="text" name="ename" [(ngModel)]="doctor.ACNAME" class="form-control">
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>MOBILE</label>
+            <input type="number" name="emobile" [(ngModel)]="doctor.MOBILE" class="form-control">
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>Doctor Email</label>
+            <input type="email" name="eemail" [(ngModel)]="doctor.EMAIL" class="form-control">
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>Doctor Place</label>
+            <input type="text" name="eplace" [(ngModel)]="doctor.AREA" class="form-control">
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>Hospital Name</label>
+            <input type="text" name="ehospital" [(ngModel)]="doctor.LANDMARK" class="form-control">
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>Registration No.</label>
+            <input type="text" name="eregistration" [(ngModel)]="doctor.shortname" class="form-control">
+        </div>
+    </div>
+</div>

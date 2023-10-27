@@ -1,0 +1,90 @@
+<!-- <div class="widgets">
+    <div class="row">
+      <button class="btn btn-info" style="margin-bottom: 10px;margin-left:18px" (click)="addNewAccount()" >New Schedule</button>
+    </div>
+    <div class="row"> -->
+      <!-- <ba-card title="Account List" baCardClass="with-scroll">
+        <ng2-smart-table [settings]="settings" [source]="source" (edit)="onEditClick($event)" (deleteConfirm)="onDeleteConfirm($event)" (view)="onViewClick($event)"></ng2-smart-table>
+      </ba-card> -->
+    <!-- </div>
+  </div> -->
+  
+  <div class="row col-md-12" >
+    <div class="col-md-4" >
+      <h5>Schedule Master</h5>
+    </div>
+    <div class="col-md-8" >
+      <!-- <button class="btn btn-info pull-right" style="font-size: 12px" routerLink="/pages/dashboard" >Back</button> -->
+      <button class="btn btn-info pull-right" style="font-size: 12px;margin-top: 10px; " (click)="addSchedule()" >Add New Schedule</button>
+    </div>
+  </div>
+
+  <div class="row" style="align-items: center;" >
+    <div class="col-md-12 col-sm-8" style="margin-top: 0.5rem;" >
+      <div class="card" style="margin: auto; width: 63rem;" >
+
+
+        <div class="card-header" style="margin-bottom: 20px;" >
+          <span>Schedule Lists</span>
+          <div style="width: 25%;" >
+            <input type="search" class="form-control" style="height: 1.5rem; font-size: 13px;margin-left: 710px; " placeholder="Search..." name="filter" [(ngModel)]="filter" >
+          </div>
+        </div>
+
+
+        <div class="card-body" >
+          <table class="table table-striped" >
+
+            <thead>
+              <tr style="position: sticky; top:0; line-height: 1.5rem;" >
+                <th scope="col" style="width: 3%;" >S.N.</th>
+                <th scope="col" style="width: 18%;" > Discount Name </th>
+                <th scope="col" style="width: 5%;" >Dis ID</th>
+                <th scope="col" style="width: 13%;" >Start Date</th>
+                <th scope="col" style="width: 13%;" >End Date</th>
+                <th scope="col" style="text-align: center; width: 15%;" >Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <ng-container *ngIf="scheduleLists && scheduleLists.length > 0" >
+                <tr *ngFor="let schedule of ( scheduleLists | searchData:filter | paginate: {itemsPerPage: 10, currentPage: currentPage, totalItems: totalCount }); let i=index" >
+
+                  <td style="width: 3%;" > {{i+1}} </td>
+                  <td style="width: 18%;" > {{ schedule.DiscountName }} </td>
+                  <td style="width: 5%;" > {{ schedule.DisID }} </td>
+                  <td style="width: 13%;" > {{ schedule.DateStart | date:"MM/dd/yyyy" }} </td>
+                  <td style="width: 13%;" > {{ schedule.DateEnd | date:"MM/dd/yyyy" }} </td>
+
+                  <td style="width: 15%;text-align: center; " >
+                    <a style="width: 60px; color: white;" class="btn btn-sm btn-info mr-1 btn-sm" (click)="onViewClick(schedule)" > View </a>
+                    <a style="width: 60%; color: white;" class="btn btn-sm btn-info mr-1 btn-sm" (click)="onEditClick(schedule)" > Edit </a>
+                  </td>
+
+                </tr>
+              </ng-container>
+
+              <ng-container *ngIf="scheduleLists && ( scheduleLists|searchData:filter ).length === 0" >
+                <tr>
+                  <td colspan="7" >
+                    <div class="font-weight-bold" > Salesman Group Information are unavailable. </div>
+                  </td>
+                </tr>
+              </ng-container>
+
+            </tbody>
+
+          </table>
+        </div>
+
+        <div class="card-footer" style="padding: 5px;" >
+          <div class="pagination" >
+            <div style="margin: auto;" >
+              <pagination-controls class="my-pagination" (pageChange)="schedulePagination($event)" ></pagination-controls>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>

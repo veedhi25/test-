@@ -1,0 +1,75 @@
+<div class="clearfix fixed-top nav-bar">
+    <div class="col-md-4">
+        <h3>Scheme Vs Budget Master [{{mode}}]</h3>
+    </div>
+    <div class="col-md-8" *ngIf="mode.toLowerCase() != 'view'">
+        <button class="btn btn-info pull-right" (click)="onSaveSchemeVsBudget($event)">Save</button>
+        <button class="btn btn-info pull-right" (click)="onBack($event)">Back</button>
+    </div>
+</div>
+
+
+<div class="clearfix">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="transaction-table-custom">
+                <div class="table-container ims-scrollable-table">
+                    <table id="BlueHeaderResizableTable" #reportHtmlTable class="reportTabel" style="table-layout: fixed; overflow-x:scroll;height: 50vh;    font-size: 12px;
+                font-family: sans-serif;">
+                        <thead style="width: calc(100% - 1em);">
+                            <tr>
+                                <th width="100px">Customer</th>
+                                <th width="200px">Scheme Description</th>
+                                <th width="100px">Budget Amount</th>
+                                <th width="100px">Budget Quantity</th>
+
+                            </tr>
+                        </thead>
+                        <tbody style="width: fit-content;">
+
+                            <tr *ngFor="let s of schemevsbudgetList;let i=index;" (click)="activeRowIndex=i;">
+
+                                <td style="overflow:hidden" width="100px" class="cell-with-comment">
+
+                                    <input type="text" id="customer{{i}}" name="customer{{i}}"
+                                        (keydown)="$event.preventDefault()" (keydown.Enter)="onCustomerEnterCommand(i)"
+                                        [(ngModel)]="s.customername" style="width: 100%;">
+                                    <span class="cell-comment">Press Enter or Tab to select customer</span>
+                                </td>
+                                <td style="overflow:hidden" width="200px" class="cell-with-comment">
+                                    <input type="text" id="scheme{{i}}" name="scheme{{i}}"
+                                        (keydown)="$event.preventDefault()" (keydown.Enter)="onSchemeEnterCommand(i)"
+                                        [(ngModel)]="s.description" style="width: 100%;">
+                                    <span class="cell-comment">Press Enter or Tab to select scheme</span>
+
+                                </td>
+
+                                <td style="overflow:hidden" width="100px">
+                                    <input type="number" min="0" id="budgetamount{{i}}" name="budgetamount{{i}}"
+                                        [(ngModel)]="s.budgetamount" (keydown.Enter)="onbudgetamountEnterCommand(i)"
+                                        style="width: 100%;">
+                                </td>
+                                <td style="overflow:hidden" width="100px">
+                                    <input type="number" min="0" id="budgetquantity{{i}}" name="budgetquantity{{i}}"
+                                        [(ngModel)]="s.budgetquantity" (keydown.Enter)="onbudgetquantityEnterCommand(i)"
+                                        style="width: 100%;">
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<generic-popup-grid #genericGridCustomer [popupsettings]="gridPopupSettingsForCustomer"
+    (onItemDoubleClick)="onCustomerDoubleClick($event)">
+</generic-popup-grid>
+
+<generic-popup-grid #genericGridScheme [popupsettings]="gridPopupSettingsForScheme"
+    (onItemDoubleClick)="onSchemeDoubleClick($event)">
+</generic-popup-grid>

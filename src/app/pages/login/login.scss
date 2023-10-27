@@ -1,0 +1,114 @@
+@import '../../theme/sass/auth';
+
+
+
+@import '../../theme/sass/auth';
+
+
+.btn-inner {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    margin: 12px 0 10px;
+    .btn.submit {
+        background: #00c5e8;
+        padding: 12px 30px;
+        color: #fff;
+        text-transform: capitalize;
+        font-size: 16px;
+        min-height: 50px;
+        font-weight: 500;
+        letter-spacing: 1px;
+    }
+}
+
+
+
+.bg-color {
+    background: #F4FFFF;
+    height: 100vh;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .form-inner {
+        margin: auto;
+        width: 550px;
+        background: #fff;
+        position: relative;
+        z-index: 99;
+        padding: 40px;
+        box-shadow: 0 0px 5px rgba(0, 0, 0, 0.5);
+        border-radius: 4px;
+    }
+}
+
+.bg-color::before {
+    content: "";
+    position: absolute;
+    z-index: 99;
+    background: #11cdef;
+    height: 100vh;
+    width: 140%;
+    transform: rotate(155deg);
+    top: 380px;
+    overflow: hidden;
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 6px 10px;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+
+input.form-control {
+    font-size: 15px;
+}
+
+
+span.login-icon {
+    position: absolute;
+    top: 10px;
+    bottom: 0;
+    left: 12px;
+}
+
+.form-inner .form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.login-heading{
+    text-align: center;
+    h3 {
+        font-size: 26px;
+        font-weight: 600;
+        margin: 0 0 12px;
+    }
+    h6 {
+        margin-bottom: 40px;
+    }
+}
+
+label.control-label.forgetpass {
+    text-align: right;
+    width: 100%;
+    font-size: 15px;
+    font-weight: 500;
+    text-transform: capitalize;
+    color: #000000;
+    a{
+        cursor: pointer;
+    }
+}

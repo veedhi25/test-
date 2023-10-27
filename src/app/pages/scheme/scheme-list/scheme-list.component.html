@@ -1,0 +1,83 @@
+<!-- <h1>This is scheme List</h1> -->
+
+<style>
+    th,
+    td {
+        padding: .1rem !important;
+    }
+</style>
+<div class="row col-md-12" style="margin-top: 6px;">
+    <div class="col-md-4">
+        <h5>Scheme List</h5>
+    </div>
+    <div class="col-md-8">
+        <button class="btn btn-info pull-right" style="font-size: 12px;" routerLink="/pages/dashboard">Back</button>
+        <button class="btn btn-info pull-right" style="font-size: 12px;margin-right:7px;" (click)="addScheme()">Add
+            Scheme</button>
+        <button *ngIf="enableSchemeToOutlet()" class="btn btn-info pull-right" style="font-size: 12px;margin-right:7px;"
+            (click)="SyncSchemeToOutlet()">Sync Scheme To Outlet</button>
+    </div>
+</div>
+
+
+<div class="row" style="align-items: center;">
+    <div class="col-md-12 col-sm-8" style="margin-top:0.5rem">
+        <div class="card" style="margin: auto; width: 63rem;">
+            <div class="card-header">
+                <span>Scheme List</span>
+                <div style="width: 25%;">
+                    <input type="search" class="form-control" style="height: 1.5rem;font-size:13px"
+                        placeholder="Search..." name="filter" [(ngModel)]="filter">
+                </div>
+            </div>
+
+            <div class="card-body" style="overflow: hidden !important;">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>S.N</th>
+                            <th>Scheme Name</th>
+                            <th class="text-center">Scheme ID</th>
+                            <th>SchemeType</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngIf="schemeList && schemeList.length > 0">
+                            <tr *ngFor="let scheme of (schemeList| searchData:filter:searchByName | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalCount });let i = index;"
+                                style="line-height:15px !important;">
+                                <td>{{i+1}}</td>
+                                <td>{{scheme.SchemeName}}</td>
+                                <td class="text-center">{{scheme.DisID}}</td>
+                                <td>{{scheme.SchemeType}}</td>
+                                <td>
+                                    <a style="width: 60px; color: white;" class="btn btn-sm btn-info mr-1 btn-sm"
+                                        (click)="onViewClick(scheme)">View</a>
+                                    <a style="width: 60px; color: white;" class="btn btn-sm btn-info mr-1 btn-sm"
+                                        (click)="onEditClicked(scheme)">Edit</a>
+                                    <a style="width: 60px; color: white;" class="btn btn-sm btn-info mr-1 btn-sm"
+                                        (click)="syncScheme(scheme)">Sync</a>
+
+                                </td>
+                            </tr>
+                        </ng-container>
+                        <ng-container *ngIf="schemeList.length == 0;">
+                            <tr>
+                                <td colspan="7">
+                                    <div class="font-weight-bold">Scheme List Information are unavailable.</div>
+                                </td>
+                            </tr>
+                        </ng-container>
+
+                    </tbody>
+                </table>
+                <div class="pagination" *ngIf="schemeList && (schemeList).length > itemsPerPage"
+                    style="text-align: center;display: block;margin:0;">
+                    <div>
+                        <pagination-controls (pageChange)="schemePagination($event)"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

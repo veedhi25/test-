@@ -1,0 +1,324 @@
+<div class="content-wrapper Company-form">
+  <div class="user-topbtn">
+    <h4 class="hder-hding" *ngIf="getTargetCompanyId()==''">Update Company Information</h4>
+    <div class="right-btn">
+      <button type="button" *ngIf="outletconfigChild() || outletconfigParentandIndividual()" (click)="onSaveClicked()"
+        title="onSave" class="btn add-btn">Save</button>
+    </div>
+  </div>
+  <div class="full-width compony-infoouter">
+    <form class="form-horizontal scroll-form" [formGroup]="form">
+      <div class="">
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">Company ID: <span class="mandatory">*</span> </label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" formControlName="COMPANYID" placeholder="maximum 3 Character"
+              placeholder="ID" />
+          </div>
+        </div>
+        <div class="alert alert-danger" *ngIf="
+          form.controls['INITIAL'].touched && !form.controls['INITIAL'].valid">
+          INITIAL is Required.
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">Name: <span class="mandatory">*</span></label>
+          <div class="col-sm-4">
+            <input type="text" formControlName="NAME" class="form-control" placeholder="Name" />
+          </div>
+        </div>
+        <div class="alert alert-danger" *ngIf="form.controls['NAME'].touched && !form.controls['NAME'].valid">
+          CompanyName is Required.
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">Address (200 Character):</label>
+          <div class="col-sm-4">
+            <textarea placeholder="Address" formControlName="ADDRESS" name="Address" class="form-control"
+              id="textarea01"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">Address2 (100 Character):</label>
+          <div class="col-sm-4">
+            <textarea placeholder="Address" formControlName="ADDRESS2" name="Address2" class="form-control"
+              id="textarea01"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">Place:</label>
+          <div class="col-sm-4">
+            <input type="text" formControlName="PLACE" class="form-control">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">Telephone No:</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" OnlyNumber=true formControlName="TELA" name="telno"
+              placeholder="Phone number" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">Mobile No:</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" OnlyNumber=true formControlName="TELB" name="mobileNo"
+              placeholder="Mobile number" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">CIN Number:</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" formControlName="CIN" placeholder="CIN" />
+          </div>
+        </div>
+        <ng-container *ngIf="masterService.appSetting.CompanyNature==1">
+          <div class="form-group">
+            <label class="col-sm-2 form-control-label">Drug License No.1 :</label>
+            <div class="col-sm-4">
+              <input type="text" formControlName="DLNO1" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 form-control-label">Drug License No.2 :</label>
+            <div class="col-sm-4">
+              <input type="text" formControlName="DLNO2" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 form-control-label">Drug License No.3 :</label>
+            <div class="col-sm-4">
+              <input type="text" formControlName="DLNO3" class="form-control">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 form-control-label">Drug License No.4 :</label>
+            <div class="col-sm-4">
+              <input type="text" formControlName="DLNO4" class="form-control">
+            </div>
+          </div>
+        </ng-container>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">State : <span class="mandatory">*</span> </label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" formControlName="STATENAME" placeholder="State"
+              (keydown.enter)="onSateClicked()" />
+          </div>
+        </div>
+        <div class="alert alert-danger" *ngIf="
+          form.controls['STATE'].touched &&
+          !form.controls['STATE'].valid
+          ">
+          STATE is required!!
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">PAN No : <span class="mandatory">*</span></label>
+          <div class="col-sm-4">
+            <input type="text" formControlName="VAT" class="form-control">
+          </div>
+        </div>
+        <div class="form-group ">
+          <label class="col-sm-2 form-control-label">GST Type : <span class="mandatory">*</span></label>
+          <div class="col-sm-4">
+            <select class="form-control" formControlName="GSTTYPE" style="height:30px;padding-bottom: 0px;">
+              <option value="Regular">Regular</option>
+              <option value="Composite">Composite</option>
+              <option value="Un-Register">Un-Register</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">GST No :</label>
+          <div class="col-sm-4">
+            <input type="text" formControlName="GSTNO" class="form-control">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">Email:</label>
+          <div class="col-sm-4">
+            <input type="email" class="form-control" formControlName="EMAIL" placeholder="Email" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">Year Start: <span class="mandatory">*</span></label>
+          <div class="col-sm-4">
+            <input type="date" class="form-control" readonly formControlName="FBDATE" placeholder="Year Start Date" />
+          </div>
+        </div>
+        <div class="alert alert-danger" *ngIf="
+          form.controls['FBDATE'].touched && !form.controls['FBDATE'].valid
+          ">
+          Year Start Date is Required.
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">Year End: <span class="mandatory">*</span></label>
+          <div class="col-sm-4">
+            <input type="date" class="form-control" readonly formControlName="FEDATE" placeholder="Year end Date" />
+          </div>
+        </div>
+        <div class="alert alert-danger" *ngIf="
+          form.controls['FEDATE'].touched && !form.controls['FEDATE'].valid
+          ">
+          Year End Date is Required.
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">Fiscal Year:</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" formControlName="PhiscalID" placeholder="Fiscal Year" readonly />
+          </div>
+        </div>
+        <div class="alert alert-danger" *ngIf="
+          form.controls['PhiscalID'].touched &&
+          !form.controls['PhiscalID'].valid
+          ">
+          Fiscal Year is Required.
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">ORG TYPE :</label>
+          <div class="col-sm-4">
+            <input type="text" formControlName="ORGTYPE" class="form-control" readonly>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">Pin Code :<span class="mandatory">*</span></label>
+          <div class="col-sm-4">
+            <input type="text" formControlName="PINCODE" class="form-control">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label"> Person Name :</label>
+          <div class="col-sm-4">
+            <input type="text" formControlName="MERCHANTLEGALNAME" class="form-control">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label"> Customer Code :</label>
+          <div class="col-sm-4">
+            <input type="text" formControlName="CUSTOMERCODE" class="form-control">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">City :</label>
+          <div class="col-sm-4">
+            <input type="text" formControlName="CITY" class="form-control">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">Bank Name:</label>
+          <div class="col-sm-4">
+            <textarea placeholder="BankName" formControlName="BankName" name="BankName" class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">Account No:</label>
+          <div class="col-sm-4">
+            <textarea placeholder="AccountNo" formControlName="AccountNo" name="AccountNo"
+              class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">IFSC Code:</label>
+          <div class="col-sm-4">
+            <textarea placeholder="IFSCCode" formControlName="IFSCCode" name="IFSCCode" class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">FSSAI No:</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" formControlName="FSSAI" name="FSSAI" placeholder="FSSAI Number" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">Account Holder Name:</label>
+          <div class="col-sm-4">
+            <textarea placeholder="AcountHolder" formControlName="AcountHolder" name="AccountHolder"
+              class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">Bank Branch :</label>
+          <div class="col-sm-4">
+            <textarea placeholder="BankBranch" formControlName="BankBranch" name="BankBranch"
+              class="form-control"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 form-control-label">Declaration (400 Character):</label>
+          <div class="col-sm-4">
+            <textarea placeholder="Declaration" formControlName="Declaration" name="Declaration"
+              class="form-control"></textarea>
+          </div>
+        </div>
+
+
+        <div class="form-group" *ngIf="getTargetCompanyId()==''">
+          <label class="col-sm-2 form-control-label">Mapped Companies:</label>
+          <div class="col-sm-4">
+            <table style="border:1px solid black;" rules="all">
+              <tr style="background: skyblue;border: 1px solid #dbd7d7;">
+                <td> COMPANY ID</td>
+                <td> NAME </td>
+              </tr>
+              <tr *ngFor="let item of list">
+                <td>{{item.companyid}} </td>
+                <td>{{item.name}} </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="form-group" *ngIf="showTurnOverOption()">
+          <label class="col-sm-2 form-control-label">Last Year TurnOver:</label>
+          <div class="col-sm-4">
+            <input type="text" class="form-control" OnlyNumber=true formControlName="LastYearTurnOver"
+              name="LastYearTurnOver" placeholder="Last Year TurnOver" />
+          </div>
+        </div>
+        <div class="form-group non-working">
+          <label class="col-sm-2 form-control-label">Non Working Days:</label>
+          <div class="col-sm-10 working-days">
+            <label> <input type="radio" (change)="onCheckboxChange($event)"
+                [checked]="nonWorkingDays.includes('sunday')" value="sunday" formControlName="NonWorkingDays"
+                name="NonWorkingDays" text="" class="form-control" /> <span>Sunday</span> </label>
+            <label> <input type="radio" (change)="onCheckboxChange($event)"
+                [checked]="nonWorkingDays.includes('monday')" value="monday" formControlName="NonWorkingDays"
+                name="NonWorkingDays" text="" class="form-control" /> <span>Monday</span> </label>
+            <label> <input type="radio" (change)="onCheckboxChange($event)"
+                [checked]="nonWorkingDays.includes('tuesday')" value="tuesday" formControlName="NonWorkingDays"
+                name="NonWorkingDays" text="" class="form-control" /> <span>Tuesday</span> </label>
+            <label> <input type="radio" (change)="onCheckboxChange($event)"
+                [checked]="nonWorkingDays.includes('wednesday')" value="wednesday" formControlName="NonWorkingDays"
+                name="NonWorkingDays" text="" class="form-control" /> <span>Wednesday</span> </label>
+            <label> <input type="radio" (change)="onCheckboxChange($event)"
+                [checked]="nonWorkingDays.includes('thursday')" value="thursday" formControlName="NonWorkingDays"
+                name="NonWorkingDays" text="" class="form-control" /> <span>Thursday</span> </label>
+            <label> <input type="radio" (change)="onCheckboxChange($event)"
+                [checked]="nonWorkingDays.includes('friday')" value="friday" formControlName="NonWorkingDays"
+                name="NonWorkingDays" text="" class="form-control" /> <span>Friday</span> </label>
+            <label> <input type="radio" (change)="onCheckboxChange($event)"
+                [checked]="nonWorkingDays.includes('saturday')" value="saturday" formControlName="NonWorkingDays"
+                name="NonWorkingDays" text="" class="form-control" /> <span>Saturday</span> </label>
+            <label> <input type="radio" (change)="onCheckboxChange($event)" [checked]="nonWorkingDays.includes('')"
+                value="" formControlName="NonWorkingDays" name="NonWorkingDays" text="" class="form-control" />
+              <span>All Days Open</span> </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" bsModal #childModal="bs-modal" [config]="{ backdrop: 'static' }" tabindex="-1"
+        role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button class="close" aria-label="Close" (click)="hideChildModal()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title">Information</h4>
+            </div>
+            <div class="modal-body">
+              {{ DialogMessage }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<generic-popup-grid #genericGrid [popupsettings]="gridPopupSettings" (onItemDoubleClick)="dblClickPopupItem($event)">
+</generic-popup-grid>

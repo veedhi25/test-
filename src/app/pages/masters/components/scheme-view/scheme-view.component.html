@@ -1,0 +1,568 @@
+<style>
+  .selected-row {
+    background: #d7d7d7d1
+  }
+
+  td {
+    padding: 5px;
+  }
+</style>
+<div class="clearfix" style="background: #e2eaea;padding: 5px 0px;">
+  <div class="col-md-7">
+    <h3>
+      Scheme View
+    </h3>
+  </div>
+  <div class="col-md-5" style="margin-top: 7px;">
+    <button class="btn btn-info pull-right" *ngIf="mode=='VIEW'" (click)="addNewScheme()" style="margin-right:5px">Add
+      New Scheme</button>
+    <button class="btn btn-info pull-right" *ngIf="mode=='NEW'" (click)="saveNewScheme()" style="margin-right:5px">Save
+      Scheme</button>
+    <button class="btn btn-info pull-right" (click)="Back()" style="margin-right:5px">Back</button>
+    <button *ngIf="schemeData.skUs && schemeData.skUs.length && mode=='VIEW'" class="btn btn-info pull-right"
+      (click)="updateScheme()" style="margin-right:5px">Update Scheme</button>
+  </div>
+
+
+
+</div>
+<ng-container *ngIf="mode!='NEW'">
+  <div class="clearfix ">
+
+    <table style="width: 100%;">
+      <tr style="border-bottom: 2px solid #E6E6E6; border-top: 2px solid #E6E6E6;    height: 30px;
+        background: silver;
+        color: black;">
+        <th>
+          Scheme No
+        </th>
+        <th>
+          Scheme Description
+        </th>
+        <th>
+          Scheme Type
+        </th>
+        <th>
+          Channel
+        </th>
+        <th>
+          Status
+        </th>
+        <th>
+          Type
+        </th>
+        <th>
+          Valid From
+        </th>
+        <th>
+          Valid To
+        </th>
+        <th>
+          Pro-rata
+        </th>
+      </tr>
+      <tbody>
+        <tr style="border: 1px solid #e6e6e6;max-height:25px;">
+          <td class="CellWithComment" style="height:23px;width: 250px;background: white;">
+            <input type="text" class="form-control" (keydown)="onKeydownPreventEdit($event)"
+              [(ngModel)]="schemeData.schemeNo" (keydown.enter)="showSchemeNumber()" (keydown.tab)="showSchemeNumber()"
+              autocomplete="off" placeholder="Press Enter to Select Scheme Number">
+          </td>
+
+          <td style="border: 1px solid #e6e6e6;background: white;">
+            {{schemeData?.schemeDescription}}
+          </td>
+          <td style="border: 1px solid #e6e6e6;background: white;">
+            {{schemeData?.schemeType}}
+          </td>
+          <td style="border: 1px solid #e6e6e6;background: white;">
+            {{schemeData?.budgetlevel}}
+          </td>
+          <td style="border: 1px solid #e6e6e6;background: white;">
+            <select name="status" id="status" [(ngModel)]="schemeData.status">
+              <option value="ACTIVE">Active</option>
+              <option value="INACTIVE">In Active</option>
+            </select>
+          </td>
+          <td style="border: 1px solid #e6e6e6;background: white;">
+            {{schemeData?.type}}
+          </td>
+          <td style="border: 1px solid #e6e6e6;background: white;">
+            {{schemeData?.validFrom|date:'yyyy-MM-dd'}}
+          </td>
+          <td style="border: 1px solid #e6e6e6;background: white;">
+            {{schemeData?.validTo|date:'yyyy-MM-dd'}}
+          </td>
+          <td style="border: 1px solid #e6e6e6;background: white;">
+            {{schemeData?.prorata}}
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <div class="clearfix" *ngIf="schemeData.discounts">
+    <div class="col-md-6 detailList" style="padding:5px 0px;border: 1px solid #e3e3e3;">
+      <div style="height: 150px;overflow-y:scroll">
+        <div class="col-md-12" style="position: sticky;top:0;padding: 0">
+          <h3 style="margin-bottom: 0px;padding:5px 5px;background: #63BBB2">Discount Details</h3>
+        </div>
+        <div class="col-md-12" style="padding: 0">
+          <table style="width:100%">
+            <tr *ngIf="schemeData.discounts.length" style="border-bottom: 2px solid #E6E6E6; border-top: 2px solid #E6E6E6;    height: 30px;
+            background: silver !important;
+            color: black;">
+              <th>
+                Scheme Type
+              </th>
+
+              <th>
+                UOM
+              </th>
+              <th>
+                Min. Disc Value
+              </th>
+              <th>
+                Discount Amount
+              </th>
+              <th>
+                Discount Amount Type
+              </th>
+            </tr>
+            <tbody *ngIf="schemeData.discounts.length">
+              <ng-container *ngFor="let discount of schemeData.discounts;let i=index">
+                <tr style="border: 1px solid #e6e6e6;height:25px;">
+                  <td style="border: 1px solid #e6e6e6;">
+                    {{discount?.schemeType}}
+                  </td>
+
+                  <td style="border: 1px solid #e6e6e6;">
+                    {{discount?.uom}}
+                  </td>
+                  <td style="border: 1px solid #e6e6e6;">
+                    <input type="text" class="form-control" id="greaterOrEqual{{i}}" name="greaterOrEqual"
+                      [(ngModel)]="discount.greaterOrEqual">
+
+                  </td>
+                  <td style="border: 1px solid #e6e6e6;">
+                    <input type="text" class="form-control" name="value" id="value{{i}}" [(ngModel)]="discount.value"
+                      (keydown.Enter)="addDiscountRange(i)" (keydown.Tab)="addDiscountRange(i)">
+
+                  </td>
+                  <td style="border: 1px solid #e6e6e6;">
+                    {{discount?.valueType}}
+                  </td>
+
+                </tr>
+              </ng-container>
+            </tbody>
+            <tr *ngIf="!schemeData.discounts.length">
+              <td colspan="5">No Discount Detail Available</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="clearfix" style="margin-top: 10px">
+    <div *ngIf="schemeData.skUs" class="col-md-6 productList" style="padding:5px 0px;border: 1px solid #e3e3e3;">
+      <div style="height: 250px;overflow-y:scroll;">
+        <div class="col-md-12" style="padding: 0;position: sticky;top:0;">
+          <h3 style="margin-bottom: 0px;padding:5px 5px;background: #63BBB2">Product List</h3>
+        </div>
+        <div class="col-md-12" style="padding: 0">
+          <ng-container>
+            <table style="width:100%">
+              <tbody *ngIf="schemeData.skUs.length">
+                <ng-container *ngFor="let prodList of schemeData.skUs;let i=index">
+                  <tr [class.selected-row]="skusDetailIndex==i" style="border: 1px solid #e6e6e6;height:25px;"
+                    (dblclick)="onProductClicked(i)">
+                    <td style="border: 1px solid #e6e6e6;">
+                      {{i+1}}
+                    </td>
+
+                    <td style="border: 1px solid #e6e6e6;">
+                      <input type="text" class="form-control" id="mcode{{i}}" [(ngModel)]="prodList.sku"
+                        (keydown)="$event.preventDefault()" (keydown.Enter)="onMcodeEnterEvent($event,i)"
+                        (keydown.Tab)="addNewProductScheme(i)"
+                        placeholder="Press Tab to Add New Row Or Enter to Select Item">
+                    </td>
+                    <td style="border: 1px solid #e6e6e6;">
+                      {{prodList?.brand}}
+                    </td>
+                    <td style="border: 1px solid #e6e6e6;">
+                      <span><i class="fa fa-minus" (click)="removeSKUFromList(i)"></i></span>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+              <tr *ngIf="!schemeData.skUs.length">
+                <td colspan="5">No Product Detail</td>
+              </tr>
+            </table>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+  <generic-popup-grid #schemeNumberList [popupsettings]="schemeNumberListPopUpSetting"
+    (onItemDoubleClick)="onSchemeNumberClick($event)" (keydown.enter)="onSchemeNumberClick($event)">
+  </generic-popup-grid>
+
+
+
+
+  <div class="modal-sticky" *ngIf="showSchemeFilterpopUp" style="display : block; padding: 0px;  margin-bottom: 25px;height: 500px;
+    position: absolute;right: 40%;top: 5px;width: 550px;z-index: 9999999">
+
+    <div class="modal-content modal-content-main-area">
+      <div class="modal-header" style="height: 40px;">
+        <h4 class="modal-title" id="myModalLabel">Scheme Filter </h4>
+      </div>
+
+      <div class="col-md-12" style="height: 226px; margin-top : 10px;">
+
+        <div class="row" style="margin-top: 8px;">
+          <div class="col-sm-4">
+            <label class="form-control-label">Scheme NO: </label>
+          </div>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" [(ngModel)]="schemeFilterObj.SCHEMENO"
+              placeholder="Press Enter or Tab for SchemeNo" (keydown.Tab)="SChemeEnterClicked($event)"
+              (keydown.enter)="SChemeEnterClicked($event)">
+
+          </div>
+        </div>
+
+        <div class="row" style="margin-top: 8px;">
+          <div class="col-sm-4">
+            <label class="form-control-label">Date Range Select
+            </label>
+          </div>
+          <div class="col-sm-8">
+            <fieldset>
+              <table>
+                <tr>
+                  <td><label class="smallBoldLabel">From:(AD)</label></td>
+                  <td><label class="smallBoldLabel">To:(AD)</label></td>
+                </tr>
+                <tr>
+                  <td>
+                    <label class="smallBoldLabel"><input type="date" style="width:152px; min-width:50%;"
+                        placeholder="Year Start Date" [(ngModel)]="schemeFilterObj.DATE1"
+                        (change)="changeEntryDate($event.target.value,'AD')"></label>
+                  </td>
+                  <td>
+                    <label class="smallBoldLabel"><input type="date" style="width:152px; min-width:50%;"
+                        placeholder="Year Start Date" [(ngModel)]="schemeFilterObj.DATE2"
+                        (change)="changeEndDate($event.target.value,'AD')"></label>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label class="smallBoldLabel"> <input id="nepaliDate"
+                        style="width:152px;height:25px;text-align:center" class="nepali-calendar ndp-nepali-calendar"
+                        [(ngModel)]="schemeFilterObj.BSDATE1" type="text"
+                        (change)="changeEntryDate($event.target.value,'BS')" placeholder="yyyy-mm-dd" />
+                    </label>
+
+                  </td>
+                  <td>
+                    <label class="smallBoldLabel">
+                      <input id="nepaliDate" style="width:152px;height:25px;text-align:center"
+                        class="nepali-calendar ndp-nepali-calendar" [(ngModel)]="schemeFilterObj.BSDATE2" type="text"
+                        (change)="changeEndDate($event.target.value,'BS')" placeholder="yyyy-mm-dd" />
+                    </label>
+                  </td>
+                </tr>
+              </table>
+
+            </fieldset>
+
+          </div>
+        </div>
+
+
+        <div class="row" style="margin-top: 8px;">
+          <div class="col-sm-4">
+            <label class="form-control-label">Status
+            </label>
+          </div>
+          <div class="col-sm-8">
+            <select class="form-control" [(ngModel)]="schemeFilterObj.Status">
+              <option>Select Status </option>
+              <option value=1>Active </option>
+              <option value=0>InActive </option>
+
+            </select>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top: 8px;">
+          <div class="col-sm-4">
+            <label class="form-control-label">Approval </label>
+          </div>
+          <div class="col-sm-8">
+            <select class="form-control" [(ngModel)]="schemeFilterObj.Approval">
+              <option>Select Approval </option>
+              <option value=1>Approved </option>
+              <option value=0>UnApproved </option>
+              <option value=2>Pending </option>
+              <option value="ALL">All </option>
+
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer" style="height: 288px;">
+        <button type="button" style="margin-top: 20px;" class="btn btn-primary" (click)="OkCommand()">Apply</button>
+
+        <button type="button" style="margin-top: 20px;" class="btn btn-primary"
+          (click)="CancelCommand()">Cancel</button>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+
+</ng-container>
+
+
+
+<generic-popup-grid #genericGrid [popupsettings]="gridPopupSettings" (onItemDoubleClick)="dblClickPopupItem($event)">
+</generic-popup-grid>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="clearfix">
+  <ng-container *ngIf="mode=='NEW'">
+
+    <div class="clearfix ">
+
+      <table style="width: 100%;">
+        <tr style="border-bottom: 2px solid #E6E6E6; border-top: 2px solid #E6E6E6;    height: 30px;
+          background: silver;
+          color: black;">
+          <th>
+            Scheme No
+          </th>
+          <th>
+            Scheme Description
+          </th>
+          <th>
+            Scheme Type
+          </th>
+          <th>
+            Channel
+          </th>
+          <th>
+            Status
+          </th>
+          <th>
+            Type
+          </th>
+          <th>
+            Valid From
+          </th>
+          <th>
+            Valid To
+          </th>
+          <th>
+            Pro-rata
+          </th>
+
+        </tr>
+        <tbody>
+          <tr style="border: 1px solid #e6e6e6;max-height:25px;">
+            <td class="CellWithComment" style="height:23px;width: 250px;background: white;">
+              <input type="text" class="form-control" name="schemeno" [(ngModel)]="schemeData.schemeNo">
+            </td>
+
+            <td style="border: 1px solid #e6e6e6;background: white;">
+              <input type="text" class="form-control" name="schemeDescription"
+                [(ngModel)]="schemeData.schemeDescription">
+
+            </td>
+            <td style="border: 1px solid #e6e6e6;background: white;">
+              <select name="schemeType" id="schemeType" [(ngModel)]="schemeData.schemeType">
+                <option value="QTY">QTY</option>
+              </select>
+            </td>
+            <td style="border: 1px solid #e6e6e6;background: white;">
+              <select name="budgetlevel" id="budgetlevel" [(ngModel)]="schemeData.budgetlevel">
+                <option value="{{cat.CATEGORY_NAME}}" *ngFor="let cat of allCategory">{{cat.CATEGORY_NAME}}</option>
+              </select>
+            </td>
+            <td style="border: 1px solid #e6e6e6;background: white;">
+              <select name="status" id="status" [(ngModel)]="schemeData.status">
+                <option value="ACTIVE">Active</option>
+                <option value="INACTIVE">In Active</option>
+              </select>
+            </td>
+            <td style="border: 1px solid #e6e6e6;background: white;">
+              <select name="type" id="type" [(ngModel)]="schemeData.type">
+                <option value="TPP">TPP</option>
+              </select>
+            </td>
+            <td style="border: 1px solid #e6e6e6;background: white;">
+              <input type="date" class="form-control" name="validFrom" [(ngModel)]="schemeData.validFrom">
+
+            </td>
+            <td style="border: 1px solid #e6e6e6;background: white;">
+              <input type="date" class="form-control" name="validTo" [(ngModel)]="schemeData.validTo">
+            </td>
+            <td style="border: 1px solid #e6e6e6;background: white;">
+              <select name="prorata" id="prorata" [(ngModel)]="schemeData.prorata">
+                <option value="1">1</option>
+                <option value="0">0</option>
+              </select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <div class="clearfix">
+      <div class="col-md-6 detailList" style="padding:5px 0px;border: 1px solid #e3e3e3;">
+        <div style="height: 150px;overflow-y:scroll">
+          <div class="col-md-12" style="position: sticky;top:0;padding: 0">
+            <h3 style="margin-bottom: 0px;padding:5px 5px;background: #63BBB2">Discount Details</h3>
+          </div>
+          <div class="col-md-12" style="padding: 0">
+            <table style="width:100%">
+              <tr *ngIf="schemeData.discounts.length" style="border-bottom: 2px solid #E6E6E6; border-top: 2px solid #E6E6E6;    height: 30px;
+              background: silver !important;
+              color: black;">
+                <th>
+                  Scheme Type
+                </th>
+
+                <th>
+                  UOM
+                </th>
+                <th>
+                  Min. Disc Value
+                </th>
+                <th>
+                  Discount Amount
+                </th>
+                <th>
+                  Discount Amount Type
+                </th>
+              </tr>
+              <tbody *ngIf="schemeData.discounts.length">
+                <ng-container *ngFor="let discount of schemeData.discounts;let i=index">
+                  <tr style="border: 1px solid #e6e6e6;height:25px;">
+                    <td style="border: 1px solid #e6e6e6;">
+                      {{discount?.schemeType}}
+                    </td>
+
+                    <td style="border: 1px solid #e6e6e6;">
+                      {{discount?.uom}}
+                    </td>
+                    <td style="border: 1px solid #e6e6e6;">
+                      <input type="text" class="form-control" id="greaterOrEqual{{i}}" name="greaterOrEqual"
+                        [(ngModel)]="discount.greaterOrEqual">
+
+                    </td>
+                    <td style="border: 1px solid #e6e6e6;">
+                      <input type="text" class="form-control" name="value" id="value{{i}}" [(ngModel)]="discount.value"
+                        (keydown.Enter)="addDiscountRange(i)" (keydown.Tab)="addDiscountRange(i)">
+
+                    </td>
+                    <td style="border: 1px solid #e6e6e6;">
+                      {{discount?.valueType}}
+                    </td>
+
+                  </tr>
+                </ng-container>
+              </tbody>
+
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="clearfix" style="margin-top: 10px">
+      <div class="col-md-6 productList" style="padding:5px 0px;border: 1px solid #e3e3e3;">
+        <div style="height: 250px;overflow-y:scroll;">
+          <div class="col-md-12" style="padding: 0;position: sticky;top:0;">
+            <h3 style="margin-bottom: 0px;padding:5px 5px;background: #63BBB2">Product List</h3>
+          </div>
+          <div class="col-md-12" style="padding: 0">
+            <ng-container>
+              <table style="width:100%">
+                <tbody *ngIf="schemeData.skUs.length">
+                  <ng-container *ngFor="let prodList of schemeData.skUs;let i=index">
+                    <tr [class.selected-row]="skusDetailIndex==i" style="border: 1px solid #e6e6e6;height:25px;"
+                      (dblclick)="onProductClicked(i)">
+                      <td style="border: 1px solid #e6e6e6;">
+                        {{i+1}}
+                      </td>
+
+                      <td style="border: 1px solid #e6e6e6;">
+                        <input type="text" class="form-control" id="mcode{{i}}" [(ngModel)]="prodList.sku"
+                          (keydown)="$event.preventDefault()" (keydown.Enter)="onMcodeEnterEvent($event,i)"
+                          (keydown.Tab)="addNewProductScheme(i)"
+                          placeholder="Press Tab to Add New Row Or Enter to Select Item">
+                      </td>
+                      <td style="border: 1px solid #e6e6e6;">
+                        {{prodList?.brand}}
+                      </td>
+                      <td style="border: 1px solid #e6e6e6;">
+                        <span><i class="fa fa-minus" (click)="removeSKUFromList(i)"></i></span>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

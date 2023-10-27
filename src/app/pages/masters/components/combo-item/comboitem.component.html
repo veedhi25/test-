@@ -1,0 +1,96 @@
+<div class="content-wrapper">
+
+  <div class="user-topbtn">
+    <h4 class="hder-hding">Combo Item [{{ mode }}]</h4>
+    <div class="right-btn">
+      <button class="btn add-btn" (click)="onSaveClicked()">Save</button>
+      <button class="btn btn-load" (click)="onReset()">Reset</button>
+      <button class="btn btn-download" (click)="onViewClicked()"> View</button>
+      <button class="btn btn-back" (click)="onEditClicked()">Edit</button>
+    </div>
+  </div>
+
+  <div class="full-width compony-infoouter">
+
+    <div class="row">
+      <div class="col-md-12">
+
+        <div class="col-md-6">
+          <div class="kitFormWrap">
+            <div class="productWrap form-group">
+
+              <label for="type" class="col-md-2 form-control-label">Combopack Name:</label>
+              <div class="col-md-10">
+                <input class="form-control" type="text" [(ngModel)]="product" class="form-control"
+                  placeholder="Press Enter to Select" (keydown.Enter)="productSelect()" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="kitFormWrap">
+            <div class="productWrap form-group">
+
+              <label for="type" class="col-md-2 form-control-label">Factor:</label>
+              <div class="col-md-10">
+                <input class="form-control" min=1 type="number" [(ngModel)]="factor" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="custom-table">
+      <table class="table">
+        <tr>
+          <th style="width: 7%">S.No.</th>
+          <th style="width: 20%">Code</th>
+          <th style="width: 52%">Description</th>
+          <th>Unit</th>
+          <th style="width: 10%">Qty</th>
+        </tr>
+        <tbody style="width: fit-content">
+          <tr *ngFor="let product of products; let i = index" (click)="RowClick(i)" (keydown.delete)="deleteRow(i)">
+            <td id="sno{{ i }}">
+              {{ i + 1 }}
+            </td>
+
+            <td>
+              <input type="text" id="menuCode{{ i }}" [(ngModel)]="product.MCODE" (keydown.Enter)="showItemPopUp(i)"
+                class="form-control" placeholder="Press Enter to Select Item" />
+            </td>
+            <td>
+              <input type="text" id="desca{{ i }}" [(ngModel)]="product.DESCA" class="form-control" />
+            </td>
+            <td>
+
+              {{product.UNIT}}
+
+              <!-- <select class="form-control" name="unit" id="unit{{ i }}" [(ngModel)]="product.UNIT">
+                <option *ngFor="let u of product.alternateUnits" value="{{u.ALTUNIT}}">{{u?.ALTUNIT}}</option>
+              </select> -->
+
+            </td>
+            <td>
+              <input type="number" id="qty{{ i }}" [(ngModel)]="product.QTY" class="form-control"
+                (keydown.Enter)="addNextRow(product, i)" min="0" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<generic-popup-grid #genericGridProduct [popupsettings]="gridProductPopupSettings"
+  (onItemDoubleClick)="dblClickPopupProduct($event)">
+</generic-popup-grid>
+
+
+<generic-popup-grid #genericGridItem [popupsettings]="gridItemPopupSettings"
+  (onItemDoubleClick)="dblClickPopupItem($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericGridview [popupsettings]="gridItemviewSettings" (onItemDoubleClick)="dblClickview($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericGridedit [popupsettings]="gridItemeditSettings" (onItemDoubleClick)="dblClickedit($event)">
+</generic-popup-grid>

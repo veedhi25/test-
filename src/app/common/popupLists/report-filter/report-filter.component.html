@@ -1,0 +1,159 @@
+<style>
+  .modal-content {
+    padding: 1px;
+    margin: 0px;
+    float: right;
+  }
+
+  tbody>tr:hover {
+    background-color: #f3f5f4;
+    cursor: pointer;
+  }
+
+  tr {
+    font-size: 11px;
+  }
+
+  .selected-row {
+    background-color: #ced6d3 !important;
+  }
+
+  .table>tbody>tr>td {
+    line-height: 30px !important;
+  }
+
+  .table>thead>tr>th {
+    line-height: 5px !important;
+  }
+
+  .table>tbody>tr>td:first-child {
+    text-align: left !important;
+    padding: 0px 0px 0px 11px !important;
+  }
+
+  .modal-content {
+    box-shadow: -10px 0px 10px 1px #aaaaaa;
+  }
+
+  .modal-content-main-area {
+    max-height: 100%;
+    height: 100%;
+    overflow: auto;
+    overflow-x: hidden;
+  }
+
+  .modal-content-summary-area {
+    max-height: 20%;
+    height: 20%;
+    overflow: auto;
+    overflow-x: hidden;
+  }
+
+  .ellipsis {
+    /* width: 220px;
+    text-overflow: ellipsis;
+    overflow: hidden; */
+    white-space: nowrap;
+  }
+
+</style>
+<div [class.modal-sticky-hide]="!isActive" style="display : block; padding: 0px;position: absolute;
+                            top: 85px ;
+                            right: 34%;
+                            width: 100%;
+                            height: auto;
+                            z-index: 9999999;
+                            max-height: 500px;
+                            overflow-y: auto;">
+  <!-- Modal content -->
+  <div class="modal-content modal-content-main-area" style="width: 35% !important">
+    <div>
+      <div class="modal-header" style="padding: 0px;background: #ecad79;">
+        <button class="close" aria-label="Close" (click)="popupClose()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" style="text-align: center;">
+          Select Filters
+        </h4>
+      </div>
+      <hr />
+      <div class="modal-body">
+        <div class="clearfix">
+          <div class="col-md-12">
+            <div class="col-md-6 form-group">
+              <div class="report-filter">
+                <label >Date Selection</label>
+                <input class="form-control" type="text" ngxDaterangepickerMd [(ngModel)]="selectedDate"
+                  [showDropdowns]="true" [showCustomRangeLabel]="true" [alwaysShowCalendars]="true" [locale]="locale"
+                  [ranges]="masterService.dateFilterRange" [linkedCalendars]="true" [showCancel]="true" placeholder="Date Range..."
+                  (ngModelChange)="dateChanged($event)" />
+              </div>
+            </div>
+            <div class="col-md-6 form-group">
+              <label >Division Selection</label>
+              <select class="form-control" #division (change)="divisionChanged()">
+                <option value="%" selected>ALL</option>
+                <option *ngFor="let divs of divisionList;let i=index" value="{{divs.INITIAL}}">{{divs.NAME}}</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="col-md-12" *ngIf="reportType=='Ledger Voucher'">
+              <fieldset>
+                  <legend style="width: 28%"> Account</legend>
+                  <table>
+                     <tr>
+                        <td><label class="smallBoldLabel">ACCODE</label></td>
+                        <td><label class="smallBoldLabel">ACNAME</label></td>
+                     </tr>
+                     <tr>
+                        <td>
+                           <label class="smallBoldLabel">
+                             <input class="form-control" tabindex="2" type="text" style="height:26px;width: 85px !important;" (keydown.enter)="accodeChanged($event.target.value)" [(ngModel)]="ReportFilterObj.ACCODE">
+                            </label>
+                        </td>
+                        <td>
+                           <div >
+                              <label class="smallBoldLabel">
+                                <input class="form-control" tabindex="2" ngui-auto-complete [source]="dropListItem.bind(this)" max-num-list="25" [(ngModel)]="ReportFilterObj.ACCNAME" list-formatter="ACNAME" style="height:26px; width: 300px !important" (ngModelChange)="itemChanged($event)" name="AcName" display-property-name="ACNAME">
+                              </label>
+                           </div>
+                        </td>
+                     </tr>
+                  </table>
+               </fieldset>
+          </div>
+
+
+
+
+          <div class="col-md-12" *ngIf="reportType=='Voucher Register' || reportType=='Day Book'">
+            <div class="col-md-6">
+              <label>VoucherType Selection</label>
+              <select class="form-control" #voucherType (change)="voucherTypeChanged()">
+                <option value="%" selected>ALL</option>
+                <option *ngFor="let vch of vouchertypeList;let i=index" value="{{vch.VOUCHER_ID}}">{{vch.VOUCHER_TYPE}}</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label >Show Narration</label>
+              <select #showNarration class="form-control" #voucherType (change)="showNarrationChanged()">
+                <option value=1 selected>Yes</option>
+                <option value=0 >No</option>
+              </select>
+            </div>
+          </div>
+
+
+          
+        </div>
+      </div>
+
+      <hr style="margin-bottom: 0px !important">
+      <div class="clearfix" style="padding: 10px;">
+        <button class="btn btn-info pull-right" style="margin-left: 10px;" (click)="popupClose()">Cancel</button>
+        <button class="btn btn-info pull-right" (click)="applyClicked()">Apply</button>
+      </div>
+    </div>
+  </div>
+</div>

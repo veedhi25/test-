@@ -1,0 +1,109 @@
+﻿<style>
+  .history-table {
+    /*background: #2bade5;  */
+    width: 100%;
+    bottom: 25%;
+    overflow-x: hidden;
+    height: 20vh;
+    overflow-y: scroll
+  }
+
+
+  th {
+    font-size: 13px;
+  }
+
+  .td-left {
+    text-align: left;
+  }
+
+  .td-right {
+    text-align: right;
+  }
+</style>
+<ng-container *ngIf="_trnMainService.TrnMainObj.VoucherType==3 || _trnMainService.TrnMainObj.VoucherType==16">
+  <div id="history-main-layer" class="history-Wrap modal-sticky customsidebar-modal"
+    style="text-align: center;width: 100% ;height: auto ; bottom: 5vh;z-index: 0;padding-left: 10px;">
+    <div class="report-table history-table modal-content modal-content-main-area" id="history-main--detail-layer">
+      <div class="widgets">
+        <div>
+          <h1 class="col-md-12"
+            style="font-size: 13px;padding: 6px;margin-bottom: 0;text-align: center;background: #2bade5;color:#FFFFFF; width: 94%;">
+            History (last 10 transcations) For the Item :
+            {{_trnMainService.TrnMainObj.ProdList[activeIndex]?.ITEMDESC}}</h1>
+          <span>
+            <em>ALT+Z</em>
+            <i style="vertical-align: middle;"
+              [ngClass]="{'fa fa-window-minimize' : isminimized==true,'fa fa-window-maximize' :isminimized==false}"
+              (click)="OnMiniMizeClick()"></i>
+          </span>
+        </div>
+        <!-- [style.height]=" this.masterService.ShowMore ? 'calc(79vh - 231px)' : '79vh' " -->
+        <div class="row table-container" style="margin: 0;">
+          <table id="BlueHeaderResizableTable" #reportHtmlTable style="font-size: 12px; width: 100%; overflow-x: auto"
+            class="reportTabel table-striped">
+            <thead>
+              <tr style="
+                border-bottom: 2px solid #e6e6e6;
+                border-top: 2px solid #e6e6e6;
+                height: 30px;
+                background: silver;
+                color: black;
+              ">
+                <th *ngIf="_trnMainService.TrnMainObj.VoucherType==3" width="60" class="td-left">GRN No.</th>
+                <th *ngIf="_trnMainService.TrnMainObj.VoucherType==16" width="60" class="td-left">Inv No.</th>
+                <th width="60" class="td-left">TranDate</th>
+                <th width="100px" class="td-left">SupplierName</th>
+                <th width="60" class="td-left">Invoice no</th>
+                <th width="60" class="td-left">InvoiceDate</th>
+                <th width="50px" class="td-left">ItemCode</th>
+                <th width="100px" class="td-left">ItemName</th>
+                <th width="50px" class="td-right">Qty</th>
+
+                <th width="50px" class="td-right">PurRate</th>
+                <th width="50px" class="td-right">MRP</th>
+                <th width="50px" class="td-right">Selling</th>
+                <th width="80px" class="td-left">Batch No. </th>
+                <th width="60" class="td-left">ExpiryDt</th>
+
+            </thead>
+            <tbody style="width: fit-content">
+
+              <ng-container
+                *ngIf="_trnMainService.TrnMainObj.ProdList[activeIndex] && _trnMainService.TrnMainObj.ProdList[activeIndex]?.TransactionHistory">
+                <tr *ngFor="let item of _trnMainService.TrnMainObj.ProdList[activeIndex]?.TransactionHistory"
+                  style="border: 1px solid #e6e6e6; max-height: 25px">
+
+
+                  <td width="60px" class="td-left">{{item.CHALANNO}}</td>
+                  <td width="60px" class="td-left">
+                    {{item.TRNDATE}}
+                  </td>
+                  <td width="100px" class="td-left">
+                    {{item.ACNAME}}
+                  </td>
+                  <td class="td-left">{{item.REFBILL}}</td>
+                  <td class="td-left"> {{item.TRN_DATE}}</td>
+                  <td class="td-left"> {{item.MCODE}}</td>
+                  <td class="td-left"> {{item.ITEMDESC}}</td>
+                  <td class="td-right">{{item.Qty}}</td>
+                  <td class="td-right">{{item.PRATE}}</td>
+                  <td class="td-right">{{item.MRP}}</td>
+                  <td class="td-right">{{item.SELLINGPRICE}}</td>
+                  <td class="td-left">{{item.BATCH}}</td>
+                  <td class="td-left">{{item.EXPDATE}}</td>
+
+
+
+                </tr>
+              </ng-container>
+
+
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

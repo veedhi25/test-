@@ -1,0 +1,25 @@
+<div class="clearfix">
+    <button class="btn btn-info pull-right" *ngIf='this.employee.MODE !="view"' (click)="onSaveClicked()">save</button>
+    <button class="btn btn-info pull-right" (click)="back()">Back</button>
+</div>
+
+<div class="row clearfix">
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>Employee Name</label>
+            <input type="text" name="ename" [(ngModel)]="employee.ACNAME" class="form-control">
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>MOBILE</label>
+            <input type="number" name="emobile" [(ngModel)]="employee.MOBILE" class="form-control">
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label>Employee Email</label>
+            <input type="email" name="eemail" [(ngModel)]="employee.EMAIL" class="form-control">
+        </div>
+    </div>
+</div>

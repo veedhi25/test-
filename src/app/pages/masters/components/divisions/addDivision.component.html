@@ -1,0 +1,107 @@
+<div class="sticky-top">
+    <div class="row clearfix" style=" padding: 0px 20px;">
+        <div class="col-md-6">
+            <h3 class="page-title">Division</h3>
+        </div>
+        <div class="col-md-6" style="float: right;">
+            <button type="button " class="btn btn-info pull-right" (click)="cancel()" style="margin-right : 10px;">
+                Back
+            </button>
+            <button *ngIf="viewMode == false" (click)="onSave()" class="btn btn-info pull-right"
+                style="margin-right : 10px;" [disabled]="!form.valid">
+                Save
+            </button>
+        </div>
+    </div>
+</div>
+<div class="main-container" style="padding-top : 10px; margin-bottom: 0px">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tabbable" id="warehouse-tabs">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#general-info" data-toggle="tab">General Info</a>
+                    </li>
+                    <!-- <li class="nav-item">
+                  <a class="nav-link" href="#tab2" data-toggle="tab">Section 2</a>
+                </li> -->
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="general-info">
+                        <div>
+                            <form id=formId class="form-horizontal" [formGroup]="form">
+                                <ba-card [title]="modeTitle">
+
+                                    <div class="form-group row ">
+                                        <label for="initial " class="col-sm-2 form-control-label ">Initial</label>
+                                        <div class="col-sm-6 ">
+                                            <input [style.background-color]="disabled()" style="color:black"
+                                                type="text " class="form-control " name="initial" id="initial"
+                                                formControlName="INITIAL" [readOnly]="mode=='edit'?true:false"
+                                                placeholder="Initial ">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row ">
+                                        <label for="description " class="col-sm-2 form-control-label ">Name</label>
+                                        <div class="col-sm-6 ">
+                                            <input [readOnly]="viewMode == true" style="color:black"
+                                                [style.background-color]="disabled()" type="text " class="form-control "
+                                                name="NAME" id="description" formControlName="NAME"
+                                                placeholder="Company Name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row ">
+                                        <label for="id " class="col-sm-2 form-control-label ">Id</label>
+                                        <div class="col-sm-6 ">
+                                            <input [readOnly]="viewMode == true" style="color:black"
+                                                [style.background-color]="disabled()" type="text " class="form-control "
+                                                name="id" id="id " formControlName="ID" placeholder="Id ">
+                                        </div>
+                                    </div>
+                                    <!-- <div class="form-group row">
+                                        <label for="rategroup " class="col-sm-2 form-control-label ">RateGroup</label>
+                                        <div class="col-sm-6 ">
+                                            <select class="form-control" style="color:black"
+                                                [style.background-color]="disabled()" name="rategroup" id="rategroup"
+                                                formControlName="RATEGROUPID">
+                                                <option *ngFor="let item of masterService.rateGroupList$ | async"
+                                                    [ngValue]="item.RID ">{{item.DESCRIPTION}}</option>
+
+                                            </select>
+                                        </div>
+                                    </div> -->
+                                    <div class="form-group row">
+
+                                        <label for="rategroup " class="col-sm-2 form-control-label "> Default Bill
+                                            Unit</label>
+                                        <div class="col-sm-6 ">
+                                            <select class="form-control" name="defaultunit" id="defaultunit"
+                                                formControlName="DEFAULTBILLUNIT">
+                                                <option *ngFor="let unit of units" value="{{unit.UNITS}}">{{unit.UNITS}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+
+                                        <label for="rategroup " class="col-sm-2 form-control-label ">Bill Prefix
+                                        </label>
+                                        <div class="col-sm-6 ">
+
+                                            <select class="form-control" name="billprefix" id="billprefix"
+                                                formControlName="BILLPREFIX">
+                                                <option *ngFor="let prefix of prefixList" value="{{prefix.vseries_id}}">
+                                                    {{prefix.vseries_name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </ba-card>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

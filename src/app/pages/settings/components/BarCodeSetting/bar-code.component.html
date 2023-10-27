@@ -1,0 +1,187 @@
+<div class="content-wrapper">
+  <div class="user-topbtn">
+    <h4 class="hder-hding">Bar Code Setting</h4>
+    <div class="right-btn">
+      <button class="btn btn-success" (click)="genBarCode()">Generate Bar Code</button>
+      <button class="btn btn-danger" (click)="loadTransType()">Load Transaction</button>
+      <button class="btn btn-download" (click)="onPrint()">PRINT</button>
+      <button class="btn btn-primary" (click)="onSave()">Save</button>
+    </div>
+  </div>
+  <div class="full-width compony-infoouter">
+    <div class="custom-table no-mr">
+      <table class="table">
+        <tr>
+          <th><input type="checkbox" [(ngModel)]="selectAllitem" (change)="getSelectAllRecord()" /></th>
+          <th style="width: 5%;">S.No.</th>
+          <th style="width: 8%;">Code</th>
+          <th style="width: 30%;">Item</th>
+          <th style="width: 5%;">Batch</th>
+          <th style="width: 5%;">Rate</th>
+          <!-- <th style="width: 5%;">QTY</th> -->
+          <th style="width: 13%;">ExpDate</th>
+          <th style="width: 9%;">Stock</th>
+          <th style="width: 10%;">MRP</th>
+          <th style="width: 23%;">Bar Code</th>
+          <th>Conv Type</th>
+          <th style="width: 3%;">Printed QTY</th>
+        </tr>
+
+        <tr *ngFor="let bar of barcodeModels; index as i">
+          <td><input type="checkbox" id="{{ 'chkitem' + x }}" [(ngModel)]="bar.checkFlagEAN" /></td>
+          <td style="width: 5%;"> {{ i+1 }} </td>
+          <td style="width: 8%;"> <input type="text" class="form-control" id="code{{i}}"
+              [(ngModel)]="barcodeModels[i].Code" (keypress)="keyPressOnly($event)" (keydown.Enter)="codeEnter()"
+              (keydown.delete)="deleteRow(i)"> </td>
+          <td style="width: 30%;"> <input type="text" class="form-control" id="item{{i}}"
+              [(ngModel)]="barcodeModels[i].Item" (keydown.Enter)="codeEnter()" (keypress)="keyPressOnly($event)"
+              (keydown.delete)="deleteRow(i)"> </td>
+          <td>
+            <input type="text" id="batch{{i}}" class="form-control" [(ngModel)]="barcodeModels[i].Batch"
+              (keydown.Tab)="BatchTabClick(i)" (keydown)="onKeydownOnBatch($event)" (keydown.enter)="BatchEnter(i)"
+              autocomplete="off" #focusBatch />
+
+          </td>
+          <td style="width: 5%;"> <input type="text" class="form-control" id="rate{{i}}"
+              [(ngModel)]="barcodeModels[i].Rate" (keydown.Enter)="rateEnter()"> </td>
+          <!-- <td style="width: 5%;"> <input type="text" class="form-control" id="qty{{i}}" [(ngModel)]="barcodeModels[i].QTY" (keydown.Enter)="qtyEnter()" > </td> -->
+          <!-- <td style="width: 17%;">{{tList.EXPDATE | date: 'dd/MM/yyyy'}}<input type="date" class="form-control" style="width: 88%;margin-left: 5%;" id="expdate{{i}}" [(ngModel)]="bar.ExpDate" (keydown.Enter)="expdateEnter()" > </td> -->
+          <td style="width: 13%;"><b>{{bar.ExpDate | date: 'dd/MM/yyyy'}}</b></td>
+          <td style="width: 9%; align-items: center; "><input type="text" class="form-control" id="stock{{i}}"
+              [(ngModel)]="bar.Stock" (keydown.Enter)="stockEnter()"> </td>
+          <td style="width: 10%;"> <input type="text" class="form-control" id="mrp{{i}}" [(ngModel)]="bar.MRP"
+              (keydown.Enter)="mrpEnter()"> </td>
+          <td style="width: 23%;"> <input type="text" class="form-control" id="barcode{{i}}" [(ngModel)]="bar.BarCode"
+              (keydown.Enter)="barcodeEnter()"> </td>
+          <td> <input type="text" id="convtype{{i}}" class="form-control" [(ngModel)]="bar.ConvType"
+              (keydown.Enter)="convtypeEnter()">
+          </td>
+          <td style="width: 3%;"> <input type="text" class="form-control" id="printedqty{{i}}"
+              [(ngModel)]="barcodeModels[i].PrintedQTY" (keydown.Enter)="saveRow($event,bar,i);"
+              (keydown.delete)="deleteRow(i)"> </td>
+        </tr>
+
+      </table>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="print-modal-sticky" *ngIf="promptPrintDevice" style="display : block; padding: 0px;  margin-bottom: 25px;height: auto;
+position: absolute;top: 5px;left: 40%;z-index: 9999999">
+
+  <div class="modal-content modal-content-main-area">
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel">Available Printing Device Supported</h4>
+    </div>
+    <div class="modal-body">
+      <form>
+        <ng-container>
+          <input type="radio" [formControl]="printControl" name="printOption" value=0 [checked]='true'>[24mmX25mm]
+          Default Print
+          <!-- <br>
+    <input type="radio" [formControl]="printControl" name="printOption" value=1  >[25mmX15mm] Print
+    <br>
+    <input type="radio" [formControl]="printControl" name="printOption" value=2  >[34mmX20mm] Print
+    <br>
+    <input type="radio" [formControl]="printControl" name="printOption" value=3  >[50mmX38mm] Print
+    <br>
+    <input type="radio" [formControl]="printControl" name="printOption" value=4  >[102mmX38mm] 2 in 1 Print
+    <br>
+    <input type="radio" [formControl]="printControl" name="printOption" value=5  >[102mmX38mm] 3 in 1 Print
+    <br>
+    <input type="radio" [formControl]="printControl" name="printOption" value=6  >[76mmX38mm] Print -->
+          <br>
+          <input type="radio" [formControl]="printControl" name="printOption" value=1>[76mmX38mm] Print
+          <br />
+          <input type="radio" [formControl]="printControl" name="printOption" value=2>[38mmX38mm] Print
+          <br />
+          <input type="radio" [formControl]="printControl" name="printOption" value=3>[38mmX25mm] 2 in 1 Print
+          <br />
+          <input type="radio" [formControl]="printControl" name="printOption" value=4>[50mmX25mm] 2 in 1 Print
+          <br />
+          <input type="radio" [formControl]="printControl" name="printOption" value=5>[38mmX25mm] Print
+          <br />
+          <input type="radio" [formControl]="printControl" name="printOption" value=6>[50X25] Print
+          <br />
+          <input type="radio" [formControl]="printControl" name="printOption" value=7>[34mmX20mm] 3 in 1 Print
+          <br />
+          <input type="radio" [formControl]="printControl" name="printOption" value=8>[50mmX38mm] 2 in 1 Print
+          <br />
+          <!-- <input type="radio"  [formControl]="printControl"  name="printOption"  value=1>Customize Print<br>
+    <input type="radio"  [formControl]="printControl"  name="printOption"  value=12>Download Excel File<br> -->
+        </ng-container>
+        <ng-container *ngIf="externalBarcodePrintProfile && externalBarcodePrintProfile.length">
+          <ng-container *ngFor="let profile of externalBarcodePrintProfile">
+            <input type="radio" [formControl]="printControl" name="printOption"
+              value="{{profile.controlValue}}">{{profile?.profileNameLabel}}<br>
+          </ng-container>
+
+        </ng-container>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cancelprint()">Cancel</button>
+      <!-- setPrinterAndprint() -->
+      <button type="button" class="btn btn-primary" (click)="print()">Print</button>
+    </div>
+
+  </div>
+</div>
+
+<div *ngIf="showTransactionType" style="display: block;
+top: 150px;
+display: block;
+padding: 0px;
+margin-bottom: 0;
+height: 36vh;
+position: absolute;
+left: calc(40% - 201px);
+/* top: 135%; */
+width: 40%;
+z-index: 1;">
+
+  <div class="modal-content modal-content-main-area" style="width: 100%;text-align:left;">
+    <div class="modal-header" style="text-align: left;
+height: 40px;
+position: relative;padding: 9px;">
+      <h4 class="modal-title m-0" id="myModalLabel">Transaction Type</h4>
+      <button class="close" aria-label="Close" style="
+position: absolute;
+clear: both;
+z-index: 1;
+right: 16px;
+top: 10px;" (click)="onClose()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-6" style="margin-top: 15px;">
+          <select [(ngModel)]="selectTransType" class="form-control" (change)="onTransactionClick()">
+            <option value="">Select Transcation Type</option>
+            <option value="PI">PI : Purchase Invoice</option>
+            <option value="OP">OP : Opening Stock Entry</option>
+            <option value="PD">PD : Production Entry</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="masterService.PlistTitle=='batchListold'" class="PList" style="width: 1000px;">
+  <PBatchListOld (dbClickEvent)="dblClickPopupBatch($event)" [AlternateUnits]="AlternateUnits"
+    [activerowIndex]="activerowIndex" [title]="PlistTitle" [BList]="_trnMainService.batchlist"
+    [voucherType]="_trnMainService.TrnMainObj.VoucherType" (BatchClosedClick)="model1Closed()"
+    (returnBatchValue)="returnBatch($event)"></PBatchListOld>
+</div>
+
+
+
+<generic-popup-grid #genericGridBarcode [popupsettings]="gridPopupSettingsForBarcode"
+  (onItemDoubleClick)="onItemSelect($event,bar)"></generic-popup-grid>
+
+<generic-popup-grid #genericGrid [popupsettings]="gridPopupSettings" (onItemDoubleClick)="onItemDoubleClick($event)">
+</generic-popup-grid>

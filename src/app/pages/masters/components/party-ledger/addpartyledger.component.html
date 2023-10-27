@@ -1,0 +1,134 @@
+<form [formGroup]='form'>
+  <div class="row" class="form-horizontal">
+    <div style="background-color:#ffffff; border:1px solid;border-color:#dcdcdc; padding:20px; margin-bottom: 10px;">
+      <div class="com-sm-12" style="padding:5px;border-bottom: solid 1px #dcdcdc; margin-bottom: 10px;">
+        <h5>{{modeTitle}}</h5>
+      </div>
+      <div *ngFor="let g of acGroups;let k = index" class="form-group row">
+        <label class="col-sm-2 form-control-label"> {{g.group}} </label>
+         <div class="col-sm-6">
+          <p-dropdown [style]="{'width':'350px'}" [options]="g.options" [(ngModel)]="g.value.SELECTEDGROUPAC" [ngModelOptions]="{standalone: true}"
+            (onChange)="onGrpChange($event,k,g?.value.SELECTEDGROUPAC)" [disabled]="mode=='view'" placeholder="Select a group"></p-dropdown>
+        </div> 
+      </div>
+      <div *ngIf="Title == 'AddGroup' || mode=='edit'  && grp!='A'" class="form-group row">
+        <label class="col-sm-2 form-control-label">GroupName:</label>
+        <div class="col-sm-6">
+          <input type="text" formControlName="ACNAME" class="form-control" placeholder="Group Name" />
+        </div>
+      </div>
+      <div *ngIf="Title == 'AddLedger' || mode=='edit' && grp=='A' || mode=='view' ">
+        <div class="form-group row">
+          <label class="col-sm-2 form-control-label">Ledger Name:</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" formControlName="ACNAME" placeholder="Ledger Name">
+          </div>
+        </div>
+        <div class="alert alert-danger" *ngIf="form.controls['ACNAME'].touched && !form.controls['ACNAME'].valid">PartyLedger Name is Required.</div>
+
+        <div class="form-group row">
+          <label class="col-sm-2 form-control-label">Address:</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" formControlName="ADDRESS" placeholder="Address">
+          </div>
+        </div>
+        <div class="alert alert-danger" *ngIf="form.controls['ADDRESS'].touched && !form.controls['ADDRESS'].valid">Address is Required.</div>
+        <div class="form-group row">
+          <label class="col-sm-2 form-control-label">Phone:</label>
+          <div class="col-sm-6">
+            <input type="number" class="form-control" formControlName="PHONE" placeholder="Phone No.">
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-2 form-control-label">Fax:</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" formControlName="FAX" placeholder="Fax">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-2 form-control-label">Email:</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" formControlName="EMAIL" placeholder="Email Address">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-sm-2 form-control-label">Vat No:</label>
+          <div class="col-sm-6">
+            <input type="number" class="form-control" formControlName="VATNO" placeholder="VAT No.">
+          </div>
+        </div>
+        <div class="alert alert-danger" *ngIf="form.controls['VATNO'].touched && !form.controls['VATNO'].valid">VATNO is Required.</div>
+        <div class="form-group row">
+          <label class="col-sm-2 form-control-label">ACCODE:</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" formControlName="ACCODE" placeholder="Account Code">
+          </div>
+        </div>
+        <div class="alert alert-danger" *ngIf="form.controls['ACCODE'].touched && !form.controls['ACCODE'].valid">Account Code is Required.</div>
+        <div class="form-group row">
+          <label class="col-sm-2 form-control-label">Credit Limit:</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" formControlName="CRLIMIT" placeholder="Credit Limit">
+          </div>
+        </div>
+
+        <div class="alert alert-danger" *ngIf="form.controls['CRLIMIT'].touched && !form.controls['CRLIMIT'].valid">Credit Limit is Required.</div>
+
+        <div class="form-group row">
+          <label class="col-sm-2 form-control-label">Not-Active:</label>
+          <div class="col-sm-2">
+            <!-- <input type="checkbox" class="form-control" (change)="clickedNotActive(1)" formControlName="isNotActive"> -->
+
+            <input type="checkbox"  (change)="NotActive($event.target.checked==1?1:0)" formControlName="isNotActive" name="hasSubLedger" >
+          </div>
+        </div>
+
+        <fieldset style="border:1px solid #dcdcdc; margin-top:30px;">
+          <label style="background-color:white; position: absolute; margin-top:-22px; margin-left: 20px; padding:5px;">ASSETS</label>
+
+          <table>
+            <tr>
+              <td>
+                <p-radioButton style="margin-left:100px;" formControlName="Ptype"  value="C" (onClick)="changePtype('C')"></p-radioButton> <label>Customer</label>
+              </td>
+              <td>
+                <p-radioButton style="margin-left:100px;" formControlName="Ptype"  value="S" (onClick)="changePtype('S')"></p-radioButton><label>Supplier</label>
+              </td>
+            </tr>
+          </table>
+
+        </fieldset>
+      </div>
+    </div>
+  </div>
+
+
+  <button type="button" (click)="SumbitSave()" title="onSave" class="btn btn-info" [disabled]="!this.parentGroup || !form.valid || mode=='view'"
+    *ngIf="grp=='A'">Save</button>
+  <button type="button" (click)="SumbitSave()" title="onSave" class="btn btn-info" [disabled]="!this.parentGroup" *ngIf="grp=='G'">Save</button>
+  <button type="button" (click)="cancel()" title="Cancel" class="btn btn-info">Back</button>
+</form>
+<div class="modal fade" bsModal #childModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" aria-label="Close" (click)="hideChildModal()">
+          <span aria-hidden="true">&times;</span>
+          
+        </button>
+        <h4 class="modal-title">Information</h4>
+      </div>
+      <div class="modal-body">
+        {{DialogMessage}}
+      </div>
+      <!--<div class="modal-footer">
+                        <button class="btn btn-info confirm-btn" (click)="hideChildModal()">Save changes</button>
+                        <button class="btn btn-info confirm-btn" type="button" (click)=onsubmit()>Save</button>
+                    </div>!-->
+
+    </div>
+  </div>
+</div>
+<div>

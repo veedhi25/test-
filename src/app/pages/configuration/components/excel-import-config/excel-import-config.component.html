@@ -1,0 +1,528 @@
+<div class="content-wrapper">
+  <div class="main-container Custom-container">
+    <div class="full-width">
+      <div class="tap-tabbable">
+        <div class="tabbable" id="sheet-generation-tabs">
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" href="#sheet-generation" data-toggle="tab">Sheet Generation</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#upload-sheet" data-toggle="tab">Upload Sheet</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#update-status" data-toggle="tab">Upload Status</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#Margin" data-toggle="tab">Margin</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#Product" data-toggle="tab">Product</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#stockUpdate" data-toggle="tab">Stock Update</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#updatePhiscalInventory" data-toggle="tab">Physical Inventory Update</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#expired" data-toggle="tab">Expired and Damaged</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#transferout" data-toggle="tab">Transfer Out</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#scheme" data-toggle="tab">Scheme</a>
+            </li>
+            <li class="nav-item" *ngIf="showCustomerUpdate()">
+              <a class="nav-link" href="#customerUpdate" data-toggle="tab">Customer Update</a>
+            </li>
+            <li class="nav-item" *ngIf="
+              _trnMainService.userProfile.CompanyInfo.ORG_TYPE == 'central'">
+              <a class="nav-link" href="#itemPropertySetting" data-toggle="tab">Item Property</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" *ngIf="
+                _trnMainService.userProfile.CompanyInfo.ORG_TYPE == 'central'
+                " href="#stateMaster" data-toggle="tab">State Master</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" *ngIf="
+                _trnMainService.userProfile.CompanyInfo.ORG_TYPE == 'central'" href="#districtMaster"
+                data-toggle="tab">District Master</a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" id="sheet-generation">
+
+              <div class="row">
+                <div class="col-md-12" *ngIf="excelImportConfig.length">
+                  <h3 class="text-center">{{selectedMasterName }}</h3>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-3" *ngIf="!excelImportConfig.length">
+                  <div class="form-group" *ngIf="!excelImportConfig.length">
+                    <label class="col-md-4 form-control-label">Select a Master</label>
+                    <div class="col-md-12">
+                      <select class="form-control" style="color: black" name="selectedMaster"
+                        [(ngModel)]="selectedMasterName">
+                        <option *ngFor="let item of masterList" value="{{ item }}">
+                          {{ item }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4" *ngIf="selectedMasterName=='PURCHASE INVOICE'">
+                  <div class="form-group">
+                    <label class="col-md-4 form-control-label">Select Template For</label>
+                    <div class="col-md-8 cell-with-comment">
+                      <input type="text" (keydown)="$event.preventDefault()"
+                        (keydown.Enter)="onSelectSupplierForMaster($event)" [(ngModel)]="supplierName">
+                      <span class="cell-comment">Press Enter or Tab to select customer</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-5">
+                  <button type="button" (click)="loadConfig()" class="btn btn-info">
+                    Load Config
+                  </button>
+                  <button type="button" (click)="onSave()" class="btn btn-info">
+                    Save Config
+                  </button>
+                  <button type="button" (click)="downloadConfigCSV()" class="btn btn-info">
+                    Download CSV
+                  </button>
+                  <button type="button" (click)="resetConfig()" class="btn btn-info">
+                    Clear Config
+                  </button>
+                  <button type="button " class="btn btn-info" (click)="cancel()">Back
+                  </button>
+                </div>
+              </div>
+              <form class="row" class="form-horizontal" [formGroup]="form">
+                <div class="transaction-table-custom">
+                  <div class="table-container ims-scrollable-table">
+                    <table *ngIf="excelImportConfig.length" id="BlueHeaderResizableTable" #reportHtmlTable
+                      class="reportTabel" style="table-layout: fixed; overflow-x:scroll;height: 55vh;    font-size: 12px;
+                font-family: sans-serif;">
+
+
+
+                      <thead>
+                        <tr>
+                          <th width="100px">S.NO</th>
+                          <th *ngIf="selectedMasterName=='PURCHASE INVOICE'" width="100px">Column Name</th>
+                          <th width="100px">Mapping Name</th>
+                          <th width="100px">Column Size</th>
+                          <th width="100px">Data Type</th>
+                          <th width="100px">Mandatory</th>
+                          <th width="100px">Add to Sheet</th>
+                          <th width="400px">Column Value</th>
+                        </tr>
+                      </thead>
+                      <tbody style="width: fit-content">
+                        <ng-container formArrayName="items" *ngFor="
+                        let item of form.get('items').controls;
+                        let i = index
+                        ">
+                          <tr [formGroupName]="i">
+                            <td width="100px" style="overflow: hidden;">
+                              <input class="non-editable" formControlName="SNO" (keydown)="$event.preventDefault()"
+                                style="width: 100%" />
+                            </td>
+                            <td *ngIf="selectedMasterName=='PURCHASE INVOICE'" width="100px" style="overflow: hidden;">
+                              <input formControlName="ColumnName" style="width: 100%" />
+                            </td>
+                            <td width="100px" style="overflow: hidden;">
+                              <input class="non-editable" formControlName="MappingName"
+                                (keydown)="$event.preventDefault()" style="width: 100%" />
+                            </td>
+                            <td width="100px" style="overflow: hidden;">
+                              <input class="non-editable" formControlName="ColumnSize"
+                                (keydown)="$event.preventDefault()" style="width: 100%" />
+                            </td>
+                            <td width="100px" style="overflow: hidden;">
+                              <input class="non-editable" formControlName="DataType" (keydown)="$event.preventDefault()"
+                                style="width: 100%" />
+                            </td>
+                            <td width="100px" style="overflow: hidden;">
+                              <input type="checkbox" class="non-editable" formControlName="Mandatory"
+                                (change)="MandatoryChanged($event, i)" style="width: 100%" />
+                            </td>
+                            <td width="100px" style="overflow: hidden;">
+                              <input type="checkbox" class="non-editable" formControlName="AddToSheet"
+                                (change)="AddToSheetChanged($event, i)" style="width: 100%" />
+                            </td>
+                            <td width="400px" style="overflow: hidden;">
+                              <input class="non-editable" formControlName="ColumnValue" style="width: 100%"
+                                (keydown)="$event.preventDefault()" />
+                            </td>
+                          </tr>
+                        </ng-container>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="tab-pane" id="upload-sheet">
+              <div class="row">
+
+                <div class="col-md-4">
+
+                  <div class="form-group">
+                    <label>Select a Master </label>
+                    <select class="form-control" style="color: black" name="selectedMaster"
+                      [(ngModel)]="selectedMasterName" style="height: 35px">
+                      <option *ngFor="let item of masterList" value="{{ item }}">
+                        {{ item }}
+                      </option>
+                    </select>
+                  </div>
+                  <div *ngIf="selectedMasterName == 'Opening Stocks'">
+                    <div class="form-group">
+                      <label>Select a Warehouse </label>
+                      <select class="form-control" style="color: black" name="selectedWarehouse"
+                        [(ngModel)]="selectedWarehouseName" style="height: 35px">
+                        <option *ngFor="let warehouse of warehouseList" value="{{ warehouse }}">
+                          {{ warehouse }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Choose a file </label>
+                    <input #fileSelector_Import class="form-control" type="file" accept=".xlsx, .csv"
+                      (change)="onFileChange($event)" style="height: 35px" />
+                  </div>
+                  <button (click)="importConfig()" class="btn btn-load">
+                    Upload File
+                  </button>
+                  <button type="button " class="btn btn-back" (click)="cancel()">
+                    Back
+                  </button>
+
+                </div>
+
+              </div>
+            </div>
+            <div class="tab-pane" id="update-status">
+              <div class="row">
+
+                <div class="col-md-4" *ngIf="!importErrorList.length">
+                  <div class="form-group" *ngIf="!excelImportConfig.length">
+                    <label class="col-md-4 form-control-label">Select a Master
+                    </label>
+                    <div class="col-md-8">
+                      <select class="form-control" style="color: black" name="selectedMaster"
+                        [(ngModel)]="selectedMasterName">
+                        <option *ngFor="let item of masterList" value="{{ item }}">
+                          {{ item }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4" *ngIf="importErrorList.length">
+                  <label class="col-md-6">Master :: {{ selectedMasterName }}</label>
+                </div>
+                <div class="col-md-8 btn-conficvr">
+                  <button type="button" (click)="onLoadMaster()" class="btn btn-load">
+                    Load
+                  </button>
+                  <button type="button" (click)="onSaveMaster()" class="btn add-btn">
+                    Save Master
+                  </button>
+                  <button type="button" (click)="resetConfig()" class="btn clear-btn">
+                    Clear Config
+                  </button>
+                  <button type="button " class="btn btn-back" (click)="cancel()">
+                    Back
+                  </button>
+                </div>
+
+
+                <div *ngIf="importErrorList.length" style="
+                  width: 100%;
+                  height: 500px;
+                  overflow: auto;
+                  margin: 0px 15px;
+                  ">
+                  <table id="BlueHeaderResizableTable" #reportHtmlTable
+                    style="font-size: 12px; width: 100%; overflow-x: auto" class="reportTabel">
+                    <thead>
+                      <tr>
+                        <ng-container *ngFor="let key of importErrorList[0] | keys">
+                          <th *ngIf="
+                            key == 'Customer Name' ||
+                            key == 'Address1' ||
+                            key == 'Error Status'
+                            " width="300px">
+                            {{ key }}
+                          </th>
+                          <th *ngIf="
+                            key != 'Customer Name' &&
+                            key != 'Address1' &&
+                            key != 'Error Status'
+                            " width="150px">
+                            {{ key }}
+                          </th>
+                        </ng-container>
+                      </tr>
+                    </thead>
+                    <tbody style="width: fit-content">
+                      <tr *ngFor="let c of importErrorList; let i = index">
+                        <ng-container *ngFor="let key of c | keys; let j = index">
+                          <td *ngIf="
+                            key == 'Customer Name' ||
+                            key == 'Address1' ||
+                            key == 'Error Status'
+                            " width="300px">
+                            {{ c[key] }}
+                          </td>
+                          <td *ngIf="
+                            key != 'Customer Name' &&
+                            key != 'Address1' &&
+                            key != 'Error Status'
+                            " width="150px">
+                            {{ c[key] }}
+                          </td>
+                        </ng-container>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="Margin">
+              <div class="row">
+
+                <div class="col-md-8">
+                  <!-- <button type="button" (click)="showImportMargin()" class="btn btn-info" style="margin-right : 10px;">
+                      Load
+                      </button> -->
+                  <button type="button" (click)="UpdateMarginImport()" class="btn add-btn">
+                    Update
+                  </button>
+                </div>
+                <div *ngIf="importErrorList.length" style="width: 100%; height: 400px; overflow: auto">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th *ngFor="let key of importErrorList[0] | keys" width="100px">
+                          {{ key }}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let c of importErrorList; let i = index">
+                        <td *ngFor="let key of c | keys; let j = index" width="100px">
+                          <input type="text" class="form-control" [(ngModel)]="c[key]" name="{{ i }}_{{ j }}" />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="Product">
+              <div class="row">
+
+                <div class="col-md-8">
+                  <button type="button" (click)="ProductUpload()" class="btn btn-load">
+                    Upload
+                  </button>
+                  <button type="button" (click)="ItemListUpload()" class="btn btn-download">
+                    Item List Upload
+                  </button>
+                </div>
+
+
+                <div *ngIf="importErrorList.length" style="width: 100%; height: 400px; overflow: auto">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th *ngFor="let key of importErrorList[0] | keys" width="100px">
+                          {{ key }}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let c of importErrorList; let i = index">
+                        <td *ngFor="let key of c | keys; let j = index" width="100px">
+                          <input type="text" class="form-control" [(ngModel)]="c[key]" name="{{ i }}_{{ j }}" />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <!-- stock update -->
+            <div class="tab-pane" id="stockUpdate">
+              <div class="row">
+
+                <div class="col-md-8">
+                  <button type="button" (click)="stockUpload()" class="btn btn-load">
+                    Upload
+                  </button>
+                  <button type="button" (click)="downloadStockUpdate()" class="btn btn-download">
+                    Download Sample
+                  </button>
+                </div>
+
+
+              </div>
+            </div>
+            <!-- End Of Stock Update -->
+
+
+            <!-- updatePhiscalInventory update -->
+            <div class="tab-pane" id="updatePhiscalInventory">
+              <div class="row">
+
+                <div class="col-md-8">
+                  <button type="button" (click)="updatePhiscalInventoryUpload()" class="btn btn-load">
+                    Upload
+                  </button>
+                  <button type="button" (click)="downloadupdatePhiscalInventoryUpdate()" class="btn btn-download">
+                    Download Sample
+                  </button>
+                </div>
+
+
+              </div>
+            </div>
+            <!-- End Of updatePhiscalInventory Update -->
+            <!-- Start Of Expired -->
+            <div class="tab-pane" id="expired">
+              <div class="row">
+
+                <div class="col-md-8">
+                  <button type="button" (click)="expired()" class="btn btn-load">
+                    Upload
+                  </button>
+                  <button type="button" (click)="downloadexpired()" class="btn btn-download">
+                    Download Sample
+                  </button>
+                </div>
+
+
+              </div>
+            </div>
+            <!-- End oF Expired and damaged -->
+            <!-- Start Of transferout -->
+            <div class="tab-pane" id="transferout">
+              <div class="row">
+
+                <div class="col-md-8">
+                  <button type="button" (click)="transferout()" class="btn btn-load">
+                    Upload
+                  </button>
+                </div>
+
+              </div>
+            </div>
+            <!-- End oF transferout and damaged -->
+            <!-- Start Of scheme -->
+            <div class="tab-pane" id="scheme">
+              <div class="row">
+
+                <div class="col-md-8">
+                  <button type="button" (click)="scheme()" class="btn btn-load">
+                    Upload
+                  </button>
+                </div>
+
+              </div>
+            </div>
+            <!-- End oF scheme and damaged -->
+            <!-- customer update -->
+            <div class="tab-pane" id="customerUpdate" *ngIf="
+              _trnMainService.userProfile.username == 'patanjali_user' ||
+              _trnMainService.userProfile.username == 'Patanjali_Support'">
+              <div class="row">
+
+                <div class="col-md-8">
+                  <button type="button" (click)="updateCustomer()" class="btn btn-info">
+                    Upload
+                  </button>
+                  <button type="button" (click)="downloadCustomer()" class="btn btn-info">
+                    Download Customer List
+                  </button>
+                </div>
+
+              </div>
+            </div>
+            <!-- End Of Customer Update -->
+            <!-- Item Property Setting -->
+            <div class="tab-pane" id="itemPropertySetting">
+              <div class="row">
+
+                <div class="col-md-8">
+                  <button type="button" (click)="updateItemPropertySetting('channel')" class="btn add-btn">
+                    Upload ChannelWise
+                  </button>
+                  <button type="button" (click)="updateItemPropertySetting('sap')" class="btn btn-load">
+                    Upload SAp Wise
+                  </button>
+                  <button type="button" (click)="downloadItemPropertSetting()" class="btn btn-download">
+                    Download Sample
+                  </button>
+                </div>
+
+                <hr />
+              </div>
+            </div>
+            <!-- End Of Item Property Setting -->
+            <!--State Master-->
+            <div class="tab-pane" id="stateMaster">
+              <div class="row">
+
+                <div class="col-md-8">
+                  <button type="button" (click)="updateState()" class="btn btn-load">
+                    Upload
+                  </button>
+                  <button type="button" (click)="downloadState()" class="btn btn-download">
+                    Download State List
+                  </button>
+                </div>
+
+
+              </div>
+            </div>
+            <!-- End of State Master-->
+            <!--District Master-->
+            <div class="tab-pane" id="districtMaster">
+              <div class="row">
+
+                <div class="col-md-8">
+                  <button type="button" (click)="updateDistrict()" class="btn btn-load">
+                    Upload
+                  </button>
+                  <button type="button" (click)="downloadDistrict()" class="btn btn-download">
+                    Download District List
+                  </button>
+                </div>
+
+
+              </div>
+            </div>
+            <!-- End of District Master-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<file-uploader-popup #fileUploadPopup [popupsettings]="fileUploadPopupSettings"
+  (onUploaded)="fileUploadSuccessStatus($event)">
+</file-uploader-popup>
+
+
+<generic-popup-grid #genericGridSupplier [popupsettings]="gridPopupSettingsForSupplier"
+  (onItemDoubleClick)="onSupplierSelected($event)">
+</generic-popup-grid>

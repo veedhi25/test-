@@ -1,0 +1,23 @@
+<div class="sticky-top">
+    <div class="row clearfix">
+      
+        <div class="col-md-4">
+            <h2 style="color: black;">Account Migration</h2>
+        </div>
+
+        <div class="col-md-8">
+            <button style="margin: 0px 4px;" class="btn btn-info pull-right" (click)="Migration('accountLedger')">
+                Account Ledger Migration
+            </button>
+        </div>
+        <div class="col-md-8">
+            <button style="margin: 0px 4px;" class="btn btn-info pull-right" (click)="Migration('partyLedger')">
+                Party Ledger Migration
+            </button>
+        </div>
+    </div>
+
+</div>
+<file-uploader-popup #fileUploadPopup [popupsettings]="fileUploadPopupSettings"
+  (onUploaded)="fileUploadSuccessStatus($event)">
+</file-uploader-popup>

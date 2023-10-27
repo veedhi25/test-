@@ -1,0 +1,53 @@
+<div id="periodicLedgerSummaryReportId" style="background-color : #ffffff; padding :1%; height : auto; width : 60%; ">
+    <div class="row">
+        <div class="modal-header" style="width : 97%; margin : 0px auto;">
+            <button type="button" class="close" data-dismiss="modal" (click)="closeReportBox()">&times;</button>
+            <h4 class="modal-title">Periodic Ledger Summary Report</h4>
+        </div>
+        <div class="col-md-12">
+            <!-- <fieldset>
+                <legend>Report Format : </legend>
+                <label class="smallBoldLabel"><input type="radio" value=1 name="optRepFor"
+                        [(ngModel)]="ReportParameters.OPT_REPORT_TYPE">&nbsp;Non-Tree Format</label>
+                <label class="smallBoldLabel"><input type="radio" value=2 name="optRepFor"
+                        [(ngModel)]="ReportParameters.OPT_REPORT_TYPE">&nbsp;Tree Format</label>
+            </fieldset> -->
+
+            <fieldset>
+                <legend>Show Periodic Report Base On : </legend>
+                <label class="smallBoldLabel"><input type="radio" value=1 name="optReportbase"
+                        [(ngModel)]="ReportParameters.OPT_REPORT_TYPE">&nbsp;AD Format</label>
+                <label class="smallBoldLabel"><input type="radio" value=2 name="optReportbase"
+                        [(ngModel)]="ReportParameters.OPT_REPORT_TYPE">&nbsp;BS Format</label>
+            </fieldset>
+            <fieldset>
+                <legend>As On Dated:</legend>
+                <span>
+                    <label class="smallBoldLabel"><input type="date" style="width:152px; min-width:50%;"
+                            placeholder="Year Start Date" [(ngModel)]="ReportParameters.DATE1"
+                            (change)="changestartDate($event.target.value,'AD')"></label>
+                    <label class="smallBoldLabel"><input id="nepaliDate"
+                            style="width:152px;height:25px;text-align:center"
+                            class="nepali-calendar ndp-nepali-calendar" [(ngModel)]="ReportParameters.BSDATE1"
+                            type="text" (change)="changestartDate($event.target.value,'BS')" placeholder="yyyy-mm-dd" />
+                        (Miti) </label>
+                </span>
+            </fieldset>
+            <fieldset>
+                <legend>Division Selection:</legend>
+                <select [(ngModel)]="ReportParameters.DIVISION" style="width : 100%;">
+                    <option value="%">ALL</option>
+                    <option *ngFor="let div of division" value="{{ div.INITIAL }}">
+                          {{ div.NAME }}
+                       </option>
+                </select>
+            </fieldset>
+            <div class="btn">
+                <!-- <button type="button"  title="onSave" class="btn btn-info">Run</button>    -->
+                <button class="btn btn-info confirm-btn" type="button" (click)=onload()>RUN</button>
+                <button type="button" title="Cancel" class="btn btn-info" (click)="closeReportBox()">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>

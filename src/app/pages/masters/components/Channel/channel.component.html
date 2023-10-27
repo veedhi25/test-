@@ -1,0 +1,83 @@
+<div class="sticky-top">
+  <div class="row clearfix" style=" padding: 0px 20px;">
+    <div class="col-md-6">
+      <h3 class="page-title">{{ modeTitle }}</h3>
+    </div>
+    <div class="col-md-6" style="float: right;">
+      <button type="button " class="btn btn-info pull-right" (click)="cancel()" style="margin-right : 10px;">
+        Back
+      </button>
+      <button *ngIf="viewMode == false" (click)="onSave()" class="btn btn-info pull-right" style="margin-right : 10px;"
+        [disabled]="!form.valid">
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+<div class="main-container" style="padding-top : 10px; margin-bottom: 0px">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="tabbable" id="warehouse-tabs">
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" href="#general-info" data-toggle="tab">General Info</a>
+          </li>
+
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="general-info">
+            <form class="row" class="form-horizontal" [formGroup]="form">
+
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">Channel Type:</label>
+                <div class="col-md-6">
+                  <select class="form-control" style="color:black" name="ChannelType" id="ChannelType"
+                    formControlName="ChannelType" (change)="ChangeChannelType()">
+                    <option value="Channel">Channel</option>
+                    <option value="Sub-Channel">Sub-Channel</option>
+                  </select>
+                </div>
+
+              </div>
+              <div *ngIf="Channeltype=='Sub-Channel'" class="col-md-6">
+
+                <label class="col-md-4 form-control-label">Parent:</label>
+                <div class="col-md-6">
+                  <select class="form-control" style="color:black" name="Parent" id="Parent"
+                    formControlName="ParentChannelCode">
+                    <option *ngFor="let item of ChannelList" value="{{ item.ChannelCode }}">{{
+                            item.ChannelName
+                          }}</option>
+                  </select>
+
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">Name:</label>
+                <div class="col-md-6">
+                  <input type="text" style="color:black" class="form-control" [readOnly]="mode == 'view' ? true : false"
+                    id="BranchName" name="BranchName" formControlName="ChannelName" placeholder="Name" />
+                  <div *ngIf="!form.controls['ChannelName'].valid && form.controls['ChannelName']?.touched"
+                    class="text-danger">
+
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">STATUS:</label>
+                <div class="col-md-6">
+                  <select class="form-control" style="color:black" name="STATE" id="STATE" formControlName="STATUS">
+                    <option value=1>Active</option>
+                    <option value=0>InActive</option>
+                  </select>
+                </div>
+              </div>
+
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

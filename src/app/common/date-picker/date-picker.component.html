@@ -1,0 +1,18 @@
+
+<div class="ims-datepicker-wrapper">
+  <input id="{{index}}" type="text" [disabled]="disabled" class="ims-date-input" style="width: 100%;"
+    (change)="onDateEnterTab($event)" (keydown)="IsNumeric($event)"
+    (keydown.enter)="onDateEnterTab($event)" id="invoiceDate" (keydown.Tab)="onDateEnterTab($event)" maxlength="10" max="2999-12-31"
+    placeholder="dd/mm/yyyy" [(ngModel)]="date" autocomplete="off">
+    <i *ngIf="showCalendar" class="fa fa-caret-down ims-date-picker" (click)="show()"></i>
+</div>
+
+
+
+<ng-container *ngIf="showCalendar">
+  <input type="text" id="date{{ID}}{{index}}" style="position:absolute; display: none; overflow: hidden;
+-webkit-user-modify: read-only;
+opacity: 0;" class="hide-input" ngxDaterangepickerMd [locale]="locale" [(ngModel)]="selectedDate" [singleDatePicker]="true"
+    [autoApply]="true" (ngModelChange)="onvalueChange($event)" />
+
+</ng-container>

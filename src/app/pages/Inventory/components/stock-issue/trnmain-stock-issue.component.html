@@ -1,0 +1,31 @@
+
+
+<form [formGroup]="TrnMainForm">
+<div *ngIf="masterService.ShowMore==true" class="plainBackGround">
+        <div class="row">
+            <div class="form-group">
+                <label class="form-control-label">From Warehouse :</label>
+                <select class="form-control" formControlName="BILLTO">
+                    <option *ngFor="let w of masterService.warehouseList$ | async" [ngValue]="w.NAME">{{w.NAME}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-control-label">To Warehouse :</label>
+                <select class="form-control" formControlName="BILLTOADD">
+                    <option *ngFor="let w of masterService.warehouseList$ | async" [ngValue]="w.NAME">{{w.NAME}}</option>
+                </select>
+            </div>
+        </div>
+        
+      
+        <div class="row">
+            <div class="form-group">
+                <label class="form-control-label">Remarks :</label>
+                <input type="text" class="form-control" formControlName="REMARKS" (change)="formValidCheck">
+            </div>
+        </div>
+
+
+
+    </div>
+</form>

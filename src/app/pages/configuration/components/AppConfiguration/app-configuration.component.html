@@ -1,0 +1,1023 @@
+<style>
+  input,
+  select {
+    border: 1px solid #ced4da !important;
+    /* display: block; */
+    width: auto;
+    height: 30px;
+    padding: 5px 15px;
+    font-size: 12px;
+    line-height: 1;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+
+  .functionKeyHeading {
+    font-size: 18px;
+  }
+
+  .functionKey {
+    font-size: 14px;
+  }
+
+  .active {
+    background-color: white !important;
+    color: black !important;
+  }
+
+  .appcon-container {
+    height: 85vh;
+    background: white;
+    padding: 6px;
+  }
+
+  .tab-button {
+    width: inherit;
+    background-color: #2bade5;
+    margin: 0;
+    border-radius: 0;
+    color: white;
+    font-size: 12;
+    text-align: left;
+    font-weight: 600;
+  }
+
+
+  label {
+    font-size: 14px;
+    font-weight: 500;
+  }
+</style>
+
+
+<div class="top-forms">
+  <div class="heading-section col-md-4">
+    <h3 class="main-heading">Application Configuration</h3>
+  </div>
+  <div class="col-md-8 control-section form-right-btn">
+    <button class="btn add-btn" (click)="saveAppConfiguration()">Save</button>
+    <button class="btn edit-btn" (click)="openKeySetting()">Key Setting</button>
+    <button class="btn view-btn" (click)="openMasterPopupSetting()">Master Setting</button>
+  </div>
+</div>
+
+
+<div class="appcon-container">
+  <div class="col-md-2" style="padding: 0;
+  height: inherit;
+  background-color: #2bade5;">
+    <ul class="nav nav-tabs" role="tablist" style="background-color: #2bade5;">
+      <li role="presentation" class="nav-item col-md-12" style="padding:5px 0px;margin-left: 0;"><button href="#master"
+          class="btn btn-tab tab-button active" aria-controls="master" role="tab" data-toggle="tab">Master</button>
+      </li>
+      <li role="presentation" class="nav-item col-md-12" style="padding:5px 0px;margin-left: 0;"><button href="#sales"
+          class="btn btn-tab tab-button" aria-controls="sales" role="tab" data-toggle="tab">Sales</button></li>
+      <li role="presentation" class="nav-item col-md-12" style="padding:5px 0px;margin-left: 0;"><button
+          href="#purchase" class="btn btn-tab tab-button" aria-controls="purchase" role="tab"
+          data-toggle="tab">Purchase</button>
+      </li>
+      <li role="presentation" class="nav-item col-md-12" style="padding:5px 0px;margin-left: 0;"><button href="#print"
+          class="btn btn-tab tab-button" aria-controls="print" role="tab" data-toggle="tab">Print</button></li>
+      <li role="presentation" class="nav-item col-md-12" style="padding:5px 0px;margin-left: 0;"><button
+          href="#warehouse" class="btn btn-tab tab-button" aria-controls="warehouse" role="tab"
+          data-toggle="tab">Warehouse</button>
+      </li>
+    </ul>
+  </div>
+  <div class="col-md-10" style="padding: 0;height: inherit;">
+    <div class="tab-content" style="padding: 0 0 0 5px;">
+      <div role="tabpanel" class="tab-pane fade in active" id="master">
+        <div class="col-md-4" *ngIf="isPatanjaliUser()">
+          <label style="
+          display: inline-block;
+          width: 9.5vw;">Company Nature :</label>
+          <select style="
+          width: 55%;
+          display: inline-block;" name="companyType" id="BATCHPRE"
+            [(ngModel)]="appConfigurationSettings.COMPANYNATURE">
+            <option *ngFor="let c of companynature" value="{{c.value}}">
+              {{c.companynature}}
+            </option>
+
+          </select>
+        </div>
+
+        <div class="col-md-4" *ngIf="isPatanjaliUser()">
+          <label style=" width: 100%">Total Nos of user </label>
+          <input style="vertical-align: middle" type="number" min="0" name="TOTALNOOFUSER" id="TOTALNOOFUSER"
+            [(ngModel)]="appConfigurationSettings.TOTALNOOFUSER" />
+        </div>
+        <div class="col-md-4">
+          <label style=" width: 100%">
+            <input style="vertical-align: middle" type="checkbox"
+              name="enableTranOfScheduledNarcoticDrugWithLicenseOnly"
+              id="enableTranOfScheduledNarcoticDrugWithLicenseOnly"
+              [(ngModel)]="appConfigurationSettings.enableTranOfScheduledNarcoticDrugWithLicenseOnly" />
+            Enable Transaction of Scheduled & Narcotic Drug with Drug License Only ? </label>
+        </div>
+        <div class="col-md-4">
+          <label style=" width: 100%">
+            <input style="vertical-align: middle" type="checkbox" name="allowSupplierInIndent"
+              id="allowSupplierInIndent" [(ngModel)]="appConfigurationSettings.allowSupplierInIndent" />
+            Allow Supplier in Indent ? </label>
+        </div>
+        <div class="col-md-4">
+          <label style=" width: 100%">
+            <input style="vertical-align: middle" type="checkbox" name="allowPhoneInCustomerLOV"
+              id="allowPhoneInCustomerLOV" [(ngModel)]="appConfigurationSettings.allowPhoneInCustomerLOV" />
+            Allow Phone in Customer LOV ? </label>
+        </div>
+        <div class="col-md-4">
+          <label style=" width: 100%">
+            <input style="vertical-align: middle" type="checkbox" name="VALIDATEAADHARNO" id="VALIDATEAADHARNO"
+              [(ngModel)]="appConfigurationSettings.VALIDATEAADHARNO" />
+            Is Aadhaar No Mandatory ? </label>
+        </div>
+        <div class="col-md-4">
+          <label style=" width: 100%">
+            <input style="vertical-align: middle" type="checkbox" name="AllowProductionQC" id="AllowProductionQC"
+              [(ngModel)]="appConfigurationSettings.AllowProductionQC" />
+            Allow Production QC </label>
+        </div>
+        <div class="col-md-4">
+          <label style=" width: 100%">
+            <input style="vertical-align: middle" type="checkbox" name="showPhistory" id="showpurchashistory"
+              [(ngModel)]="appConfigurationSettings.ALLOWEXPIREDITEMINRETURN"
+              [checked]="appConfigurationSettings.ALLOWEXPIREDITEMINRETURN"
+              (change)="onAllowExpireItemChange($event.target.checked)" />
+            Allow Expired item return </label>
+        </div>
+        <div class="col-md-4">
+          <label style=" width: 100%">
+            <input style="vertical-align: middle" type="checkbox" name="CREATEVARIANTITEMONPRODUCTMASTER"
+              id="CREATEVARIANTITEMONPRODUCTMASTER"
+              [(ngModel)]="appConfigurationSettings.CREATEVARIANTITEMONPRODUCTMASTER" />
+            Create Variant In Product Master? </label>
+        </div>
+        <div class="col-md-4">
+          <label style=" width: 100%">
+            <input style="vertical-align: middle" type="checkbox" name="aliascode" id="aliascode"
+              [(ngModel)]="appConfigurationSettings.ENABLEAUTOALIASCODE" />
+            Enable Auto Alias Code</label>
+        </div>
+        <div class="col-md-4" *ngIf="isPatanjaliUser()">
+          <label style=" width: 100%">
+            <input style="vertical-align: middle" type="checkbox" name="EnableParentMrpAsSalesRateOnEDI"
+              id="EnableParentMrpAsSalesRateOnEDI"
+              [(ngModel)]="appConfigurationSettings.EnableParentMrpAsSalesRateOnEDI" />
+            Enable Parent Mrp As Sales Rate On EDI?</label>
+        </div>
+        <div class="col-md-4">
+          <label style=" width: 100%">
+            <input style="vertical-align: middle" type="checkbox" name="showPhistory" id="showpurchashistory"
+              [(ngModel)]="appConfigurationSettings.SHOWPURCHASEHISTORY"
+              [checked]="appConfigurationSettings.SHOWPURCHASEHISTORY"
+              (change)="onShowPurchaseHistoryChange($event.target.checked)" />
+            Show Purchase History</label>
+        </div>
+        <div class="col-md-4">
+          <label style=" width: 100%">
+            <input style="vertical-align: middle" type="checkbox" name="hideSuffixInBill" id="hideSuffixInBill"
+              [(ngModel)]="appConfigurationSettings.hideSuffixInBill" />
+            Hide suffix In Bill</label>
+        </div>
+        <div class="col-md-4" *ngIf="showPickListOption()">
+          <div class="checkbox">
+            <label>
+              <input style="vertical-align: middle" type="checkbox"
+                [(ngModel)]="appConfigurationSettings.SHOWPICKLISTONLY" />
+              Show PickList Only?
+            </label>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label style=" width: 8vw">DSM Options</label>
+          <select style="width: 60%" name="SHOWDSMONMANUALSO" id="SHOWDSMONMANUALSO"
+            [(ngModel)]="appConfigurationSettings.SHOWDSMONMANUALSO">
+            <option value="0">Only Other DSM</option>
+            <option value="1">All DSM</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label style=" width: 100%">
+            <input style="vertical-align: middle" type="checkbox" name="showcombodetails" id="showcombodetails"
+              [(ngModel)]="appConfigurationSettings.SHOWCOMBOITEMDETAILS" />
+            Show Combo Item Details</label>
+        </div>
+        <div class="col-md-4">
+          <label style=" width: 100%">
+            <input style="vertical-align: middle" type="checkbox"
+              [(ngModel)]="appConfigurationSettings.EnableLiveChatBot" />
+            Enable Chat Support</label>
+        </div>
+        <!-- <div class="col-md-4">
+          <label style=" width: 100%">
+            <input style="vertical-align: middle" type="checkbox"
+              [(ngModel)]="appConfigurationSettings.EnableCustomSms" />
+            Enable Custom Message</label>
+        </div> -->
+        <div class="col-md-4" *ngIf="isPatanjaliUser()">
+          <div class="checkbox">
+            <label>
+              <input style="vertical-align: middle" type="checkbox"
+                [(ngModel)]="appConfigurationSettings.ENABLEMULTIBUSINESS" />
+              Enable MultiBusiness?
+            </label>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="checkbox">
+            <label>
+              <input style="vertical-align: middle" type="checkbox"
+                [(ngModel)]="appConfigurationSettings.enableSupplierWiseTermsAndConditionInPO" />
+              Enable SupplierWise T&C
+            </label>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="checkbox">
+            <label>
+              <input style="vertical-align: middle" type="checkbox"
+                [(ngModel)]="appConfigurationSettings.IsEnableHCategory" />
+              Enable Hierarchical Category
+            </label>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="checkbox">
+            <label>
+              <input style="vertical-align: middle" type="checkbox"
+                [(ngModel)]="appConfigurationSettings.defaultCustomerAsLocal" />
+              Default Customer as Local?
+            </label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="col-md-4" style="margin-top: 5px" *ngIf="isPatanjaliUser()">
+              <fieldset class="scheduler-border">
+                <legend class="scheduler-border" style="
+                  
+                  width: 75% !important;
+                  text-transform: uppercase;
+                  font-size: 14px!important;
+                ">
+                  <em><strong>Enable Mail Delivery For</strong></em>
+                </legend>
+                <div class="row">
+                  <div class="col-md-6 checkbox">
+                    <label>
+                      <input style="vertical-align: middle" type="checkbox"
+                        [(ngModel)]="appConfigurationSettings.ENABLETAXINVOICEMAIL" />
+                      Tax Invoice?
+                    </label>
+                  </div>
+                  <div class="col-md-6 checkbox">
+                    <label>
+                      <input style="vertical-align: middle" type="checkbox"
+                        [(ngModel)]="appConfigurationSettings.ENABLECREDITNOTEMAIL" />
+                      Credit Note?
+                    </label>
+                  </div>
+                  <div class="col-md-6 checkbox">
+                    <label>
+                      <input style="vertical-align: middle" type="checkbox"
+                        [(ngModel)]="appConfigurationSettings.ENABLEPURCHASEMAIL" />
+                      Purchase Invoice?
+                    </label>
+                  </div>
+                  <div class="col-md-6 checkbox">
+                    <label>
+                      <input style="vertical-align: middle" type="checkbox"
+                        [(ngModel)]="appConfigurationSettings.ENABLEDEBITNOTEMAIL" />
+                      Debit Note?
+                    </label>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+
+            <div class="col-md-4" style="margin-top: 5px">
+              <fieldset class="scheduler-border">
+                <legend class="scheduler-border" style="
+                  font-size: 14px;
+                  width: 13vw !important;
+                  text-transform: uppercase;
+                ">
+                  <em><strong>Item Merge Setting</strong></em>
+                </legend>
+                <div class="row">
+                  <div class="col-md-6 checkbox">
+                    <label>
+                      <input style="vertical-align: middle" type="checkbox"
+                        [(ngModel)]="appConfigurationSettings.POITEMMERGE" />
+                      Item Merge In PO?
+                    </label>
+                  </div>
+                  <div class="col-md-6 checkbox">
+                    <label>
+                      <input style="vertical-align: middle" type="checkbox"
+                        [(ngModel)]="appConfigurationSettings.SOTOSIITEMMERGE" />
+                      Item Merge In SO TO SI?
+                    </label>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div role="tabpanel" class="tab-pane fade " id="sales">
+        <div class=" row">
+          <div class="col-md-12">
+            <div class="col-md-4">
+              <label style="width: 150px; ">Default Sales Qty:</label>
+              <input type="number" [(ngModel)]="appConfigurationSettings.DEFAULTQUANTITY" />
+            </div>
+            <div class="col-md-4">
+              <label style="width: 15vw; ">No Of Days For Bill Edit</label>
+              <input type="number" [(ngModel)]="appConfigurationSettings.NOOFDAYSFORBILLEDIT" />
+            </div>
+
+            <div class="col-md-4">
+              <label style="width: 15vw; ">No Of Days For Bill Cancel</label>
+              <input type="number" [(ngModel)]="appConfigurationSettings.NOOFDAYSFORBILLCANCEL" />
+            </div>
+            <div class="col-md-4">
+              <label style="width: 150px; ">No Of Days For CN:</label>
+              <input type="number" [(ngModel)]="appConfigurationSettings.NOOFDAYSFORCREDITNOTE" />
+            </div>
+            <div class="col-md-4">
+              <label>Show Single Batch Preview</label>
+              <select name="batchpreview" id="BATCHPRE" [(ngModel)]="appConfigurationSettings.BATCHPREVIEW">
+                <option value="DISABLESINGLEBATCHPREVIEW">
+                  Hide Single Batch Preview
+                </option>
+                <option value="ENABLESINGLEBATCHPREVIEW">
+                  Show Single Batch Preview
+                </option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label style=" width: 100%">
+                <input style="vertical-align: middle" type="checkbox" name="showcombodetails" id="showcombodetails"
+                  [(ngModel)]="appConfigurationSettings.SHOWCOMBOITEMDETAILS" />
+                Show Combo Item Details</label>
+            </div>
+            <div class="col-md-4">
+              <label>
+                <input style="vertical-align: middle" type="checkbox" [(ngModel)]="
+                    appConfigurationSettings.EnableFocusOnSalesManOnBilling
+                  " />
+                FocusOn SalesMan OnBilling
+              </label>
+            </div>
+            <div class="col-md-4">
+              <label style=" width: 100%">
+                <input style="vertical-align: middle" type="checkbox" name="IsMRPBilling" id="IsMRPBilling"
+                  [(ngModel)]="appConfigurationSettings.IsMRPBilling" />
+                Enable MRP Billing</label>
+            </div>
+            <div class="col-md-4">
+              <label style=" width: 100%">
+                <input style="vertical-align: middle" type="checkbox" name="MRtoSI" id="MRtoSI"
+                  [(ngModel)]="appConfigurationSettings.MRtoSI" />
+                Enable MR to SI</label>
+            </div>
+            <div class="col-md-4">
+              <label style=" width: 100%">
+                <input style="vertical-align: middle" type="checkbox" name="disableRepeatProductInsale"
+                  id="disableRepeatProductInsale" [(ngModel)]="appConfigurationSettings.disableRepeatProductInsale" />
+                Disable Repeat Product In Sales</label>
+            </div>
+
+            <div class="col-md-4">
+              <label style=" width: 100%">
+                <input style="vertical-align: middle" type="checkbox" name="enableMultiSeriesInSales"
+                  id="enableMultiSeriesInSales" [(ngModel)]="appConfigurationSettings.enableMultiSeriesInSales" />
+                Enable Multi Series In sales</label>
+            </div>
+            <div class="col-md-4">
+              <label style=" width: 100%">
+                <input style="vertical-align: middle" type="checkbox" name="enableMultiUnitOnSoToSI"
+                  id="enableMultiUnitOnSoToSI" [(ngModel)]="appConfigurationSettings.enableMultiUnitOnSoToSI" />
+                Enable Multi Unit In Order Conversion</label>
+            </div>
+            <div class="col-md-4">
+              <label style=" width: 100%">
+                <input style="vertical-align: middle" type="checkbox" name="enableZeroStockItemLoadInSoToSI"
+                  id="enableZeroStockItemLoadInSoToSI"
+                  [(ngModel)]="appConfigurationSettings.enableZeroStockItemLoadInSoToSI" />
+                Enable Zero Stock Item In Sales Order Conversion</label>
+            </div>
+
+
+
+            <div class="col-md-4">
+              <label style=" width: 100%">
+                <input style="vertical-align: middle" type="checkbox" name="aliascode" id="aliascode"
+                  [(ngModel)]="appConfigurationSettings.ENABLEAUTOALIASCODE" />
+                Enable Auto Alias Code</label>
+            </div>
+
+            <div class="col-md-4">
+              <label style=" width: 100%">
+                <input style="vertical-align: middle" type="checkbox" name="showDeliveryBoy" id="showDeliveryBoy"
+                  [(ngModel)]="appConfigurationSettings.SHOWDELIVERYBOY"
+                  [checked]="appConfigurationSettings.SHOWDELIVERYBOY"
+                  (change)="onShowShowDeliveryBoyChange($event.target.checked)" />
+                Show Delivery Boy</label>
+            </div>
+            <div class="col-md-4">
+              <label style=" width: 100%">
+                <input style="vertical-align: middle" type="checkbox" name="showPhistory" id="showpurchashistory"
+                  [(ngModel)]="appConfigurationSettings.ENABLEBILLLOCKING" />
+                Enable Bill Locking</label>
+            </div>
+            <div class="col-md-4">
+              <label style=" width: 100%">
+                <input style="vertical-align: middle" type="checkbox" name="BarcodePrinter" id="BarcodePrinter"
+                  [(ngModel)]="appConfigurationSettings.BarcodePrinter" />
+                Enable BarcodePrinter?</label>
+            </div>
+            <div class="col-md-4">
+              <label style=" width: 100%">
+                <input style="vertical-align: middle" type="checkbox" name="AUTOSCHEME" id="AUTOSCHEME"
+                  [(ngModel)]="appConfigurationSettings.AUTOSCHEME" />
+                Auto Scheme? </label>
+            </div>
+            <div class="col-md-4">
+              <label style=" width: 100%">
+                <input style="vertical-align: middle" type="checkbox" name="ENABLEBILLREMINDER" id="ENABLEBILLREMINDER"
+                  [(ngModel)]="appConfigurationSettings.ENABLEBILLREMINDER" />
+                Enable Bill Reminder ? </label>
+            </div>
+
+            <div class="col-md-4">
+              <label for="ALLOWEXPIREDITEMSALE" style=" width: 100%">
+                <input style="vertical-align: middle" type="checkbox" name="ALLOWEXPIREDITEMSALE"
+                  id="ALLOWEXPIREDITEMSALE" [(ngModel)]="appConfigurationSettings.ALLOWEXPIREDITEMSALE"
+                  [checked]="appConfigurationSettings.ALLOWEXPIREDITEMSALE" />
+                Allow Expired item sale </label>
+            </div>
+            <div class="col-md-4">
+              <label for="EnableBatchwiseItemSearch" style=" width: 100%">
+                <input style="vertical-align: middle" type="checkbox" name="EnableBatchwiseItemSearch"
+                  id="EnableBatchwiseItemSearch" [(ngModel)]="appConfigurationSettings.EnableBatchwiseItemSearch"
+                  [checked]="appConfigurationSettings.EnableBatchwiseItemSearch" />
+                Enable Batchwise ItemSearch </label>
+            </div>
+            <div class="col-md-4">
+              <label style=" width: 100%">
+                <input style="vertical-align: middle" type="checkbox" name="ENABLESESSIONMANAGEMENT"
+                  id="ENABLESESSIONMANAGEMENT" [(ngModel)]="appConfigurationSettings.ENABLESESSIONMANAGEMENT" />
+                Enable Session Management ? </label>
+            </div>
+            <div class="col-md-4">
+              <label style=" width: 100%">
+                <input style="vertical-align: middle" type="checkbox" name="EnableAdvanceOnOrder"
+                  id="EnableAdvanceOnOrder" [(ngModel)]="appConfigurationSettings.enableAdvanceOptionInSalesOrder" />
+                Enable Advance On Order ? </label>
+            </div>
+            <div class="col-md-3" *ngIf="isPatanjaliUser()">
+              <label>
+                Offline Mobile Billing </label>
+              <select name="ENABLEOFFLINESALE" id="ENABLEOFFLINESALE"
+                [(ngModel)]="appConfigurationSettings.ENABLEOFFLINESALE">
+                <option value=0>Disable</option>
+                <option value=2>Enable</option>
+              </select>
+            </div>
+            <!-- <div class="col-md-3" *ngIf="isPatanjaliUser()">
+              <label>
+                Device ID </label>
+              <input type="text" [(ngModel)]="appConfigurationSettings.RegistredDeviceId" />
+            </div> -->
+            <div class="col-md-3" *ngIf="isPatanjaliUser()">
+              <label style=" width: 100%">
+                <input style="vertical-align: middle" type="checkbox" name="enableSchemeInSales"
+                  id="enableSchemeInSales" [(ngModel)]="appConfigurationSettings.enableSchemeInSales" />
+                Enable Scheme In Sales </label>
+            </div>
+            <div class="col-md-3" *ngIf="isPatanjaliUser()">
+              <label>
+                Sorting Batch </label>
+              <select name="SORTINGBATCHFORSALES" id="SORTINGBATCHSELECTIONFORSALES"
+                [(ngModel)]="appConfigurationSettings.SORTINGBATCHSELECTIONFORSALES">
+                <option value="expirywisefefo">Expiry Wise (FEFO)</option>
+                <option value="grnnumberwisefifo">GRN Number Wise (FIFO)</option>
+              </select>
+            </div>
+            <div class="col-md-6" style="margin-top: 5px">
+              <fieldset class="scheduler-border">
+                <legend class="scheduler-border" style="
+                    font-size: 14px;
+                    width: 17vw !important;
+                    text-transform: uppercase;
+                  ">
+                  <em><strong>Batch and Dates Setting</strong></em>
+                </legend>
+                <div class="row">
+                  <div class="col-md-6 checkbox">
+                    <label>
+                      <input style="vertical-align: middle" type="checkbox"
+                        [(ngModel)]="appConfigurationSettings.HIDEMFGDATE" />
+                      Hide Mfg Date
+                    </label>
+                  </div>
+                  <div class="col-md-6 checkbox">
+                    <label>
+                      <input style="vertical-align: middle" type="checkbox"
+                        [(ngModel)]="appConfigurationSettings.HIDEEXPDATE" />
+                      Hide Exp Date
+                    </label>
+                  </div>
+                  <div class="col-md-6 checkbox">
+                    <label>
+                      <input style="vertical-align: middle" type="checkbox"
+                        [(ngModel)]="appConfigurationSettings.HIDEBATCH" />
+                      Hide Batch
+                    </label>
+                  </div>
+                  <div class="col-md-6 checkbox">
+                    <label>
+                      <input style="vertical-align: middle" type="checkbox"
+                        [(ngModel)]="appConfigurationSettings.HideCostpriceInBatch" />
+                      Hide CostPrice
+                    </label>
+                  </div>
+                  <div class="col-md-6 checkbox">
+                    <label>
+                      <input style="vertical-align: middle" type="checkbox"
+                        [(ngModel)]="appConfigurationSettings.ENABLEBATCHSRATE" />
+                      Enable Batch Selling Price?
+                    </label>
+                  </div>
+                  <div class="col-md-6 checkbox">
+                    <label>
+                      <input style="vertical-align: middle" type="checkbox"
+                        [(ngModel)]="appConfigurationSettings.ENABLEEXPIREDRETURNINSALES" />
+                      Enable Expired Return?
+                    </label>
+                  </div>
+
+                </div>
+              </fieldset>
+            </div>
+            <div class="col-md-4" style="margin-top: 5px">
+              <fieldset class="scheduler-border">
+                <legend class="scheduler-border" style="
+                  font-size: 14px;
+                  width: 13vw !important;
+                  text-transform: uppercase;
+                ">
+                  <em><strong>Round Off Setting</strong></em>
+                </legend>
+                <div class="row">
+                  <div class="col-md-6 checkbox">
+                    <label>
+                      <input style="vertical-align: middle" type="checkbox"
+                        [(ngModel)]="appConfigurationSettings.ENABLEROUNDOFFINSALES" />
+                      Enable Round Off?
+                    </label>
+                  </div>
+                  <div class="col-md-6 checkbox">
+                    <label> Round On</label>
+                    <select name="roundfigureon" id="roundfigureon"
+                      [(ngModel)]="appConfigurationSettings.ROUNDOFFLIMITERINSALES">
+                      <option value="0">Lower Limit</option>
+                      <option value="1">Upper Limit</option>
+                    </select>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div role="tabpanel" class="tab-pane fade" id="purchase">
+        <div class="col-md-12 row">
+          <div class="col-md-12">
+            <div class="col-md-4">
+              <label style="width: 15vw;">No Of Days For Purchase Edit</label>
+              <input type="number" [(ngModel)]="appConfigurationSettings.NOOFDAYSFORPURCHASEEDIT" />
+            </div>
+
+            <div class="col-md-4">
+              <label style="width: 15vw;">No Of Days For Purchase Cancel</label>
+              <input type="number" [(ngModel)]="appConfigurationSettings.NOOFDAYSFORPURCHASECANCEL" />
+            </div>
+
+            <div class="col-md-6">
+              <label style=" width: 100%">
+                <input style="vertical-align: middle" type="checkbox"
+                  [(ngModel)]="appConfigurationSettings.PoNumberMandatoryFlag" />
+                Enable PI without PO number</label>
+            </div>
+
+            <div class="col-md-4 checkbox">
+              <label>
+                <input style="vertical-align: middle" type="checkbox"
+                  [(ngModel)]="appConfigurationSettings.ENABLEEXPIREDRETURNINPURCHASE" />
+                Enable Expired Return?
+              </label>
+            </div>
+            <div class="col-md-4 checkbox">
+              <label>
+                <input style="vertical-align: middle" type="checkbox"
+                  [(ngModel)]="appConfigurationSettings.ENABLEINDENTDELIVERY" />
+                Enable Indent Delivery?
+              </label>
+            </div>
+            <div class="col-md-4 checkbox">
+              <label>
+                <input style="vertical-align: middle" type="checkbox"
+                  [(ngModel)]="appConfigurationSettings.gstIncludedIndDiscountOnPurchase" />
+                Gst Included Ind. Dis.?
+              </label>
+            </div>
+            <div class="col-md-4 checkbox">
+              <label>
+                <input style="vertical-align: middle" type="checkbox"
+                  [(ngModel)]="appConfigurationSettings.gstIncludedPrimaryDiscountOnPurchase" />
+                Gst Included Pri. Dis.?
+              </label>
+            </div>
+            <div class="col-md-4 checkbox">
+              <label>
+                <input style="vertical-align: middle" type="checkbox"
+                  [(ngModel)]="appConfigurationSettings.gstIncludedSecondaryDiscountPurchase" />
+                Gst Included Sec. Dis.?
+              </label>
+            </div>
+
+            <div class="col-md-4" *ngIf="isPatanjaliUser()">
+              <label style=" width: 100%">
+                <input style="vertical-align: middle" type="checkbox" name="enableAutoDebitNote"
+                  id="enableAutoDebitNote" [(ngModel)]="appConfigurationSettings.enableAutoDebitNote" />
+                Enable Auto Purchase Return</label>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="col-md-4" style="margin-top: 5px">
+              <fieldset class="scheduler-border">
+                <legend class="scheduler-border" style="
+                  font-size: 14px;
+                  width: 13vw !important;
+                  text-transform: uppercase;
+                ">
+                  <em><strong>Round Off Setting</strong></em>
+                </legend>
+                <div class="row">
+                  <div class="col-md-6 checkbox">
+                    <label>
+                      <input style="vertical-align: middle" type="checkbox"
+                        [(ngModel)]="appConfigurationSettings.ENABLEROUNDOFFINPURCHASE" />
+                      Enable Round Off?
+                    </label>
+                  </div>
+                  <div class="col-md-6 checkbox">
+                    <label> Round On</label>
+                    <select name="roundfigureon" id="roundfigureon"
+                      [(ngModel)]="appConfigurationSettings.ROUNDOFFLIMITERINPURCHASE">
+                      <option value="0">Lower Limit</option>
+                      <option value="1">Upper Limit</option>
+                    </select>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div role="tabpanel" class="tab-pane fade" id="print">
+        <div class="col-md-4" style="margin-bottom: 15px">
+          <div class="col-md-12">
+            <fieldset class="scheduler-border">
+              <legend class="scheduler-border" style="
+                  font-size: 14px;
+                  width: 15vw!important;
+                  text-transform: uppercase;
+                ">
+                <em> <strong>3mm Printer Setting</strong> </em>
+              </legend>
+              <div class="row">
+                <div class="col-md-12" style="padding-left: 0px">
+                  <div class="col-md-6">
+                    <label style="width: 10vw">Left Margin :</label>
+                    <input style="width: 10vw" type="number" [(ngModel)]="appConfigurationSettings.LEFTMARGIN" />
+                  </div>
+                  <div class="col-md-6">
+                    <label style="width: 10vw">Bottom Margin :</label>
+                    <input style="width: 10vw" type="number" [(ngModel)]="appConfigurationSettings.BUTTOMMARGIN" />
+                  </div>
+                </div>
+                <div class="col-md-6" style="margin: 5px;">
+                  <label style="width: 15vw">
+                    <input style="vertical-align: middle;" type="checkbox"
+                      [(ngModel)]="appConfigurationSettings.SHOWPRINTPREVIEW" />
+                    Show Print Preview?
+                  </label>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+      <div role="tabpanel" class="tab-pane fade" id="warehouse">
+        <div class="col-md-12" style="margin-top: 5px">
+          <fieldset class="scheduler-border">
+            <legend class="scheduler-border" style="
+              font-size: 14px;
+              width: 17vw !important;
+              text-transform: uppercase;
+            ">
+              <em><strong>Warehouse Stock Setting</strong></em>
+            </legend>
+            <div class="row">
+              <div class="col-md-6 checkbox">
+                <label>
+                  <input style="vertical-align: middle" type="checkbox"
+                    [(ngModel)]="appConfigurationSettings.WAREHOUSEWISESTOCKINITEMLOV" />
+                  Enable Warehouse Wise Stock In Item LOV?
+                </label>
+              </div>
+              <div class="col-md-6">
+                <angular4-multiselect [data]="warehouseList" [(ngModel)]="appConfigurationSettings.WAREHOUSEFORITEMLOV"
+                  class="form-control" [settings]="multiselectSetting" (onSelect)="onMultiSelect($event)"
+                  (onDeSelect)="onMultiSelect($event)" (onSelectAll)="onMultiSelect($event)"
+                  (onDeSelectAll)="onMultiSelect($event)">
+                </angular4-multiselect>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div *ngIf="showSupplierMaster" style="display: block;
+padding: 0px;
+margin-bottom: 0;
+height: 300px;
+position: absolute;
+right: 65%;
+top: 0px;
+width: 30%;
+z-index: 9999999;">
+  <div class="modal-content modal-content-main-area"
+    style="width: 100%; margin-left: 400px; height: 500px;overflow: scroll; ">
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel"> Supplier Master </h4>
+    </div>
+    <div class="modal-body">
+      <div class="clearfix">
+        MENU LIST
+        <div *ngFor="let a of supplierMasterList">
+          <div class="col-md-7">
+            <label for="{{a.label}}"> {{a.label}} </label>
+          </div>
+          <div class="class-md-3">
+            <input type="checkbox" id="form-control">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" style="margin-top: 5px;" class="btn btn-info"
+        (click)="cancelSupplierMaster()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showCustomerMaster" style="display: block;
+padding: 0px;
+margin-bottom: 0;
+height: 300px;
+position: absolute;
+right: 65%;
+top: 0px;
+width: 30%;
+z-index: 9999999;">
+  <div class="modal-content modal-content-main-area"
+    style="width: 100%; margin-left: 400px; height: 500px;overflow: scroll; ">
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel"> Customer Master </h4>
+    </div>
+    <div class="modal-body">
+      <div class="clearfix">
+        MENU LIST
+        <div *ngFor="let a of customerMasterList">
+          <div class="col-md-7">
+            <label for="{{a.label}}"> {{a.label}} </label>
+          </div>
+          <div class="class-md-3">
+            <input type="checkbox" id="form-control">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" style="margin-top: 5px;" class="btn btn-info"
+        (click)="cancelCustomerMaster()">Cancel</button>
+    </div>
+  </div>
+</div>
+<div *ngIf="showItemMaster" style="
+    padding: 0px;
+    margin-bottom: 0;
+    height: 300px;
+    position: absolute;
+    right: 65%;
+    top: 0px;
+    width: 30%;
+    z-index: 9999999;
+  ">
+  <div class="modal-content modal-content-main-area"
+    style="width: 100%; margin-left: 400px; height: 500px; overflow: scroll">
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel">Item Master</h4>
+    </div>
+    <div class="modal-body">
+      <div class="clearfix">
+        <label style="text-align: center;"> MENU LIST </label>
+        <div class="form-inline" *ngFor="let a of itemMasterList;">
+          <div class="col-md-7">
+            <label for="{{a.label}}">{{a.label}}</label>
+          </div>
+          <div class="col-md-3">
+            <input type="checkbox" id="{{a.label}}" class="form-control" (change)="changeCheckbox(a,$event)">
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" style="margin-top: 5px" class="btn btn-info" (click)="cancelItemMaster()">
+        Cancel
+      </button>
+      <button type="button" style="margin-top: 5px" class="btn btn-info" (click)="saveAppConfiguration()">
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+<div *ngIf="showFunctionKeyPopUp" style="
+    padding: 0px;
+    margin-bottom: 0;
+    height: 300px;
+    position: absolute;
+    left:calc(50% - 240px);
+    top: 13%;
+    width: 600px;
+    z-index: 9999999;
+  ">
+  <div class="modal-content modal-content-main-area" style="width: 100%;overflow-y: scroll;overflow-x:hidden;">
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel">Function Keys</h4>
+    </div>
+    <div class="modal-body" style="display: flex;padding:0px;">
+      <div class="clearfix"
+        style="width:50%;border:1px solid #e5e5e5;overflow-y: scroll;overflow-x: hidden;height: 420px;">
+        <div class="header">
+          <h1 class="functionKeyHeading" style="margin-left: 10px;padding-top: 6px;">Forms</h1>
+        </div>
+        <div class="form-inline function-key-container">
+          <h2 class="functionKey" *ngFor="let data of formNames"
+            style="border:1px solid #e5e5e5;cursor:pointer; padding: 10px;margin: 0;" (click)="onFormSelect(data.name)">
+            {{data.name}}</h2>
+        </div>
+      </div>
+      <div class="clearfix"
+        style="width:50%;border:1px solid #e5e5e5;overflow-y:scroll;height:420px;overflow-x: hidden;">
+        <div class="header">
+          <h1 class="functionKeyHeading" style="margin-left: 10px;padding-top:6px;">{{formName}} Keys</h1>
+        </div>
+        <div class="form-inline" style="padding-left: 10px;">
+          <!-- <h2  class="functionKey" *ngFor="let item of functionKeySettingList">{{data}}</h2> -->
+          <div class="row" *ngFor="let item of functionKeySettingList">
+            <ng-container *ngIf="item.show == true">
+              <div class="col-md-12 checkbox">
+                <label>
+                  <input style="vertical-align: middle" type="checkbox" [checked]="item.selected"
+                    value="{{ item.values }}" (change)="onFunctionKeyChange(item.label)" />
+                  <!-- [(ngModel)]="item.selected" -->
+                  {{ item.label }}
+                </label>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" style="margin-top: 5px" class="btn btn-info" (click)="hideFunctionKeyPopUp()">
+        Cancel
+      </button>
+      <button type="button" style="margin-top: 5px" class="btn btn-info" (click)="saveAppConfiguration()">
+        Save
+      </button>
+    </div>
+  </div>
+
+
+
+  <div *ngIf="showMasterSettingPopUp" style="
+    padding: 0px;
+    margin-bottom: 0;
+    height: 300px;
+    position: absolute;
+    left:calc(50% - 240px);
+    top: 13%;
+    width: 600px;
+    z-index: 9999999;
+  ">
+    <div class="modal-content modal-content-main-area" style="width: 100%;overflow-x:hidden;">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Master Forms Setting</h4>
+      </div>
+      <div class="modal-body" style="display: flex;padding:0px;">
+        <div class="clearfix" style="width:50%;border:1px solid #e5e5e5;">
+          <div class="header">
+            <h1 class="functionKeyHeading" style="margin-left: 10px;padding-top: 6px;">Forms</h1>
+          </div>
+          <div class="form-inline">
+            <h2 class="functionKey" *ngFor="let data of masterFormNames"
+              [ngClass]="{'active': this.selectedMasterForm == data.value}"
+              style="border:1px solid #e5e5e5;cursor:pointer; padding: 10px;margin: 0;"
+              (click)="onMasterFormSelect(data)">{{data.name}}</h2>
+          </div>
+        </div>
+        <div class="clearfix" style="width:50%;border:1px solid #e5e5e5;overflow-y: scroll;
+      height: 420px;
+      overflow-x: hidden;">
+          <div class="header">
+            <h1 class="functionKeyHeading" style="margin-left: 10px;padding-top:6px;">{{formName}} Field Hide</h1>
+          </div>
+          <div class="form-inline" style="padding-left: 10px;">
+            <!-- <h2  class="functionKey" *ngFor="let item of functionKeySettingList">{{data}}</h2> -->
+            <ng-container *ngIf="selectedMasterForm === 'customerMaster' ">
+              <div class="row" *ngFor="let item of customerMasterList">
+                <!-- <ng-container *ngIf="item.show == true"> -->
+                <div class="col-md-12 checkbox">
+                  <label>
+                    <input style="vertical-align: middle" type="checkbox" [checked]="item.selected"
+                      value="{{ item.values }}" (change)="onCustomerMasterChange(item)" />
+                    <!-- [(ngModel)]="item.selected" -->
+                    {{ item.label }}
+                  </label>
+                </div>
+                <!-- </ng-container> -->
+              </div>
+            </ng-container>
+            <ng-container *ngIf="selectedMasterForm === 'SupplierMaster' ">
+              <div class="row" *ngFor="let item of supplierMasterList">
+                <!-- <ng-container *ngIf="item.show == true"> -->
+                <div class="col-md-12 checkbox">
+                  <label>
+                    <input style="vertical-align: middle" type="checkbox" [checked]="item.selected"
+                      value="{{ item.values }}" (change)="onSupplierMasterChange(item)" />
+                    <!-- [(ngModel)]="item.selected" -->
+                    {{ item.label }}
+                  </label>
+                </div>
+                <!-- </ng-container> -->
+              </div>
+            </ng-container>
+            <ng-container *ngIf="selectedMasterForm === 'itemMaster' ">
+              <div class="row" *ngFor="let item of itemMasterList">
+                <!-- <ng-container *ngIf="item.show == true"> -->
+                <div class="col-md-12 checkbox">
+                  <label>
+                    <input style="vertical-align: middle" type="checkbox" [checked]="item.selected"
+                      value="{{ item.values }}" (change)="onItemMasterChange(item)" />
+                    <!-- [(ngModel)]="item.selected" -->
+                    {{ item.label }}
+                  </label>
+                </div>
+                <!-- </ng-container> -->
+              </div>
+            </ng-container>
+
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" style="margin-top: 5px" class="btn btn-info" (click)="hideMasterSettingPopUp()">
+          Cancel
+        </button>
+        <button type="button" style="margin-top: 5px" class="btn btn-info" (click)="saveMasterSettingConfiguration()">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>

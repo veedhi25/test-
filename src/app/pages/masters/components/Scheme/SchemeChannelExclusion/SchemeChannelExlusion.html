@@ -1,0 +1,13 @@
+<form class="row" class="form-horizontal" [formGroup]="form">
+    <div class="col-md-6">
+        <label class="col-md-4 form-control-label">Channel:</label>
+        <div class="col-md-6">
+            <select class="form-control" style="color:black" [style.background-color]="disabled()" name="CHANNEL"
+                id="CHANNEL" formControlName="CHANNEL">
+                <option>SUPER MARKET</option>
+                <option value=0>GROCERY</option>
+            </select>
+        </div>
+    </div>
+
+</form>

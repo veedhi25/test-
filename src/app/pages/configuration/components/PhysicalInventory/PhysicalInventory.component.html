@@ -1,0 +1,60 @@
+<style>
+  .ei-cnt {
+    margin-top: 3%;
+    min-height: 80vh;
+    max-height: 80vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+  .en-sticky {
+    background-color: #ffffff;
+  }
+</style>
+
+<div class="clearfix sticky-top en-sticky">
+  <div class="col-md-4"><h4>E-INVOICE</h4></div>
+  <div class="col-md-8">
+    <button class="btn btn-info pull-right" (click)="updateInventorySelection()">Update inventory selection</button>  
+  </div>
+</div>
+<div class="clearfix main-container" style="background: white; margin-top: 6%">
+  <div class="ims-scrollable-table">
+    <div class="table-container" style="height: 75vh">
+      <table
+        id="BlueHeaderResizableTable"
+        style="font-size: 12px; width: 100%; overflow-x: auto"
+        class="reportTabel"
+      >
+        <thead>
+          <tr>
+            <th width="100px">Item Code</th>
+            <th width="100px">Description</th>
+            <th width="200px">Barcode</th>
+            <th width="100px" >
+              <input
+                type="checkbox"
+                class="form-control"
+                (change)="onSelectAll($event)"
+              />
+            </th>
+          </tr>
+        </thead>
+        <tbody style="width: fit-content">
+          <tr *ngFor="let i of ItemList; let i = index" style="border: 1px">
+            <td width="100px">{{ i.MCODE }}</td>
+            <td width="100px">{{ i.DESCA }}</td>
+            <td width="200px">{{ i.BARCODE }}</td>
+            <td width="100px" class="text-center">
+              <input
+                type="checkbox"
+                name="status"
+                class="form-control"
+                [(ngModel)]="i.STATUS"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

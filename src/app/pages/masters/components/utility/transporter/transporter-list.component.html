@@ -1,0 +1,13 @@
+<div class="content-wrapper">
+  <div class="right-btn">
+    <button type="button" class="btn add-btn" (click)="onAddClick()">Add Transporter Info</button>
+  </div>
+  <div class="full-width">
+    <div class="ng-tableinner">
+      <ims-grid #accountGenericGrid [imsGridSettings]="imsGridSettingsEntity" (onEditClicked)="onEditClicked($event)"
+        (onViewClicked)="onViewClicked($event)" (onDeleteClicked)="onAccountDelete($event)"></ims-grid>
+      <!-- <ng2-smart-table [settings]="settings" [source]="source" (edit)="onEditClick($event)"
+        (view)="onViewClick($event)"></ng2-smart-table> -->
+    </div>
+  </div>
+</div>

@@ -1,0 +1,64 @@
+<!-- 
+    <form [formGroup]="TrnMainForm">
+    <div  *ngIf="masterService.ShowMore==true"  class="row plainBackGround">
+        <div class="col-md-6">
+            <div class="row">  
+                <div class="col-md-12">  
+                    <label  style="width:85.5px">Supplier :</label>
+                    <select style="width:75%;" formControlName="TRNAC" (change)="supplierchange($event.target.value)"><option *ngFor="let s of SupplierList " [ngValue]="s.ACID">{{s.ACNAME}}</option></select>
+                </div>
+                <div class="form-group cell-with-comment">          
+                    <button (click)="ChooseSupplierForRFQ()">Suppliers</button>         
+                  </div>
+            </div>
+            <div class="row">  
+                <div class="col-md-12">  
+                    <label  style="width:85.5px">Delivery Date :</label>
+                    <input type="date" style="width:35%;" formControlName="DeliveryDate" />
+                </div>
+                <div class="form-group cell-with-comment RFQ">
+                    <label class="form-control-label">Expected Delivery Date :</label>
+                    <ims-date-picker [ID]='"ExpDate"' class="dropdownRfq" (onDateChange)="setExpDate($event)" [index]="'ExpDate'"
+                    [date]="getExpDate()">
+                  </ims-date-picker>
+                  </div>
+            </div>
+            
+          <div class="row">
+                <div class="col-md-12">
+                    <label style="width:85.5px;">Remarks :</label>
+                    <input type="text" style="min-width:75%;" formControlName="REMARKS" >
+                </div>
+            </div> 
+         
+            <div class="row">
+                <div class="col-md-12">
+                    <label style="width:85.5px;">Entry Date :</label>
+                    <input type="date" style="min-width:75%;" formControlName="Entry Date" >
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label style="width:85.5px;">RFQ Validity :</label>
+                    <input type="datetime" style="min-width:75%;" formControlName="RFQ Validity" >
+                </div>
+            </div>
+        </div>
+         <div class="col-md-6">
+                <div class="col-md-12">
+                        <label style="width:150px;">Item Listing :</label>
+                       <select  formControlName="ItemOptions">
+                           <option value=0>All</option>
+                           <option value=1>Supplier Wise Item Listing</option>
+                       </select>
+                       
+                    </div>
+           
+        </div> 
+       
+    </div>
+    <div>
+        
+    </div>
+    </form> -->

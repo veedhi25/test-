@@ -1,0 +1,28 @@
+<div class="compony-infoouter unit-form">
+<form class="form-horizontal" [formGroup]="form">
+  <ba-card [title]="modeTitle" baCardClass="with-scroll">
+    <div class="form-group">
+      <label class="col-sm-2 form-control-label">Unit: <span class="mandatory">*</span> </label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" formControlName="UNITS"
+          class="form-control" placeholder="Unit"/>
+        <div
+          *ngIf="
+            !form.controls['UNITS'].valid && form.controls['UNITS']?.touched" class="text-danger">
+          <span *ngIf="form.get('UNITS').hasError('required')">
+            Unit name is required.
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="form-btninner">
+      <button type="button" (click)="onSave()" title="Save" class="btn add-btn"
+        [disabled]="!this.form.valid">Save
+      </button>
+      <button type="button" (click)="cancel()" title="Cancel" class="btn btn-back">
+        Back
+      </button>
+    </div>
+  </ba-card>
+</form>
+</div>

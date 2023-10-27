@@ -1,0 +1,228 @@
+<div class="sticky-top">
+  <div class="row clearfix" style=" padding: 0px 20px;">
+    <div class="col-md-6">
+      <h3 class="page-title">{{ modeTitle }}</h3>
+    </div>
+    <div class="col-md-6" style="float: right;">
+      <button
+        type="button "
+        class="btn btn-info pull-right"
+        (click)="cancel()"
+        style="margin-right : 10px;"
+      >
+        Back
+      </button>
+      <button
+        *ngIf="viewMode == false"
+        (click)="onSave()"
+        class="btn btn-info pull-right"
+        style="margin-right : 10px;"
+        [disabled]="!form.valid"
+      >
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+<div class="main-container" style="padding-top : 10px; margin-bottom: 0px">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="tabbable" id="warehouse-tabs">
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" href="#general-info" data-toggle="tab"
+              >General Info</a
+            >
+          </li>
+          <!-- <li class="nav-item">
+            <a class="nav-link" href="#tab2" data-toggle="tab">Section 2</a>
+          </li> -->
+        </ul>
+        <!-- [readOnly]="mode == 'edit' ? true : false" style="color:black" [style.background-color]="disabled()" -->
+        <div class="tab-content">
+          <div class="tab-pane active" id="general-info">
+            <form class="row" class="form-horizontal" [formGroup]="form">
+              <!-- <ba-card baCardClass="with-scroll">  -->
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">Item Code:</label>
+                <div class="col-md-6">
+                  <input
+                    type="text"
+                    [style.background-color]="editDisabled()"
+                    class="form-control"
+                    id="MCODE"
+                    name="MCODE"
+                    [(ngModel)]="MCODE"
+                    [ngModelOptions]="{ standalone: true }"
+                    placeholder="Press TAB or Enter to select ITEM"
+                    (keydown.Tab)="ItemkeyEvent()"
+                    (keydown.enter)="ItemkeyEvent()"
+                  />
+                  <div
+                    *ngIf="
+                      !form.controls['MCODE'].valid &&
+                      form.controls['MCODE']?.touched
+                    "
+                    class="text-danger"
+                  >
+                    <span *ngIf="form.get('MCODE').hasError('required')">
+                      MCODE is required.
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">Item Name:</label>
+                <div class="col-md-6">
+                  <input
+                    type="text"
+                    [style.background-color]="disabled()"
+                    style="color:black"
+                    class="form-control"
+                    id="DESCRIPTION"
+                    name="DESCRIPTION"
+                    formControlName="DESCRIPTION"
+                    placeholder="Press TAB or Enter to select ITEM"
+                    disabled
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">State:</label>
+                <div class="col-md-6">
+                  <select
+                    class="form-control"
+                    style="color:black"
+                    [style.background-color]="disabled()"
+                    name="STATE"
+                    id="STATE"
+                    formControlName="STATE"
+                  >
+                    <option
+                      *ngFor="let i of StateList"
+                      value="{{ i.StateCode }}"
+                      >{{ i.StateName }}</option
+                    >
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">TAX(%):</label>
+                <div class="col-md-6">
+                  <input
+                    type="number"
+                    [style.background-color]="disabled()"
+                    style="color:black"
+                    class="form-control"
+                    id="TAX"
+                    name="TAX"
+                    formControlName="TAX"
+                    placeholder="TAX"
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">TAX Group:</label>
+                <div class="col-md-6">
+                  <input
+                    type="text"
+                    [style.background-color]="disabled()"
+                    style="color:black"
+                    class="form-control"
+                    id="TAXGROUP"
+                    name="TAXGROUP"
+                    formControlName="TAXGROUP"
+                    placeholder="TAXGROUP"
+                  />
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">HSNCODE:</label>
+                <div class="col-md-6">
+                  <input
+                    type="text"
+                    [style.background-color]="disabled()"
+                    style="color:black"
+                    class="form-control"
+                    id="HSNCODE"
+                    name="HSNCODE"
+                    formControlName="HSNCODE"
+                    placeholder="HSNCODE"
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">STATUS:</label>
+                <div class="col-md-6">
+                  <select
+                    class="form-control"
+                    style="color:black"
+                    [style.background-color]="disabled()"
+                    name="STATE"
+                    id="STATE"
+                    formControlName="STATUS"
+                  >
+                    <option value="1">Active</option>
+                    <option value="0">InActive</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">PCL:</label>
+                <div class="col-md-6">
+                  <select
+                    class="form-control"
+                    style="color:black"
+                    [style.background-color]="disabled()"
+                    name="Type"
+                    id="Type"
+                    formControlName="PCL"
+                  >
+                    <option *ngFor="let i of PCL_List" value="{{ i.PCL }}">{{
+                      i.PCL
+                    }}</option>
+                  </select>
+                </div>
+              </div>
+              <div hidden class="col-md-6">
+                <label class="col-md-2 form-control-label"
+                  >Product Level:</label
+                >
+                <div class="col-md-4">
+                  <input
+                    type="text"
+                    [style.background-color]="disabled()"
+                    style="color:black"
+                    class="form-control"
+                    id="PRODUCTHEIRARCHYLEVEL"
+                    name="PCL"
+                    formControlName="PRODUCTHEIRARCHYLEVEL"
+                    placeholder="PRODUCTHEIRARCHYLEVEL"
+                  />
+                </div>
+              </div>
+              <!-- </ba-card>  -->
+            </form>
+          </div>
+          <!-- <div class="tab-pane" id="tab2">
+            <p>
+              Howdy, I'm in Section 2.
+            </p>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="masterService.PlistTitle == 'itemList'" class="PList">
+  <PItemList
+    (dbClickEvent)="dblClickPopupItem($event)"
+    [title]="PlistTitle"
+    (itemCloseClick)="model1Closed()"
+  >
+  </PItemList>
+</div>
+

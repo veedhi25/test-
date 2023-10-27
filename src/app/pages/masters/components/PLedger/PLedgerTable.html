@@ -1,0 +1,32 @@
+<div class="content-wrapper">
+  <div class="right-btn">
+    <button *ngIf="showNewCustomerOption() && (outletconfigChild() || outletconfigParentandIndividual())"
+      class="btn btn-info" (click)="onAddClick()">{{partyName}}</button>
+    <button
+      *ngIf="PType=='C' && (masterService.userProfile.CompanyInfo.ORG_TYPE=='distributor' || masterService.userProfile.CompanyInfo.ORG_TYPE=='wdb' || masterService.userProfile.CompanyInfo.ORG_TYPE=='superstockist')"
+      class="btn btn-info" (click)="getCustomerFromMobileApp()">Get Customer From Mobile App</button>
+    <button class="btn btn-info" *ngIf="(outletconfigExportChild() || outletconfigParentandIndividual())"
+      (click)="ExportCusotmerToExcel()">Export {{PType=='C'?'Customer':'Supplier'}}</button>
+    <button class="btn btn-info" *ngIf="(outletconfigImportChild() || outletconfigParentandIndividual())"
+      (click)="Importparty()">Import {{PType=='C'?'Customer':'Supplier'}}</button>
+    <button class="btn btn-info" *ngIf="PType=='V'" (click)="syncSupplier()">Sync Supplier</button>
+    <!-- <button class="btn btn-info" *ngIf="(isHeadoffice!==1 && CNAME!==null && CNAME!=='')" (click)="syncSuppliertoChild()">Sync Supplier to Child</button>-->
+    <button class="btn btn-info" *ngIf="EnableGlobalCustomerSYnc()" (click)="syncGlobalCustomer()">Sync Customer to
+      Outlet</button>
+  </div>
+  <div class="full-width">
+    <div class="ng-tableinner">
+      <ba-card baCardClass="with-scroll">
+        <ims-grid #accountGenericGrid [imsGridSettings]="imsGridSettingsEntity" (onEditClicked)="onEditClicked($event)"
+          (onViewClicked)="onViewClicked($event)" (onDeleteClicked)="onAccountDelete($event)"></ims-grid>
+        <!-- <ng2-smart-table [settings]="settings" [source]="source" (edit)="onEditClick($event)"
+          (delete)="onDeleteConfirm($event)" (view)="onEditClick($event)"></ng2-smart-table> -->
+      </ba-card>
+    </div>
+  </div>
+</div>
+
+
+<file-uploader-popup #fileUploadPopup [popupsettings]="fileUploadPopupSettings"
+  (onUploaded)="fileUploadSuccessStatus($event)">
+</file-uploader-popup>

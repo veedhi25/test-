@@ -1,0 +1,424 @@
+<div class="form-inner">
+
+  <div class="top-forms">
+    <div class="row">
+      <div class="col-md-4">
+        <h3 class="main-heading">Load Sheet</h3>
+      </div>
+      <div class="col-md-8 form-right-btn">
+        <voucher-master-toggler></voucher-master-toggler>
+        <button *ngIf="LoadChartModel.MODE !='VIEW'" class="btn btn-info" (click)="save()">Save</button>
+        <button class="btn btn-info" (click)="edit()">Edit</button>
+        <button *ngIf="enableCancelButton" class="btn btn-info" (click)="cancel()">Cancel</button>
+        <button class="btn btn-info" (click)="view()">View</button>
+        <button class="btn btn-info" (click)="reset()">Reset</button>
+        <button class="btn btn-info" (click)="sendToPrint()">Print</button>
+        <button *ngIf="LoadChartModel.MODE =='VIEW'" class="btn btn-info pull-right"
+          (click)="CollectionSheet()">Collection Sheet</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-areaform">
+    <div class="">
+
+      <div *ngIf="masterService.ShowMore" class="load-chart-pannel">
+        <div *ngIf="LoadChartModel.MODE !='VIEW'" class="col-md-2">
+          <div class="loadFilter">
+            <input type="text" id="filter" class="form-control" (keydown.enter)="loadFilter()"
+              (keydown.tab)="loadFilter()" placeholder="Enter or Tab to load Filter option" name="filter" />
+          </div>
+        </div>
+        <div class="col-md-5">
+          <div class="form-group">
+            <label class="form-control-label">Load Sheet No: </label>
+            <label class="form-control-label custom-label">{{LoadChartModel.VOUCHERNO}}</label>
+          </div>
+
+          <div class="form-group">
+            <label class="form-control-label">Vehicle No: </label>
+            <select [(ngModel)]="LoadChartModel.VEHICLENO" name="vechNoId"
+              style="width: 62% !important;display: inline;" id="vechNoId">
+              <option *ngFor="let d of vehicleList;let i=index" value="{{d.VEHICLENO}}">{{d.VEHICLENO}}</option>
+            </select>
+            <span><button class="btn btn-info btn-sm" (click)="showVehilcePopUp=true">Add</button></span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-control-label">Driver Name: </label>
+            <select [(ngModel)]="LoadChartModel.DRIVERNAME" name="dnme" style="width: 62% !important;display: inline;"
+              id="DrivernmaeID">
+              <option *ngFor="let d of driverList;let i=index" value="{{d.DRIVERNAME}}">{{d.DRIVERNAME}}</option>
+            </select>
+            <span><button class="btn btn-info btn-sm" (click)="showDiverPopUp=true">Add</button></span>
+          </div>
+        </div>
+        <div class="col-md-5">
+          <div class="form-group">
+            <label class="form-control-label">Driver license No: </label>
+            <input type="text" class="form-control" id="licenseNoId" [(ngModel)]="LoadChartModel.DRIVERLISCENSENO"
+              name="dlicno" />
+          </div>
+          <div class="form-group">
+            <label class="form-control-label">Sales Man Name: </label>
+            <input type="text" class="form-control" id="SalesManName" [(ngModel)]="LoadChartModel.SALESMANNAME"
+              name="SalesMan_Name" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-control-label">Route No: </label>
+            <input type="text" class="form-control" id="RouteNo" [(ngModel)]="LoadChartModel.ROUTENO" name="ROUTENO" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-8">
+        <div class="temDetailstbale">
+          <h4 class="table-heading">Item Details</h4>
+          <table>
+            <thead>
+              <tr style="background-color:#e3e3e3; ">
+                <th style="width:5%;">S.No</th>
+                <th style="width:10%;">Item Code</th>
+                <th style="width:15%;">Item Name</th>
+                <th style="width:10%;">Batch</th>
+                <th style="width:5%;">MRP</th>
+                <th style="width:10%;">MFG DATE</th>
+                <th style="width:10%;">EXP DATE</th>
+                <th style="width:10%;">Qty</th>
+                <th style="width:10%;">Weight</th>
+                <th style="width:10%;">Net Amt</th>
+              </tr>
+            </thead>
+          </table>
+          <table>
+            <tbody *ngIf="LoadChartModel.ITEMSUMMARY.length">
+              <tr *ngFor="let itm of LoadChartModel.ITEMSUMMARY;let i=index">
+                <td style="width:5%;">{{_transactionService.nullToZeroConverter(i+1)}}</td>
+                <td style="width:10%;">{{itm?.MCODE}}</td>
+                <td style="width:15%;">{{itm?.ITEMDESC}}</td>
+                <td style="width:10%;">{{itm?.BATCH}}</td>
+                <td style="width:10%;">{{itm?.MRP}}</td>
+                <td style="width:10%;">{{itm?.MFGDATE | date: 'dd-MM-yyyy'}}</td>
+                <td style="width:10%;">{{itm?.EXPDATE | date: 'dd-MM-yyyy'}}</td>
+                <td style="width:10%;">{{itm?.RealQty}}</td>
+                <td style="width:10%;">{{itm?.WEIGHT}}</td>
+                <td style="width:10%;" style="text-align: right">{{itm?.NETAMOUNT | number:'1.2-2'}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="temDetailstbale-bottom">
+          <table>
+            <tbody *ngIf="LoadChartModel.ITEMSUMMARY.length">
+              <tr>
+                <td>Total Weight</td>
+                <td>{{LoadChartModel?.TOTALWEIGHT |number:'1.2-2'}}</td>
+              </tr>
+              <tr>
+                <td>Tota No. Of Bills</td>
+                <td>{{LoadChartModel?.TOTALNUMBEROFBILLS}}</td>
+              </tr>
+              <tr>
+                <td>Total Taxable</td>
+                <td>{{LoadChartModel?.TOTALTAXABLE |number:'1.2-2'}}</td>
+              </tr>
+              <tr>
+                <td>Total Amount</td>
+                <td>{{LoadChartModel?.TOTALAMOUNT |number:'1.2-2'}}</td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+
+
+
+
+      <div class="col-md-4">
+        <div *ngIf="LoadChartModel.MODE != 'VIEW'" class="Invoice-listtable">
+
+          <div class="table-container scoll-addtbale" id="BlueHeaderResizableTable" #reportHtmlTable>
+            <table class="Invoice-fixed-table">
+              <thead>
+                <tr>
+                  <th class="emty-th"></th>
+                  <th class="emty-th">Invoice List</th>
+                  <th class="emty-th"></th>
+                  <th class="emty-th"></th>
+                </tr>
+                <tr>
+                  <th width="100px">VCHRNO</th>
+                  <th width="100px">TRNDATE</th>
+                  <th width="100px">CUSTOMER</th>
+                  <th width="100px">AMOUNT</th>
+                </tr>
+              </thead>
+            </table>
+            <table class="scroll-invoicetble">
+              <tbody>
+                <ng-container *ngIf="
+                        LoadChartModel.SalesVoucher &&
+                        LoadChartModel.SalesVoucher.length">
+                  <tr *ngFor="
+                                let invoice of LoadChartModel.SalesVoucher;
+                                let i = index
+                              " (dblclick)="doubleClick(invoice)" (click)="singleClick(i)">
+                    <td>{{ invoice.VoucherType=='TI' && setting.hideSuffixInBill?invoice.CHALANNO: invoice?.VCHRNO}}
+                    </td>
+                    <td>{{invoice?.TRNDATE}}</td>
+                    <td>{{ invoice?.BILLTO }}</td>
+                    <td>{{invoice?.NETAMNT}}</td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+        <div class="Invoice-listtable">
+
+          <div class="table-container scoll-addtbale" id="BlueHeaderResizableTable" #reportHtmlTable>
+            <table class="Invoice-fixed-table">
+              <thead>
+                <tr>
+                  <th class="emty-th"></th>
+                  <th class="emty-th">Selected Invoice List</th>
+                  <th class="emty-th"></th>
+                </tr>
+                <tr>
+                  <th width="100px">VCHRNO</th>
+                  <th width="100px">BILL TO</th>
+                  <th width="100px">ACTION</th>
+                </tr>
+              </thead>
+            </table>
+            <table class="scroll-invoicetble">
+              <tbody>
+                <ng-container *ngIf="LoadChartModel.REFBILL.length">
+                  <tr *ngFor="let invoice of LoadChartModel.REFBILL; let i = index">
+                    <td>{{ invoice.VoucherType=='TI' && setting.hideSuffixInBill?invoice.CHALANNO: invoice?.REFBILL }}
+                    </td>
+                    <td>{{ invoice?.BILLTO }}</td>
+                    <td *ngIf="LoadChartModel.MODE != 'VIEW'">
+                      <i class="fa fa-trash" (click)="removeInvoiceFromList(i)"></i>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+
+
+  </div>
+</div>
+
+<div [class.modal-sticky-hide]="!isFilterActive" style="display : block;" class="filter-modalbox">
+  <!-- Modal content -->
+  <div class="modal-content-main-area">
+    <div class="modal-header">
+      <button class="close" aria-label="Close" (click)="popupClose()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="modal-title">Filter Options</h4>
+    </div>
+    <div class="modal-body">
+      <div class="col-md-12">
+        <div class="form-group">
+          <label class="form-control-label">Beat Selection:</label>
+          <input type="text" class="form-control" (keydown.enter)="loadBeatilter()" (keydown.tab)="loadBeatilter()"
+            name="beatfilter" placeholder="Enter to Load Beat List">
+        </div>
+        <div class="form-group">
+          <label class="form-control-label">DSM Selection:</label>
+          <input type="text" class="form-control" (keydown.enter)="loadDSMFilter()" (keydown.tab)="loadDSMFilter()"
+            name="dsmfilter" placeholder="Enter to Load DSM List">
+        </div>
+        <div class="loadsheet-date-filter form-group">
+          <label class="form-control-label">Date Selection:</label>
+          <input class="form-control" type="text" ngxDaterangepickerMd [(ngModel)]="selectedDate" [showDropdowns]="true"
+            [showCustomRangeLabel]="true" [alwaysShowCalendars]="true" [locale]="locale"
+            [ranges]="masterService.dateFilterRange" [showCancel]="true" placeholder="Date Range..."
+            (ngModelChange)="dateChanged($event)" />
+        </div>
+        <div class="loadsheet-date-filter form-group">
+          <label class="form-control-label">Voucher Selection:</label>
+          <select name="vtype" id="vtype" class="form-control" (change)="onVoucherTypeChanged()" [(ngModel)]="VTYPE">
+            <option value="TI">Tax Invoice</option>
+            <option value="PP">Proforma Invoice</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-md-12">
+        <table *ngIf="SELECTEDDSMLIST && SELECTEDDSMLIST.length">
+          <thead>
+            <tr>
+              <th>DSM NAME</th>
+              <th>DSM CODE</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dsm of SELECTEDDSMLIST;let i=index" [class.selected-row]="activeIndex == i">
+              <td>{{dsm?.DSMNAME}}</td>
+              <td style="text-align: right">
+                {{dsm?.DSMCODE}}
+              </td>
+              <td>
+                <i class="fa fa-trash" (click)="removeDSM(i)"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-md-12">
+        <table *ngIf="SELECTEdBEATLIST && SELECTEdBEATLIST.length">
+          <thead>
+            <tr>
+              <th>BEAT NAME</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dsm of SELECTEdBEATLIST;let i=index" [class.selected-row]="activeIndex == i">
+              <td>{{dsm?.BEAT}}</td>
+              <td>
+                <i class="fa fa-trash" (click)="removeBEAT(i)"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button class="btn cancel-btn" (click)="popupClose()">Cancel</button>
+      <button class="btn add-btn" (click)="onFilterApply()">Apply</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="print-modal-sticky" *ngIf="promptPrintDevice" style="display : block; padding: 0px;  margin-bottom: 25px;height: auto;
+  position: absolute;right: 65%;top: 5px;width: 50%;z-index: 9999999">
+
+  <div class="modal-content modal-content-main-area">
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel">Available Printing Device Supported</h4>
+    </div>
+    <div class="modal-body">
+      <form>
+        <ng-container>
+          <input type="radio" [formControl]="printControl" name="printOption" value=0>Default Print
+          <br>
+          <input type="radio"  [formControl]="printControl"  name="printOption"  value=1>Customize Print<br>
+          <input type="radio"  [formControl]="printControl"  name="printOption"  value=12>Download Excel File<br>
+        </ng-container>
+
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cancelprint()">Cancel</button>
+      <!-- setPrinterAndprint() -->
+      <button type="button" class="btn btn-primary" (click)="print()">Print</button>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+<div class="print-modal-sticky" *ngIf="showDiverPopUp" style="    display: block;
+padding: 0px;
+position: absolute;
+right: 42%;
+top: 25%;
+min-height: max-content;
+width: 20%;
+z-index: 9999999;
+">
+
+  <div class="modal-content-main-area" style="background-color: #c9c9c9;
+  margin: auto;">
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel">Add Driver Details</h4>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="form-group">
+          <label for="username">Driver Name</label>
+          <input type="text" class="form-control" name="drivername" [(ngModel)]="drivername">
+        </div>
+
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-info" data-dismiss="modal" (click)="saveDriver()">
+        Save Driver
+      </button>
+      <button type="button" class="btn btn-info" (click)="showDiverPopUp=false">Cancel</button>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="print-modal-sticky" *ngIf="showVehilcePopUp" style="    display: block;
+padding: 0px;
+position: absolute;
+right: 42%;
+top: 25%;
+min-height: max-content;
+width: 20%;
+z-index: 9999999;
+">
+
+  <div class="modal-content-main-area" style="background-color: #c9c9c9;
+  margin: auto;">
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel">Add Vehicle Details</h4>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="form-group">
+          <label for="username">Vehicle No</label>
+          <input type="text" class="form-control" name="vehicleNo" [(ngModel)]="vehicleNo">
+        </div>
+
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-info" data-dismiss="modal" (click)="saveVehicle()">
+        Sav </button>
+      <button type="button" class="btn btn-info" (click)="showVehilcePopUp=false">Cancel</button>
+    </div>
+  </div>
+
+</div>
+
+
+
+<generic-popup-grid #genericGrid [popupsettings]="gridPopupSettings" (onItemDoubleClick)="getLoadSheetVoucher($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericDSMGrid [popupsettings]="dsmGridPopupSettings"
+  (onItemDoubleClick)="getDSMSheetVoucher($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericBeatGrid [popupsettings]="beatGridPopupSettings"
+  (onItemDoubleClick)="getBeatVoucher($event)">
+</generic-popup-grid>

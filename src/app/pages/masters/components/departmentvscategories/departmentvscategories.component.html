@@ -1,0 +1,44 @@
+<div class="content-wrapper">
+  <div class="kitwrap">
+    <div class="buttons-wrap">
+      <h4 class="hder-hding">{{_departmentvsCategory?.DepartmentVsCategoryObj?.TITLE}} [{{
+        _departmentvsCategory?.DepartmentVsCategoryObj?.MODE }}]
+      </h4>
+      <div class="right-btn">
+        <button class="btn add-btn" (click)="onSaveClicked()">Save</button>
+        <button class="btn btn-back" (click)="onReset()">Reset</button>
+      </div>
+    </div>
+  </div>
+  <div class="bgcover-form depatvscat">
+    <div #prodlistTable id="prodlistTable">
+      <div class="table-container">
+        <table id="BlueHeaderResizableTable" #reportHtmlTable class="table reportTabel">
+          <thead>
+            <tr>
+              <th>Categories</th>
+              <th>Category Name</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let tList of _departmentvsCategory.DepartmentVsCategoryObj.CATLIST;let i=index"
+            (click)="_departmentvsCategory.DepartmentVsCategoryObj.SELECTEDINDEX=i"  >
+            <td>
+              <input type="text" [(ngModel)]="tList.VARIANT" class="form-control" 
+              (keydown)="$event.preventDefault()" />
+            </td>
+            <td>
+              <input type="text" id="catname{{i}}" [(ngModel)]="tList.VARIANTNAME" class="form-control"
+              (keydown.enter)="onCategoryNameEnterClicked(i)" />
+            </td>
+            <td>
+              <button (click)="deleteRow(i)" class="btn red-btn">Delete</button>
+            </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

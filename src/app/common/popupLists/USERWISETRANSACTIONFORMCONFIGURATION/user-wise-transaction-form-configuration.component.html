@@ -1,0 +1,87 @@
+<style>
+  select {
+    width: inherit;
+    height: inherit;
+  }
+
+  td {
+    overflow: hidden;
+    border: 1px solid #181616;
+  }
+
+  th {
+    background: #5198b9 !important;
+    border: 1px solid #181616;
+  }
+</style>
+
+
+<div class="modal fade" id="userwisetransactionconf" tabindex="-1" role="dialog"
+  aria-labelledby="userwisetransactionconfLabel" style="padding:0;">
+  <div role="document">
+    <ng-container *ngIf="isActive && columnsList && columnsList.columns.length">
+      <div class="modal-content" style="width: min-content; margin: 0 auto;">
+        <div class="modal-header">
+          <button class="btn btn-info" (click)="onSaveClicked()">Save Grid Conf</button>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+              aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title col-md-9" id="genericModalLabel">{{columnsList?.formName}} Grid Configuration</h4>
+        </div>
+        <div class="modal-body">
+
+
+          <div class="row">
+            <div class="col-md-12">
+              <ng-container>
+                <div class="transaction-table-custom">
+                  <div class="table-container ims-scrollable-table">
+                    <table id="BlueHeaderResizableTable" #reportHtmlTable class="reportTabel" style="table-layout: fixed; overflow-x:scroll;height: 50vh;    font-size: 12px;
+                    font-family: sans-serif;">
+                      <thead style="width: calc(100% - 1em);">
+                        <tr>
+                          <th width="300px">Columns Name</th>
+                          <th width="200px">Show/Hide</th>
+                          <th width="200px">Is Mandatory</th>
+                          <th width="200px">Focus To</th>
+
+                        </tr>
+                      </thead>
+                      <tbody style="width: fit-content;">
+
+                        <tr *ngFor="let col of columnsList.columns;let i=index">
+                          <td width="300px" style="padding: 5px;">{{col?.LABELVALUE}}</td>
+                          <td width="200px" style="padding: 5px;">
+                            <ng-container *ngIf="!col.ISMANDATORY">
+                              <input style="height: auto !important;" type="checkbox" name="checkbox" id="hideshow{{i}}"
+                                [(ngModel)]="col.CONTROLVALUE">
+                            </ng-container>
+                          </td>
+                          <td width="200px" style="padding: 5px;">
+                            {{col.ISMANDATORY?'YES':'NO'}}
+                          </td>
+                          <td width="200px" style="padding: 5px;">
+                            <ng-container *ngIf="col.SHOWFOCUS">
+                              <select name="focusto{{i}}" id="focusto{{i}}" [(ngModel)]="col.FOCUSTO">
+                                <ng-container
+                                  *ngFor="let fcol of columnsList.columns |filterFocusOption:col.LABELVALUE ;let j=index">
+                                  <option value="{{fcol.CONTROLID}}">{{fcol.LABELVALUE}}</option>
+                                </ng-container>
+                                <option value="BREAKROW">Go To Next Row</option>
+                              </select>
+                            </ng-container>
+
+                          </td>
+
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

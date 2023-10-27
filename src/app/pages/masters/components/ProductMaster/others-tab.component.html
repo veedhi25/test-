@@ -1,0 +1,20 @@
+<div class="row" style="margin-left: 50px;" >
+        
+            <label>Warehouse</label>
+            <!-- <select style="width: 200px" [(ngModel)]="productObj.WHOUSE">
+              <option *ngFor="let w of WarehouseList" [ngValue]="w.NAME">{{
+                w?.NAME
+              }}</option>
+            </select> -->
+            <input type="text" (keydown.Enter)="genericWarehouseGrid.show()" >
+                <label>Rack Number</label>
+                <input (change)="changeRack()" [(ngModel)]="productObj.RackNumber" style="width: 200px; margin-right: 10px;" type="text">
+
+            <label>Price Level Formula</label>
+            <input (change)="changeFormula()" [(ngModel)]="productObj.Pricelevel" style="width: 200px; margin-right: 10px;" type="text">
+        
+    </div>
+    
+    <generic-popup-grid #genericWarehouseGrid [popupsettings]="genericWarehouseSettings" (onItemDoubleClick)="dblClickPopupItems($event)" >
+    </generic-popup-grid>
+    

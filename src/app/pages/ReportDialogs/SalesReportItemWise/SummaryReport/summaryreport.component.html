@@ -1,0 +1,204 @@
+<div id="salesSummaryReportId" style="background-color : #ffffff; padding :1%; height : auto;">
+    <div class="row">
+        <div class="modal-header" style="width : 97%; margin : 0px auto;">
+            <button type="button" class="close" data-dismiss="modal" (click)="closeReportBox()">&times;</button>
+            <h4 class="modal-title">Summary Report</h4>
+        </div>
+        <!-- Left Column -->
+        <div class="col-md-6">
+
+            <fieldset>
+                <legend>Report Type : </legend>
+                <label class="smallBoldLabel"><input type="radio" value="ITEM" name="optReportType"
+                        [(ngModel)]="ReportParameters.WISE">&nbsp;Item Wise Report</label><br>
+                <label class="smallBoldLabel"><input type="radio" value="MGROUP" name="optReportType"
+                        [(ngModel)]="ReportParameters.WISE">&nbsp;Group Wise Report</label><br>
+                <label class="smallBoldLabel"><input type="radio" value="MCAT" name="optReportType"
+                        [(ngModel)]="ReportParameters.WISE">&nbsp;Category Wise Report</label><br>
+                <label class="smallBoldLabel"><input type="radio" value="PTYPE" name="optReportType"
+                        [(ngModel)]="ReportParameters.WISE">&nbsp;Item Type Wise</label>
+            </fieldset>
+            <fieldset style="width : 99%;">
+                <legend>Date Range Selection :</legend>
+                <table>
+                    <tr>
+                        <td><label class="smallBoldLabel">From(AD):</label></td>
+                        <td><label class="smallBoldLabel">To(AD):</label></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="smallBoldLabel"><input type="date" style="width:152px; min-width:50%;"
+                                    placeholder="Year Start Date" [(ngModel)]="ReportParameters.DATE1"
+                                    (change)="changestartDate($event.target.value,'AD')"></label>
+                        </td>
+                        <td>
+                            <label class="smallBoldLabel"><input type="date" style="width:152px; min-width:50%;"
+                                    placeholder="Year Start Date" [(ngModel)]="ReportParameters.DATE2"
+                                    (change)="changeEndDate($event.target.value,'AD')"></label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="smallBoldLabel"><input id="nepaliDate"
+                                    style="width:152px;height:25px;text-align:center"
+                                    class="nepali-calendar ndp-nepali-calendar" [(ngModel)]="ReportParameters.BSDATE1"
+                                    type="text" (change)="changestartDate($event.target.value,'BS')"
+                                    placeholder="yyyy-mm-dd" /> </label>
+                        </td>
+                        <td>
+                            <label class="smallBoldLabel"><input id="nepaliDate"
+                                    style="width:152px;height:25px;text-align:center"
+                                    class="nepali-calendar ndp-nepali-calendar" [(ngModel)]="ReportParameters.BSDATE2"
+                                    type="text" (change)="changeEndDate($event.target.value,'BS')"
+                                    placeholder="yyyy-mm-dd" /> </label>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+            <fieldset>
+                <legend>Report Format : </legend>
+                <label class="smallBoldLabel"><input type="radio" value=0 name="optReportFormat"
+                        [(ngModel)]="ReportParameters.OPT_TREE">&nbsp;Item Base Format</label>
+                <label class="smallBoldLabel"><input type="radio" value=1 name="optReportFormat"
+                        [(ngModel)]="ReportParameters.OPT_TREE">&nbsp;Item Group Base Format</label>
+            </fieldset>
+            <fieldset>
+                <legend>Division Selection:</legend>
+                <select [(ngModel)]="ReportParameters.DIVISION" style="width : 100%;">
+                    <option value="%">ALL</option>
+                    <option *ngFor="let div of division" value="{{ div.INITIAL }}">
+                        {{ div.NAME }}
+                    </option>
+                </select>
+            </fieldset>
+            <label class="smallBoldLabel"><input type="checkbox" style="vertical-align: middle;"
+                    (change)="$event.target.checked?(ReportParameters.DIVISIONWISEREPORT=1):(ReportParameters.DIVISIONWISEREPORT=0)"
+                    [checked]="ReportParameters.DIVISIONWISEREPORT == 1" name="showDivWisRep">&nbsp;Show Division Wise
+                Purchase Report</label>
+        </div>
+        <!-- Right Column -->
+        <div class="col-md-6">
+            <fieldset>
+                <legend>Report Filter Option:</legend>
+                <div class="col-md-12">
+                    <!-- <label style="width:105.5px;">Item Group:</label>  -->
+                    <div class="smalllabeldiv">
+                        <label class="smallBoldLabel">Item Group:</label>
+                    </div>
+                    <div>
+                        <select style="width:285px;">
+                            <option></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <!-- <label style="width:105.5px;">Item Category:</label>  -->
+                    <div class="smalllabeldiv">
+                        <label class="smallBoldLabel">Item Category:</label>
+                    </div>
+                    <div>
+                        <select (change)=" onSelectItemCategory($event.target.value)" style="width:285px;">
+                            <option>--All--</option>
+                            <option *ngFor="let itemCat of itemsCategory" value={{itemCat.MENUCAT}}>{{itemCat.MENUCAT}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <!-- <label style="width:105.5px;">Item Type:</label> -->
+                    <div class="smalllabeldiv">
+                        <label class="smallBoldLabel">Item Type:</label>
+                    </div>
+                    <label>
+                        <select (change)="onSelectItemType($event.target.value)" style="width:285px;">
+                            <option>--All--</option>
+                            <option *ngFor="let itemT of itemsType" value={{itemT.PTYPENAME}}>{{itemT.PTYPENAME}}
+                            </option>
+                        </select>
+                    </label>
+
+                </div>
+                <div class="col-md-12">
+                    <!-- <label style="width:90%">Supplier Name:</label>  -->
+                    <div class="smalllabeldiv">
+                        <label class="smallBoldLabel">Supplier Name:</label>
+                    </div>
+                    <div>
+                        <select (change)="onSelectSupplierName($event.target.value)" style="width:285px;">
+                            <option>--All--</option>
+                            <option *ngFor="let supName of suppliersName" value={{supName.ACID}}>{{supName.ACNAME}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <fieldset>
+                    <legend style="font-size:11px;font-weight: bold; width:auto">Item Selection:</legend>
+                    <div class="col-md-6">
+                        <!-- <label style="width:105.5px;">Barcode</label> -->
+                        <div class="smalllabeldiv">
+                            <label class="smallBoldLabel">Barcode :</label>
+                        </div>
+                        <div class="smalllabeldiv">
+                            <input type="text" style="width : 100%; height: 25px;">
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <!-- <label style="width:100%;">Item Code :</label>  -->
+                        <div class="smalllabeldiv">
+                            <label class="smallBoldLabel">Item Code:</label>
+                        </div>
+                        <div class="smallBoldLabel">
+                            <input tabindex="-1" type="text" style="width:120px"
+                                (keydown.enter)="menucodeChanged($event.target.value)" [(ngModel)]="itemCode">
+                        </div>
+
+                    </div>
+                    <div class="col-md-12">
+                        <!-- <label>Item Name :</label>    -->
+                        <div class="smalllabeldiv">
+                            <label class="smallBoldLabel">Item Name:</label>
+                        </div>
+                        <div class="smallBoldLabel">
+                            <input ngui-auto-complete [source]="dropListItem.bind(this)" max-num-list="25"
+                                [(ngModel)]="selectedProd" (ngModelChange)="itemChanged($event)"
+                                style="width:284px;height:25px" list-formatter="DESCA" display-property-name="DESCA">
+                        </div>
+                    </div>
+                </fieldset>
+
+
+            </fieldset>
+            <fieldset style="border : none;">
+                <label class="smallBoldLabel"><input type="checkbox" style="vertical-align: middle;"
+                        (change)="$event.target.checked?(ReportParameters.CHK_SALESMANWISESUMMARY=1):(ReportParameters.CHK_SALESMANWISESUMMARY=0)"
+                        [checked]="ReportParameters.CHK_SALESMANWISESUMMARY == 1" name="showBarCDet">&nbsp;Show Barcode
+                    Wise Detail</label>
+                <br>
+                <fieldset>
+                    <legend>Barcode Attributes Selection:</legend>
+                    <select style="width : 47%;">
+                        <option>All</option>
+                    </select>
+                    :
+                    <select style="width : 47%;">
+                        <option>All</option>
+                    </select>
+                </fieldset>
+            </fieldset>
+
+
+            <div class="btn">
+                <!-- <button type="button"  title="onSave" class="btn btn-info">Run</button>    -->
+                <button class="btn btn-info confirm-btn" type="button" (click)=onload()>RUN</button>
+                <button type="button" title="Cancel" class="btn btn-info" (click)="closeReportBox()">Close</button>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="modal-footer">
+               <button class="btn btn-info confirm-btn" type="button"  (click)=onload()>RUN</button>
+               </div> -->
+
+</div>

@@ -1,0 +1,114 @@
+
+<div style="background-color : #ffffff; padding :1%; height : auto; ">
+        <div class="row" >
+                <div class="modal-header" style="width: 97%; margin:0px auto;">
+                        <button type="button" class="close" data-dismiss="modal" (click)="hide()">&times;</button>
+                        <h4 class="modal-title">Stock Ledger</h4>
+                </div>
+            <div class="_left_section col-md-6">
+                    <fieldset style="width:352px;height:126px;" >
+                            <legend style="font-size:11px;font-weight: bold; width:auto">Date Range Selection :</legend>                   
+                                <table>
+                                  <tr>
+                                     <td><label class="smallBoldLabel">From:(AD)</label></td>
+                                     <td><label class="smallBoldLabel">To:(AD)</label></td>   
+                                  </tr>
+                                   <tr>
+                                        <td>                                                 
+                                          <label class="smallBoldLabel"><input  type="date"  style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]="StockLedger.DATE1"  (change)="changeEntryDate($event.target.value,'AD')"  ></label>
+                                        </td>
+                                        <td>                                                 
+                                           <label class="smallBoldLabel"><input  type="date" style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]="StockLedger.DATE2"  (change)="changeEndDate($event.target.value,'AD')"   ></label>
+                                         </td>
+                                      </tr>
+                                      <tr>
+                                            <td>
+                                                   <label class="smallBoldLabel"> <input id="nepaliDate" style="width:152px;height:25px;text-align:center" class="nepali-calendar ndp-nepali-calendar" [(ngModel)]="StockLedger.BSDATE1"
+                                                     type="text" (change)="changeEntryDate($event.target.value,'BS')"
+                                                    placeholder="yyyy-mm-dd" />
+                                                </label>  
+                                                                    
+                                               </td>
+                                               <td>
+                                                   <label class="smallBoldLabel">
+                                                    <input id="nepaliDate" style="width:152px;height:25px;text-align:center" class="nepali-calendar ndp-nepali-calendar" [(ngModel)]="StockLedger.BSDATE2"
+                                                    type="text" (change)="changeEndDate($event.target.value,'BS')"
+                                                   placeholder="yyyy-mm-dd" />
+                                                </label>                     
+                                               </td>                              
+                                       </tr>
+                                </table>
+                    </fieldset> 
+                     <fieldset>
+                            <legend  style="font-size:11px;font-weight: bold; width:auto">Division Selection :</legend>          
+                            <div >         
+                                    <select  (click)="onSelectDivision($event.target.value)" style="width:275px;" >
+                                            <option>--All--</option>
+                                            <option *ngFor="let div of division" value={{div.INITIAL}} >{{div.NAME}} </option>
+                                    </select>
+                            </div>                                                                                                                     
+                       </fieldset>                   
+                        <div class="checkbox smallBoldLabel" style="margin-top:5px; ">
+                            <input type="checkbox" value="">Show BarcodeWise Stock
+                        </div> 
+                        
+            </div>
+            <div  class="_right_section col-md-6">
+
+                       <fieldset>
+                        <legend style="font-size:11px;font-weight: bold; width:auto">Item Selection:</legend>          
+                          <div class="col-md-6">
+                              <!-- <label style="width:105.5px;">Barcode</label> -->
+                              <div class="smalllabeldiv">
+                                    <label class="smallBoldLabel">Barcode :</label>
+                               </div>
+                               <div class="smalllabeldiv">
+                                    <input type="text"  class="form-control input-sm" style="min-width:80%; height: 25px;" placeholder="Barcode" >                                                                                                                                                    
+                               </div>
+                             
+                         </div>
+
+                         <div class="col-md-6">                                               
+                             <!-- <label style="width:100%;">Item Code :</label>  -->
+                             <div class="smalllabeldiv">
+                                    <label class="smallBoldLabel">Item Code:</label>
+                             </div>
+                             <div >
+                                    <input tabindex="-1" type="text" style="width:120px"  (keydown.enter)="menucodeChanged($event.target.value)" [(ngModel)]="itemCode" >                                
+                             </div>
+                               
+                       </div> 
+                       <div class="col-md-12">                                                     
+                                  <!-- <label>Item Name :</label>    -->
+                                  <div class="smalllabeldiv">
+                                        <label class="smallBoldLabel">Item Name:</label>
+                                   </div>
+                                    <div >
+                                        <input ngui-auto-complete [source]="dropListItem.bind(this)" max-num-list="25" [(ngModel)]="selectedProd" (ngModelChange)="itemChanged($event)"
+                                            style="width:284px;height:25px" list-formatter="DESCA" 
+                                            display-property-name="DESCA">
+                                    </div>
+                    </div>                           
+                   </fieldset>
+
+                   <fieldset>
+                        <legend style="font-size:11px;font-weight: bold; width:auto">Warehouse Selection :</legend>          
+                        <div >
+                                <select  (click)="onSelectWarehouse($event.target.value)" style="width:275px;" >
+                                    <option>--All--</option>
+                                    <option *ngFor="let item of items" value={{item.NAME}}>{{item.NAME}} </option>
+                                </select>
+                        </div>                                                                                                                       
+                 </fieldset>
+                 <div style="margin-top:5px; "> 
+                    <button class="btn btn-info confirm-btn" type="button"  (click)=onload()>RUN</button> 
+                    <!-- <button type="button" (click)="onSaveClicked()" title="onSave" class="btn btn-info">Run</button>    -->
+                    <button type="button" (click)="cancel()" title="Cancel" class="btn btn-info">Close</button>
+                </div>
+
+            </div>
+        </div>
+        <!-- <hr style="margin-top:0px ; margin-bottom:0px"> -->
+        
+        <div class="horizontal_line"></div>
+        </div>

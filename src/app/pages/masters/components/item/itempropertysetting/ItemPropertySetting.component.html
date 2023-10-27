@@ -1,0 +1,155 @@
+<style>
+    .item-property-setting-table {
+        height: auto;
+        overflow: scroll;
+        background-color: #ffffff;
+    }
+
+    table {
+        font-family: 'Montserrat', sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th {
+        text-align: center;
+        padding: 5px;
+        border: 1px solid #dddddd;
+    }
+
+    td {
+        border: 1px solid #dddddd;
+        padding: px;
+    }
+
+    table>thead {
+        min-height: 30px;
+    }
+
+    table>thead>th {
+        padding: 5px;
+        background-color: #c0c0c0;
+    }
+</style>
+<div class="clearfix sticky-top">
+    <div class="col-md-3">
+        <h3>
+            Item Property Settings
+        </h3>
+    </div>
+    <div class="col-md-5">
+        <ng-container *ngIf="this.isCentral">
+
+            <label style="width:20%"><b>Select Sap Code</b></label>
+            <input id="sapCode" type="text" style="width: 30%;" [(ngModel)]="selectedSapCode"
+                (keydown.Tab)="showSapCode()" (keydown.enter)="showSapCode()" autocomplete="off"
+                placeholder="Enter or Tab to select SAP Code">
+        </ng-container>
+    </div>
+
+    <div class="col-md-2" style="margin: 2px 0px;">
+        <!-- <input #inputBox type="text" style="width: 100%;" placeholder="Enter keyword to search" [formControl]="filter"  /> -->
+        <input #inputBox type="text" style="width: 100%;" placeholder="Enter keyword to search" [(ngModel)]="filter" />
+    </div>
+    <div class="col-md-2">
+        <button type="button" (click)="saveItemProperty()" title="onSave" class="btn btn-info pull-right">
+            Save
+        </button>
+        <button type="button" (click)="exportItemProperty()" title="onSave" class="btn btn-info pull-right" style="margin-right: 5px;">
+            Export
+        </button>
+    </div>
+</div>
+<div class="col-md-12 table-scroll" style="height: auto; padding-right: 0px; margin-top: 35px;">
+    <div class="item-property-setting-table">
+        <table>
+            <thead>
+                <th></th>
+                <th>S.No</th>
+                <th>Item Code</th>
+                <th>Description</th>
+                <th>Min Qty</th>
+                <th>Max Qty</th>
+                <th>Can Sale</th>
+                <th>Can Purchase ORDER</th>
+                <th>Can Purchase</th>
+                <th>Pur.Return</th>
+                <th>Sale.Return</th>
+                <th>Allow negative</th>
+                <th>Tax Inclusive</th>
+                <th>Store Pickup</th>
+            </thead>
+            <tbody>
+
+                <tr *ngFor="let control of filteredItemList | filter:'MCODE':filter |  paginate: { itemsPerPage: 10, currentPage: page };
+                        let i = index">
+                    <td>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="tc" [(ngModel)]="control.isChecked">
+                            </label>
+                        </div>
+                    </td>
+                    <td>{{i+1}}</td>
+                    <td>
+                        <input type="hidden" class="form-control" [(ngModel)]="control.MCODE" name="a">
+                        {{control.MCODE}}
+                    </td>
+                    <td>
+                        {{control.DESCA}}
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" [(ngModel)]="control.MINQTY" [disabled]="!isCentral"
+                            name="b">
+                    </td>
+                    <td>
+                        <input type="number" [disabled]="!isCentral" class="form-control" [(ngModel)]="control.MAXQTY"
+                            name="c">
+                    </td>
+                    <td>
+                        <input type="checkbox" id="tag{{i}}d" [(ngModel)]="control.CANSALE" name="d">
+                    </td>
+                    <td>
+                        <input type="checkbox" id="tag{{i}}e" [(ngModel)]="control.CANPURCHASE" name="e">
+                    </td>
+                    <td>
+                        <input type="checkbox" id="tag{{i}}x" [(ngModel)]="control.CANPURCHASEINVOICE" name="e">
+                    </td>
+                    <td>
+                        <input type="checkbox" id="tag{{i}}f" [(ngModel)]="control.PURCHASERETURN" name="f">
+                    </td>
+                    <td>
+                        <input type="checkbox" id="tag{{i}}g" [(ngModel)]="control.SALERETURN" name="g">
+                    </td>
+                    <td>
+                        <select class="form-control" id="tag{{i}}h" [(ngModel)]="control.ALLOWNEGATIVE" name="h">
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </td>
+
+                    <td>
+                        <input type="checkbox" id="tag{{i}}i" [(ngModel)]="control.TAXINCLUSIVE" name="i">
+                    </td>
+                    <td>
+                        <input type="checkbox" id="tag{{i}}j" [(ngModel)]="control.STOREPICKUP" name="j">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<div class="sticky-bottom">
+    <div class="row clearfix sticky-bottom" style="float: center; margin : 4px 0px;">
+        <div class="col-md-12" style="width:100%" *ngIf="itemList.length">
+            <pagination-controls (pageChange)="page = $event"></pagination-controls>
+        </div>
+
+    </div>
+</div>
+
+
+<generic-popup-grid #genericGrid [popupsettings]="gridPopupSettings" (onItemDoubleClick)="onItemDoubleClick($event)">
+</generic-popup-grid>

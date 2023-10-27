@@ -1,0 +1,18 @@
+<div class="widgets">
+  <div class="row">
+    <button *ngIf="canActiveMenu('Branch', 'add')" type="button" class="btn btn-info" (click)="addNewProductHierarchy()"
+      style="margin-left:18px; margin-bottom: 10px;">Add Route </button>
+
+    <button *ngIf="canActiveMenu('Branch', 'add')" class="btn btn-info" (click)="viewSchedule()"
+      style="margin-left:18px; margin-bottom: 10px;">View Schedule </button>
+
+
+  </div>
+
+  <div class="row">
+    <ba-card title="Route" baCardClass="with-scroll">
+      <ng2-smart-table [settings]="settings" [source]="source" (edit)="onEditClick($event)" (view)="onViewClick($event)"
+        (deleteConfirm)="onDeleteConfirm($event)"></ng2-smart-table>
+    </ba-card>
+  </div>
+</div>

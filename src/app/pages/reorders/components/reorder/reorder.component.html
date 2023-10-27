@@ -1,0 +1,48 @@
+
+
+<div class="content-wrapper">
+
+  <div class="user-topbtn">
+    <h3 class="page-title">Reorder Request</h3>
+    <div class="col-md-6 right-btn">
+      <button type="button" class="btn add-btn" (click)="GenerateIndent()">Save Indent</button>
+      <button type="button" class="btn reset-btn" (click)="ResetIndent()">Reset</button>
+      <button type="button" class="btn edit-btn" (click)="EditIndent()">Edit</button>
+    </div>
+  </div>
+
+
+<div class="main-container transaction-container">
+  <div class="ims-scrollable-table">
+    <div class="table-container">
+      <table id="BlueHeaderResizableTable" class="table transaction-table" #reportHtmlTable>
+        <thead>
+          <tr>
+            <th width="100px">Item Code</th>
+            <th width="300px">Item Name</th>
+            <th width="100px">Min</th>
+            <th width="100px">Max</th>
+            <th width="100px">Stock</th>
+            <th width="100px">Indent</th>
+          </tr>
+        </thead>
+        <tbody style="width: fit-content;">
+          <tr *ngFor="let item of IndentList;let i=index">
+            <td width="100px">{{item.MCODE}}</td>
+            <td width="300px">{{item.DESCA}}</td>
+            <td width="100px">{{item.MINQTY}}</td>
+            <td width="100px">{{item.MAXQTY}}</td>
+            <td width="100px">{{item.STOCK}}</td>
+            <td width="100px" contenteditable="true" [textContent]="item.Indent" (input)="item.Indent=$event.target.textContent">
+              {{item.Indent}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<generic-popup-grid #genericGrid [popupsettings]="gridPopupSettings" (onItemDoubleClick)="onItemDoubleClick($event)">
+</generic-popup-grid>

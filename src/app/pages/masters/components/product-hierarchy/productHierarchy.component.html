@@ -1,0 +1,58 @@
+<form [formGroup]="form" (ngSubmit)="onSave()"  style="margin-top: 15px;">
+    <ba-card title="Product Hierarchy" baCardClass="with-scroll">
+      <div class="form-group row">
+        <label class="col-sm-2 form-control-label">Name * </label>
+        <div class="col-sm-5">
+          <input type="text" [style.background-color]="disabled()" style="color:black" class="form-control"
+            [readOnly]="mode == 'view' ? true : false" id="BranchName" name="BranchName" formControlName="Name"
+            placeholder="Name" />
+          <div *ngIf="!form.controls['Name'].valid && form.controls['Name']?.touched" class="text-danger">
+            <span *ngIf="form.get('Name').hasError('required')">
+            Name is required.
+            </span>
+          </div>
+        </div>
+      </div>
+  
+      <div class="form-group row">
+        <label class="col-sm-2 form-control-label">Parent:</label>
+        <div class="col-sm-5">
+          <select class="form-control" style="color:black" formControlName="Parent" [style.background-color]="disabled()">
+            <option *ngFor="let item of chanels" value="{{ item.Name }}">{{
+              item.Name
+            }}</option>
+          </select>
+        </div>
+      </div>
+      <div style="padding-bottom: 10px; margin-top: -8px;">
+        <button *ngIf="viewMode == false" type="submit" [disabled]="!this.form.valid" style="margin-right: 4px;"
+          class="btn btn-info">
+          Save
+        </button>
+        <button type="button " class="btn btn-info" (click)="cancel()">
+          Back
+        </button>
+      </div>
+    </ba-card>
+  
+  
+  </form>
+
+  <div class="modal fade" bsModal #childModal="bs-modal" [config]="{ backdrop: 'static' }" tabindex="-1" role="dialog"
+  aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" aria-label="Close" (click)="hideChildModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Information</h4>
+      </div>
+      <div class="modal-body">
+        {{ DialogMessage }}
+      </div>
+    </div>
+  </div>
+</div>
+  
+  

@@ -1,0 +1,3026 @@
+@import "~normalize.css";
+@import "theme/theme";
+@import "theme/sass/conf/conf";
+
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.main-container-transaction {
+  background-color: #f1f1f1;
+  margin-top      : 26px;
+  margin-bottom   : 70px;
+  position        : fixed;
+  top             : 70px;
+  max-width       : 100%;
+  height          : 100%;
+  width           : 100%;
+  margin-left     : 10px;
+}
+
+.ng2-smart-table-container table.ng2-smart-table {
+
+  th,
+  td {
+    border        : 1px solid $border-light !important;
+    line-height   : 25px !important;
+    font-size     : 12px !important;
+    vertical-align: middle;
+  }
+
+  color: $default-text;
+
+  input {
+    line-height: 23px !important;
+  }
+
+  tbody {
+    tr:hover {
+      background: rgba(0, 0, 0, 0.03);
+    }
+  }
+
+  a.ng2-smart-sort-link {
+    font-size  : 14px !important;
+    color      : $default-text;
+    font-weight: $font-bolder;
+
+    &.sort {
+      font-weight: $font-bolder !important;
+
+      &::after {
+        border-bottom-color: $default-text !important;
+      }
+    }
+  }
+
+  .ng2-smart-actions {
+    width     : 70px;
+    text-align: center;
+
+    .actions {
+      float     : none;
+      text-align: center;
+    }
+  }
+
+  a.ng2-smart-action {
+    font-size: 14px !important;
+    color    : $default-text;
+    padding  : 0 5px;
+    display  : inline-block;
+
+    &.ng2-smart-action-add-add {
+      font-size: 25px !important;
+    }
+  }
+}
+
+nav.ng2-smart-pagination-nav {
+  display        : flex;
+  justify-content: center;
+}
+
+
+.alert-danger {
+  background-color: none !important;
+  border-color    : none !important;
+  color           : #a94442;
+}
+
+
+
+.main-container {
+  background-color: #f1f1f1;
+  margin-top      : 45px;
+  margin-bottom   : 70px;
+  position        : fixed;
+  top             : 70px;
+  max-width       : 100%;
+  height          : 100%;
+  overflow-y      : auto;
+  overflow-x      : hidden;
+  width           : 100%;
+  margin-left     : 10px;
+}
+
+.sticky-top {
+  position  : fixed;
+  left      : 0px;
+  height    : 35px;
+  padding   : 5px;
+  top       : 85px;
+  background: #e2eaea !important;
+  width     : 100%;
+  z-index   : 9;
+}
+
+.sticky-bottom {
+  position  : fixed;
+  bottom    : 20px;
+  left      : 0px;
+  width     : 100%;
+  height    : 35px;
+  z-index   : 0;
+  background: #e2eaea !important;
+}
+
+.modal-sticky {
+  position: fixed;
+  bottom  : 5px;
+  right   : 5px;
+  width   : 50%;
+  height  : 80%;
+  z-index : 9999999;
+}
+
+.modal-sticky-hide {
+  display: none !important;
+}
+
+.custom-page-top {
+  position: fixed;
+  top     : 0;
+  width   : 100%;
+  z-index : 9999999999;
+}
+
+.custom-page-body {
+  margin-top    : 60px;
+  padding-bottom: 0px;
+  max-height    : 70%;
+  overflow-y    : scroll;
+  overflow-x    : hidden;
+  margin-left   : 0px !important;
+}
+
+
+select.form-control:not([size]):not([multiple]) {
+  height: auto !important;
+}
+
+.notification-modal-sticky {
+  position: fixed;
+  top     : 35px;
+  right   : 1px;
+  width   : 50%;
+  height  : 94%;
+  z-index : 9999999999;
+}
+
+// .message {
+//   position: fixed;
+//   top: 2px;
+//   right: 163px;
+//   height: 30px;
+//   font-size: 18px;
+// }
+.notification-sticky {
+  position : fixed;
+  top      : 1vh;
+  right    : 10vw;
+  width    : 28px;
+  height   : 30px;
+  z-index  : 9999999999;
+  font-size: 20px;
+}
+
+
+.notification {
+  // background-color: #555;
+  color          : #616363 !important;
+  text-decoration: none;
+  padding        : 7px 8px;
+  border-radius  : 50%;
+  cursor         : pointer;
+}
+
+
+.notification .badge {
+  position     : relative;
+  bottom       : 30px;
+  left         : 5px;
+  padding      : 4px 4px;
+  border-radius: 50%;
+  background   : red;
+  font-size    : 7px;
+  font-weight  : bold;
+  color        : white;
+}
+
+.notification-card {
+  box-shadow: 0 1px 0px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  width     : 100%;
+}
+
+.notification-card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.notification-card-inside {
+  // padding: 8px 8px;
+  padding: 5px 5px;
+}
+
+button.close {
+  margin-right: 8px;
+}
+
+.cell-comment {
+  display      : none;
+  position     : absolute;
+  z-index      : 100;
+  color        : #ffffff;
+  top          : auto;
+  background   : #2bade5;
+  width        : 240px;
+  text-align   : center;
+  border-radius: 10px;
+  font-size    : 12px;
+  font-family  : cursive;
+  line-height  : 20px;
+  left         : 18%;
+  padding      : 6px 4px;
+  border       : 1px solid #2bade5;
+}
+
+.cell-with-comment:hover span.cell-comment {
+  display: block !important;
+}
+
+.cell-with-comment:focus-within span.cell-comment {
+  display: block !important;
+}
+
+
+
+.red-btn {
+  padding      : 5px 10px;
+  border-radius: 2px;
+  font-size    : 10px;
+  color        : #ffffff;
+  font-weight  : 500;
+}
+
+.recall-btn {
+  padding      : 5px 10px;
+  border-radius: 2px;
+  font-size    : 10px;
+  color        : #ffffff;
+  font-weight  : 500;
+
+}
+
+.hold-btn {
+  padding      : 5px 10px;
+  border-radius: 2px;
+  font-size    : 10px;
+  color        : #ffffff;
+  font-weight  : 500;
+
+}
+
+.Proforma-btn {
+  padding      : 5px 10px;
+  border-radius: 2px;
+  font-size    : 10px;
+  color        : #ffffff;
+  font-weight  : 500;
+
+}
+
+.Transport-btn {
+  padding      : 5px 10px;
+  border-radius: 2px;
+  font-size    : 10px;
+  color        : #ffffff;
+  font-weight  : 500;
+
+}
+
+.pink-btn {
+  padding      : 5px 10px;
+  border-radius: 2px;
+  font-size    : 10px;
+  color        : #ffffff;
+  font-weight  : 500;
+
+}
+
+.edit-btn {
+  padding      : 5px 10px;
+  border-radius: 2px;
+  font-size    : 10px;
+  color        : #ffffff;
+  font-weight  : 500;
+
+}
+
+.print-btn {
+  padding      : 5px 10px;
+  border-radius: 2px;
+  font-size    : 10px;
+  color        : #ffffff;
+  font-weight  : 500;
+
+}
+
+.view-btn {
+  padding      : 5px 10px;
+  border-radius: 2px;
+  font-size    : 10px;
+  color        : #ffffff;
+  font-weight  : 500;
+
+}
+
+.btn-back {
+  padding      : 5px 10px;
+  border-radius: 2px;
+  font-size    : 10px;
+  color        : #ffffff;
+  font-weight  : 500;
+
+}
+
+.add-btn {
+  padding      : 5px 10px;
+  border-radius: 2px;
+  font-size    : 10px;
+  color        : #ffffff;
+  font-weight  : 500;
+}
+
+.btn-back:hover {
+  border-color: #11cdef;
+  background  : #11cdef;
+  transform   : none;
+}
+
+.add-btn:hover {
+  border-color: #0f9668;
+  background  : #0f9668;
+  transform   : none;
+}
+
+
+.red-btn:hover {
+  border-color: #fb725e;
+  background  : #fb725e;
+  transform   : none;
+
+}
+
+.recall-btn :hover {
+  border-color: #5935f1;
+  background  : #5935f1;
+  transform   : none;
+
+}
+
+.hold-btn :hover {
+  border-color: #df7803;
+  background  : #df7803;
+  transform   : none;
+
+}
+
+.Proforma-btn:hover {
+  border-color: #2a95d3;
+  background  : #2a95d3;
+  transform   : none;
+
+}
+
+.Transport-btn :hover {
+  border-color: #3ec9d6;
+  background  : #3ec9d6;
+  transform   : none;
+
+}
+
+.pink-btn:hover {
+  border-color: #0496a9;
+  background  : #0496a9;
+  transform   : none;
+
+}
+
+.edit-btn :hover {
+  border-color: #0887ec;
+  background  : #0887ec;
+  transform   : none;
+
+}
+
+.print-btn :hover {
+  border-color: #eab207;
+  background  : #eab207;
+  transform   : none;
+
+}
+
+.view-btn :hover {
+  border-color: #607d8b;
+  background  : #607d8b;
+  transform   : none;
+
+}
+
+
+
+.btn-info {
+  padding      : 5px 10px;
+  border-radius: 4px;
+  font-size    : 12px;
+}
+
+.btn-info:hover {
+  transform   : none;
+  background  : #2dacd1;
+  border-color: #1594b9;
+}
+
+.footer {
+  background : #2bade5 !important;
+  padding-top: 10px !important;
+}
+
+.trn-main-voucher-entry {
+  margin-top: 5px;
+}
+
+.card-body {
+  max-height: 490px !important;
+  overflow-y: scroll !important;
+}
+
+thead tr th {
+  color: black !important;
+}
+
+.sticky-footer {
+  bottom    : 0;
+  position  : fixed;
+  z-index   : 9999999;
+  height    : 20px;
+  padding   : 2px;
+  font-size : 10px;
+  background: #c0c0c0;
+}
+
+
+table.ng2-smart-table {
+
+  td,
+  th {
+    padding: 2px 2px !important;
+  }
+}
+
+.ng2-smart-filter {
+  select {
+
+    padding    : 0px 5px !important;
+    font-weight: normal;
+  }
+}
+
+//input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="date"]::-webkit-inner-spin-button {
+  display: none;
+}
+
+// select.form-control {
+//   padding: 0px .75rem;
+// }
+
+.md-drppicker {
+  left: 25% !important;
+  top : 30px !important
+}
+
+.md-drppicker .ranges ul li button.active {
+  background-color: #2199e8 !important;
+  color           : #fff;
+}
+
+.md-drppicker .btn {
+  background-color: #2199e8 !important;
+  box-shadow      : none !important;
+}
+
+.btn:hover {
+  transform: none !important;
+}
+
+
+.md-drppicker .btn.btn-default {
+  color           : #000;
+  background-color: #dcdcdc !important;
+}
+
+.report-filter {
+  .md-drppicker {
+    position: fixed !important;
+    left    : 20% !important;
+  }
+
+}
+
+.single-calendar {
+  .md-drppicker {
+    position: fixed !important;
+    left    : 70% !important;
+    width   : auto !important;
+  }
+}
+
+.date {
+  .md-drppicker {
+    width: inherit !important;
+    top  : auto !important;
+    left : auto !important;
+    right: auto !important;
+  }
+}
+
+
+.trndatepicker {
+  .md-drppicker {
+    left    : 75% !important;
+    width   : 250px !important;
+    position: fixed;
+  }
+
+  .ims-datepicker-wrapper {
+    width: 100% !important;
+
+    .ims-date-input {
+      height       : 25px;
+      width        : 310px;
+      padding-left : 15px;
+      padding-right: 15px;
+    }
+  }
+}
+
+.productmaster-date {
+  .ims-datepicker-wrapper {
+    width: 68% !important;
+
+    input {
+      width : 100% !important;
+      height: 25px !important;
+    }
+  }
+
+  i {
+    position: relative !important;
+    float   : right !important;
+    bottom  : 22px !important;
+    right   : 5px !important;
+  }
+
+  .md-drppicker {
+    position: inherit !important;
+    width   : 240px !important;
+  }
+}
+
+
+.report-table {
+  .ngx-pagination {
+    margin    : 0 auto;
+    width     : 40%;
+    text-align: center;
+  }
+}
+
+
+.ngx-pagination {
+  text-align: center;
+}
+
+.loadsheet-date-filter {
+  .md-drppicker {
+    position: fixed !important;
+  }
+}
+
+
+.fixed-top {
+  position  : sticky;
+  left      : 0px;
+  height    : 35px;
+  padding   : 5px;
+  top       : 60px;
+  background: #e2eaea !important;
+  width     : 100%;
+  z-index   : 9;
+}
+
+
+
+.ims-scrollable-table {
+  th {
+    background: #ced6d3;
+    border    : 1px solid #dbd7d7;
+    padding   : 5px;
+  }
+
+  td {
+    height    : 30px;
+    border    : 1px solid #dbd7d7;
+    overflow-x: scroll;
+  }
+
+  .borderdiv {
+    border: 1px solid rgba(119, 119, 119, 0.15)
+  }
+
+  .rowdiv {
+    border    : 1px solid rgba(119, 119, 119, 0.15);
+    text-align: center;
+  }
+
+  .smalllabeldiv {
+    height: 16px;
+  }
+
+  .smallHeader {
+    font-size  : 11px;
+    font-weight: bold;
+    margin     : 0px;
+
+  }
+
+
+  .scrolldiv {
+    max-height                : 75px;
+    padding-right             : 30px;
+    overflow                  : auto;
+    scrollbar-3dlight-color   : #FFFFFF;
+    scrollbar-arrow-color     : #000000;
+    scrollbar-base-color      : #FF9999;
+    scrollbar-darkshadow-color: #000000;
+    scrollbar-face-color      : #000000;
+    scrollbar-highlight-color : #000000;
+    scrollbar-shadow-color    : #0033CC;
+  }
+
+  .multiboxspan {
+    font-size       : 11px;
+    font-weight     : bold;
+    position        : relative;
+    float           : left;
+    display         : block;
+    margin          : 2px;
+    border          : 1px solid silver;
+    border-radius   : 5px;
+    background-color: lavenderblush;
+  }
+
+  .smallBoldLabel {
+    font-size     : 11px;
+    font-weight   : bold;
+    margin        : 0px;
+    float         : left;
+    /* margin-left: 10px; */
+    color         : #222;
+    /* font-family: arial; */
+
+  }
+
+  .table-container {
+    height: 77vh;
+
+  }
+
+  table {
+    display  : flex;
+    flex-flow: column;
+    height   : 95%;
+
+  }
+
+  table thead,
+  table tfoot {
+    /* head takes the height it requires,
+        and it's not scaled when table is resized */
+    flex : 0 0 auto;
+    width: calc(100% - 0.9em);
+
+  }
+
+
+  table tbody {
+    /* body takes all the remaining available space */
+    flex      : 1 1 auto;
+    display   : block;
+    overflow-y: scroll;
+  }
+
+  table tbody tr {
+    width: 99.6%;
+  }
+
+  table thead,
+  table tfoot,
+  table tbody tr {
+    display     : table;
+    table-layout: fixed;
+  }
+
+  .reportTabel tr:hover {
+    background-color: #e0e0e0;
+  }
+
+  .reportTabel tr.active td {
+    background-color: burlywood !important;
+    color           : white;
+  }
+
+}
+
+
+/* New Desing Css Start */
+.content-wrapper {
+  padding: 10px;
+  display: inline-block;
+  width  : 100%;
+}
+
+.user-topbtn {
+  display: inline-block;
+  width  : 100%;
+  padding: 6px 0;
+}
+
+h4.hder-hding {
+  font-size  : 18px;
+  font-weight: 600;
+  color      : #3a3a3a;
+  float      : left;
+  display    : inline;
+  width      : auto;
+  margin     : 8px 0 0;
+}
+
+
+.right-btn {
+  float: right;
+}
+
+textarea {
+  resize: none;
+}
+
+.mandatory {
+  color: red;
+}
+
+.full-width {
+  display: inline-block;
+  width  : 100%;
+}
+
+.ng-tableinner table.ng2-smart-table {
+  font-family: "Montserrat", sans-serif !important;
+}
+
+.ng-tableinner .ng2-smart-table-container table.ng2-smart-table a.ng2-smart-sort-link {
+  font-size     : 14px !important;
+  color         : #292929;
+  font-weight   : 600 !important;
+  text-transform: capitalize;
+}
+
+.ng-tableinner .ng2-smart-title {
+  text-align    : center;
+  font-size     : 14px !important;
+  color         : #292929;
+  font-weight   : 900 !important;
+  text-transform: capitalize;
+}
+
+.content-wrapper .form-control {
+  font-size: 13px !important;
+}
+
+.ng-tableinner .card {
+  box-shadow   : none;
+  border       : 1px solid #ccc;
+  padding      : 0 0 20px;
+  border-radius: 4px;
+  margin       : 12px 0 0;
+}
+
+.ng-tableinner .card-title {
+  font-weight   : 600;
+  font-size     : 16px;
+  text-transform: uppercase;
+  opacity       : 1;
+  color         : #292929;
+}
+
+.ng-tableinner a.ng2-smart-action.ng2-smart-action-edit-edit {
+  background    : #0887ec !important;
+  text-align    : center;
+  vertical-align: middle;
+  color         : #fff !important;
+  padding       : 1px 6px !important;
+  border-radius : 2px;
+}
+
+.ng2-smart-action i {
+  margin: 0;
+}
+
+.user-topbtn .page-title {
+  display    : inline-block;
+  width      : auto;
+  font-weight: 600;
+  font-size  : 18px;
+  color      : #464646;
+}
+
+h3.page-title.space-heading {
+  margin: 6px 0 0;
+}
+
+
+.tap-tabbable a.nav-link {
+  padding    : 12px 18px !important;
+  color      : #333;
+  font-weight: 600;
+  margin     : 0 !important;
+}
+
+.tap-tabbable a.nav-link.active {
+  background: #ffffff !important;
+  color     : #4e4e4e !important;
+  position  : relative;
+}
+
+.tap-tabbable .nav.nav-tabs {
+  border-top-left-radius : 0;
+  border-top-right-radius: 0;
+  border-bottom          : 1px solid transparent;
+  background-color       : #11cdef;
+}
+
+.tap-tabbable .nav-tabs .nav-item {
+  float        : left;
+  margin-bottom: -1px !important;
+  margin       : 0;
+  border-right : 1px solid #0dc0e0;
+  min-width    : 120px;
+  text-align   : center;
+}
+
+.tap-tabbable .nav.nav-tabs>li>a:hover {
+  border          : none;
+  background-color: #11cdef;
+}
+
+.tap-tabbable .tabbable {
+  display   : inline-block;
+  width     : 100%;
+  background: #fff;
+  padding   : 0px 0px;
+  border    : 1px solid #11cdef;
+}
+
+.tap-tabbable .tab-content {
+  padding   : 15px 15px 5px 15px;
+  background: transparent;
+  color     : #000000;
+  display   : inline-block;
+  width     : 100%;
+}
+
+
+.tap-tabbable .form-group label {
+  color      : #172b4d;
+  font-size  : 14px;
+  line-height: 18px;
+  margin     : 10px 0 0;
+  text-align : right;
+  font-weight: 600;
+  width      : auto;
+}
+
+.General-inofo .col-sm-3 {
+  width: 25% !important
+}
+
+.tap-tabbable .nav.nav-tabs>li:first-of-type a {
+  border-top-left-radius: 0px;
+}
+
+.tap-tabbable a.nav-link.active:after {
+  height    : 14px;
+  width     : 14px;
+  border    : 1px solid #11cdef;
+  display   : inline-block;
+  position  : absolute;
+  bottom    : -6px;
+  left      : 0;
+  right     : 0;
+  margin    : auto;
+  transform : rotate(45deg);
+  background: #11cdef;
+}
+
+.tap-tabbable select.form-control:not([size]):not([multiple]) {
+  height: auto !important;
+}
+
+.tap-tabbable select.form-control {
+  padding: 6px 12px;
+  height : 40px !important;
+}
+
+.tap-tabbable .form-control {
+  padding: 0 10px;
+  height : 36px;
+}
+
+p.table-active {
+  background   : #089062;
+  color        : #ffffff;
+  font-weight  : 500;
+  margin       : 0;
+  padding      : 1px 0 2px;
+  width        : 60px;
+  text-align   : center;
+  display      : inline-block;
+  border-radius: 2px;
+  font-size    : 13px;
+}
+
+p.table-inactive {
+  background   : #d23c3c;
+  color        : #ffffff;
+  font-weight  : 500;
+  margin       : 0;
+  padding      : 1px 0 2px;
+  width        : 60px;
+  text-align   : center;
+  display      : inline-block;
+  border-radius: 2px;
+  font-size    : 13px;
+}
+
+.ng-tableinner .ng2-smart-table-container table.ng2-smart-table th,
+.ng-tableinner .ng2-smart-table-container table.ng2-smart-table td {
+  line-height: 20px !important;
+  font-size  : 13px !important;
+  padding    : 4px 6px !important;
+
+}
+
+.main-container.Custom-container {
+  position: static;
+  top     : 0;
+  margin  : 0;
+}
+
+
+
+.tap-tabbable .tab-content {
+  padding      : 15px 15px 5px 15px;
+  background   : transparent;
+  color        : #000000;
+  display      : inline-block;
+  width        : 100%;
+  // margin    : 20px 0;
+}
+
+.tabbable .form-group .text-danger {
+  color      : #d9534f !important;
+  font-weight: 500;
+  font-size  : 13px;
+}
+
+.ng2-smart-th select.form-control:not([size]):not([multiple]) {
+  height: 33px !important;
+}
+
+.btn.btn-cancle {
+  background   : #4a4a4a;
+  color        : #ffffff;
+  border-radius: 3px;
+  padding      : 10px 20px;
+  font-weight  : 500;
+  font-size    : 15px;
+  transition   : all ease-in-out 300ms;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+
+.tap-tabbable .ng-tableinner.border- .nav.nav-tabs {
+  border: 1px solid #ccc;
+}
+
+.ng-tableinner th.ng2-smart-actions {
+  width         : 8% !important;
+  text-align    : center;
+  vertical-align: middle;
+}
+
+.btn.clear-btn {
+  background   : #565656;
+  color        : #ffffff;
+  border-radius: 3px;
+  padding      : 10px 20px;
+  font-weight  : 500;
+  font-size    : 15px;
+  transition   : all ease-in-out 300ms;
+}
+
+.btn.btn-download {
+  background   : #eca654 !important;
+  color        : #ffffff;
+  border-radius: 3px;
+  padding      : 10px 20px;
+  font-weight  : 500;
+  font-size    : 15px;
+  transition   : all ease-in-out 300ms;
+}
+
+.btn.btn-category {
+  background   : #eb63c2 !important;
+  color        : #ffffff;
+  border-radius: 3px;
+  padding      : 10px 20px;
+  font-weight  : 500;
+  font-size    : 15px;
+  transition   : all ease-in-out 300ms;
+}
+
+.btn.btn-load {
+  background   : #0887ec !important;
+  color        : #ffffff;
+  border-radius: 3px;
+  padding      : 10px 20px;
+  font-weight  : 500;
+  font-size    : 15px;
+  transition   : all ease-in-out 300ms;
+}
+
+.btn-conficvr button.btn {
+  padding  : 8px 12px;
+  font-size: 14px;
+  margin   : 4px 6px;
+}
+
+.btn.btn-cancel {
+  background   : #5a5a5a;
+  color        : #ffffff;
+  border-radius: 3px;
+  padding      : 10px 20px;
+  font-weight  : 500;
+  font-size    : 15px;
+  transition   : all ease-in-out 300ms;
+}
+
+
+.form-card .card {
+  position        : relative;
+  display         : block;
+  margin-bottom   : 0.75rem;
+  background-color: #fff;
+  border-radius   : 0.25rem;
+  border          : 1px solid #ccc;
+  box-shadow      : none;
+  margin          : 10px 0;
+  padding         : 10px 0;
+}
+
+.form-card .form-group label.form-control-label {
+  color      : #172b4d;
+  font-size  : 14px;
+  line-height: 18px;
+  margin     : 10px 0 0;
+  text-align : right;
+  font-weight: 600;
+}
+
+.form-card .form-control {
+  padding: 8px 16px;
+}
+
+.form-card select.form-control:not([size]):not([multiple]) {
+  height: 40px !important;
+}
+
+.form-card .form-group {
+  margin-bottom: 1rem;
+  width        : 50%;
+  float        : left;
+}
+
+.btn.btn-batch {
+  background   : #356075;
+  color        : #ffffff;
+  border-radius: 3px;
+  padding      : 10px 20px;
+  font-weight  : 500;
+  font-size    : 15px;
+  transition   : all ease-in-out 300ms;
+}
+
+
+
+.checkbox-inneradduser {
+  display: inline-block;
+  width  : 100%;
+  margin : 30px 0 22px 0;
+}
+
+.checkbox-inneradduser label {
+  font-weight: 600;
+}
+
+.main-menu-inner.menu-area.master-menu .dropdown {
+  margin: 0 !important;
+}
+
+.main-menu-inner.menu-area.master-menu .dropdown:hover {
+  background: transparent
+}
+
+
+.btn.btn-import {
+  background   : #607d8b;
+  color        : #ffffff;
+  border-radius: 3px;
+  padding      : 10px 20px;
+  font-weight  : 500;
+  font-size    : 15px;
+  transition   : all ease-in-out 300ms;
+}
+
+.icon-view a.ng2-smart-action.ng2-smart-action-view-view {
+  background    : #577584 !important;
+  text-align    : center;
+  vertical-align: middle;
+  color         : #fff !important;
+  padding       : 1px 6px !important;
+  border-radius : 2px;
+}
+
+.multiple-btn .btn {
+  padding  : 8px 10px;
+  font-size: 14px;
+  margin   : 0 2px;
+}
+
+.addProduct-Master {
+  display: inline-block;
+  width  : 100%;
+}
+
+.addProduct-Master .form-group {
+  display: inline-block;
+  width  : 33%;
+  margin : 6px 0;
+}
+
+.addProduct-Master .form-group label {
+  float      : left;
+  height     : auto;
+  width      : 135px;
+  margin     : 0;
+  font-weight: 600;
+  color      : #353535;
+  font-size  : 14px;
+  padding    : 8px 10px 0 0;
+  text-align : right;
+}
+
+
+.addProduct-Master .form-group .form-control,
+.addProduct-Master .form-group select {
+  float    : left;
+  padding  : 6px 8px;
+  width    : 58%;
+  border   : 1px solid #c7c7c7;
+  height   : 34px !important;
+  font-size: 14px !important;
+}
+
+.addProduct-Master .form-group select.form-control:not([size]):not([multiple]) {
+  height: 34px !important;
+}
+
+.addProduct-Master .form-group i.fa.fa-plus.text-primary {
+  position     : relative;
+  background   : #2bade5;
+  padding      : 8px 10px;
+  color        : #fff !important;
+  cursor       : pointer;
+  left         : 4px;
+  top          : 2px;
+  border-radius: 2px;
+}
+
+.pane[_ngcontent-c9] {
+  padding: 0;
+}
+
+.compony-infoouter {
+  display   : inline-block;
+  width     : 100%;
+  background: #fff;
+  border    : 1px solid #ccc;
+}
+
+.compony-infoouter .col-sm-4 {
+  float : left;
+  width : 33.33333%;
+  margin: 0 0 15px;
+}
+
+.compony-infoouter .form-group label {
+  margin-bottom: 5px;
+  color        : #172b4d;
+  font-size    : 14px;
+  line-height  : 18px;
+  margin       : 10px 0 0;
+  text-align   : left;
+  font-weight  : 600;
+}
+
+.working-days label {
+  margin : 4px 0 0 !important;
+  padding: 0;
+  width  : 12%;
+}
+
+.scroll-form {
+  height  : 74vh;
+  overflow: auto;
+}
+
+.working-days input.form-control {
+  min-height: 18px;
+}
+
+.working-days span {
+  text-align : center;
+  width      : 100%;
+  display    : inline-block;
+  margin     : 2px 0 0;
+  color      : #008198;
+  font-weight: 600;
+}
+
+.content-wrapper select.form-control:not([size]):not([multiple]) {
+  height: 36px !important;
+}
+
+.btn-conficvr button.btn {
+  padding  : 8px 12px;
+  font-size: 14px;
+  margin   : 4px 6px;
+}
+
+.scrollable-element {
+  scrollbar-width: thin;
+}
+
+.form-outer input {
+  padding: 8px 40px;
+}
+
+
+.delete-cvr a.ng2-smart-action.ng2-smart-action-delete-delete {
+  background   : #F44336;
+  padding      : 1px 7px !important;
+  margin       : 2px 4px 0 !important;
+  color        : #fff !important;
+  display      : inline-block !important;
+  position     : relative;
+  top          : 2px;
+  border-radius: 2px;
+}
+
+.compony-infoouter .form-card .card {
+  border: none;
+}
+
+.full-width .form-control {
+  font-size: 15px;
+}
+
+button.btn {
+  margin        : 0 0 0 4px;
+  text-transform: capitalize;
+}
+
+a.ng2-smart-action.ng2-smart-action-view-view {
+  background    : #0885bb !important;
+  text-align    : center;
+  vertical-align: middle;
+  color         : #fff !important;
+  border-radius : 2px;
+}
+
+.bgcover-form {
+  display   : inline-block;
+  width     : 100%;
+  background: #fff;
+  border    : 1px solid #ccc;
+  padding   : 24px 0;
+}
+
+.Scheme-form .cell-with-comment {
+  width      : 30%;
+  height     : auto;
+  margin     : 0;
+  font-size  : 14px;
+  padding    : 0 10px;
+  font-weight: 500;
+  display    : inline-block;
+  text-align : right;
+}
+
+.Scheme-form .cell-with-comment label {
+  height     : auto;
+  width      : 30%;
+  float      : left;
+  padding    : 0;
+  margin     : 7px 0;
+  font-size  : 14px;
+  font-weight: 500;
+  text-align : right;
+}
+
+.cell-with-comment input,
+.cell-with-comment select {
+  width  : 100%;
+  padding: 2px 10px;
+}
+
+.ei-cnt.e-invoice-frm {
+  display: inline-block;
+  width  : 100%;
+  margin : 0 0 20px;
+}
+
+.ei-cnt.e-invoice-frm label {
+  display    : inline-block;
+  width      : 100%;
+  margin     : 0 0 4px;
+  font-size  : 14px;
+  font-weight: 600;
+}
+
+
+.Custom-container .e-invoicetable tr th {
+  border     : 1px solid #ffffff;
+  padding    : 10px 0;
+  text-align : center;
+  font-weight: 600;
+  background : #2bade5;
+  color      : #fff !important;
+}
+
+.bank-Finance .form-inner {
+  display: inline-block;
+  width  : 24.6%;
+  padding: 0 6px 0 20px;
+  margin : 0 0 20px;
+}
+
+.bank-Finance .form-inner label {
+  font-weight   : 500;
+  margin        : 0 0 4px;
+  text-transform: capitalize;
+}
+
+.form-control[disabled],
+.form-control[readonly],
+fieldset[disabled] .form-control {
+  background-color: #ffffff;
+  color           : #949494;
+  border-color    : #e2e2e2;
+}
+
+label.eway-lbl {
+  margin     : 8px 0 0;
+  font-size  : 14px;
+  font-weight: 600;
+  color      : #4c4c4c;
+}
+
+.edit-customer .form-group {
+  margin-bottom: 1rem;
+  width        : 50%;
+  float        : left;
+  min-height   : 42px;
+}
+
+.edit-customer .col-sm-4.form-control-label {
+  width: 33.33333%;
+}
+
+.Category select {
+  float: left;
+  width: 85%;
+}
+
+.Category i.fa.fa-plus.text-primary {
+  background   : #11cdef;
+  margin       : 0 0 0 4px;
+  padding      : 10px 12px;
+  color        : #fff !important;
+  border-radius: 2px;
+  cursor       : pointer;
+}
+
+.alterunbits- input {
+  width  : 20%;
+  display: inline-block;
+}
+
+.alterunbits- span {
+  font-weight: 600;
+  padding    : 6px 6px 0;
+  display    : inline-block;
+}
+
+.alterunbits- label {
+  float      : left;
+  height     : auto !important;
+  width      : auto !important;
+  font-weight: 700 !important;
+}
+
+.alternatunitss label {
+  width      : auto;
+  font-weight: 600;
+  font-size  : 14px;
+  margin     : 0;
+  padding    : 0;
+  height     : auto;
+}
+
+.BaseUnit-cvr {
+  display   : inline-block;
+  width     : 100%;
+  text-align: center;
+}
+
+.BaseUnit-cvr .form-control-label {
+  display    : inline-block;
+  width      : 100%;
+  text-align : center !important;
+  height     : auto;
+  font-weight: 600;
+  font-size  : 16px;
+  margin     : 0 !important;
+  padding    : 0 0 10px;
+}
+
+.Alternate-table {
+  margin: 20px 0 10px;
+}
+
+
+.Product-master input.form-control {
+  height : 34px;
+  padding: 14px 12px;
+}
+
+.Product-master .form-group {
+  margin-bottom: 1rem;
+  width        : 50%;
+  float        : left;
+}
+
+.Product-master label.form-control-label {
+  float        : left;
+  margin-bottom: 5px;
+  color        : #172b4d;
+  font-size    : 14px;
+  line-height  : 18px;
+  margin       : 10px 0 0;
+  text-align   : left;
+  font-weight  : 600;
+  height       : auto;
+  width        : auto;
+}
+
+.pane {
+  padding: 0;
+}
+
+.btn.cancel-btn {
+  background   : #4c4c4c;
+  color        : #fff;
+  border-radius: 4px;
+}
+
+.depatvscat .table thead tr th {
+  background : #2bade5;
+  color      : #ffffff !important;
+  text-align : center;
+  font-weight: 600;
+  font-size  : 15px;
+}
+
+.depatvscat .table tbody tr td {
+  border : none;
+  padding: 4px 12px;
+}
+
+.bgcover-form.depatvscat {
+  padding   : 0;
+  border-top: 0;
+  margin    : 6px 0 0;
+}
+
+.simpleSelect[_ngcontent-c9] .simplesuggestformControl[_ngcontent-c9] {
+  border       : 1px solid #505050;
+  padding      : 7px 30px;
+  width        : inherit;
+  border-radius: 4px;
+}
+
+.simpleSelect[_ngcontent-c9]>.optionsContainer[_ngcontent-c9] .options[_ngcontent-c9] li[_ngcontent-c9]:hover,
+.simpleSelect[_ngcontent-c9]>.optionsContainer[_ngcontent-c9] .options[_ngcontent-c9] li[_ngcontent-c9]:focus {
+  outline   : none;
+  color     : #ffffff;
+  background: #2bade5;
+}
+
+.mandatory {
+  color: red;
+}
+
+.content-wrapper label.form-control-label {
+  color      : #172b4d;
+  font-size  : 14px;
+  line-height: 18px;
+  margin     : 10px 0 4px;
+  text-align : left;
+  font-weight: 600;
+}
+
+.catgory-master .inner-wrap {
+  margin: 0 15px;
+}
+
+.catgory-master {
+  margin: 6px 0 0;
+}
+
+.Category-table th {
+  background : #2bade5;
+  border     : 1px solid #ccc;
+  text-align : center;
+  font-weight: 600;
+  color      : #2f2f2f !important;
+}
+
+.Category-table td {
+  padding: 6px 10px !important;
+}
+
+.Category-table {
+  display: inline-block;
+  width  : 100%;
+  margin : 16px 0 0;
+}
+
+.Category-table tbody {
+  height  : 100px;
+  overflow: auto;
+}
+
+.compony-infoouter.unit-form {
+  margin: 20px 0;
+}
+
+.unit-form .card {
+  box-shadow: none;
+}
+
+.form-btninner {
+  display   : inline-block;
+  width     : 100%;
+  text-align: center;
+  margin    : 10px 0 0;
+}
+
+.custom-table {
+  display: inline-block;
+  width  : 100%;
+  margin : 30px 0 0;
+}
+
+.custom-table .table tr th {
+  background : #607d8b;
+  color      : #ffffff;
+  font-weight: 500;
+  text-align : center;
+  border     : 1px solid #597380;
+  padding    : 10px 14px;
+  white-space: nowrap;
+}
+
+.custom-table .table>tbody>tr>td {
+  padding    : 10px 8px;
+  line-height: 26px;
+  border-top : 1px solid gainsboro;
+  text-align : center;
+}
+
+button.btn {
+  padding: 5px 10px !important;
+}
+
+.no-mr {
+  margin: 0;
+}
+
+.kit-config2 .form-group {
+  width  : 50%;
+  display: inline-block;
+  float  : left;
+}
+
+.kit-config-lable {
+  display    : inline-block;
+  padding    : 15px 20px 10px;
+  font-weight: 500;
+  font-size  : 15px;
+}
+
+h3.title-prodct {
+  display    : inline-block;
+  width      : 100%;
+  font-weight: 600;
+  margin     : 11px 0 14px;
+  font-size  : 16px;
+}
+
+.card-dash .btn {
+  padding: 8px 8px !important;
+}
+
+.add-tendar .form-group {
+  width     : 50%;
+  display   : inline-block;
+  float     : left;
+  min-height: 64px;
+}
+
+.content-wrapper.add-salesman .form-group {
+  display: inline-block;
+  width  : 49%;
+}
+
+.content-wrapper.add-salesman .form-control-label {
+  width: 30%;
+}
+
+.transporter-form .form-control-label {
+  width: 33% !important;
+}
+
+.loyalty-form .form-control-label {
+  width: 33% !important;
+}
+
+h3 {
+  font-size  : 16px;
+  margin     : 5px 0 0;
+  font-weight: 600;
+}
+
+
+.PartyLedger-form .form-group {
+  width  : 49%;
+  display: inline-block;
+}
+
+.PartyLedger-form .form-control-label {
+  width  : 33% !important;
+  height : auto;
+  padding: 0px 6px;
+}
+
+.pd-20 {
+  padding: 20px 0;
+}
+
+.form-btninner button.btn {
+  padding: 12px 38px !important;
+}
+
+table .form-control {
+  font-size: 13px !important;
+  padding  : 4px 10px !important;
+}
+
+.form-control {
+  border: 1px solid #b6bcc3;
+}
+
+
+.selected-list .c-btn {
+  box-shadow: none !important;
+}
+
+h3.main-heading {
+  float    : left;
+  width    : auto;
+  font-size: 15px;
+  margin   : 8px 10px 0 0;
+}
+
+.form-inner {
+  display   : inline-block;
+  width     : 100%;
+  background: #fff;
+  border    : 1px solid #ccc;
+  margin    : 10px 0;
+}
+
+.top-forms {
+  display: inline-block;
+  width  : 100%;
+  padding: 4px 10px;
+}
+
+.red-btn {
+  background: #fb725e;
+}
+
+.recall-btn {
+  background: #5935f1;
+}
+
+.hold-btn {
+  background: #df7803;
+}
+
+.Proforma-btn {
+  background: #2a95d3;
+}
+
+.Transport-btn {
+  background: #3ec9d6;
+}
+
+.pink-btn {
+  background: #0496a9;
+}
+
+.edit-btn {
+  background: #0887ec;
+}
+
+.print-btn {
+  background: #eab207;
+}
+
+.view-btn {
+  background: #607d8b;
+}
+
+.add-btn {
+  background: #0f9668;
+}
+
+
+
+.btn-back {
+  background: #11cdef;
+}
+
+.top-forms .btn {
+  border-radius: 3px;
+  font-weight  : 400;
+  font-size    : 12px;
+  transition   : all ease-in-out 300ms;
+  color        : #ffffff;
+  padding      : 5px 5px !important;
+}
+
+.form-right-btn {
+  float     : right;
+  text-align: right;
+}
+
+.btn.btn-toggle {
+  background: #2bade5;
+}
+
+.form-inner .form-group {
+  margin-bottom: 10px !important;
+  position     : relative;
+}
+
+.content-areaform {
+  display: inline-block;
+  width  : 100%;
+}
+
+.plainBackGround {
+  border       : 1px solid #E6E6E6;
+  padding      : 12px 0 6px;
+  border-left  : 0;
+  border-right : 0;
+  border-bottom: 0;
+  background   : #e8e8e8;
+}
+
+.transaction-table-custom .reportTabel thead tr th {
+
+  background: #607d8b;
+  color     : #ffff !important;
+  text-align: center;
+  height    : 34px;
+  font-size : 13px;
+  border    : 1px solid #808080 !important;
+}
+
+tr td {
+  text-align: center;
+  padding   : 1px !important;
+}
+
+.transaction-table-custom .reportTabel tbody tr td:first-child {
+  word-wrap: break-word;
+}
+
+
+.transaction-table-custom {
+  .table-container {
+    table {
+      display   : flex;
+      flex-flow : column;
+      overflow-x: scroll;
+    }
+
+    table thead,
+    table tfoot {
+      /* head takes the height it requires,
+      and it's not scaled when table is resized */
+      flex : 0 1 auto;
+      width: 100%;
+
+    }
+
+
+    table tbody {
+      /* body takes all the remaining available space */
+      flex         : 1 1 auto;
+      display      : block;
+      // overflow-y: scroll;
+    }
+
+    table tbody tr {
+      width: 100%;
+    }
+
+    table thead,
+    table tfoot,
+    table tbody tr {
+      display     : table;
+      table-layout: fixed;
+    }
+  }
+
+  th {
+    height: 25px !important;
+  }
+
+}
+
+.transaction-table-custom .reportTabel tbody tr td {
+  padding    : 0;
+  font-weight: 500;
+  border     : 1px solid #9c9696;
+
+  input,
+  select {
+    height: 30px !important;
+  }
+}
+
+.reportTabel tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.appcon-container {
+  width: 100%;
+}
+
+.nav-tabs {
+  .active {
+    font-style: italic;
+    font-size : 20px;
+  }
+}
+
+
+
+.sticky-bottom h4 {
+  font-size  : 14px;
+  color      : #fff;
+  text-align : center;
+  font-weight: 600;
+}
+
+.table.table-summary tbody tr td {
+  padding      : 8px 8px !important;
+  line-height  : 18px;
+  font-size    : 13px;
+  font-weight  : 600;
+  border       : 0;
+  border-bottom: 1px dashed #afafaf;
+}
+
+.table.table-summary tr td span {
+  float  : right;
+  padding: 0 14px 0 0;
+}
+
+.form-inner label.form-control.custom-label {
+  width  : 70%;
+  display: inline-block;
+  height : 32px;
+}
+
+.CellComment {
+  width      : auto !important;
+  padding    : 8px 10px !important;
+  background : #2bade5 !important;
+  color      : #ffffff !important;
+  font-weight: 600 !important;
+  white-space: nowrap;
+}
+
+.plainBackGround.transaction-sc label.form-control-label {
+  height     : auto;
+  font-weight: 600;
+  font-size  : 12px;
+  color      : #3c3c3c;
+  width      : 113px;
+  text-align : left;
+  margin     : 0;
+  padding    : 0 10px 0 0;
+  float      : left;
+}
+
+.plainBackGround.transaction-sc input {
+  width  : 70% !important;
+  height : 25px !important;
+  display: inline-block;
+  padding: 8px 4px;
+  border : 1px solid #c5c5c5;
+}
+
+.plainBackGround.transaction-sc select {
+  width     : 70% !important;
+  // height : 32px !important;
+  display   : inline-block;
+  // padding: 8px 4px;
+  border    : 1px solid #c5c5c5;
+}
+
+
+
+.plainBackGround.transaction-sc select.form-control:not([size]):not([multiple]) {
+  height : 32px !important;
+  padding: 4px 4px;
+}
+
+.form-inner .form-group {
+  margin-bottom: 10px !important;
+  position     : relative;
+}
+
+.customsidebar-modal .modal-header {
+  padding   : 6px 8px;
+  background: #2bade5;
+  color     : #fff;
+  text-align: center;
+}
+
+.customsidebar-modal .modal-content {
+  padding   : 0;
+  margin    : 0px;
+  float     : right;
+  border    : none;
+  box-shadow: none;
+  border    : 1px solid #0490cc !important;
+}
+
+.customsidebar-modal .close {
+  color        : #505050;
+  float        : right;
+  font-size    : 28px;
+  font-weight  : bold;
+  background   : #fff;
+  opacity      : 1;
+  margin       : 2px 0 0;
+  display      : inline-block;
+  width        : 26px;
+  border-radius: 2px;
+  height       : 24px;
+  line-height  : 16px;
+}
+
+.customsidebar-modal .modal-content.modal-content-main-area {
+  margin : 0px 0 0;
+  padding: 0;
+}
+
+.customsidebar-modal .modal-sticky {
+  bottom: 1px;
+  right : 0;
+  width : 50%;
+}
+
+.row.sidebar-tophead {
+  padding: 4px 0;
+}
+
+.row.sidebar-tophead .form-control {
+  padding    : 4px 8px !important;
+  min-height : 34px;
+  width      : 100% !important;
+  font-weight: 600;
+}
+
+
+.customsidebar-modal .table>thead>tr>th {
+  border-bottom: none;
+  background   : #2bade5 !important;
+  color        : #ffffff !important;
+  border       : 1px solid #e2e2e2;
+}
+
+.customsidebar-modal .table>tbody>tr>td {
+  padding    : 8px 10px !important;
+  line-height: 16px;
+  font-size  : 12px !important;
+  font-weight: 500;
+}
+
+.customsidebar-modal tbody>tr:hover {
+  background-color: #ced6d3;
+  cursor          : pointer;
+}
+
+.custom-pagination .ngx-pagination .current {
+  padding   : 8px 12px !important;
+  background: #2199e8;
+  color     : #fefefe;
+  margin    : 0 !important;
+}
+
+.custom-pagination .ngx-pagination a,
+.custom-pagination .ngx-pagination button {
+  color        : #0a0a0a;
+  display      : block;
+  padding      : 8px 12px !important;
+  border-radius: 0;
+  background   : #ccc;
+}
+
+.custom-pagination .ngx-pagination li {
+  display: inline-block;
+  margin : 0 !important;
+}
+
+.custom-pagination .ngx-pagination .disabled {
+  padding   : 8px 10px !important;
+  cursor    : default;
+  background: #ccc;
+  color     : #000 !important;
+  margin    : 0 !important;
+}
+
+.custom-pagination li.small-screen {
+  display: none !important;
+}
+
+.custom-pagination {
+  text-align: center;
+  margin    : 10px 0 0;
+}
+
+.custom-pagination .ngx-pagination li {
+  display: inline-block;
+  margin : 0 !important;
+  float  : left;
+  border : 1px solid #bfbfbf;
+}
+
+.custom-pagination .ngx-pagination {
+  display: inline-block;
+}
+
+.table-container.scroll-tablee {
+  overflow: auto;
+}
+
+.Tender-popupbtn button.btn {
+  background: #2bade5;
+  display   : inline-block;
+  width     : auto;
+  margin    : 4px;
+}
+
+.Tender-popupbtn {
+  background: #ffffff;
+  width     : 100%;
+  text-align: center;
+}
+
+.login-form .form-group {
+  margin-bottom: 24px !important;
+  position     : relative;
+}
+
+.main-container.transaction-container {
+  position: static;
+  margin  : 0;
+}
+
+.transaction-container table.transaction-table thead tr th {
+  background : #4c4c4c !important;
+  color      : #fff !important;
+  text-align : center;
+  padding    : 8px 6px;
+  font-weight: 500;
+  font-size  : 14px !important;
+}
+
+.transaction-container .table.transaction-table tbody tr td {
+  text-align    : center;
+  padding       : 10px 6px;
+  font-weight   : 400;
+  font-size     : 14px !important;
+  line-height   : 15px;
+  vertical-align: middle;
+  height        : auto;
+  margin        : 0;
+  border        : 1px solid #b18c8c;
+}
+
+.plainBackGround.transaction-sc.three-formtransaction input {
+  width: 70% !important;
+}
+
+.plainBackGround.transaction-sc.three-formtransaction select {
+  width: 70% !important;
+}
+
+.PO-Deliverytble tr th {
+  background: #607d8b;
+  color     : #fff;
+  border    : 1px solid #596f79 !important;
+}
+
+.PO-Deliverytble {
+  width  : 100%;
+  display: inline-block;
+  border : 1px solid #d3d3d3;
+}
+
+.row-even {
+  background-color: #E6E6E6
+}
+
+.row-odd {
+  background-color: rgb(197, 197, 196)
+}
+
+.PO-Deliverytble .table>tbody>tr>td {
+  text-align : center;
+  font-size  : 13px;
+  font-weight: 500;
+  color      : #313131;
+  line-height: 16px;
+  padding    : 6px 0;
+  border     : 1px solid #d3d3d3;
+}
+
+
+.advance-filtermodal .modal-content {
+  position: absolute;
+  top     : 150px;
+  width   : 50% !important;
+  height  : auto !important;
+  left    : 0 !important;
+  right   : 0;
+  margin  : auto !important;
+  padding : 0 !important;
+  border  : 1px solid #a8e5ff !important;
+}
+
+.advance-filtermodal .modal-header {
+  padding      : 8px 0;
+  border-bottom: 1px solid #2bade5;
+  text-align   : center;
+  background   : #2bade5;
+  color        : #fff;
+  font-weight  : 600;
+}
+
+.advac-footer {
+  text-align: center;
+  padding   : 10px 0;
+  border-top: 1px solid #b2e8ff;
+  background: #f1fbff;
+  display   : inline-block;
+  width     : 100%;
+}
+
+.advance-body {
+  display: inline-block;
+  width  : 100%;
+  padding: 24px 20px;
+}
+
+.advance-body input {
+  height : 38px !important;
+  width  : 100%;
+  padding: 6px 10px !important;
+  margin : 0 0 15px;
+}
+
+.advance-body select.form-control:not([size]):not([multiple]) {
+  height     : 32px !important;
+  width      : 100%;
+  padding    : 6px 10px !important;
+  margin     : 0 0 15px;
+  font-weight: 500;
+}
+
+label.form-control-label.starus {
+  height     : auto;
+  width      : auto;
+  font-weight: 600;
+  font-size  : 13px;
+}
+
+button.btn.remove-btn {
+  background   : #f20808;
+  margin       : 2px 0 0;
+  padding      : 6px 12px !important;
+  color        : #fff;
+  border-radius: 2px;
+}
+
+button.btn.remove-btn i {
+  margin: 0;
+}
+
+.Device-Setting-list h3.page-title {
+  margin: 15px 0 0;
+}
+
+.Device-Setting-list .card-body[_ngcontent-c7] {
+  padding: 0 !important;
+}
+
+
+.Device-Setting-list .table[_ngcontent-c7] td[_ngcontent-c7] {
+  padding: 6px !important;
+}
+
+.Device-Setting-list .table[_ngcontent-c7] th[_ngcontent-c7] {
+  color     : #ffffff !important;
+  background: #607d8b;
+  padding   : 6px !important;
+}
+
+.load-chart-pannel {
+  border       : 1px solid #E6E6E6;
+  padding      : 12px 0 0;
+  border-left  : 0;
+  border-right : 0;
+  border-bottom: 0;
+  background   : #e8e8e8;
+  display      : inline-block;
+  width        : 100%;
+}
+
+.load-chart-pannel label.form-control-label {
+  height     : auto;
+  font-weight: 600;
+  font-size  : 13px;
+  color      : #3c3c3c;
+  width      : 130px;
+  text-align : right;
+  margin     : 0;
+  padding    : 0 10px 0 0;
+}
+
+.load-chart-pannel input[_ngcontent-c7] {
+  width  : 72% !important;
+  height : 32px !important;
+  display: inline-block;
+  padding: 8px 4px;
+  border : 1px solid #c5c5c5;
+}
+
+label.form-control-label.custom-label {
+  text-align : left !important;
+  width      : auto;
+  font-weight: 500 !important;
+}
+
+.load-chart-pannel[_ngcontent-c7] .loadFilter[_ngcontent-c7] input[_ngcontent-c7][_ngcontent-c7] {
+  width: 110% !important;
+}
+
+.filter-modalbox {
+  position  : absolute;
+  top       : 138px;
+  width     : 50%;
+  left      : 26%;
+  right     : auto;
+  margin    : auto;
+  background: #fff;
+  border    : 1px solid #d3d3d3;
+}
+
+.filter-modalbox label.form-control-label {
+  height     : auto;
+  font-weight: 600;
+  font-size  : 13px;
+  color      : #3c3c3c;
+  width      : 150px;
+  text-align : right;
+  margin     : 0;
+  padding    : 0 10px 0 0;
+}
+
+.filter-modalbox input[_ngcontent-c7],
+.filter-modalbox select {
+  width  : 75% !important;
+  height : 34px !important;
+  display: inline-block;
+  padding: 8px 4px;
+  border : 1px solid #c5c5c5;
+}
+
+.filter-modalbox .modal-body {
+  position: relative;
+  padding : 15px 0 0;
+  display : inline-block;
+  width   : 100%;
+}
+
+.filter-modalbox .modal-header {
+  padding      : 6px 0;
+  border-bottom: 1px solid #e5e5e5;
+  background   : #2bade5;
+  text-align   : center;
+  color        : #fff;
+}
+
+.filter-modalbox .modal-footer {
+  padding   : 10px 20px;
+  text-align: center;
+  border-top: 1px solid #e5e5e5;
+}
+
+.temDetailstbale thead tr th {
+  background : #607d8b;
+  color      : #fff !important;
+  text-align : center;
+  border     : 1px solid #536d79 !important;
+  font-size  : 13px;
+  font-weight: 600 !important;
+  height     : 34px i !important;
+}
+
+.temDetailstbale {
+  display: inline-block;
+  width  : 100%;
+}
+
+h4.table-heading {
+  text-align: center;
+  width     : 100%;
+  display   : inline-block;
+  margin    : 0;
+  padding   : 6px 0;
+  font-size : 16px;
+  background: #506c79;
+  color     : #fff;
+}
+
+.temDetailstbale table tbody tr td {
+  background : #fff;
+  padding    : 4px 6px !important;
+  border     : 1px solid #afafaf;
+  font-size  : 13px;
+  color      : #4c4c4c;
+  text-align : center;
+  font-weight: 500;
+}
+
+.temDetailstbale-bottom tbody td {
+  font-size  : 13px;
+  padding    : 4px 6px !important;
+  border     : 1px solid #ccc;
+  font-weight: 500;
+  color      : #fff;
+  background : #607d8b;
+}
+
+.temDetailstbale-bottom tbody td:last-child {
+  text-align: right;
+}
+
+.Invoice-listtable thead tr th {
+  background : #607d8b;
+  color      : #fff !important;
+  text-align : center;
+  border     : 1px solid #536b77 !important;
+  font-size  : 13px;
+  font-weight: 600 !important;
+  height     : 34px !important;
+}
+
+.Invoice-listtable tbody tr td {
+  background : #fff;
+  padding    : 4px 6px !important;
+  border     : 1px solid #afafaf;
+  font-size  : 13px;
+  color      : #4c4c4c;
+  text-align : center;
+  font-weight: 500;
+}
+
+h4.invoice-listheading {
+  font-size  : 15px;
+  width      : 100%;
+  text-align : center;
+  margin     : 0;
+  background : #506c79;
+  color      : #fff;
+  padding    : 6px 0;
+  font-weight: 600;
+}
+
+table.Invoice-fixed-table {
+  table-layout: fixed;
+  position    : sticky;
+  top         : 0;
+}
+
+table.scroll-invoicetble {
+  height  : 120px;
+  overflow: auto;
+}
+
+.scoll-addtbale {
+  min-height   : 250px;
+  max-height   : 250px;
+  overflow-y   : scroll;
+  padding-right: 0px;
+  padding-left : 0px;
+}
+
+.Invoice-listtable thead tr th.emty-th {
+  border: none !important;
+}
+
+
+.md-drppicker .btn {
+  list-style: initial !important;
+}
+
+
+
+label.trndatepicker.custom-datepicker {
+  width : 69%;
+  height: auto;
+}
+
+.ims-datepicker-wrapper input#trndate {
+  width   : 100% !important;
+  position: relative;
+}
+
+
+.trndatepicker .ims-datepicker-wrapper {
+  width   : 100% !important;
+  position: relative;
+}
+
+.VoucherPrint-btn {
+  display: inline-block;
+  width  : 100%;
+}
+
+.VoucherPrint-select {
+  display: inline-block;
+  width  : 17%;
+  margin : 12px 10px 4px;
+}
+
+.VoucherPrint-btn .right-btn {
+  float : right;
+  margin: 11px 0 0;
+}
+
+.VoucherPrint-table .Print-tablehead thead tr th {
+  color      : #fff !important;
+  background : #607d8b;
+  text-align : center;
+  border     : 1px solid #576e79;
+  padding    : 8px 0;
+  font-weight: 600;
+}
+
+.Print-tablebody tbody tr td {
+  padding    : 8px 4px;
+  text-align : center;
+  font-weight: 500;
+  border     : 1px solid #ccc;
+  background : #fff;
+  font-size  : 13px;
+}
+
+.Print-tablebody i.fa.fa-trash {
+  background   : #f10000;
+  padding      : 5px 6px;
+  color        : #fff;
+  border-radius: 2px;
+  cursor       : pointer;
+}
+
+.row.Multiple-inner {
+  width  : 100%;
+  display: inline-block;
+  margin : 2px -11px 10px;
+}
+
+.Print-tablehead p {
+  font-size: 14px;
+  margin   : 0;
+}
+
+.add-mr .btn {
+  font-size  : 12px;
+  font-weight: 500;
+  color      : #fff;
+}
+
+.add-mr button.btn {
+  padding: 8px 10px !important;
+  float  : right;
+  margin : 2px 4px;
+}
+
+.col-md-12.add-mr {
+  margin: 5px 0;
+}
+
+.gate-entryselect .col-xs-12.col-sm-12.col-md-2 {
+  width: 20%;
+}
+
+.hide-input {
+  display: none;
+}
+
+.pagination>.active>a,
+.pagination>.active>span,
+.pagination>.active>a:hover,
+.pagination>.active>span:hover,
+.pagination>.active>a:focus,
+.pagination>.active>span:focus {
+  background-color: #2bade5 !important;
+  border-color    : #2cade5 !important;
+}
+
+.trndatepicker.custom-datepicker i.fa.fa-caret-down.ims-date-picker {
+  position: absolute;
+  right   : 4px;
+  top     : 10px;
+}
+
+
+.showproducts-modal {
+  display      : block;
+  padding      : 0px;
+  margin-bottom: 0;
+  height       : auto;
+  position     : absolute;
+  right        : 42%;
+  top          : 50px;
+  width        : 60%;
+  z-index      : 999;
+}
+
+.showproducts-modal .modal-header {
+  text-align: center;
+  padding   : 8px 0;
+  background: #2bade5;
+  color     : #fff;
+  border    : none;
+}
+
+.showproducts-modal .form-inline {
+  text-align: left;
+  width     : 100%;
+  display   : inline-block;
+}
+
+.showproducts-modal label.form-control-label {
+  height     : auto;
+  font-weight: 600;
+  font-size  : 13px;
+  color      : #3c3c3c;
+  width      : 130px;
+  text-align : right;
+  margin     : 0;
+  padding    : 0 10px 0 0;
+}
+
+.showproducts-modal .form-inline {
+  text-align: left;
+  width     : 100%;
+  display   : inline-block;
+  margin    : 8px 0;
+}
+
+.showproducts-modal input.form-control {
+  height: auto;
+  width : 64%;
+}
+
+.showproducts-modal select {
+  height : 34px !important;
+  padding: 0 4px !important;
+  width  : 64% !important;
+}
+
+.showproducts-modal .modal-content {
+  box-shadow: 1px 0px 10px 1px #aaaaaa !important;
+  padding   : 0 !important;
+}
+
+.showproducts-modal .modal-footer {
+  padding   : 10px 0;
+  text-align: center;
+}
+
+
+
+.showItemImage-modal {
+  display      : block;
+  padding      : 0px;
+  margin-bottom: 0;
+  height       : auto;
+  position     : absolute;
+  right        : 42%;
+  top          : 50px;
+  width        : 60%;
+  z-index      : 999;
+}
+
+.showItemImage-modal .modal-header {
+  text-align: center;
+  padding   : 8px 0;
+  background: #2bade5;
+  color     : #fff;
+  border    : none;
+}
+
+.showItemImage-modal label.form-control-label {
+  height     : auto;
+  font-weight: 600;
+  font-size  : 13px;
+  color      : #3c3c3c;
+  width      : 130px;
+  text-align : right;
+  margin     : 0;
+  padding    : 0 10px 0 0;
+}
+
+
+.showItemImage-modal select {
+  height : 34px !important;
+  padding: 0 4px !important;
+  width  : 64% !important;
+}
+
+.showItemImage-modal .modal-content {
+  box-shadow: 1px 0px 10px 1px #aaaaaa !important;
+  padding   : 0 !important;
+}
+
+.showItemImage-modal .modal-footer {
+  padding   : 10px 0;
+  text-align: center;
+}
+
+.print-modal {
+  border: 1px solid #ccc;
+}
+
+.print-modal h4 {
+  margin     : 0;
+  display    : inline-block;
+  float      : left;
+  width      : auto;
+  font-weight: 600;
+  font-size  : 17px;
+}
+
+.print-modal .heading-wrap {
+  background: #2bade5 !important;
+  width     : 100%;
+  display   : inline-block;
+  padding   : 10px 14px 8px;
+  color     : #fff;
+}
+
+.popUpForDeviceSetting.print-modal {
+  padding: 0 !important;
+}
+
+.print-modal .heading-wrap {
+  background: #2bade5 !important;
+  width     : 100%;
+  display   : inline-block;
+  padding   : 8px 14px 3px;
+  color     : #fff;
+}
+
+.print-modal button.close {
+  background   : #ffffff;
+  opacity      : 1 !important;
+  font-size    : 16px;
+  padding      : 4px 6px;
+  border-radius: 2px;
+}
+
+.print-modal .filter-wrap {
+  padding      : 6px 10px 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.print-modal .table[_ngcontent-c7] th[_ngcontent-c7] {
+  background : #607d8b;
+  padding    : 8px 0 !important;
+  color      : #fff !important;
+  text-align : center;
+  border     : 1px solid #d3d3d3;
+  font-weight: 500;
+}
+
+.print-modal .table td {
+  border    : 1px solid #ccc;
+  text-align: center;
+}
+
+.print-modal .filter-wrap {
+  padding      : 5px 10px 8px;
+  border-bottom: 1px solid #ccc;
+}
+
+.stock-sattelment label.form-control-label {
+  width: 170px !important;
+}
+
+.stock-sattelment .plainBackGround.transaction-sc.three-formtransaction select,
+.stock-sattelment .plainBackGround.transaction-sc.three-formtransaction input {
+  width: 30% !important;
+}
+
+.xl-modalbox {
+  padding   : 0px;
+  position  : absolute;
+  right     : 27%;
+  top       : 15%;
+  min-height: 504px;
+  width     : 500px;
+  z-index   : 9999999;
+  display   : block;
+}
+
+.xl-modalbox .modal-content-main-area {
+  width: 100%;
+}
+
+.xl-modalbox .modal-header {
+  padding      : 10px 14px;
+  border-bottom: 1px solid #e5e5e5;
+  background   : #2bade5;
+}
+
+.xl-modalbox .modal-title {
+  margin     : 0;
+  color      : #fff;
+  font-weight: 500;
+}
+
+span.dsm-name {
+  border       : 1px solid #ccc;
+  width        : 100%;
+  display      : inline-block;
+  padding      : 8px 10px;
+  border-radius: 2px;
+  margin-left  : 54px;
+}
+
+.selected-row {
+  background-color: #ced6d3 !important;
+}
+
+.report-title-topbar {
+  display: inline-block;
+  width  : 100%;
+}
+
+.report-title-topbar h4.modal-title {
+  display    : inline-block;
+  width      : auto;
+  float      : left;
+  font-weight: 600;
+}
+
+.report-filtercvr {
+  float: right;
+  width: 25%;
+}
+
+.reporttable-outer {
+  display   : inline;
+  background: #fff;
+  border    : 1px solid #ccc;
+  padding   : 9px 10px;
+}
+
+.report-lefticon {
+  float: left;
+  width: 60px;
+}
+
+.reporttable-outer .report-table {
+  float: left;
+  width: 95%;
+}
+
+.reporttable-outer .report-table thead tr th {
+  background : #2bade5;
+  border     : 1px solid #dbd7d7;
+  color      : #fff !important;
+  font-weight: 500;
+  padding    : 2px 2px;
+  font-size  : 13px;
+}
+
+.reporttable-outer .report-table tbody tr td {
+  height       : auto;
+  padding      : 1px 6px;
+  border       : 1px solid #8bdcff;
+  border-bottom: none;
+  font-size    : 13px;
+}
+
+.reporttable-outer .selected-row {
+  background-color: #a4e4ff !important;
+  color           : #191919 !important;
+}
+
+.report-mainfiltemodal .modal-header {
+  padding      : 6px 17px;
+  border-bottom: 1px solid #e8e8e8;
+  background   : #1f7ba3;
+  color        : #fff;
+}
+
+.report-mainfiltemodal button.close {
+  float        : right;
+  background   : #fff;
+  opacity      : 1;
+  padding      : 0 6px;
+  border-radius: 2px;
+}
+
+.report-mainfiltemodal h4.modal-title {
+  float: left;
+  width: auto;
+}
+
+.report-mainfiltemodal {
+  width : 500px;
+  margin: 15% 0 0;
+}
+
+.report-mainfiltemodal .modal-body {
+  position: relative;
+  padding : 8px 0 0;
+  display : inline-block;
+  width   : 100%;
+}
+
+.report-mainfiltemodal .modal-footer {
+  padding   : 10px 0;
+  border-top: 1px solid #e5e5e5;
+  text-align: center;
+}
+
+.report-filtercvr input.form-control {
+  border: 1px solid #b5b5b5;
+}
+
+.report-mainfiltemodal label.modal-label {
+  font-weight: 500;
+  font-size  : 14px;
+  margin     : 0;
+}
+
+.report-mainfiltemodal select.form-control {
+  min-height: 32px;
+  font-size : 15px;
+  padding   : 0 8px;
+}
+
+
+#datepicker-wrapper {
+  .md-drppicker {
+    width: auto !important;
+  }
+}
+
+
+form {
+  text-align: left;
+}
+
+.dropdownRfq .ims-datepicker-wrapper {
+  position: relative;
+}
+
+
+.dropdownRfq .ims-datepicker-wrapper i.fa.fa-caret-down.ims-date-picker {
+  position: absolute;
+  right   : 27px;
+  top     : 4px;
+}
+
+legend {
+  font-size  : 14px;
+  font-weight: bold;
+  width      : fit-content;
+}
+
+
+input,
+select {
+  border: 1px solid #ced4da !important;
+}
+
+input:focus {
+  outline-color: #2bade5;
+}
+
+input:focus-visible {
+  outline-color: #2bade5;
+}
+
+select:focus {
+  outline-color: #2bade5;
+}
+
+select:focus-visible {
+  outline-color: #2bade5;
+}
+
+input[type="checkbox"] {
+  height: 15px !important;
+}
+
+.sub-headingbar {
+  display: inline-block;
+  width  : 100%;
+  padding: 5px 0 2px;
+}
+.mb-10 {
+    margin-bottom: 10px !important;
+}

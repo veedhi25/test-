@@ -1,0 +1,109 @@
+<style>
+    .sel-vert-list-container {
+        height: 250px;
+        overflow: scroll;
+    }
+</style>
+
+
+<div class="sticky-top">
+    <div class="row clearfix" style=" padding: 0px 20px;">
+        <div class="col-md-6">
+            <h3 class="page-title">{{ modeTitle }}</h3>
+        </div>
+        <div class="col-md-6" style="float: right;">
+
+            <button (click)="onSave()" class="btn btn-info pull-right" style="margin-right : 10px;">
+                Save
+            </button>
+            <button (click)="cancel()" class="btn btn-info pull-right" style="margin-right : 10px;">
+                Cancel
+            </button>
+        </div>
+    </div>
+</div>
+<div class="main-container" style="padding-top : 10px; margin-bottom: 0px;min-height: 125px;">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tabbable" id="warehouse-tabs">
+
+                <form class="row" class="form-horizontal" [formGroup]="customerItemMappingForm">
+                    <div class="form-group cell-with-comment col-md-2">
+                        <label for="distributor">Distributor</label>
+                        <input type="text" #DBNAME (keydown.tab)="showLoadFromDistributorPopup();DBNAME.blur()"
+                            (keydown)="preventKeyPress($event)"
+                            (keydown.enter)="showLoadFromDistributorPopup();DBNAME.blur()" formControlName="DBNAME"
+                            placeholder="Press tab or enter to select" class="form-control">
+                        <span contenteditable="false" class="cell-comment">press ENTER or TAB to
+                            Select Item</span>
+                    </div>
+                    <div class="form-group cell-with-comment col-md-2"  *ngIf="isDistributorSelected">
+                        <label for="distributor">Super Distributor</label>
+                        <input type="text" formControlName="SPDNAME" class="form-control">
+        
+                    </div>
+                    <div class="col-md-2" *ngIf="isDistributorSelected">
+                        <div class="form-group">
+                            <label for="verticals">Select Vertical</label>
+                            <div class="col-md-10">
+                                <select name="vertical" id="vertical" class="form-control" #verticals
+                                    formControlName="VerticalList">
+
+                                    <option *ngFor="let vertical of verticalList;let i=index" value="{{i}}">
+                                        {{vertical.BrandName}}</option>
+
+                                </select>
+
+                            </div>
+                            <div class="col-md-2">
+                                <button
+                                    title="{{customerItemMappingForm.valid?'Click to add Vertical list':'Please select vertical list'}}"
+                                    class="btn btn-info" [disabled]="!customerItemMappingForm.valid"
+                                    (click)="addToSelectedVerticalList(verticals.value)">
+                                    <i class="ion-plus"></i>
+                                </button>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="clear-fix"></div>
+
+
+    <ng-container *ngIf="isDistributorSelected && selectedVerticalList.length">
+        <div class="row">
+
+            <div class="col-md-3" style="margin:15px;">
+                <ba-card title="Selected Vertical List">
+                    <div class="sel-vert-list-container">
+                        <ul style="list-style: none;padding-left: 0">
+                            <ng-container *ngFor="let selectedVerticals of selectedVerticalList;let i=index">
+                                <div style="padding-left: 0;padding-right:0">
+                                    <li style="margin: 10px">
+                                        {{selectedVerticals?.BrandName}}
+                                        <span class="badge">
+                                            <i (click)="removeFromSelectedVerticals(i)" class="ion-trash-a text-danger"
+                                                style="cursor: pointer"></i>
+                                        </span>
+                                    </li>
+
+                                </div>
+                            </ng-container>
+                        </ul>
+                    </div>
+                </ba-card>
+            </div>
+
+        </div>
+    </ng-container>
+
+</div>
+
+
+
+<generic-popup-grid #genericGridCusItmMapping [popupsettings]="gridPopupSettings"
+    (onItemDoubleClick)="onDistributorClicked($event)"></generic-popup-grid>

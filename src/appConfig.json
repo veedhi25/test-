@@ -1,0 +1,6 @@
+{
+    "apiUrl": "http://localhost:8010/api",
+    "imageServer": "http://localhost:8010",
+    "_apiUrl": "http://app.pos.bharuwa.com:8030/publish/api",
+    "Version": "1.0.0.32"
+}

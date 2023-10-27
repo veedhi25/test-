@@ -1,0 +1,64 @@
+﻿     
+<button #back (click)="onCancelClicked()" class="btn btn-info pull-right">
+    F10 Back
+</button> 
+<button
+  *ngIf="_trnMainService.TrnMainObj.Mode == 'VIEW'  && 
+!showSecondaryButtons && _trnMainService.TrnMainObj.VoucherType==12 || _trnMainService.TrnMainObj.VoucherType==15|| _trnMainService.TrnMainObj.VoucherType==16 || _trnMainService.TrnMainObj.VoucherType==9 || _trnMainService.TrnMainObj.VoucherType!=3 "
+  style="margin: 0px 4px;"
+  (click)="onPrintClicked()"
+  class="btn btn-info pull-right" 
+>
+  F8 Print 
+</button>
+<button #save
+  *ngIf="(_trnMainService.TrnMainObj.Mode != 'VIEW' || !_trnMainService.showPerformaApproveReject) && !showSecondaryButtons"
+  style="margin: 0px 4px;"
+  (click)="onSaveClicked()"
+  class="btn btn-info pull-right" 
+>
+  F6 SAVE
+</button>
+<button #view
+*ngIf = "(!_trnMainService.showPerformaApproveReject && _trnMainService.TrnMainObj.VoucherType !=58) && !showSecondaryButtons"
+  (click)="onViewClicked()"
+  style="margin: 0px 4px;"
+  class="btn btn-info pull-right"
+>
+  F4 VIEW
+</button> 
+<button  #reset
+  style="margin: 0px 4px;"
+  (click)="onNewClick()"
+  class="btn btn-info pull-right"
+  *ngIf="!showSecondaryButtons"
+>
+  F3 RESET
+</button> 
+<generic-popup-grid  
+  #genericGrid 
+  [popupsettings]="gridPopupSettings"
+  (onItemDoubleClick) = "onItemDoubleClick($event)"
+></generic-popup-grid>  
+
+
+<div class="print-modal-sticky" *ngIf="promptPrintDevice" style="display : block; padding: 0px;  margin-bottom: 25px;height: auto;
+  position: absolute;right: 65%;top: 5px;width: 50%;z-index: 9999999">
+
+  <div class="modal-content modal-content-main-area">
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel">Available Printing Device Supported</h4>
+    </div>
+    <div class="modal-body">
+      <form>
+        <input type="radio" [formControl]="printControl" name="printOption" value=0>POS Printer<br>
+        <input type="radio" [formControl]="printControl" name="printOption" value=1 checked>Laser printer [A4]<br>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cancelprint()">Cancel</button>
+      <button type="button" class="btn btn-primary" (click)="setPrinterAndprint()">Print</button>
+    </div>
+  </div>
+
+</div>

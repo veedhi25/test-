@@ -1,0 +1,13 @@
+<div class="content-wrapper">
+ <div class ="right-btn">
+    <button type="button" class="btn add-btn" (click)="AddUnit()">Add Unit</button>
+  </div>
+
+  <div class="full-width">
+    <div class="ng-tableinner">
+      <ba-card  title="Units" baCardClass="with-scroll">
+        <ng2-smart-table [settings]="settings" [source]="source"  (edit)="onEditClick($event)"  (deleteConfirm)="onDeleteConfirm($event)"></ng2-smart-table>
+      </ba-card>
+    </div>
+  </div>
+</div>

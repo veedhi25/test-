@@ -1,0 +1,81 @@
+<div class="bg-color">
+  <div class="form-outer">
+    <div class="form-inner">
+      <!--<a routerLink="/register" class="auth-link">New to ng2-admin? Sign up!</a>-->
+      <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" class="login-form">
+      <div *ngIf="SendMail!=true && loginService.searchUser!=true || loginService.loginpage==true">
+        <div class="login-heading">
+          <h3>B-POS</h3>
+          <h6>Welcome back! Please login to continue.</h6>
+        </div>
+        <div>
+          <div class="form-group" [ngClass]="{'has-error': (email.touched), 'has-success': (email.touched)}">
+            <span class="login-icon"><img src="../../../assets/img/username.svg" alt=""></span>
+            <input [formControl]="email" type="text" class="form-control" id="inputEmail3" placeholder="Username or Email">
+          </div>
+          <div class="form-group" [ngClass]="{'has-error': (!password.valid && password.touched), 'has-success': (password.valid && password.touched)}">
+            <span class="login-icon"><img src="../../../assets/img/lock.svg" alt=""></span>  
+            <input [formControl]="password" type="password" class="form-control" id="inputPassword3" placeholder="Password">
+          </div>
+          <div class="form-group">
+          <label for="inputEmail3" class="control-label forgetpass" (click)="ForgetPassword()">
+            <a>Forgot password?</a>
+            </label>
+          </div>
+          <div class="form-group">
+            <div class="btn-inner">
+              <button [disabled]="!form.valid || !submitButtonStatus" type="submit" class="btn submit">
+              <span *ngIf="submitButtonStatus">
+              Sign in
+              </span>
+              <span *ngIf="!submitButtonStatus">Logging in ...
+              <i class="fa fa-spinner fa-pulse  fa-fw"></i>
+              </span>
+              </button>
+              <!--<a routerLink="/login" class="forgot-pass">Forgot password?</a>-->
+            </div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div *ngIf="loginService.searchUser==true && loginService.sendMail!=true && loginService.loginpage!=true">
+        <SearchUser></SearchUser>
+      </div>
+      <div *ngIf="loginService.sendMail==true && loginService.securityCode!=true && loginService.loginpage!=true">
+        <SendEmail></SendEmail>
+      </div>
+      <div *ngIf="loginService.securityCode==true && loginService.newPassword!=true && loginService.loginpage!=true">
+        <enterSecurity></enterSecurity>
+      </div>
+      <div *ngIf="loginService.newPassword==true && loginService.loginpage!=true">
+        <newPassword></newPassword>
+      </div>
+      </form>
+      <!--<div class="auth-sep"><span><span>or Sign in with one click</span></span></div>
+        <div class="al-share-auth">
+          <ul class="al-share clearfix">
+            <li><i class="socicon socicon-facebook" title="Share on Facebook"></i></li>
+            <li><i class="socicon socicon-twitter" title="Share on Twitter"></i></li>
+            <li><i class="socicon socicon-google" title="Share on Google Plus"></i></li>
+          </ul>
+        </div>-->
+    </div>
+  </div>
+</div>
+<div class="modal fade" bsModal #childModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+aria-hidden="true">
+<div class="modal-dialog modal-sm">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button class="close" aria-label="Close" (click)="childModal.hide()">
+      <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="modal-title">Information</h4>
+    </div>
+    <div class="modal-body">
+      {{DialogMessage}}
+    </div>
+  </div>
+</div>
+</div>

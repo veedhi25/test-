@@ -1,0 +1,41 @@
+
+       <div id="openingBalanceEntryReportId" style="background-color : #ffffff; padding :1%; height : auto; width : 60%; ">
+            <div class="row">
+               <div class="modal-header" style="width : 97%; margin : 0px auto;">
+                  <button type="button" class="close" data-dismiss="modal" (click)="closeReportBox()">&times;</button>
+                  <h4 class="modal-title">Opening Balance Entry Report</h4>
+               </div>
+               <!-- Left Column -->
+               <div class="col-md-12">
+                
+                  <fieldset>
+                     <span>Ledger/ Party a/c</span>
+                     <select style="width : 100%;" [(ngModel)]="ReportParameters.ACID">
+                        <option value="%">ALL</option>
+                        <option *ngFor="let ledAc of ledgerAc" value="{{ ledAc.ACID }}">
+                           {{ ledAc.ACNAME }}
+                        </option>
+                     </select>
+                  </fieldset>
+                 
+                  <fieldset>
+                        <legend>Division Selection:</legend>
+                        <select [(ngModel)]="ReportParameters.DIVISION" style="width : 100%;">
+                           <option value="%">ALL</option>
+                           <option *ngFor="let div of division" value="{{ div.INITIAL }}">
+                              {{ div.NAME }}
+                           </option>
+                        </select>
+                     </fieldset>
+      
+                          
+
+                  <div class="btn">
+
+                        <button class="btn btn-info confirm-btn" type="button"  (click)=onload()>RUN</button>
+                        <button type="button"  title="Cancel" class="btn btn-info" (click)="closeReportBox()">Close</button>  
+                     </div>
+              
+            </div>
+         
+       </div>

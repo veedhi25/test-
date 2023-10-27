@@ -1,0 +1,184 @@
+<div class="plainBackGround transaction-sc three-formtransaction" *ngIf="masterService.ShowMore == true">
+  <div class="row col-md-12">
+    <div class="col-md-4">
+      <div *ngIf="_trnMainService.TrnMainObj.VoucherType==7" class="form-group">
+        <label class="form-control-label">Branch In :</label>
+        <select class="form-control" [(ngModel)]="_trnMainService.TrnMainObj.BILLTOADD">
+          <option *ngFor="let d of divisionlist" [ngValue]="d.INITIAL">
+            {{d.NAME}}{{d.COMID?'('+d.COMID+')':''}}
+          </option>
+        </select>
+      </div>
+      <div *ngIf="_trnMainService.TrnMainObj.VoucherType==8" class="form-group">
+        <label class="form-control-label">Branch Out :</label>
+        <select class="form-control" [(ngModel)]="_trnMainService.TrnMainObj.BILLTOADD">
+          <option *ngFor="let d of divisionlist" [ngValue]="d.INITIAL">
+            {{d.NAME}}{{d.COMID?'('+d.COMID+')':''}}
+          </option>
+        </select>
+      </div>
+      <div *ngIf="_trnMainService.TrnMainObj.VoucherType==5" class="form-group">
+        <label class="form-control-label">From Warehouse :</label>
+        <select class="form-control" [(ngModel)]="_trnMainService.TrnMainObj.BILLTO"
+          [disabled]="FromWarehouseFieldDisabled()">
+          <option *ngFor="let w of warehouseList" [ngValue]="w.NAME">
+            {{w.NAME}}
+          </option>
+        </select>
+      </div>
+      <div *ngIf="_trnMainService.TrnMainObj.VoucherType==5" class="form-group">
+        <label class="form-control-label">To Warehouse :</label>
+        <select class="form-control" [(ngModel)]="_trnMainService.TrnMainObj.BILLTOADD">
+          <option *ngFor="let w of warehouseList" [ngValue]="w.NAME">
+            {{w.NAME}}
+          </option>
+        </select>
+      </div>
+
+      <div *ngIf="_trnMainService.TrnMainObj.VoucherType==9 || _trnMainService.TrnMainObj.VoucherType==59 "
+        class="form-group">
+        <label class="form-control-label">Settlement Mode :</label>
+        <select class="form-control" [(ngModel)]="_trnMainService.TrnMainObj.TRNMODE">
+          <option *ngFor="let s of _trnMainService.settlementList" [ngValue]="s.DESCRIPTION">
+            {{s?.LABEL}}
+          </option>
+        </select>
+      </div>
+
+
+      <div class="form-group cell-with-comment"
+        *ngIf="_trnMainService.TrnMainObj.VoucherType==102 || _trnMainService.TrnMainObj.VoucherType==103">
+        <label  *ngIf="_trnMainService.TrnMainObj.VoucherType!=102" class="form-control-label">Party :</label>
+        <label  *ngIf="_trnMainService.TrnMainObj.VoucherType==102"  class="form-control-label">Sender Party :</label>
+        <input id="partyselectid" [disabled]="partyFieldDisabled()" type="text" class="form-control"
+          (change)="partyFieldChange()" autocomplete="off" title="Enter or Tab to select"
+          [(ngModel)]="_trnMainService.TrnMainObj.BILLTO" (keydown.tab)="partyTabCommand($event)"
+          (keydown.enter)="partyEnterCommand($event)" (keydown)="preventInput($event)" />
+        <span class="cell-comment" style="margin-left: 27%">
+          Press Enter or TAB to Select Party
+        </span>
+      </div>
+
+
+      <div class="form-group"
+        *ngIf="_trnMainService.TrnMainObj.VoucherType==102 || _trnMainService.TrnMainObj.VoucherType==103">
+        <label class="form-control-label">Vehicle No :</label>
+        <input id="VEHICLENO" type="text" class="form-control" autocomplete="off"
+          [(ngModel)]="_trnMainService.TrnMainObj.AdditionalObj.VEHICLENO" />
+
+      </div>
+
+
+
+      <div
+        *ngIf="_trnMainService.TrnMainObj.VoucherType==24 || _trnMainService.TrnMainObj.VoucherType==102 || _trnMainService.TrnMainObj.VoucherType==103"
+        class="form-group">
+        <label class="form-control-label">Warehouse :</label>
+        <input id="warehouseId" type="text" style="width:70%;" autocomplete="off"
+          [(ngModel)]="_trnMainService.TrnMainObj.MWAREHOUSE" (keydown.enter)="WarehouseEnterCommand($event)"
+          (keydown.tab)="WarehouseEnterCommand($event)" (keydown)="preventInput($event)" />
+
+      </div>
+      <div class="form-group">
+        <label class="form-control-label">Remarks :</label>
+        <!-- <select class="form-control" [(ngModel)]="selectedremarks">
+                  <option *ngFor="let r of remarksList" [ngValue]="r.remarks">
+                    {{r.remarks}}
+                  </option>
+                </select> -->
+
+
+        <ng-container *ngIf="_trnMainService.TrnMainObj.VoucherType == 5">
+          <input type="text" class="form-control" (keydown)="$event.preventDefault()"
+            (keydown.Enter)="onRemarksSelect()" [(ngModel)]="_trnMainService.TrnMainObj.REMARKS"
+            placeholder="Press Enter to load remarks" />
+        </ng-container>
+        <ng-container *ngIf="_trnMainService.TrnMainObj.VoucherType != 5">
+          <input type="text" class="form-control" [(ngModel)]="_trnMainService.TrnMainObj.REMARKS" />
+        </ng-container>
+
+        <button style="border: none;" *ngIf="_trnMainService.TrnMainObj.VoucherType == 5" (click)="addRemarks()"><span
+            class="glyphicon glyphicon-plus"></span></button>
+        <!-- <button style="border: none;" *ngIf="_trnMainService.TrnMainObj.VoucherType == 5"
+          (click)="onDeleteRemarks()"><span class="glyphicon glyphicon-trash"></span></button> -->
+      </div>
+    </div>
+
+    <div class="col-md-4" style="max-height: 150px; overflow-y: scroll; overflow-x: hidden">
+      <div *ngIf="_trnMainService.TrnMainObj.VoucherType==7" class="row">
+        <label class="form-control-label">Ref Bill:</label>
+        <input type="text" class="form-control" [(ngModel)]="_trnMainService.TrnMainObj.REFBILL" />
+      </div>
+    </div>
+    <div class="col-md-4" style="max-height: 150px; overflow-y: scroll; overflow-x: hidden">
+      <div class="form-group"
+        *ngIf="_trnMainService.TrnMainObj.VoucherType==102 || _trnMainService.TrnMainObj.VoucherType==103">
+        <label class="form-control-label" style="margin-top: 7px;">VCHRNO:</label>
+        <td style="float: right; width: 70%; margin-top: 7px">
+          {{ _trnMainService.TrnMainObj.VCHRNO }}
+        </td>
+      </div>
+      <div class="form-group"
+        *ngIf="_trnMainService.TrnMainObj.VoucherType==102 || _trnMainService.TrnMainObj.VoucherType==103">
+        <label class="form-control-label" style="margin-top: 7px;">Entry Date:</label>
+        <td style="float: right; width: 70%; margin-top: 7px">
+          {{ _trnMainService.TrnMainObj.TRNDATE | date: 'dd/MM/yyyy'}}
+        </td>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<generic-popup-grid #genericGridCustomer [popupsettings]="gridPopupSettingsForCustomer"
+  (onItemDoubleClick)="onCustomerSelected($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericGridWarehouse [popupsettings]="gridPopupSettingsForWarehouse"
+  (onItemDoubleClick)="onWarehouseSelected($event)">
+</generic-popup-grid>
+
+<generic-popup-grid #genericGridRemarks [popupsettings]="gridPopupSettingsForRemarks"
+  (onItemDoubleClick)="onRemarksSelected($event)" (onDeleteClicked)="onDeleteRemarks($event)">
+</generic-popup-grid>
+<div *ngIf="showRemarksForm" style="display: block;
+    top: 150px;
+    display: block;
+    padding: 0px;
+    margin-bottom: 0;
+    height: 36vh;
+    position: absolute;
+    left: calc(40% - 201px);
+    width: 40%;
+    z-index: 1;">
+
+  <div class="modal-content modal-content-main-area" style="width: 100%;text-align:left;">
+    <div class="modal-header" style="text-align: left;
+    height: 40px;
+    position: relative;padding: 9px;
+    background: #2bade5;
+    color: #fff;">
+      <h4 class="modal-title m-0" id="myModalLabel">Add New Remarks</h4>
+      <button class="close" aria-label="Close" style="
+    position: absolute;
+    clear: both;
+    z-index: 1;
+    right: 16px;
+    top: 10px;" (click)="closeRemarks()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="clearfix">
+        <div class="form-inline">
+          <label for="remarks" style="width: 35%;">Remarks:</label>
+          <input type="text" id='remarks' [(ngModel)]="remarks" name="remarks" style="width:57%;height: 32px;"
+            class="form-control">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer" style="padding: 10px">
+      <button class="btn add-btn" (click)="onSaveRemarks()">Save</button>
+      <button class="btn red-btn" style="color: #fff;" (click)="closeRemarks()">Cancel</button>
+    </div>
+  </div>
+</div>

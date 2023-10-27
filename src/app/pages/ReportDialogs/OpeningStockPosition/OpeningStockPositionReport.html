@@ -1,0 +1,56 @@
+<div style="background-color : #ffffff; padding :1%; height : auto; ">
+        <div class="row" >
+                <div class="modal-header" style="width: 97%; margin:0px auto;">
+                        <button type="button" class="close" data-dismiss="modal" (click)="hide()">&times;</button>
+                        <h4 class="modal-title">Opening Stock Position</h4>
+                </div>
+            <div class="_left_section col-md-6">               
+                    <fieldset>
+                            <legend  style="font-size:11px;font-weight: bold; width:auto">Division Selection :</legend>          
+                            <div >         
+                                    <select  [(ngModel)]="OpeningStockPosition.selectedDivision" style="width:311px;" >
+                                            <option>All</option> 
+                                            <option *ngFor="let div of division"  [value]="div.INITIAL">{{div.NAME}} </option>
+                                    </select>
+                            </div>                                                                                                                     
+                    </fieldset>
+                     <fieldset>
+                         <legend style="font-size:11px;font-weight: bold; width:auto">Product Type:</legend>
+                         <label class="smallBoldLabel">Item Type :</label>
+                         <select  [(ngModel)]="OpeningStockPosition.selectedItem" style="width:95%;" >
+                                <option *ngFor="let itemT of itemsType" [value]="itemT.PTYPEID">{{itemT.PTYPENAME}} </option>
+                            </select>
+                     </fieldset>
+            </div>
+            <div  class="_right_section col-md-6">
+                    <fieldset>
+                            <legend style="font-size:11px;font-weight: bold; width:auto">Warehouse Selection :</legend>          
+                            <div class="col-md-12">
+                                    <select  [(ngModel)]="OpeningStockPosition.selectedWarehouse" style="width:95%;" >
+                                        <option *ngFor="let warehouse of WarehouseList" [value]="warehouse.NAME">{{warehouse.NAME}} </option>
+                                    </select>
+                            </div>                                                                                                                       
+                     </fieldset>
+                    <fieldset>
+                            <legend style="font-size:11px;font-weight: bold; width:auto">Report format :</legend>          
+                              <div class="col-md-6">
+                                    <label class="smallBoldLabel" style="width: 95%"><input type="radio" name="Nonradio" [(ngModel)]="OpeningStockPosition.OPT_TREE" value="0" checked>Non-Tree Structure</label>                                                   
+                             </div>
+
+                             <div class="col-md-6">                                               
+                                    <label class="smallBoldLabel" style="width: 95%"><input type="radio" name="Nradio" [(ngModel)]="OpeningStockPosition.OPT_TREE" value="1" checked>Tree Structure</label>                                                   
+                           </div> 
+                           <div class="col-md-12">                                                     
+                                <select [(ngModel)]="SelectedWarehouse" (click)="onSelectProductType($event.target.value)" style="width:95%;" >
+                                        <option *ngFor="let item of itemss" [ngValue]="warehouse">{{item.NAME}} </option>
+                                    </select>     
+                             </div>                           
+                    </fieldset>
+                    <div style="margin-top:10px;"> 
+                            <button class="btn btn-info confirm-btn" type="button"  (click)=onload()>RUN</button> 
+                        <button type="button" (click)="cancel()" title="Cancel" class="btn btn-info">Close</button>
+                    </div>
+                   
+            </div>
+        </div>
+</div>

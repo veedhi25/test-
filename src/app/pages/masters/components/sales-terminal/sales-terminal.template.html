@@ -1,0 +1,199 @@
+<style>
+    .sales-terminal-container {
+        margin-top: 35px;
+        margin-bottom: 10px;
+        height: 500px;
+        overflow-y: scroll;
+    }
+</style>
+
+<div class="sticky-top">
+    <div class="row clearfix" style=" padding: 0px 20px;">
+        <div class="col-md-10">
+            <h3 class="page-title">Sales Terminal</h3>
+        </div>
+        <div class="col-md-2">
+            <button style="margin-right: 4px;" *ngIf="viewMode == false" [disabled]="saveDisable==true || !form.valid"
+                (click)="onSave()" title="Save" class="btn btn-info">Save</button>
+            <button (click)="back()" title="Back" class="btn btn-info">Back</button>
+        </div>
+    </div>
+</div>
+<div class="row sales-terminal-container">
+    <form id=formId [formGroup]="form">
+        <div class="col-md-6 form-horizontal">
+            <ba-card [title]="modeTitle">
+                <div class="form-group row margin">
+                    <label for="initial" class="col-sm-3 form-control-label padding">Terminal ID: </label>
+                    <div class="col-sm-9">
+                        <input [style.background-color]="disabled()" [style.background-color]="editDisabled()"
+                            style="color:black" class="form-control" type="text" name="initial" id="initial"
+                            formControlName="INITIAL" [readOnly]="mode=='edit'?true:false" placeholder="Terminal ID">
+                        <div class="alert alert-danger"
+                            *ngIf="(form.controls['INITIAL'].touched || form.controls['INITIAL'].dirty) && !form.controls['INITIAL'].valid">
+                            Terminal ID of 3 characters is required.</div>
+                    </div>
+                </div>
+                <div class="form-group row margin">
+                    <label for="name" class="col-sm-3 form-control-label padding">Terminal Name: </label>
+                    <div class="col-sm-9">
+                        <input [style.background-color]="disabled()" style="color:black" class="form-control"
+                            type="text" name="name" id="name" formControlName="NAME" placeholder="Terminal Name">
+                        <div class="alert alert-danger"
+                            *ngIf="form.controls['NAME'].touched && !form.controls['NAME'].valid">Terminal name is
+                            required.</div>
+                    </div>
+                </div>
+
+                <div class="form-group row margin">
+                    <label for="warehouse" class="col-sm-3 form-control-label padding">Ware-house:</label>
+                    <div class="col-sm-9">
+                        <select [style.background-color]="disabled()" style="color:black" class="form-control"
+                            name="warehouse" id="warehouse" formControlName="WAREHOUSE">
+
+                            <option *ngFor="let wareHouse of wareHouseList" [ngValue]="wareHouse.NAME">
+                                {{wareHouse.NAME}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row margin">
+                    <label for="category" class="col-sm-3 form-control-label padding">Terminal Category:</label>
+                    <div class="col-sm-9">
+                        <select [style.background-color]="disabled()" style="color:black" class="form-control"
+                            name="category" id="category" formControlName="CATEGORY">
+                            <option *ngFor="let terminalCategory of terminalCategoryList"
+                                [ngValue]="terminalCategory.CNAME">{{terminalCategory.CNAME}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row margin">
+                    <label for="remarks" class="col-sm-3 form-control-label padding">Remarks:</label>
+                    <div class="col-sm-9">
+                        <textarea class="form-control" [style.background-color]="disabled()" name="remarks" id="remarks"
+                            style="height:52px; color:black" formControlName="REMARKS" placeholder="Remarks"></textarea>
+                    </div>
+                </div>
+            </ba-card>
+        </div>
+
+
+
+        <div class="col-md-6 form-horizontal">
+            <ba-card title="Terminal Wise Sales Account Mapping">
+                <div class="form-group row margin">
+                    <label class="col-sm-3 form-control-label padding">Sales A/C: </label>
+                    <div class="col-sm-9">
+                        <select [style.background-color]="disabled()" style="color:black" class="form-control"
+                            name="sales" id="sales" formControlName="SALESAC">
+                            <option value=""></option>
+                            <option *ngFor="let salesAC of accountList" [ngValue]="salesAC.ACID">{{salesAC.ACNAME}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row margin">
+                    <label class="col-sm-3 form-control-label padding">VAT A/C: </label>
+                    <div class="col-sm-9">
+                        <select [style.background-color]="disabled()" style="color:black" class="form-control"
+                            name="vat" id="vat" formControlName="VATAC">
+                            <option value=""></option>
+                            <option *ngFor="let vatAC of accountList" [ngValue]="vatAC.ACID">{{vatAC.ACNAME}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row margin">
+                    <label class="col-sm-3 form-control-label padding">Cash A/C: </label>
+                    <div class="col-sm-9">
+                        <select [style.background-color]="disabled()" style="color:black" class="form-control"
+                            name="cash" id="cash" formControlName="CASHAC">
+                            <option value=""></option>
+                            <option *ngFor="let cashAC of accountList" [ngValue]="cashAC.ACID">{{cashAC.ACNAME}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row margin">
+                    <label class="col-sm-3 form-control-label padding">Sales Return A/C: </label>
+                    <div class="col-sm-9">
+                        <select [style.background-color]="disabled()" style="color:black" class="form-control"
+                            name="salesReturn" id="salesReturn" formControlName="SRETURNAC">
+                            <option value=""></option>
+                            <option *ngFor="let salesReturnAC of accountList" [ngValue]="salesReturnAC.ACID">
+                                {{salesReturnAC.ACNAME}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-bottom: 70px;">
+                    <label class="col-sm-3 form-control-label padding">Discount A/C: </label>
+                    <div class="col-sm-9">
+                        <select [style.background-color]="disabled()" style="color:black" class="form-control"
+                            name="discount" id="discount" formControlName="DISCOUNTAC">
+                            <option value=""></option>
+                            <option *ngFor="let discountAC of accountList" [ngValue]="discountAC.ACID">
+                                {{discountAC.ACNAME}}</option>
+                        </select>
+                    </div>
+                </div>
+
+            </ba-card>
+        </div>
+    </form>
+
+
+    <form id=formId class="col-md-12 form-horizontal">
+        <ba-card title="Counter Product">
+            <div *ngIf="viewMode == false" class="form-group row margin">
+                <label class="col-sm-1 form-control-label padding">Product: </label>
+                <div class="col-sm-5">
+                    <select [style.background-color]="disabled()" style="color:black" [disabled]="viewMode == true"
+                        class="form-control" name="selectedProduct" [(ngModel)]="selectedProduct">
+                        <option *ngFor="let p of productList" [ngValue]="p">{{p.DESCA}}</option>
+                    </select>
+                </div>
+                <button [disabled]="selectedProduct==null || selectedProduct.DESCA==null" title="Add Product"
+                    class="btn btn-info" style="margin-top: 5px;" (click)="addRow()">Add</button>
+            </div>
+
+            <div style="display: block; max-height: 400px; min-height: 110px; margin-top: 10px" class="scroll">
+                <table class="table">
+                    <tr
+                        style="border-bottom: 2px solid #E6E6E6; border-top: 2px solid #E6E6E6; background-color: #FFFFFF">
+                        <th>S.No.</th>
+                        <th>Mapped Product</th>
+                        <th></th>
+                    </tr>
+
+                    <tbody *ngFor="let list of salesTerminal.MGROUPLIST;let i=index">
+                        <tr>
+                            <td style="text-align:left">{{i+1}}.</td>
+                            <td>{{list.DESCA}}</td>
+                            <td>
+                                <button *ngIf="viewMode==false" (click)="removeRow(i);" title="Remove"
+                                    class="btn btn-info"> <i class="fa fa-trash"></i> </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </ba-card>
+    </form>
+
+
+    <div class="modal fade" bsModal #childModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1" role="dialog"
+        aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" aria-label="Close" (click)="hideChildModal()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Information</h4>
+                </div>
+                <div class="modal-body">
+                    {{DialogMessage}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

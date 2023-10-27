@@ -1,0 +1,167 @@
+<div class="content-wrapper">
+  <div class="user-topbtn">
+    <h3 class="page-title">{{ modeTitle }}</h3>
+    <div class="right-btn">
+      <button type="button " class="btn btn-back" (click)="cancel()">Back</button>
+      <button *ngIf="viewMode == false" (click)="onSave()" 
+        class="btn add-btn" [disabled]="!form.valid">Save
+      </button>
+    </div>
+  </div>
+
+<div class="full-width">
+  <div class="tap-tabbable General-inofo">
+      <div class="tabbable" id="warehouse-tabs">
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" href="#general-info" data-toggle="tab">General Info</a>
+          </li>
+
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="general-info">
+            <form class="row" class="form-horizontal" [formGroup]="form">
+              <div class="col-md-12">
+                <div class="col-md-6">
+                  <div class="form-group row">
+                    <label class="col-sm-3 form-control-label">Name : <span class="mandatory">*</span></label>
+                    <div class="col-sm-9">
+                      <input type="text" [style.background-color]="disabled()" [style.background-color]="editDisabled()"
+                        style="color:black" class="form-control" [readOnly]="mode == 'edit' ? true : false"
+                        id="warehouseName" name="warehouseName" formControlName="NAME" #name  (keydown.enter)="division.focus()"/>
+                      <div *ngIf="
+                          !form.controls['NAME'].valid &&
+                          form.controls['NAME']?.touched
+                        " class="text-danger">
+                        <span *ngIf="form.get('NAME').hasError('required')">
+                          Warehouse name is required.
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-sm-3 form-control-label">Division : <span class="mandatory">*</span></label>
+                    <div class="col-sm-9">
+                      <select class="form-control" id="Division" name="division" formControlName="DIVISION" #division (keydown.enter)="address.focus()">
+                        
+                        <option *ngFor="let cc of divisonList "   [ngValue]="cc.INITIAL">
+                          {{ cc.NAME }} </option>
+                        <option> </option>
+                      </select>
+                      <div *ngIf="
+                          !form.controls['DIVISION'].valid &&
+                          form.controls['DIVISION']?.touched
+                        " class="text-danger">
+                        <span *ngIf="form.get('DIVISION').hasError('required')">
+                          Division is required.
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-sm-3 form-control-label">Address (200 Character):</label>
+                    <div class="col-sm-9">
+                      <input type="text" [style.background-color]="disabled()" style="color:black" class="form-control"
+                        id="Address" name="Address" formControlName="ADDRESS" placeholder="Address" #address  (keydown.enter)="phone.focus()"/>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-sm-3 form-control-label">Mobile No:</label>
+                    <div class="col-sm-9">
+                      <input type="text" [style.background-color]="disabled()" OnlyNumber=true style="color:black" class="form-control"
+                        id="phone" name="phone" formControlName="PHONE" #phone (keydown.enter)="postalcode.focus()" />
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-sm-3 form-control-label">Postal Code:</label>
+                    <div class="col-sm-9">
+                      <input type="text" [style.background-color]="disabled()" style="color:black" class="form-control"
+                        id="phone" name="phone" formControlName="POSTALCODE" #postalcode (keydown.enter)="panno.focus()" />
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-sm-3 form-control-label">Pan No:</label>
+                    <div class="col-sm-9">
+                      <input type="text" [style.background-color]="disabled()" style="color:black" class="form-control"
+                        id="panno" name="panno" formControlName="VATNO" #panno (keydown.enter)="gstno.focus()" />
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-sm-3 form-control-label">GST No:</label>
+                    <div class="col-sm-9">
+                      <input type="text" [style.background-color]="disabled()" style="color:black" class="form-control"
+                        id="gstno" name="gstno" formControlName="GSTNO" #gstno (keydown.enter)="state.focus()"/>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-sm-3 form-control-label">State : <span class="mandatory">*</span></label>
+                    <div class="col-sm-9">
+                      <input type="text" [style.background-color]="disabled()" style="color:black" class="form-control"
+                        id="state" name="state" formControlName="STATENAME" #state (keydown.tab)="onSateClicked()" (keydown.enter)="onSateClicked()" (keydown)="preventInput($event)"/>
+                        <span class="cell-comment" style="margin-left: 27%">
+                          press ENTER or TAB to Select Supplier
+                        </span>
+                      </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group row">
+                    <label class="col-sm-3 form-control-label">Type : <span class="mandatory">*</span></label>
+                    <div class="col-sm-9">
+                      <select class="form-control" style="color:black" [style.background-color]="disabled()" #type name="Type" (keydown.enter)="status.focus()"
+                        id="Type" formControlName="WarehouseType">
+                        <option value="sellable">Sellable</option>
+                        <option value="nonsellable">Non-Sellable</option>
+                      </select>
+                      <div *ngIf="
+                          !form.controls['WarehouseType'].valid &&
+                          form.controls['WarehouseType']?.touched
+                        " class="text-danger">
+                        <span *ngIf="form.get('WarehouseType').hasError('required')">
+                          Warehouse type is required.
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-sm-3">Is Active </label>
+                    <div class="col-sm-9">
+                      <select formControlName="STATUS" class="form-control" #status (keydown.enter)="remarks.focus()" >
+                        <option value=0>Inactive</option>
+                        <option value=1>Active</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-sm-3 form-control-label">Remarks (200 Character):</label>
+                    <div class="col-sm-9">
+                      <textarea class="form-control" [style.background-color]="disabled()" (keydown.enter)="name.focus()" #remarks style="color:black" 
+                        id="Remarks" name="Remarks" formControlName="REMARKS" placeholder="Remarks"></textarea>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+  </div>
+</div>
+</div>
+
+<generic-popup-grid #genericGrid [popupsettings]="gridPopupSettings" (onItemDoubleClick)="dblClickPopupItem($event)">
+</generic-popup-grid>
+
+
+
+
+
+
+
+
+
+
+
+                       

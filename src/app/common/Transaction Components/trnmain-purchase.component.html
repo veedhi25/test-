@@ -1,0 +1,258 @@
+<div class="plainBackGround transaction-sc three-formtransaction">
+  <div class="row" *ngIf="masterService.ShowMore == true">
+    <div class="col-md-4">
+      <div class="form-group cell-with-comment" *ngIf="_trnMainService.TrnMainObj.VoucherType != 114">
+        <label class="form-control-label">Supplier :</label>
+        <input id="supplierid" type="text" class="form-control" [focus]="supplierInputStatus" autocomplete="off"
+          [disabled]="supplierFieldDisabled()" (change)="supplierFieldChange()"
+          [(ngModel)]="_trnMainService.TrnMainObj.BILLTO" (keydown.enter)="SupplierEnterCommand($event)"
+          (keydown.tab)="SupplierEnterCommand($event)" (keydown)="preventInput($event)" />
+        <span class="cell-comment">
+          Press Enter Or Tab to Select Supplier
+        </span>
+      </div>
+
+      <div class="form-group cell-with-comment" *ngIf="_trnMainService.TrnMainObj.VoucherType == 114">
+        <label class="form-control-label">Suppliers :</label>
+        <input id="supplierselectid" type="text" autocomplete="off" title="Enter Or Tab to Select"
+          [(ngModel)]="_trnMainService.TrnMainObj.BILLTO" (keydown.tab)="ChooseSupplierForRFQ()"
+          (keydown.enter)="ChooseSupplierForRFQ()" />
+        <span class="cell-comment">
+          Press Enter Or Tab to Select Supplier
+        </span>
+      </div>
+
+      <div *ngIf="_trnMainService.TrnMainObj.VoucherType == 114" class="form-group cell-with-comment RFQ">
+        <label class="form-control-label">RFQ Validity :</label>
+        <ims-date-picker [ID]='"RFQValidity"' class="dropdownRfq" (onDateChange)="setRFQValidity($event)"
+          [index]="'RFQVALIDITY'" [date]="getRFQValidity()">
+        </ims-date-picker>
+      </div>
+
+      <div *ngIf="_trnMainService.TrnMainObj.VoucherType == 114" class="form-group cell-with-comment RFQ">
+        <label class="form-control-label">Expected Delivery Date :</label>
+        <ims-date-picker [ID]='"ExpDate"' class="dropdownRfq" (onDateChange)="setExpDate($event)" [index]="'ExpDate'"
+          [date]="getExpDate()">
+        </ims-date-picker>
+      </div>
+
+      <div *ngIf="_trnMainService.TrnMainObj.VoucherType != 114" class="form-group">
+        <label class="form-control-label">Address :</label>
+        <input type="text" class="form-control" [(ngModel)]="_trnMainService.TrnMainObj.BILLTOADD" readonly />
+      </div>
+
+      <div class="form-group"
+        *ngIf="_trnMainService.TrnMainObj.VoucherType == 3 || _trnMainService.TrnMainObj.VoucherType == 110">
+        <label class="form-control-label">Balance :</label>
+        <input type="text" class="form-control" [ngModel]="_trnMainService.TrnMainObj.BALANCE  | number : '1.2-2'"
+          readonly />
+
+      </div>
+      <div class="form-group"
+        *ngIf="_trnMainService.TrnMainObj.VoucherType == 3 || _trnMainService.TrnMainObj.VoucherType == 16">
+        <label class="form-control-label">Warehouse :</label>
+        <input id="warehouseId" type="text" class="form-control" autocomplete="off"
+          [(ngModel)]="_trnMainService.TrnMainObj.MWAREHOUSE" (keydown.enter)="WarehouseEnterCommand($event)"
+          (keydown.tab)="WarehouseEnterCommand($event)" (keydown)="preventInput($event)" />
+      </div>
+      <div class="form-group" *ngIf="_trnMainService.TrnMainObj.VoucherType == 110">
+        <label class="form-control-label">Warehouse :</label>
+        <input id="MRwarehouseId" type="text" class="form-control" autocomplete="off"
+          [(ngModel)]="_trnMainService.TrnMainObj.MWAREHOUSE" readonly />
+      </div>
+     
+      <div class="form-group">
+        <label class="form-control-label">Remarks :</label>
+        <input id="remarksid" type="text" class="form-control" [(ngModel)]="_trnMainService.TrnMainObj.REMARKS" />
+      </div>
+      <div
+        *ngIf="_trnMainService.TrnMainObj.VoucherType == 19 || _trnMainService.TrnMainObj.VoucherType == 3  || _trnMainService.TrnMainObj.VoucherType == 110"
+        class="form-group">
+        <label class="form-control-label">Bill Name :</label>
+        <input id="billname" type="text" class="form-control" placeholder="Enter or Tab to select"
+          title="Enter or Tab to select" [(ngModel)]="_trnMainService.TrnMainObj.AdditionalObj.BILLNAMEVIEW"
+          (keydown.enter)="billNameEnterCommand($event)" (keydown.tab)="billNameEnterCommand($event)"
+          (change)="billtoFieldChange()" />
+      </div>
+      <div
+      *ngIf="_trnMainService.TrnMainObj.VoucherType == 19 && _trnMainService.AppSettings.enableSupplierWiseTermsAndConditionInPO" 
+      class="form-group">
+      <label class="form-control-label">T&C :</label>
+      <textarea  style="height: 150px;" class="form-control" [(ngModel)]="_trnMainService.TrnMainObj.AdditionalObj.T_AND_C" ></textarea>
+     
+    </div>
+    </div>
+    <div class="col-md-4">
+      <div *ngIf="
+            (_trnMainService.TrnMainObj.VoucherType == 16 ||
+
+            _trnMainService.TrnMainObj.VoucherType == 4 ) &&( _trnMainService.TrnMainObj.VoucherType != 114)
+          " class="form-group">
+        <label class="form-control-label"> Bill No :</label>
+        <input id="refbill" type="text" class="form-control" [(ngModel)]="_trnMainService.TrnMainObj.REFBILL"
+          (keydown.enter)="RefBillEnterCommand($event)" />
+      </div>
+
+      <div class="form-group" *ngIf="
+            _trnMainService.TrnMainObj.VoucherType == 16 ||
+            _trnMainService.TrnMainObj.VoucherType == 4
+          ">
+        <label class="form-control-label">Return Mode :</label>
+        <select class="form-control" [(ngModel)]="_trnMainService.TrnMainObj.TRNMODE">
+          <option value="credit">Credit</option>
+          <option value="cash">Cash</option>
+        </select>
+      </div>
+
+      <div *ngIf="_trnMainService.TrnMainObj.VoucherType == 3 || _trnMainService.TrnMainObj.VoucherType == 110"
+        class="form-group">
+        <label class="form-control-label">PO No :</label>
+        <input type="text" class="form-control" (change)="onPoInvoiceEntered()"
+          [(ngModel)]="_trnMainService.TrnMainObj.REFORDBILL" [focus]="forMrPonoStatus" />
+      </div>
+      <div *ngIf="_trnMainService.TrnMainObj.VoucherType == 3 || _trnMainService.TrnMainObj.VoucherType == 110"
+        class="form-group">
+        <label class="form-control-label">PO Date :</label>
+        <input type="text" class="form-control"
+          [(ngModel)]="_trnMainService.TrnMainObj.AdditionalObj.INVOICEREFBILLDATE" />
+      </div>
+      <div *ngIf="
+            _trnMainService.TrnMainObj.VoucherType == 3 ||
+            _trnMainService.TrnMainObj.VoucherType == 19
+            || _trnMainService.TrnMainObj.VoucherType == 110
+          " class="form-group">
+        <label class="form-control-label">Payment Terms:</label>
+        <select class="form-control" [disabled]="disableAutoSupplierFiled()"
+          [(ngModel)]="_trnMainService.TrnMainObj.TRNMODE" (change)="paymentTermsChange()">
+          <option value="credit">Credit</option>
+          <option value="cash">Cash</option>
+          <option value="cashandcredit">Cash and Credit</option>
+        </select>
+      </div>
+      <div *ngIf="
+            _trnMainService.TrnMainObj.VoucherType == 3 ||
+            _trnMainService.TrnMainObj.VoucherType == 16 ||
+            _trnMainService.TrnMainObj.VoucherType == 19 ||
+           _trnMainService.TrnMainObj.VoucherType == 110
+          " class="form-group">
+        <label class="form-control-label">Purchase Type:</label>
+        <select class="form-control" [disabled]="disableAutoSupplierFiled()"
+          [(ngModel)]="_trnMainService.TrnMainObj.AdditionalObj.TRNTYPE">
+          <option value="interstate">Interstate</option>
+          <option value="local">Local</option>
+        </select>
+      </div>
+      <div *ngIf="
+            _trnMainService.TrnMainObj.VoucherType == 3 ||
+            _trnMainService.TrnMainObj.VoucherType == 19 ||
+            _trnMainService.TrnMainObj.VoucherType == 110
+          " class="form-group">
+        <label class="form-control-label">Credit Days :</label>
+        <input type="text" class="form-control" [(ngModel)]="_trnMainService.TrnMainObj.CREDITDAYS" />
+      </div>
+      <div
+        *ngIf="_trnMainService.TrnMainObj.VoucherType == 19 || _trnMainService.TrnMainObj.VoucherType == 3 || _trnMainService.TrnMainObj.VoucherType == 110"
+        class="form-group">
+        <label class="form-control-label">Ship Name :</label>
+        <input id="shipname" type="text" class="form-control" placeholder="Enter or Tab to select"
+          title="Enter or Tab to select" [(ngModel)]="_trnMainService.TrnMainObj.AdditionalObj.SHIPNAMEVIEW"
+          (keydown.enter)="shipNameEnterCommand($event)" (keydown.tab)="shipNameEnterCommand($event)"
+          (change)="shiptoFieldChange()" />
+      </div>
+      <div class="form-group" *ngIf="_trnMainService.AppSettings.enableCostCenter != 0">
+        <label lass="form-control-label">CostCenter :</label>
+        <select *ngIf="_trnMainService.AppSettings.enableCostCenter != 0" class="form-control"
+          [(ngModel)]="_trnMainService.TrnMainObj.COSTCENTER">
+          <option *ngFor="let c of masterService.costCenterList$ | async" [ngValue]="c.CostCenterName">
+            {{ c.CostCenterName }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="row">
+        <label class="form-control-label"
+          *ngIf="_trnMainService.TrnMainObj.VoucherType !=114 && _trnMainService.TrnMainObj.VoucherType !=115 ">{{billLabel}}:</label>
+
+        <label>{{ _trnMainService.TrnMainObj.VCHRNO }}</label>
+      </div>
+      <div class="row">
+        <label class="form-control-label">Entry Date:</label>
+        <label>{{ _trnMainService.TrnMainObj.TRNDATE | date: 'dd/MM/yyyy'}}</label>
+      </div>
+      <div class="row" *ngIf="_trnMainService.TrnMainObj.VoucherType != 19 ">
+        <label class="form-control-label">Ref Date:</label>
+        <label class="trndatepicker custom-datepicker">
+          <ims-date-picker [ID]="'pitrndate'" (onDateChange)="setTRNDATE($event)" [index]="'trndate'"
+            [date]="getTRNDATE()" disabled>
+          </ims-date-picker>
+        </label>
+      </div>
+      <div class="row" *ngIf="_trnMainService.TrnMainObj.VoucherType != 19 ">
+        <label class="form-control-label">Ref No:</label>
+        <ng-container *ngIf="_trnMainService.TrnMainObj.VoucherType != 16">
+          <input class="form-control" type="text" id="invNo" [(ngModel)]="_trnMainService.TrnMainObj.REFBILL"
+             />
+        </ng-container>
+        <ng-container *ngIf="_trnMainService.TrnMainObj.VoucherType == 16">
+          <input class="form-control" type="text" [(ngModel)]="_trnMainService.TrnMainObj.REFORDBILL" />
+        </ng-container>
+      </div>
+      <div class="row"
+        *ngIf="_trnMainService.TrnMainObj.VoucherType ==3 || _trnMainService.TrnMainObj.VoucherType ==4 || _trnMainService.TrnMainObj.VoucherType == 110">
+        <label class="form-control-label">Inv Amount:</label>
+        <input class="form-control" type="number" [(ngModel)]="_trnMainService.TrnMainObj.InvAmount" />
+      </div>
+
+      <div class="row"
+        *ngIf="_trnMainService.TrnMainObj.VoucherType ==3 || _trnMainService.TrnMainObj.VoucherType ==4 || _trnMainService.TrnMainObj.VoucherType == 110">
+        <label class="form-control-label">Item Dis Amt:</label>
+        <input type="text" class="form-control" readonly />
+      </div>
+
+      <div class="row"
+        *ngIf="_trnMainService.TrnMainObj.VoucherType ==3 || _trnMainService.TrnMainObj.VoucherType ==4 || _trnMainService.TrnMainObj.VoucherType == 110">
+        <label class="form-control-label">Disc %:</label>
+        <input type="number" class="form-control" [(ngModel)]="_trnMainService.TrnMainObj.DCRATE"
+          (change)="_trnMainService.FlatDiscountPercentChange()" />
+      </div>
+      <div class="row"
+        *ngIf="_trnMainService.TrnMainObj.VoucherType ==3 || _trnMainService.TrnMainObj.VoucherType ==4 || _trnMainService.TrnMainObj.VoucherType == 110">
+        <label class="form-control-label">Disc Amount:</label>
+        <input type="number" class="form-control" decimalPlacesRestriction="2"
+          [(ngModel)]="_trnMainService.TrnMainObj.ALT_TOTFLATDISCOUNT"
+          (change)="_trnMainService.FlatDiscountAmountChange()" />
+      </div>
+      <div class="row"
+        *ngIf="_trnMainService.TrnMainObj.VoucherType ==3 || _trnMainService.TrnMainObj.VoucherType ==4 || _trnMainService.TrnMainObj.VoucherType == 110">
+        <label class="form-control-label">Round Off Amt:</label>
+        <input type="text" class="form-control" [(ngModel)]="_trnMainService.TrnMainObj.ROUNDOFF" readonly />
+      </div>
+
+    </div>
+
+  </div>
+</div>
+<generic-popup-grid #genericGridSupplierForRFQ [popupsettings]="gridPOpupSettingsForSupplierForRFQ"
+  (onItemDoubleClick)="onSupplierDoubleClickForRFQ($event)" (onButtonClick)="onSupplierMultiSelectForRFQ($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericGridSupplier [popupsettings]="gridPopupSettingsForSupplier"
+  (onItemDoubleClick)="onSupplierSelected($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericGridShipName [popupsettings]="gridPopupSettingsForShipName"
+  (onItemDoubleClick)="onShipNameSelected($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericGridBillName [popupsettings]="gridPopupSettingsForBillName"
+  (onItemDoubleClick)="onBillNameSelected($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericGridRefBill [popupsettings]="gridPopupSettingsForRefBill"
+  (onItemDoubleClick)="onRefBillSelected($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericGridWarehouse [popupsettings]="gridPopupSettingsForWarehouse"
+  (onItemDoubleClick)="onWarehouseSelected($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericGridPOno [popupsettings]="gridPopupSettingsForPOno"
+  (onItemDoubleClick)="onMrPoOption($event)">
+</generic-popup-grid>
+<!-- <generic-popup-grid #genericGrid [popupsettings]="gridPopupSettings" (onItemDoubleClick)="onItemDoubleClick($event)">
+</generic-popup-grid> -->

@@ -1,0 +1,40 @@
+<div class="content-wrapper">
+    <div class="user-topbtn">
+      <h3 class="page-title">DSM vs Min Amount</h3>
+      <div class="right-btn">
+        <button (click)="onSave()" class="btn add-btn">Save</button>
+        <button type="button" class="btn btn-back" (click)="cancel()">Back</button>
+      </div>
+    </div>
+    <div class="full-width">
+      <div class="tap-tabbable General-inofo">
+        <div class="tabbable" id="warehouse-tabs">
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" href="#general-info" #generalInfo data-toggle="tab">General </a>
+            </li>
+          </ul>
+          <form class="row" class="form-horizontal">
+            <div class="tab-content">
+              <div class="tab-pane active" id="general-info">
+                <div class="col-md-6">
+                  <div class="form-group row">
+                    <label class="col-md-4 form-control-label">DSM Name:</label>
+                    <div class="col-md-8">
+                        <span class="dsm-name">{{dsmObj?.DSMNAME}}</span>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-md-4 form-control-label">Minimum Amount:</label>
+                    <div class="col-md-8">
+                      <input type="number" name="minamnt" class="form-control"  [(ngModel)]="dsmObj.MINAMT" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,131 @@
+<div class="content-wrapper add-salesman">
+
+  <div class="user-topbtn">
+    <h3 class="page-title">{{ modeTitle }}</h3>
+    <div class="right-btn">
+      <button *ngIf="viewMode == false" (click)="onSave()" class="btn add-btn" 
+        [disabled]="!form.valid">
+        Save
+      </button>
+      <button type="button" class="btn btn-back" (click)="cancel()">Back</button>
+    </div>
+  </div>
+
+<div class="full-width">
+  <div class="tap-tabbable General-inofo">
+    
+      <div class="tabbable" id="warehouse-tabs">
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" href="#general-info" data-toggle="tab">General Info</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="general-info">
+            <form class="row" class="form-horizontal" [formGroup]="form">
+              <div class="col-md-12">
+                
+                  <div class="form-group">
+                    <label class="col-sm-4 form-control-label">Name:</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" [style.background-color]="disabled()" style="color:black"
+                        formControlName="NAME" placeholder="Salesman Name"/>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-4 form-control-label">Mobile No:</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" [style.background-color]="disabled()" style="color:black"
+                        formControlName="MOBILE" placeholder="Mobile number" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-4 form-control-label">Email:</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" [style.background-color]="disabled()" style="color:black"
+                        formControlName="EMAIL" placeholder="Email" />
+                    </div>
+                  </div>
+               
+               
+
+                  <div class="form-group">
+                    <label class="col-sm-4 form-control-label">Commision Percent:</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" [style.background-color]="disabled()" style="color:black"
+                        formControlName="COMMISION" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-4 form-control-label">Beat Name:</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" [style.background-color]="disabled()" style="color:black"
+                        formControlName="SALESMANTYPECODE" />
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-4 form-control-label">Is Active </label>
+                    <div class="col-sm-8">
+                      <select formControlName="STATUS" class="form-control">
+                        <option value="0">Inactive</option>
+                        <option value="1">Active</option>
+                      </select>
+                    </div>
+                  </div>               
+                  
+              </div>
+            </form>
+          </div>
+          <div class="clearfix" style="margin-top: 10px">
+            <div *ngIf="this.salesman.mappedItemList && this.masterService.userSetting.COMPANYNATURE==1" class="col-md-6 productList" style="padding:5px 0px;border: 1px solid #e3e3e3;">
+              <div style="height: 150px;overflow-y:scroll;">
+                <div class="col-md-12" style="padding: 0;position: sticky;top:0;">
+                  <h3 style="margin-bottom: 0px;padding:5px 5px;background: #63BBB2">Item List</h3>
+                </div>
+                <div class="col-md-12" style="padding: 0">
+                  <ng-container>
+                    <table style="width:100%">
+                      <tbody *ngIf="this.salesman.mappedItemList.length">
+                        <ng-container *ngFor="let prodList of this.salesman.mappedItemList;let i=index">
+                          <tr [class.selected-row]="itemDetailIndex==i" style="border: 1px solid #e6e6e6;height:25px;"
+                            (dblclick)="onProductClicked(i)">
+                            <td style="border: 1px solid #e6e6e6;">
+                              {{i+1}}
+                            </td>
+        
+                            <td style="border: 1px solid #e6e6e6;">
+                              <input [style.background-color]="disabled()" type="text" class="form-control" id="mcode{{i}}" [(ngModel)]="prodList.MCODE"
+                                (keydown)="$event.preventDefault()" (keydown.Enter)="onMcodeEnterEvent($event,i)"
+                                (keydown.Tab)="addNewProductMappedList(i)"
+                                placeholder="Press Tab to Add New Row Or Enter to Select Item">
+                            </td>
+                            <td style="border: 1px solid #e6e6e6;">
+                              {{prodList?.DESCA}}
+                            </td>
+                            <td style="border: 1px solid #e6e6e6;">
+                              <span><i class="fa fa-minus" (click)="removeItemFromList(i)"></i></span>
+                            </td>
+                          </tr>
+                        </ng-container>
+                      </tbody>
+                      <tr *ngIf="!this.salesman.mappedItemList.length">
+                        <td colspan="5">No Product Detail</td>
+                      </tr>
+                    </table>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+        </div>
+        </div>
+      </div>
+    
+  </div>
+
+</div>
+</div>
+
+<generic-popup-grid #genericGrid [popupsettings]="gridPopupSettings" (onItemDoubleClick)="dblClickPopupItem($event)">
+</generic-popup-grid>

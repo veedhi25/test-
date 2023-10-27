@@ -1,0 +1,21 @@
+<div class="clearfix fixed-top nav-bar">
+    <div class="col-md-4">
+        <h3>Digital Signature Manager</h3>
+    </div>
+    <div class="col-md-8">
+        <button class="btn btn-info pull-right" (click)="onSaveDigitalSignature($event)">Save</button>
+    </div>
+</div>
+
+
+<div class="clearfix">
+    <div class="col-md-4">
+        <input type="file" #fileSelect name="input-file-preview" (change)="onFileChange($event)"
+            accept=".png, .jpg, .jpeg" style="width: fit-content !important;height: fit-content !important;" />
+    </div>
+
+
+    <div class="row col-md-6" *ngIf="digitalSignatureUrl">
+        <img [src]="digitalSignatureUrl" width="200" height="250" class="img-thumbnail" alt="signature not found" />
+    </div>
+</div>

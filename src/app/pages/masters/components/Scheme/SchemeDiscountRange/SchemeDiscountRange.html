@@ -1,0 +1,36 @@
+<form class="row" class="form-horizontal" [formGroup]="form">
+        <div class="col-md-6">
+            <label class="col-md-4 form-control-label">Above Qty:</label>
+            <div class="col-md-6">
+                <input type="NUMBER" [style.background-color]="disabled()" style="color:black" class="form-control"
+                    id="ABOVEQTY" name="ABOVEQTY" formControlName="ABOVEQTY" placeholder="Press TAB or Enter to select ITEM" disabled />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label class="col-md-4 form-control-label">UOM:</label>
+            <div class="col-md-6">
+                    <select class="form-control" style="color:black" [style.background-color]="disabled()" name="UOM"
+                        id="UOM" formControlName="UOM">
+                        <option>PCS</option>
+                        <option value=0>KG</option>
+                    </select>
+                </div>
+        </div>
+        <div class="col-md-6">
+            <label class="col-md-4 form-control-label">Scheme Type:</label>
+            <div class="col-md-6">
+                    <select class="form-control" style="color:black" [style.background-color]="disabled()" name="SCHEMETYPE"
+                        id="SCHEMETYPE" formControlName="SCHEMETYPE">
+                        <option>Bulk</option>
+                        <option value=0>Free</option>
+                    </select>
+                </div>
+        </div>
+        <div class="col-md-6">
+                <label class="col-md-4 form-control-label">Value:</label>
+                <div class="col-md-6">
+                    <input type="NUMBER" [style.background-color]="disabled()" style="color:black" class="form-control"
+                        id="VALUE" name="VALUE" formControlName="VALUE" placeholder="Press TAB or Enter to select ITEM" disabled />
+                </div>
+            </div>
+    </form>

@@ -1,0 +1,61 @@
+<!-- <i class="fa fa-plus text-primary" title="Create New category" style="position: relative;top: 5px;"
+            (click)="categoryType='CAT2'" data-toggle="modal" data-target="#genericModal"></i>
+          <label>Category 3</label>
+          <select name="cat3" id="cat3" style="width:200px" [(ngModel)]="productObj.MCAT3">
+            <option *ngFor="let cat of MCat3List" value="{{cat.MENUCAT}}">{{cat?.MENUCAT}}</option>
+          </select> <i class="fa fa-plus text-primary" title="Create New category" style="position: relative;top: 5px;"
+            (click)="categoryType='CAT3'" data-toggle="modal" data-target="#genericModal"></i> -->
+
+
+  <div class="row" style="margin-left: 50px;" >
+    <label>Category 1</label>
+      <select (change)="changecat1()" style="width: 200px;">
+          <option style="text-align: center; justify-content: center; " disabled selected value  > -- select an option --</option>
+          <option *ngFor="let cat of MCat1List" value="cat.MENUCAT" > {{ cat.MENUCAT }} </option>
+      </select>
+    <i class="fa fa-plus text-primary" title="Create New Category" style="position: relative; top: 5px;"
+      (click)="categoryType='CAT1'" data-toggle="modal" data-target="#genericModal" ></i>
+
+
+    <label> Category 2 </label>
+    <select (change)="changecat2()" style="width: 200px;">
+      <option style="text-align: center; justify-content: center; " disabled selected value  > -- select an option --</option>
+      <option *ngFor="let cat of MCat2List" value="cat.MENUCAT" > {{ cat.MENUCAT }} </option>
+    </select>
+    <i class="fa fa-plus text-primary" title="Create New Category" style="position: relative; top: 5px;"
+      (click)="categoryType='CAT2'" data-toggle="modal" data-target="#genericModal" ></i>
+
+   <label> Category 3 </label>
+    <select (change)="changecat3()" style="width: 200px;" >
+      <option style="text-align: center; justify-content: center; " disabled selected value  > -- select an option --</option>
+       <option *ngFor="let cat of MCat3List" value="cat.MENUCAT" > {{ cat.MENUCAT }} </option>
+    </select>
+    <i class="fa fa-plus text-primary" title="Create New Category" style="position: relative; top: 5px;"
+      (click)="categoryType='CAT3'" data-toggle="modal" data-target="#genericModal" ></i>
+  </div>
+
+        
+  <div class="modal fade" id="genericModal" tabindex="-1" role="dialog" aria-labelledby="genericModalLabel" style=" top: 15% !important;
+left: 31% !important;padding-top: 0px !important;">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="width: 300px !important;">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="genericModalLabel">Add New {{categoryType}}</h4>
+      </div>
+      <div class="modal-body">
+        <div class="clearfix row-margin">
+          <div class="form-group">
+            <label for="cat">Category Name</label>
+            <input type="text" name="cat" id="cat" #cat class="form-control" [(ngModel)]="categoryName">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="catclosebtn" class="btn btn-info" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-info" (click)="saveCategory()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>

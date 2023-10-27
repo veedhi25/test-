@@ -1,0 +1,1576 @@
+﻿<ng-container
+  *ngIf="_trnMainService.TrnMainObj.VoucherType!=3 && _trnMainService.TrnMainObj.VoucherType!=110  && _trnMainService.TrnMainObj.VoucherType!=14">
+  <div class="transaction-table-custom" #prodlistTable id="prodlistTable">
+    <div class="table-container scroll-tablee table-scrollsales"
+      [style.height]=" this.masterService.ShowMore ? 'calc(70vh - 231px)' : '70vh' ">
+      <table id="BlueHeaderResizableTable" #reportHtmlTable class="reportTabel" style="table-layout: fixed;"
+        [style.height]=" (_trnMainService.AppSettings.ShowPurchaseHistory && _trnMainService.TrnMainObj.VoucherType==14) ? '52vh' : '65vh' ">
+        <thead>
+          <tr>
+            <th width="65px">S.No.</th>
+            <th width="100px" *ngIf="'BARCODE_OPTION'|active:0">Barcode</th>
+            <th width="100px">Code</th>
+            <th width="300px">Description</th>
+            <th width="60px">C.F.</th>
+            <th width="100px" *ngIf="'BATCH_HEADER'|active:0">BatchNo</th>
+            <th width="100px" *ngIf="'MFGDATE_HEADER'|active:0">Mfg Dt</th>
+            <th width="100px" *ngIf="'EXPDATE_HEADER'|active:0">Exp Dt</th>
+            <th style="width:60px"
+              *ngIf="_trnMainService.TrnMainObj.VoucherType==9 || _trnMainService.TrnMainObj.VoucherType==60">Stock</th>
+            <!-- <th style="width:100px" *ngIf="_trnMainService.TrnMainObj.VoucherType==9 || _trnMainService.TrnMainObj.VoucherType==60">Physical Stock</th> -->
+            <th style="width:60px" *ngIf="'QUANTITY_HEADER'|active:0">Qty</th>
+            <th style="width:60px" *ngIf="'FREEQUANTITY_HEADER'|active:0">Free Qty</th>
+            <th width="60px">Packing</th>
+            <th width="100px">MRP</th>
+            <th width="100px" *ngIf="'COSTPRICE_HEADER'|active:0">Cost Price</th>
+            <th width="100px" *ngIf="'SELLING_HEADER'|active:0">Selling Price</th>
+            <th width="100px" *ngIf="'DISCOUNT_PER_HEADER'|active:0">Disc %</th>
+            <th width="100px" *ngIf="'DISCOUNT_AMT_HEADER'|active:0">Disc Amt</th>
+            <th width="100px" *ngIf="'DISCOUNT2_PER_HEADER'|active:0">Disc2 %</th>
+            <th width="100px" *ngIf="'DISCOUNT2_PER_HEADER'|active:0">Disc2 Amt</th>
+            <th width="100px" *ngIf="'SUPPLIER_HEADER'|active:0">Supplier</th>
+            <th width="60px" *ngIf="'GST_PER_HEADER'|active:0">GST%</th>
+            <th width="100px" *ngIf="'GST_AMT_HEADER'|active:0">GST TaxAmt</th>
+            <th width="100px"
+              *ngIf="_trnMainService.TrnMainObj.VoucherType==3 || _trnMainService.TrnMainObj.VoucherType==110">Adjusted
+              Amt</th>
+            <th width="100px" *ngIf="'SALESMAN_EDITABLE'|active:0">Salesman</th>
+            <th width="100px" *ngIf="'PROMOTION'|active:0">Promotion</th>
+            <th width="100px">Net Amnt</th>
+            <th width="100px" *ngIf="approvalFlag">Approval Flag</th>
+            <th width="100px">Remarks</th>
+            <th width="100px" *ngIf="_trnMainService.TrnMainObj.PARTY_ORG_TYPE=='fitindia'">C Dis</th>
+          </tr>
+        </thead>
+        <tbody style="width: fit-content;">
+          <tr *ngFor="let tList of _trnMainService.TrnMainObj.ProdList;let i=index"
+            style="border: 1px solid #e6e6e6; max-height: 25px" (click)="RowClick(i)"
+            [style.background]="_trnMainService.rowBackGrounfColor(i)" [class.selected]="isTableRowSelected(i)"
+            [class.highlighted]="i==activerowIndex" (keydown.delete)="deleteRow()" id="prodRow{{i}}">
+            <td width="65px" id="sno{{i}}">{{i+1}}</td>
+            <td width="100px" class="CellWithComment" *ngIf="'BARCODE_OPTION_EDITABLE'|active:i">
+              <input id="barcodebilling{{i}}" type="text" style="width: 100%" [(ngModel)]="tList.BC"
+                (keydown.enter)="BarcodekeyEvent($event,i)" autocomplete="off" [disableControl]="_trnMainService" />
+              <span contenteditable="false" class="CellComment">Enter BarCode and press ENTER to Select Item</span>
+            </td>
+
+            <td width="100px" *ngIf="'BARCODE_OPTION_NONEDITABLE'|active:i">
+              {{tList.BC}}
+            </td>
+            <td width="100px" class="CellWithComment" *ngIf="'MENUITEM_OPTION_EDITABLE'|active:i">
+              <input id="menucode{{i}}" type="text" style="width: 100%" [(ngModel)]="tList.MENUCODE"
+                (keydown.Tab)="ItemkeyEvent(i)" (keydown.enter)="ItemkeyEvent(i)"
+                (keydown.ArrowDown)="onMCODEDown($event,i)" (keydown.ArrowUp)="onMCODEUp($event,i)"
+                autocomplete="off"    [disableControl]="_trnMainService"/>
+              <span contenteditable="false" class="CellComment">Enter Code or press ENTER or TAB to Select Item</span>
+            </td>
+            <td width="100px" *ngIf="'MENUITEM_OPTION_NONEDITABLE'|active:i">
+              {{tList.MENUCODE}}
+            </td>
+            <td width="300px">
+              {{tList.ITEMDESC}}
+              <ng-container
+                *ngIf=" _trnMainService.AppSettings.SHOWCOMBOITEMDETAILS && tList.COMBOITEMLIST && tList.COMBOITEMLIST.length">
+                <br /><br />
+                <ng-container *ngFor="let cbm of tList.COMBOITEMLIST">
+
+                  <div class="clearfix">
+                    <span><i>{{cbm.ITEMDESC}}</i></span>&nbsp;&nbsp;&nbsp;<span><i>{{cbm.Quantity}}</i></span>
+                    <br />
+                  </div>
+                </ng-container>
+              </ng-container>
+              <ng-container>
+                <br>
+                <span [innerHtml]="tList.VARIANTDESCA"></span>
+              </ng-container>
+            </td>
+            <td width="60px">
+              {{tList.CARTONCONFACTOR}}
+            </td>
+            <td width="100px" *ngIf="'BATCH_EDITABLE'|active:i" class="CellWithComment">
+              <input type="text" id="batch{{i}}" class="CellWithComment" [(ngModel)]="tList.BATCH" style="width: 100%"
+                (keydown.Tab)="BatchTabClick(i)" (keydown)="onKeydownOnBatch($event)" (keydown.enter)="BatchEnter(i)"
+                autocomplete="off" #focusBatch  [disableControl]="_trnMainService"/>
+
+              <span contenteditable="false" class="CellComment">Enter Code or press ENTER or TAB to Select
+                Batch
+              </span>
+            </td>
+
+            <td width="100px" *ngIf="'BATCH_NONEDITABLE'|active:i">
+              <!-- {{tList.BATCH}} -->
+              <input type="text" id="batch{{i}}" readonly class="CellWithComment" [(ngModel)]="tList.BATCH"
+                style="width: 100%" (keydown.Tab)="BatchTabClick(i)" (keydown)="onKeydownOnBatch($event)"
+                (keydown.enter)="BatchEnter(i)" autocomplete="off" #focusBatch  [disableControl]="_trnMainService"/>
+            </td>
+            <td width="100px" *ngIf="'BATCH_ONLYFORSHOW'|active:i">
+              {{tList.BATCH}}
+            </td>
+            <!-- manufacturing date field -->
+
+            <td width="100px" *ngIf="'MFGDATE_EDITABLE'|active:i" class="date">
+              <ims-date-picker (onDateChange)="MFGDateEnterEvent(i,'MFGDATE_HEADER');setMFGEXPDATE('MFGDATE',$event,i)"
+                [index]="'mfgdate'+i" [date]="getMFGEXPDATE('MFGDATE',i)" [ID]="i" [showCalendar]="false">
+              </ims-date-picker>
+            </td>
+
+            <td width="100px" id="mfgDate{{i}}" *ngIf="'MFGDATE_NONEDITABLE'|active:i">
+              {{tList.MFGDATE | date: 'dd/MM/yyyy'}}
+            </td>
+
+            <!-- End of manufacturing date -->
+
+            <!-- start of Exp Date -->
+
+            <td width="100px" *ngIf="'EXPDATE_EDITABLE'|active:i" class="date">
+              <ims-date-picker [showCalendar]="false" [ID]="i"
+                (onDateChange)="expDateEnterEvent(i,'EXPDATE_HEADER');setMFGEXPDATE('EXPDATE',$event,i)"
+                [index]="'expdate'+i" [date]="getMFGEXPDATE('EXPDATE',i)"></ims-date-picker>
+            </td>
+            <td width="100px" id="expDate{{i}}" *ngIf="'EXPDATE_NONEDITABLE'|active:i">
+              {{tList.EXPDATE | date: 'dd/MM/yyyy'}}
+            </td>
+            <!-- End of Exp Date -->
+
+            <td style="width: 60px;"
+              *ngIf="_trnMainService.TrnMainObj.VoucherType==9 || _trnMainService.TrnMainObj.VoucherType==60">
+              {{tList.STOCK}}
+            </td>
+            <!-- <td width="100px" *ngIf="_trnMainService.TrnMainObj.VoucherType==9 || _trnMainService.TrnMainObj.VoucherType==60">
+              <input style="width: 100%;" id="physicalStock{{i}}" OnlyNumber="true" type="number"
+                [(ngModel)]="tList.physicalStock" (change)="physicalStockChangeEvent(i)"               
+                decimalPlacesRestriction="{{tList.DigitsAfterDecimal}}" />
+            </td> -->
+            <!-- start of qty -->
+            <td width="60px" *ngIf="'QUANTITY_EDITABLE'|active:i">
+              <input style="width: 100%;" id="quantity{{i}}" OnlyNumber="true" type="number"
+                [(ngModel)]="tList.Quantity" (change)="QuantityChangeEvent(i)"
+                (keydown.Tab)="QuantityEventClick(i,'QUANTITY_HEADER')" (keydown)="onKeyDownInQuantity($event,i)"
+                (keydown.enter)="QuantityEventClick(i,'QUANTITY_HEADER')"
+                decimalPlacesRestriction="{{tList.DigitsAfterDecimal}}" (keydown.ArrowDown)="onQuantityDown($event,i)"
+                (keydown.ArrowUp)="onQuantityUp($event,i)" [disableControl]="_trnMainService"/>
+            </td>
+            <td style="width: 60px;" *ngIf="'QUANTITY_NONEDITABLE'|active:i">
+              {{tList.Quantity}}
+            </td>
+
+            <!-- end of qty -->
+
+            <!-- START OF FREE QUANTITY -->
+            <td width="60px" *ngIf="'FREEQUANTITY_HEADER'|active:i">
+              <input style="width: 100%;" id="freequantity{{i}}" OnlyNumber="true" type="number"
+                [(ngModel)]="tList.FreeQuantity" (keypress)="numberOnly($event)" (change)="QuantityChangeEvent(i)"
+                (keydown.Tab)="FreeQuantityEventClick(i,'FREEQUANTITY_HEADER')"
+                (keydown.enter)="FreeQuantityEventClick(i,'FREEQUANTITY_HEADER')" autocomplete="off" [disableControl]="_trnMainService" />
+            </td>
+
+            <!-- END OF FREE QUANTITY -->
+
+
+            <td width="60px" *ngIf="'UNIT_NONEDITABLE'|active:i">
+              {{tList.ALTUNIT}}
+            </td>
+            <td width="60px" *ngIf="'UNIT_EDITABLE'|active:i">
+              <select (change)="SelectUnit(i)" (keydown.Tab)="UnitEnterEventClick(i,'PACKING_HEADER')"
+                (keydown.enter)="UnitEnterEventClick(i,'PACKING_HEADER')" id="alternateunit{{i}}"
+                [(ngModel)]="tList.ALTUNITObj" style="width: 100%">
+                <option *ngFor="let u of tList.Product?.AlternateUnits" [ngValue]="u"  [disableControl]="_trnMainService">
+                  {{u.ALTUNIT}}
+                </option>
+              </select>
+            </td>
+            <td style="text-align: right;" width="100px" *ngIf="'MRP_NONEDITABLE'|active:i">
+              {{_trnMainService.nullToZeroConverter(tList.ALTMRP) |
+              twoDigitNumber}}
+            </td>
+            <td width="100px" *ngIf="'MRP_EDITABLE'|active:i">
+              <input id="mrp{{i}}" style="width: 100%" OnlyNumber="true" type="text" [(ngModel)]="tList.ALTMRP"
+                (change)="MRPChangeEvent(i)" (keydown.Tab)="mrpEnterEvent(i,'MRP_HEADER')"
+                (keydown.enter)="mrpEnterEvent(i,'MRP_HEADER')"  [disableControl]="_trnMainService" />
+            </td>
+            <td width="100px" *ngIf="'COSTPRICE2_EDITABLE'|active:i">
+              <input id="prateid{{i}}" style="width: 100%" OnlyNumber="true" type="text" [(ngModel)]="tList.ALTRATE2"
+                (keydown.Tab)="PrateEnterEvent(i,'COSTPRICE_HEADER')"
+                (keydown.enter)="PrateEnterEvent(i,'COSTPRICE_HEADER')"   [disableControl]="_trnMainService" />
+            </td>
+            <td width="100px" *ngIf="'COSTPRICE2_NONEDITABLE'|active:i">
+              {{_trnMainService.nullToZeroConverter(tList.ALTRATE2)|
+              twoDigitNumber}}
+            </td>
+            <!-- <td width="100px" ><input type="number" [(ngModel)]="tList.PRATE"></td> -->
+            <td width="100px" *ngIf="'ACTUAL_TRAN_PRICE_EDITABLE'|active:i">
+              <input id="srateid{{i}}" style="width: 100%" OnlyNumber="true" type="text" onclick="this.select();"
+                [(ngModel)]="tList.ALTRATE" (change)="rateChangeEvent(i)"
+                (keydown.Tab)="SrateEnterEvent(i,'SELLING_HEADER')"
+                (keydown.enter)="SrateEnterEvent(i,'SELLING_HEADER')"    [disableControl]="_trnMainService" />
+            </td>
+            <td width="100px" *ngIf="'ACTUAL_TRAN_PRICE_NONEDITABLE'|active:i">
+              {{_trnMainService.nullToZeroConverter(tList.ALTRATE) |
+              twoDigitNumber}}
+            </td>
+
+            <td width="100px" *ngIf="'SELLING_PRICE_INCLUSIVE_EXCLUSIVE_EDITABLE'|active:i">
+              <input id="srateid{{i}}" style="width: 100%" OnlyNumber="true" type="text" onclick="this.select();"
+                [(ngModel)]="tList.ALT_ORIGINALTRANRATE" (change)="rateChangeEvent(i)" (keydown.Tab)="SrateTabEvent(i)"
+                (keydown.enter)="SrateEnterEvent(i,'SELLING_HEADER')" (keyup.Space)="spacebarcommand(i)"   [disableControl]="_trnMainService" />
+            </td>
+            <!-- <td width="100px" ><input OnlyNumber=true type="text" [(ngModel)]="tList.RATE"></td> -->
+            <td width="100px" *ngIf="'SELLINGPRICE2_EDITABLE'|active:i">
+              <input id="sellingrateid{{i}}" style="width: 100%" OnlyNumber="true" type="text"
+                (change)="rateChangeEvent(i)" [(ngModel)]="tList.ALTRATE2"
+                (keydown.Tab)="SrateEnterEvent(i,'SELLING_HEADER')"
+                (keydown.enter)="SrateEnterEvent(i,'SELLING_HEADER')"   [disableControl]="_trnMainService" />
+            </td>
+            <td width="100px" *ngIf="'SELLINGPRICE2_NONEDITABLE'|active:i">
+              {{_trnMainService.nullToZeroConverter(tList.ALTRATE2) |
+              twoDigitNumber}}
+            </td>
+
+            <td width="100px" *ngIf="'DISCOUNT_PER_EDITABLE'|active:i">
+              <input type="number" decimalPlacesRestriction="2" id="discount{{i}}" min="0" max="100" style="width: 100%"
+                [(ngModel)]="tList.INDDISCOUNTRATE" (change)="IndDiscountRateChangeEvent(i)"
+                (keydown.Tab)="discRateEnterClicked(i,'DISCOUNT_PER_HEADER')"
+                (keydown.enter)="discRateEnterClicked(i,'DISCOUNT_PER_HEADER')" #focusDiscount    [disableControl]="_trnMainService" />
+            </td>
+            <td width="100px" *ngIf="'DISCOUNT_PER_NONEDITABLE'|active:i">
+              {{tList.INDDISCOUNTRATE}}
+            </td>
+            <td width="100px" *ngIf="'DISCOUNT_AMT_EDITABLE'|active:i">
+              <input type="text" decimalPlacesRestriction="2" id="discountAmt{{i}}" style="width: 100%"
+                [ngModel]="_trnMainService.nullToZeroConverter(tList.ALTINDDISCOUNT)  | number : '1.2-2'" step="0.01"
+                (change)="IndDiscountAmountChangeEvent(i,$event)"
+                (keydown.Tab)="discEnterClicked(i,'DISCOUNT_AMT_HEADER')"
+                (keydown.enter)="discEnterClicked(i,'DISCOUNT_AMT_HEADER')"   [disableControl]="_trnMainService" />
+            </td>
+            <td width="100px" *ngIf="'DISCOUNT_AMT_NONEDITABLE'|active:i">
+              {{_trnMainService.nullToZeroConverter(tList.INDDISCOUNT) |
+              twoDigitNumber}}
+            </td>
+            <td width="100px" *ngIf="'DISCOUNT2_PER_HEADER'|active:i">
+              {{_trnMainService.nullToZeroConverter(tList.INDCDRATE) |
+              twoDigitNumber}}
+            </td>
+            <td width="100px" *ngIf="'DISCOUNT2_PER_HEADER'|active:i">
+              {{_trnMainService.nullToZeroConverter(tList.INDCDAMT) |
+              twoDigitNumber}}
+            </td>
+
+            <td width="100px" id="supplier{{i}}" (keydown)="onKeydownPreventEdit($event)" contenteditable="true"
+              *ngIf="'SUPPLIER_EDITABLE'|active:i" (keydown.Tab)="SupplierEnterClicked($event)"
+              (keydown.enter)="SupplierEnterClicked($event)">
+              {{tList.ACNAME}}
+            </td>
+            <td width="60px" *ngIf="'GST_PER_NONEDITABLE'|active:i">
+              {{tList.GSTRATE}}
+            </td>
+            <td width="60px" *ngIf="'GST_PER_NONEDITABLE_EXCLUSIVE_FOR_RETAILER'|active:i">
+              {{tList.GSTRATE}}
+            </td>
+            <td style="text-align: right;" width="100px" *ngIf="'GST_AMT_NONEDITABLE'|active:i">
+              {{_trnMainService.nullToZeroConverter(tList.VAT)
+              |twoDigitNumber}}
+            </td>
+            <td width="100px" *ngIf="'GST_AMT_NONEDITABLE_EXCLUSIVE_FOR_RETAILER'|active:i">
+              {{_trnMainService.nullToZeroConverter(tList.VAT)
+              |twoDigitNumber}}
+            </td>
+
+
+            <td width="100px"
+              *ngIf="_trnMainService.TrnMainObj.VoucherType==3 || _trnMainService.TrnMainObj.VoucherType==110">
+              <input type="number" style="width: 100%" [(ngModel)]="tList.ADJUSTEDAMNT"
+                (change)="adjustmentAmtChange()"    [disableControl]="_trnMainService"/>
+            </td>
+            <td width="100px" *ngIf="'SALESMAN_EDITABLE'|active:i">
+              <input id="salesman{{i}}" type="text" style="width: 100%" (keydown)="clearSalesman(i,$event)"
+                [(ngModel)]="tList.SALESMANNAME" (keydown.Tab)="SalesmanEnterClicked($event)"
+                (keydown.enter)="SalesmanEnterClicked($event)"     [disableControl]="_trnMainService"/>
+            </td>
+            <td style="text-align: right;" width="100px" id="promotion{{i}}" *ngIf="'PROMOTION'|active:i">
+              {{_trnMainService.nullToZeroConverter(tList.PROMOTION)|twoDigitNumber}}
+            </td>
+            <td style="text-align: right;" width="100px" id="netamount{{i}}">
+              {{_trnMainService.nullToZeroConverter(tList.NETAMOUNT)|twoDigitNumber}}
+            </td>
+
+            <td width="100px" *ngIf="approvalFlag">
+              <select [(ngModel)]="tList.IsApproveStockSettlement"   [disableControl]="_trnMainService">
+                <option [value]="true">Approved</option>
+                <option [value]="false">Not Approved</option>
+              </select>
+            </td>
+            <td width="100px" class="CellWithComment">
+              <input width="100px" id="remarks{{i}}" [(ngModel)]="tList.REMARKS" style="width: 100%;"
+                (keydown.Tab)="RemarksEnterCommand($event,i,'REMARKS_HEADER')"
+                (keydown.enter)="RemarksEnterCommand($event,i,'REMARKS_HEADER')" [disableControl]="_trnMainService"/>
+            </td>
+
+            <td width="100px" *ngIf="_trnMainService.TrnMainObj.PARTY_ORG_TYPE=='fitindia'">
+              {{_trnMainService.nullToZeroConverter(tList.INDCDAMT)}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ng-container>
+
+
+<div class="row">
+  <div class="col-md-12"
+    *ngIf="_trnMainService.TrnMainObj.VoucherType!=3 && _trnMainService.AppSettings.ShowPurchaseHistory == true">
+    <voucher-history #voucherhistory [activeIndex]="this.activerowIndex"></voucher-history>
+  </div>
+</div>
+
+
+
+
+<ng-container *ngIf="_trnMainService.userwiseTransactionFormConf && _trnMainService.userwiseTransactionFormConf.length">
+
+  <ng-container *ngIf="_trnMainService.TrnMainObj.VoucherType==14">
+    <div class="transaction-table-custom" #prodlistTable id="prodlistTable">
+      <div class="table-container scroll-tablee table-scrollsales"
+        [style.height]=" this.masterService.ShowMore ? 'calc(70vh - 231px)' : '70vh' ">
+        <table id="BlueHeaderResizableTable" #reportHtmlTable class="reportTabel" style="table-layout: fixed;"
+          [style.height]=" (_trnMainService.AppSettings.ShowPurchaseHistory && _trnMainService.TrnMainObj.VoucherType==14) ? '52vh' : '65vh' ">
+          <thead>
+            <tr>
+              <th width="65px">S.No.</th>
+              <th width="100px" *ngIf="'BARCODE_OPTION'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                Barcode
+              </th>
+              <th width="100px" *ngIf="'MCODE_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">Code
+              </th>
+              <th width="300px" *ngIf="'DESCA_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                Description
+              </th>
+              <th width="60px" *ngIf="'CONFACTOR_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                C.F.</th>
+              <th width="100px"
+                *ngIf="'BATCH_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf:_trnMainService.AppSettings.HideBatch">
+                BatchNo</th>
+              <th width="100px"
+                *ngIf="'MFGDATE_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf:_trnMainService.AppSettings.HideMfgDate">
+                Mfg
+                Dt</th>
+              <th width="100px"
+                *ngIf="'EXPDATE_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf:_trnMainService.AppSettings.HideExpDate">
+                Exp
+                Dt</th>
+              <th width="60px" *ngIf="'QUANTITY_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                Qty</th>
+              <th width="60px"
+                *ngIf="'FREEQUANTITY_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">Free
+                Qty</th>
+              <th width="60px" *ngIf="'PACKING_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                Packing
+              </th>
+              <th width="100px" *ngIf="'MRP_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">MRP
+              </th>
+              <th width="100px" *ngIf="'COSTPRICE_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                Cost
+                Price</th>
+              <th width="100px" *ngIf="'SELLING_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                Selling
+                Price</th>
+              <th width="100px"
+                *ngIf="'DISCOUNT_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">Disc
+                %</th>
+              <th width="100px"
+                *ngIf="'DISCOUNT_AMT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">Disc
+                Amt</th>
+              <th width="100px"
+                *ngIf="'DISCOUNT2_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                Disc2 %</th>
+              <th width="100px"
+                *ngIf="'DISCOUNT2_AMT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                Disc2 Amt</th>
+              <th width="60px" *ngIf="'GST_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                GST%</th>
+              <th width="100px" *ngIf="'GST_AMT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                GST TaxAmt
+              </th>
+
+              <th width="100px" *ngIf="'CESS_PER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                Cess %
+              </th>
+              <th width="100px" *ngIf="'CESS_AMOUNT'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                Cess Amount
+
+              </th>
+              <th width="100px"
+                *ngIf="'SALESMAN_EDITABLE'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                Salesman</th>
+              <th width="100px" *ngIf="'PROMOTION'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                Promotion</th>
+              <th width="100px" *ngIf="'NETAMOUNT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                Net Amnt
+              </th>
+              <th width="100px" *ngIf="'REMARKS_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                Remarks
+              </th>
+            </tr>
+          </thead>
+          <tbody style="width: fit-content;">
+            <tr *ngFor="let tList of _trnMainService.TrnMainObj.ProdList;let i=index"
+              style="border: 1px solid #e6e6e6; max-height: 25px" (click)="RowClick(i)"
+              [style.background]="_trnMainService.rowBackGrounfColor(i)" [class.selected]="isTableRowSelected(i)"
+              [class.highlighted]="i==activerowIndex" (keydown.delete)="deleteRow()" id="prodRow{{i}}">
+              <td width="65px" id="sno{{i}}">{{i+1}}</td>
+              <td width="100px" class="CellWithComment"
+                *ngIf="'BARCODE_OPTION'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                <input id="barcodebilling{{i}}" type="text" style="width: inherit" [(ngModel)]="tList.BC"
+                  [readonly]="_trnMainService.TrnMainObj.Mode?.toLowerCase()=='view'"
+                  (keydown.enter)="BarcodekeyEvent($event,i)" autocomplete="off" />
+                <span contenteditable="false" class="CellComment">Enter BarCode and press ENTER to Select Item</span>
+              </td>
+
+              <td width="100px" class="CellWithComment"
+                *ngIf="'MCODE_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                <input id="menucode{{i}}" type="text" style="width: inherit" [(ngModel)]="tList.MENUCODE"
+                  [readonly]="_trnMainService.TrnMainObj.Mode?.toLowerCase()=='view'" (keydown.Tab)="ItemkeyEvent(i)"
+                  (keydown.enter)="ItemkeyEvent(i)" (keydown.ArrowDown)="onMCODEDown($event,i)"
+                  (keydown.ArrowUp)="onMCODEUp($event,i)" autocomplete="off" />
+                <span contenteditable="false" class="CellComment">Enter Code or press ENTER or TAB to Select Item</span>
+              </td>
+
+              <td width="300px" *ngIf="'DESCA_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                {{tList.ITEMDESC}}
+                <ng-container
+                  *ngIf=" _trnMainService.AppSettings.SHOWCOMBOITEMDETAILS && tList.COMBOITEMLIST && tList.COMBOITEMLIST.length">
+                  <br /><br />
+                  <ng-container *ngFor="let cbm of tList.COMBOITEMLIST">
+
+                    <div class="clearfix">
+                      <span><i>{{cbm.ITEMDESC}}</i></span>&nbsp;&nbsp;&nbsp;<span><i>{{cbm.Quantity}}</i></span>
+                      <br />
+                    </div>
+                  </ng-container>
+                </ng-container>
+                <ng-container>
+                  <br>
+                  <span [innerHtml]="tList.VARIANTDESCA"></span>
+                </ng-container>
+              </td>
+
+
+
+              <td width="60px" *ngIf="'CONFACTOR_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                {{tList.CARTONCONFACTOR}}
+              </td>
+              <td width="100px"
+                *ngIf="'BATCH_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf:_trnMainService.AppSettings.HideBatch"
+                class="CellWithComment">
+                <input type="text" id="batch{{i}}" class="CellWithComment" [(ngModel)]="tList.BATCH" style="width: 100%"
+                  [readonly]="_trnMainService.TrnMainObj.Mode?.toLowerCase()=='view'" (keydown.Tab)="BatchTabClick(i)"
+                  (keydown)="onKeydownOnBatch($event)" (keydown.enter)="BatchEnter(i)" autocomplete="off" #focusBatch />
+
+                <span contenteditable="false" class="CellComment">Enter Code or press ENTER or TAB to Select
+                  Batch
+                </span>
+              </td>
+
+
+              <!-- manufacturing date field -->
+
+              <td width="100px"
+                *ngIf="'MFGDATE_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf:_trnMainService.AppSettings.HideMfgDate"
+                class="date">
+                {{tList.MFGDATE | date:'dd-MM-yyyy'}}
+              </td>
+
+
+
+              <!-- End of manufacturing date -->
+
+              <!-- start of Exp Date -->
+
+              <td width="100px"
+                *ngIf="'EXPDATE_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf:_trnMainService.AppSettings.HideExpDate"
+                class="date">
+                {{tList.EXPDATE | date:'dd-MM-yyyy'}}
+              </td>
+
+
+
+              <!-- End of Exp Date -->
+              <td width="60px" *ngIf="'QUANTITY_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                <input style="width: inherit;" id="quantity{{i}}" OnlyNumber="true" type="number"
+                  [readonly]="_trnMainService.TrnMainObj.Mode?.toLowerCase()=='view'" [(ngModel)]="tList.Quantity"
+                  (change)="QuantityChangeEvent(i)" (keydown.Tab)="QuantityEventClick(i,'QUANTITY_HEADER')"
+                  (keydown)="onKeyDownInQuantity($event,i)" (keydown.enter)="QuantityEventClick(i,'QUANTITY_HEADER')"
+                  decimalPlacesRestriction="{{tList.DigitsAfterDecimal}}" (keydown.ArrowDown)="onQuantityDown($event,i)"
+                  (keydown.ArrowUp)="onQuantityUp($event,i)" />
+              </td>
+
+
+
+              <!-- START OF FREE QUANTITY -->
+              <td width="60px"
+                *ngIf="'FREEQUANTITY_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                <input style="width: inherit;" id="freequantity{{i}}" OnlyNumber="true" type="number"
+                  [readonly]="_trnMainService.TrnMainObj.Mode?.toLowerCase()=='view'" [(ngModel)]="tList.FreeQuantity"
+                  (keypress)="numberOnly($event)" (change)="QuantityChangeEvent(i)"
+                  (keydown.Tab)="FreeQuantityEventClick(i,'FREEQUANTITY_HEADER')"
+                  (keydown.enter)="FreeQuantityEventClick(i,'FREEQUANTITY_HEADER')" autocomplete="off" />
+              </td>
+
+              <!-- END OF FREE QUANTITY -->
+
+
+              <td width="60px" *ngIf="'PACKING_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                <select (change)="SelectUnit(i)" (keydown.Tab)="UnitEnterEventClick(i,'PACKING_HEADER')"
+                  [disabled]="_trnMainService.TrnMainObj.Mode?.toLowerCase()=='view'"
+                  (keydown.enter)="UnitEnterEventClick(i,'PACKING_HEADER')" id="alternateunit{{i}}"
+                  [(ngModel)]="tList.ALTUNITObj" style="width: inherit">
+                  <option *ngFor="let u of tList.Product?.AlternateUnits" [ngValue]="u">
+                    {{u.ALTUNIT}}
+                  </option>
+                </select>
+              </td>
+
+
+              <td width="100px" *ngIf="'MRP_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                <input id="mrp{{i}}" style="width: 100%" OnlyNumber="true" type="text" [(ngModel)]="tList.ALTMRP"
+                  [readonly]="_trnMainService.TrnMainObj.Mode?.toLowerCase()=='view'" (change)="MRPChangeEvent(i)"
+                  (keydown.Tab)="mrpEnterEvent(i,'MRP_HEADER')" (keydown.enter)="mrpEnterEvent(i,'MRP_HEADER')" />
+              </td>
+
+
+              <td width="100px" *ngIf="'COSTPRICE_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                <input id="prateid{{i}}" style="width: 100%" OnlyNumber="true" type="text" [(ngModel)]="tList.ALTRATE2"
+                  [readonly]="_trnMainService.TrnMainObj.Mode?.toLowerCase()=='view'"
+                  (keydown.Tab)="PrateEnterEvent(i,'COSTPRICE_HEADER')"
+                  (keydown.enter)="PrateEnterEvent(i,'COSTPRICE_HEADER')" />
+              </td>
+
+
+
+
+              <td width="100px" *ngIf="'SELLING_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                <input id="srateid{{i}}" style="width: 100%" OnlyNumber="true" type="text" onclick="this.select();"
+                  [readonly]="_trnMainService.TrnMainObj.Mode?.toLowerCase()=='view'"
+                  [(ngModel)]="tList.ALT_ORIGINALTRANRATE" (change)="rateChangeEvent(i)"
+                  (keydown.Tab)="SrateTabEvent(i,'SELLING_HEADER')"
+                  (keydown.enter)="SrateEnterEvent(i,'SELLING_HEADER')" (keyup.Space)="spacebarcommand(i)" />
+              </td>
+
+
+
+              <td width="100px"
+                *ngIf="'DISCOUNT_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                <input type="number" decimalPlacesRestriction="2" id="discount{{i}}" min="0" max="100"
+                  [readonly]="_trnMainService.TrnMainObj.Mode?.toLowerCase()=='view'" style="width: 100%"
+                  [(ngModel)]="tList.INDDISCOUNTRATE" (change)="IndDiscountRateChangeEvent(i)"
+                  (keydown.Tab)="discRateEnterClicked(i,'DISCOUNT_PER_HEADER')"
+                  (keydown.enter)="discRateEnterClicked(i,'DISCOUNT_PER_HEADER')" #focusDiscount />
+              </td>
+
+
+
+
+              <td width="100px"
+                *ngIf="'DISCOUNT_AMT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                <input type="text" decimalPlacesRestriction="2" id="discountAmt{{i}}" style="width: 100%"
+                  [readonly]="_trnMainService.TrnMainObj.Mode?.toLowerCase()=='view'"
+                  [ngModel]="_trnMainService.nullToZeroConverter(tList.ALTINDDISCOUNT)  | number : '1.2-2'" step="0.01"
+                  (change)="IndDiscountAmountChangeEvent(i,$event)"
+                  (keydown.Tab)="discEnterClicked(i,'DISCOUNT_AMT_HEADER')"
+                  (keydown.enter)="discEnterClicked(i,'DISCOUNT_AMT_HEADER')" />
+              </td>
+
+
+              <td width="100px"
+                *ngIf="'DISCOUNT2_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                {{_trnMainService.nullToZeroConverter(tList.INDCDRATE) |
+                twoDigitNumber}}
+              </td>
+              <td width="100px"
+                *ngIf="'DISCOUNT2_AMT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                {{_trnMainService.nullToZeroConverter(tList.INDCDAMT) |
+                twoDigitNumber}}
+              </td>
+
+
+              <td width="60px" *ngIf="'GST_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                {{tList.GSTRATE}}
+              </td>
+
+              <td style="text-align: right;" width="100px"
+                *ngIf="'GST_AMT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                {{_trnMainService.nullToZeroConverter(tList.VAT) |twoDigitNumber}}
+              </td>
+
+
+              <td width="100px" *ngIf="'CESS_PER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                {{tList.INDCESS_PER}}
+              </td>
+
+
+              <td width="100px" *ngIf="'CESS_AMOUNT'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                {{tList.INDCESS_AMT}}
+              </td>
+
+              <td width="100px"
+                *ngIf="'SALESMAN_EDITABLE'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                <input id="salesman{{i}}" type="text" style="width: 100%" (keydown)="clearSalesman(i,$event)"
+                  [readonly]="_trnMainService.TrnMainObj.Mode?.toLowerCase()=='view'" [(ngModel)]="tList.SALESMANNAME"
+                  (keydown.Tab)="SalesmanEnterClicked($event)" (keydown.enter)="SalesmanEnterClicked($event)" />
+              </td>
+
+              <td style="text-align: right;"
+                *ngIf="'PROMOTION'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf" width="100px"
+                id="promotion{{i}}">
+                {{_trnMainService.nullToZeroConverter(tList.PROMOTION)|twoDigitNumber}}
+              </td>
+              <td style="text-align: right;"
+                *ngIf="'NETAMOUNT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf" width="100px"
+                id="netamount{{i}}">
+                {{_trnMainService.nullToZeroConverter(tList.NETAMOUNT)|twoDigitNumber}}
+              </td>
+
+
+
+
+
+              <td width="100px" class="CellWithComment"
+                *ngIf="'REMARKS_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+                <input width="100px" id="remarks{{i}}" [(ngModel)]="tList.REMARKS" style="width: inherit;"
+                  (keydown.Tab)="RemarksEnterCommand($event,i,'REMARKS_HEADER')"
+                  (keydown.enter)="RemarksEnterCommand($event,i,'REMARKS_HEADER')" />
+              </td>
+
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>
+
+
+
+
+
+
+<div class="modal fade" bsModal #childModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1" role="dialog"
+  aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content" style="height: 370px; left: 70%; width: 435px">
+      <div class="modal-header">
+        <button class="close" aria-label="Close" (click)="hidepopup()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Information</h4>
+      </div>
+      <div class="modal-body">{{DialogMessage}}</div>
+      <div *ngIf="lengths==true" class="modal-footer">
+        <button class="btn btn-info confirm-btn" (click)="onClickYes()">
+          Yes
+        </button>
+        <button class="btn btn-info confirm-btn" type="button" (click)="onClickNo()">
+          No
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="masterService.PlistTitle=='itemList'" class="PList">
+  <PItemList (dbClickEvent)="dblClickPopupItem($event)" [selectedRowIndex]="activerowIndex" [title]="PlistTitle"
+    (itemCloseClick)="model1Closed()">
+  </PItemList>
+</div>
+<div *ngIf="masterService.PlistTitle=='batchList'" class="PList">
+  <PBatchList (dbClickEvent)="onDblClickBatchPopMUltipleSelection($event)" [AlternateUnits]="AlternateUnits"
+    [activerowIndex]="activerowIndex" [title]="PlistTitle" [BList]="_trnMainService.batchlist"
+    [voucherType]="_trnMainService.TrnMainObj.VoucherType" (BatchClosedClick)="model1Closed()"
+    (returnBatchValue)="onDblClickBatchPopMUltipleSelection($event)"></PBatchList>
+</div>
+
+<div *ngIf="masterService.PlistTitle=='schemelist'" class="PList">
+  <PSalesSchemeList (dbClickEvent)="dblClickPopupScheme($event)" [schemeList]="schemeList"
+    (schemeCloseClick)="schemepopupClosed()"></PSalesSchemeList>
+</div>
+
+<div *ngIf="masterService.PlistTitle=='partyPopUp'" class="PList">
+  <popPartyChoose (dbClickEvent)="dblClickPopupParty($event)" [partyList]="_trnMainService.partyList"
+    (partyCloseClick)="partypopupClosed()"></popPartyChoose>
+</div>
+<generic-popup-grid #genericGrid [popupsettings]="gridPopupSettings" (onItemDoubleClick)="dblClickPopupItem($event)">
+</generic-popup-grid>
+<generic-static-popup-grid #genericStaticGrid [popupsettings]="gridPopupSettings"
+  (onItemDoubleClick)="dblClickPopupItem($event)">
+</generic-static-popup-grid>
+<generic-popup-grid #genericGridSupplierPopup [popupsettings]="gridPopupSettingsForSupplier"
+  (onItemDoubleClick)="dblClickPopupParty($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericGridSalesmanPopup [popupsettings]="gridPopupSettingsForSalesman"
+  (onItemDoubleClick)="dblClickPopupSalesman($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericGridItemPricesPopup [popupsettings]="gridPopupSettingsForItemPrices"
+  (onItemDoubleClick)="dblClickPopupPartItemPrices($event)">
+</generic-popup-grid>
+
+
+
+
+<generic-popup-grid #batchfilterGrid [popupsettings]="gridPopupSettingsForbatchfilterGrid"
+  (onItemDoubleClick)="dblClickbatchItemFromFilter($event)">
+</generic-popup-grid>
+
+
+
+
+<matrix-item-grid #matrixitemgrid (onApplyClicked)="setVariantData($event)" [matrixItemAtrribute]="matrixItemAtrribute">
+
+</matrix-item-grid>
+
+
+<serialised-item-grid #serialiseditemgrid (onApplyClicked)="onSerialisedItemApply($event)">
+</serialised-item-grid>
+
+
+
+
+
+<ng-container *ngIf=" _trnMainService.TrnMainObj.VoucherType==110">
+  <div class="transaction-table-custom" #prodlistTable id="prodlistTable">
+    <div class="table-container scroll-tablee table-scrollsales"
+      [style.height]=" this.masterService.ShowMore ? 'calc(79vh - 231px)' : purchaseTableHeight()">
+      <table id="BlueHeaderResizableTable" #reportHtmlTable class="reportTabel" style="table-layout: fixed;"
+        [style.height]=" (_trnMainService.AppSettings.ShowPurchaseHistory && _trnMainService.TrnMainObj.VoucherType==14) ? '45vh' : '65vh' ">
+        <thead>
+          <tr style="
+                border-bottom: 2px solid #e6e6e6;
+                border-top: 2px solid #e6e6e6;
+                height: 30px;
+                background: silver;
+                color: black;
+              ">
+            <th width="65px">S.No.</th>
+            <th width="100px" *ngIf="'BARCODE_OPTION'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              Barcode</th>
+            <th width="100px" *ngIf="'MCODE_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">Code
+            </th>
+            <th width="300px" *ngIf="'DESCA_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              Description</th>
+            <th width="100px" *ngIf="'CONFACTOR_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              C.F.
+            </th>
+            <th width="100px"
+              *ngIf="'BATCH_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf:_trnMainService.AppSettings.HideBatch">
+              BatchNo</th>
+            <th width="100px"
+              *ngIf="'MFGDATE_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf:_trnMainService.AppSettings.HideMfgDate">
+              Mfg
+              Dt</th>
+            <th width="100px"
+              *ngIf="'EXPDATE_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf:_trnMainService.AppSettings.HideExpDate">
+              Exp
+              Dt</th>
+            <th width="100px" *ngIf="'QUANTITY_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">Qty
+            </th>
+
+
+
+            <th width="100px"
+              *ngIf="'FREEQUANTITY_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">Free
+              Qty</th>
+
+            <th width="100px" *ngIf="'PACKING_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              Packing</th>
+            <th width="100px" *ngIf="'MRP_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">MRP
+            </th>
+            <th width="100px" *ngIf="'COSTPRICE_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              Cost
+              Price</th>
+            <th width="100px" *ngIf="'SELLING_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              Selling Price</th>
+            <th width="100px" *ngIf="'PROFIT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              Profit </th>
+            <th width="100px"
+              *ngIf="'DISCOUNT_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">Disc
+              %</th>
+            <th width="100px"
+              *ngIf="'DISCOUNT_AMT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">Disc
+              Amt</th>
+            <th width="100px" *ngIf="'GST_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">GST%
+            </th>
+            <th width="100px" *ngIf="'GST_AMT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">GST
+              TaxAmt</th>
+
+            <th width="100px" *ngIf="'CESS_PER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              Cess %
+            </th>
+            <th width="100px" *ngIf="'CESS_AMOUNT'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              Cess Amount
+            </th>
+            <th width="100px"
+              *ngIf="'PRIMARY_DIS_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">P
+              Dis.%</th>
+            <th width="100px" *ngIf="'PRIMARY_DIS_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              P
+              Dis.</th>
+            <th width="100px"
+              *ngIf="'SECONDARY_DIS_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">S
+              Dis.%</th>
+            <th width="100px"
+              *ngIf="'SECONDARY_DIS_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">S
+              Dis.</th>
+            <th width="100px"
+              *ngIf="'LIQUIDITION_DIS_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">L
+              Dis.%</th>
+            <th width="100px"
+              *ngIf="'LIQUIDITION_DIS_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">L
+              Dis.</th>
+            <th width="100px" *ngIf="'OTHER_DIS_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">OS
+              Dis.</th>
+            <th width="100px" *ngIf="'ADJUSTMENT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              Adjusted Amt</th>
+            <th width="100px" *ngIf="'NETAMOUNT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              Net
+              Amnt</th>
+            <th width="100px" *ngIf="'REMARKS_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              Remarks</th>
+          </tr>
+        </thead>
+        <tbody style="width: fit-content;">
+          <tr *ngFor="let tList of _trnMainService.TrnMainObj.ProdList;let i=index"
+            style="border: 1px solid #e6e6e6; max-height: 25px" (click)="RowClick(i)"
+            [style.background]="_trnMainService.rowBackGrounfColor(i)" [class.selected]="isTableRowSelected(i)"
+            [class.highlighted]="i==activerowIndex"
+            (keydown.delete)="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI')?'':deleteRow()" id="prodRow{{i}}">
+            <!-- START OF SNO -->
+            <td width="65px" id="sno{{i}}">{{i+1}}</td>
+            <!-- END OF SNO -->
+            <td width="100px" class="CellWithComment"
+              *ngIf="'BARCODE_OPTION'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input id="barcodebilling{{i}}" type="text" style="width: inherit" [(ngModel)]="tList.BC"
+                (keydown.enter)="BarcodekeyEvent($event,i)" autocomplete="off" />
+              <span contenteditable="false" class="CellComment">Enter BarCode and press ENTER to Select Item</span>
+            </td>
+
+            <!-- START OF ITEM CODE -->
+            <td width="100px" class="CellWithComment"
+              *ngIf="'MCODE_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input id="menucode{{i}}" type="text" style="width: inherit" [(ngModel)]="tList.MENUCODE"
+                (keydown.Tab)="ItemkeyEvent(i)" (keydown.enter)="ItemkeyEvent(i)"
+                (keydown.ArrowDown)="onMCODEDown($event,i)" (keydown.ArrowUp)="onMCODEUp($event,i)" autocomplete="off"
+                [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )" />
+              <span contenteditable="false" class="CellComment">Enter Code or press ENTER or TAB to Select Item</span>
+            </td>
+            <!-- END OF ITEM CODE -->
+
+            <!-- START OF ITEM DESC -->
+            <td width="300px" *ngIf="'DESCA_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              {{tList.ITEMDESC}}
+              <ng-container>
+                <br>
+                <span [innerHtml]="tList.VARIANTDESCA"></span>
+              </ng-container>
+            </td>
+            <!-- END OF ITEM DESC -->
+            <td width="100px" *ngIf="'CONFACTOR_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              {{tList.CARTONCONFACTOR}}
+            </td>
+            <!-- START OF BATCH -->
+            <!-- <td width="100px" class="CellWithComment" *ngIf="_trnMainService.AppSettings.HideBatch == false" *ngIf="'BATCH_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf"> -->
+            <td width="100px" class="CellWithComment"
+              *ngIf="'BATCH_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf:_trnMainService.AppSettings.HideBatch">
+              <input type="text" id="batch{{i}}" style="width: inherit" class="CellWithComment"
+                [(ngModel)]="tList.BATCH" (keydown.Tab)="BatchTabClick(i,'BATCH_HEADER')"
+                (keydown)="onKeydownOnBatch($event)" (keydown.enter)="BatchTabClick(i,'BATCH_HEADER')"
+                autocomplete="off" #focusBatch [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )" />
+              <span contenteditable="false" class="CellComment">Enter Code or press ENTER or TAB to Select
+                Batch</span>
+            </td>
+            <!-- END OF BATCH -->
+
+            <!-- manufacturing date field -->
+
+            <!-- <td width="100px" class="date" *ngIf="_trnMainService.AppSettings.HideMfgDate == false"> -->
+            <td width="100px" class="date"
+              *ngIf="'MFGDATE_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf:_trnMainService.AppSettings.HideMfgDate">
+              <ims-date-picker [showCalendar]="false"
+                [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )?true:false"
+                (onDateChange)="MFGDateEnterEvent(i,'MFGDATE_HEADER');setMFGEXPDATE('MFGDATE',$event,i)"
+                [index]="'mfgdate'+i" [date]="getMFGEXPDATE('MFGDATE',i)" [ID]="i"></ims-date-picker>
+            </td>
+            <!-- End of manufacturing date -->
+
+            <!-- start of Exp Date -->
+            <!-- <td width="100px" class="date" *ngIf="_trnMainService.AppSettings.HideExpDate == false"> -->
+            <td width="100px" class="date"
+              *ngIf="'EXPDATE_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf:_trnMainService.AppSettings.HideExpDate">
+              <ims-date-picker [showCalendar]="false" [ID]="i"
+                [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )?true:false"
+                (onDateChange)="expDateEnterEvent(i,'EXPDATE_HEADER');setMFGEXPDATE('EXPDATE',$event,i)"
+                [index]="'expdate'+i" [date]="getMFGEXPDATE('EXPDATE',i)"></ims-date-picker>
+            </td>
+            <!-- End of Exp Date -->
+
+            <!-- START OF QUANTITY -->
+            <td width="100px" *ngIf="'QUANTITY_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input id="quantity{{i}}" OnlyNumber="true" type="number" [(ngModel)]="tList.Quantity"
+                style="width: inherit" (keydown)="onKeyDownInQuantity($event,i)" (change)="QuantityChangeEvent(i)"
+                (keydown.Tab)="QuantityEventClick(i,'QUANTITY_HEADER')"
+                (keydown.enter)="QuantityEventClick(i,'QUANTITY_HEADER')" (keydown.ArrowDown)="onQuantityDown($event,i)"
+                (keydown.ArrowUp)="onQuantityUp($event,i)" autocomplete="off"
+                [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )" />
+            </td>
+            <!-- END OF QUANTITY -->
+
+
+
+            <!-- START OF FREE QUANTITY -->
+            <td width="100px"
+              *ngIf="'FREEQUANTITY_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input id="freequantity{{i}}" OnlyNumber="true" type="number" [(ngModel)]="tList.FreeQuantity"
+                style="width: inherit" (keypress)="numberOnly($event)" (change)="QuantityChangeEvent(i)"
+                (keydown.Tab)="FreeQuantityEventClick(i,'FREEQUANTITY_HEADER')"
+                (keydown.enter)="FreeQuantityEventClick(i,'FREEQUANTITY_HEADER')" autocomplete="off" />
+            </td>
+
+            <!-- END OF FREE QUANTITY -->
+
+            <!-- START OF UNIT -->
+            <td width="100px" *ngIf="'PACKING_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <select (change)="SelectUnit(i)" (keydown.Tab)="UnitEnterEventClick(i,'PACKING_HEADER')"
+                style="width: inherit" (keydown.enter)="UnitEnterEventClick(i,'PACKING_HEADER')" id="alternateunit{{i}}"
+                [(ngModel)]="tList.ALTUNITObj" [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )">
+                <option *ngFor="let u of tList.Product?.AlternateUnits" [ngValue]="u">
+                  {{u.ALTUNIT}}
+                </option>
+              </select>
+            </td>
+            <!-- END OF UNIT -->
+
+            <!-- START OF MRP -->
+            <td width="100px" *ngIf="'MRP_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input id="mrp{{i}}" OnlyNumber="true" type="text" [(ngModel)]="tList.ALTMRP" style="width: inherit"
+                [disabled]="( _trnMainService.TrnMainObj.INVOICETYPE=='EDI' )" (change)="MRPChangeEvent(i)"
+                (keydown.Tab)="mrpEnterEvent(i,'MRP_HEADER')" (keydown.enter)="mrpEnterEvent(i,'MRP_HEADER')" />
+            </td>
+            <!-- END OF MRP -->
+
+            <!-- START OF COST PRICE -->
+            <td width="100px" *ngIf="'COSTPRICE_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input id="prateid{{i}}" OnlyNumber="true" type="text" onclick="this.select();" style="width: inherit"
+                [(ngModel)]="tList.ALTRATE" (change)="tranrateChangeEvent(i)"
+                (keydown.Tab)="prateEnterEvent(i,'COSTPRICE_HEADER')"
+                (keydown.enter)="prateEnterEvent(i,'COSTPRICE_HEADER')" />
+            </td>
+
+            <!-- END OF SELL PRICE -->
+            <td width="100px" *ngIf="'SELLING_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input id="srateid{{i}}" OnlyNumber="true" type="text" onclick="this.select();" style="width: inherit"
+                [(ngModel)]="tList.ALTRATE2" (change)="rateChangeEvent(i)"
+                (keydown.Tab)="SrateEnterEvent(i,'SELLING_HEADER')"
+                (keydown.enter)="SrateEnterEvent(i,'SELLING_HEADER')" />
+            </td>
+
+            <td width="100px" *ngIf="'PROFIT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              {{tList.PROFIT | number:'1.2-2'}}
+
+            </td>
+            <!-- START OF DISCOUNT PERCENT -->
+            <td width="100px"
+              *ngIf="'DISCOUNT_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input type="number" decimalPlacesRestriction="2" id="discount{{i}}" min="0" max="100"
+                style="width: inherit" [(ngModel)]="tList.INDDISCOUNTRATE" (change)="IndDiscountRateChangeEvent(i)"
+                [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )"
+                (keydown.Tab)="discRateEnterClicked(i,'DISCOUNT_PER_HEADER')"
+                (keydown.enter)="discRateEnterClicked(i,'DISCOUNT_PER_HEADER')" #focusDiscount />
+            </td>
+            <!-- END OF DISCOUNT PERCENT -->
+
+            <!-- START OF DISCOUNT AMOUNT -->
+            <td width="100px"
+              *ngIf="'DISCOUNT_AMT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input type="text" id="discountAmt{{i}}" [ngModel]="tList.INDDISCOUNT | number : '1.2-2'"
+                style="width: inherit" [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )"
+                (change)="IndDiscountAmountChangeEvent(i,$event)"
+                (keydown.Tab)="discEnterClicked(i,'DISCOUNT_AMT_HEADER')"
+                (keydown.enter)="discEnterClicked(i,'DISCOUNT_AMT_HEADER')" />
+            </td>
+            <!-- END OF DISCOUNT AMOUNT -->
+
+            <!-- START OF GST RATE -->
+            <td width="100px" id="gstrateper{{i}}"
+              *ngIf="'GST_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              {{tList.GSTRATE}}
+            </td>
+            <!-- END OF GST RATE -->
+
+            <!-- START OF GST AMOUNT -->
+            <td width="100px" id="vat{{i}}"
+              *ngIf="'GST_AMT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              {{_trnMainService.nullToZeroConverter(tList.VAT)|twoDigitNumber }}
+            </td>
+            <!-- END OF GST AMOUNT -->
+
+
+
+            <td width="100px" *ngIf="'CESS_PER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              {{tList.INDCESS_PER}}
+            </td>
+
+
+            <td width="100px" *ngIf="'CESS_AMOUNT'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              {{tList.INDCESS_AMT}}
+            </td>
+
+            <!-- START OF PRIMARY DISCOUNT PERCENT -->
+            <td width="100px"
+              *ngIf="'PRIMARY_DIS_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input type="number" [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )" style="width: inherit"
+                decimalPlacesRestriction="2" id="primarydiscountper{{i}}" min="0" max="100"
+                [(ngModel)]="tList.PrimaryDiscountPercent" (change)="manulaSchemeDiscountChange(i)"
+                (keydown.Tab)="primarydiscountperClicked(i,'PRIMARY_DIS_PER_HEADER')"
+                (keydown.enter)="primarydiscountperClicked(i,'PRIMARY_DIS_PER_HEADER')" />
+            </td>
+            <!-- END OF PRIMARY DISCOUNT PERCENT -->
+
+            <!-- START OF PRIMARY DISCOUNT -->
+            <td width="100px" *ngIf="'PRIMARY_DIS_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input type="text" [disabled]="( _trnMainService.TrnMainObj.INVOICETYPE=='EDI' )" style="width: inherit"
+                [readonly]="_trnMainService.TrnMainObj.VoucherType==3 || _trnMainService.TrnMainObj.VoucherType==110"
+                id="BasePrimaryDiscount{{i}}" [ngModel]="tList.BasePrimaryDiscount| number:'1.2-2'" />
+            </td>
+            <!-- END OF PRIMARY DISCOUNT -->
+
+            <!-- START OF SECONDARY DISCOUNT PERCENT -->
+            <td width="100px"
+              *ngIf="'SECONDARY_DIS_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input type="number" [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )" style="width: inherit"
+                id="secondarydiscountper{{i}}" [(ngModel)]="tList.SecondaryDiscountPercent"
+                (change)="manulaSchemeDiscountChange(i)"
+                (keydown.Tab)="secondarydiscountperClicked(i,'SECONDARY_DIS_PER_HEADER')"
+                (keydown.enter)="secondarydiscountperClicked(i,'SECONDARY_DIS_PER_HEADER')" />
+            </td>
+            <!-- END OF SECONDARY DISCOUNT PERCENT -->
+
+            <!-- START OF SECONDARY DISCOUNT AMOUNT -->
+            <td width="100px"
+              *ngIf="'SECONDARY_DIS_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input type="text" [disabled]="( _trnMainService.TrnMainObj.INVOICETYPE=='EDI' )" style="width: inherit"
+                [readonly]="_trnMainService.TrnMainObj.VoucherType==3  || _trnMainService.TrnMainObj.VoucherType==110"
+                id="BaseSecondaryDiscount{{i}}" [ngModel]="tList.BaseSecondaryDiscount| number:'1.2-2'" />
+            </td>
+            <!-- END OF SECONDARY DISCOUNT AMOUNT -->
+
+            <!-- START OF LIQUIDATION DISCOUNT PERCENT -->
+            <td width="100px"
+              *ngIf="'LIQUIDITION_DIS_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input type="number" id="liquiditiondiscountper{{i}}"
+                [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )" style="width: inherit"
+                [(ngModel)]="tList.LiquiditionDiscountPercent" (change)="manulaSchemeDiscountChange(i)"
+                (keydown.Tab)="liquiditiondiscountperClicked(i,'LIQUIDITION_DIS_PER_HEADER')"
+                (keydown.enter)="liquiditiondiscountperClicked(i,'LIQUIDITION_DIS_PER_HEADER')" />
+            </td>
+            <!-- END OF LIQUIDATION DISCOUNT PERCENT -->
+
+            <!-- START OF LIQUIDATION DISCOUNT AMOUNT -->
+            <td width="100px"
+              *ngIf="'LIQUIDITION_DIS_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input type="text" [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )" style="width: inherit"
+                [readonly]="_trnMainService.TrnMainObj.VoucherType==3 || _trnMainService.TrnMainObj.VoucherType==110"
+                id="BaseLiquiditionDiscount{{i}}" [ngModel]="tList.BaseLiquiditionDiscount| number:'1.2-2'" />
+            </td>
+            <!-- END OF LIQUIDATION DISCOUNT AMOUNT -->
+
+            <!-- START OF OTHER DISCOUNT -->
+            <td width="100px" *ngIf="'OTHER_DIS_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input type="text" [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )" style="width: inherit"
+                [readonly]="_trnMainService.TrnMainObj.VoucherType==3 ||  _trnMainService.TrnMainObj.VoucherType==110"
+                id="OtherDiscount{{i}}" [ngModel]="tList.OtherDiscount| number:'1.2-2'" />
+            </td>
+            <!-- END OF OTHER DISCOUNT  -->
+
+            <!-- START OF ADJUSTMENT AMOUNT -->
+            <td width="100px" *ngIf="'ADJUSTMENT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input type="number" id="adjustment{{i}}" [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )"
+                style="width: inherit" [(ngModel)]="tList.ADJUSTEDAMNT" (change)="adjustmentAmtChange()"
+                (keydown.Tab)="adjustmentAmtrClicked(i,'ADJUSTMENT_HEADER')"
+                (keydown.enter)="adjustmentAmtrClicked(i,'ADJUSTMENT_HEADER')" />
+            </td>
+            <!-- END OF ADJUSTMENT AMOUNT -->
+
+            <!-- START OF NET AMOUNT -->
+            <td width="100px" id="netamount{{i}}"
+              *ngIf="'NETAMOUNT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              {{_trnMainService.nullToZeroConverter(tList.NETAMOUNT)|twoDigitNumber}}
+            </td>
+            <!-- END OF NET AMOUNT -->
+
+            <!-- START OF REMARKS -->
+            <td width="100px" *ngIf="'REMARKS_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input type="text" (keydown.Tab)="RemarksEnterCommand($event,i,'REMARKS_HEADER')" style="width: inherit;"
+                (keydown.enter)="RemarksEnterCommand($event,i,'REMARKS_HEADER')" id="remarks{{i}}"
+                [ngModel]="tList.REMARKS" />
+            </td>
+            <!-- END OF REMARKS -->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</ng-container>
+<ng-container *ngIf=" _trnMainService.TrnMainObj.VoucherType==3 ">
+  <div class="transaction-table-custom" #prodlistTable id="prodlistTable">
+    <div class="table-container scroll-tablee table-scrollsales"
+      [style.height]=" this.masterService.ShowMore ? 'calc(79vh - 231px)' : purchaseTableHeight()">
+      <table id="BlueHeaderResizableTable" #reportHtmlTable class="reportTabel" style="table-layout: fixed;"
+        [style.height]=" (_trnMainService.AppSettings.ShowPurchaseHistory && _trnMainService.TrnMainObj.VoucherType==14) ? '45vh' : '65vh' ">
+        <thead>
+          <tr style="
+                border-bottom: 2px solid #e6e6e6;
+                border-top: 2px solid #e6e6e6;
+                height: 30px;
+                background: silver;
+                color: black;
+              ">
+            <th width="65px">S.No.</th>
+            <th width="100px" *ngIf="'BARCODE_OPTION'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              Barcode</th>
+            <th width="100px" *ngIf="'MCODE_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">Code
+            </th>
+            <th width="300px" *ngIf="'DESCA_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              Description</th>
+            <th width="100px" *ngIf="'CONFACTOR_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              C.F.
+            </th>
+            <th width="100px"
+              *ngIf="'BATCH_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf:_trnMainService.AppSettings.HideBatch">
+              BatchNo</th>
+            <th width="100px"
+              *ngIf="'MFGDATE_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf:_trnMainService.AppSettings.HideMfgDate">
+              Mfg
+              Dt</th>
+            <th width="100px"
+              *ngIf="'EXPDATE_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf:_trnMainService.AppSettings.HideExpDate">
+              Exp
+              Dt</th>
+            <!-- <th width="100px" *ngIf="'QUANTITY_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">ActualQty
+            </th> -->
+            <th style="width:100px"
+              *ngIf="'QUANTITY_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf "> Qty</th>
+            <!-- <th style="width:100px" *ngIf="'QUANTITY1_HEADER'">ReturnQty</th>  -->
+
+            <th width="100px"
+              *ngIf="'FREEQUANTITY_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">Free
+              Qty</th>
+
+            <th width="100px" *ngIf="'PACKING_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              Packing</th>
+            <th width="100px" *ngIf="'MRP_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">MRP
+            </th>
+            <th width="100px" *ngIf="'COSTPRICE_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              Cost
+              Price</th>
+            <th width="100px" *ngIf="'SELLING_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              Selling Price</th>
+            <th width="100px" *ngIf="'PROFIT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              Profit </th>
+            <th width="100px" *ngIf="'TAXABLEAMT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              Taxable</th>
+            <th width="100px"
+              *ngIf="'DISCOUNT_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">Disc
+              %</th>
+            <th width="100px"
+              *ngIf="'DISCOUNT_AMT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">Disc
+              Amt</th>
+            <th width="100px" *ngIf="'GST_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">GST%
+            </th>
+            <th width="100px" *ngIf="'GST_AMT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">GST
+              TaxAmt</th>
+            <th width="60px">
+              Cess%</th>
+            <th width="100px">
+              Cess Amnt
+            </th>
+            <th width="100px"
+              *ngIf="'PRIMARY_DIS_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">P
+              Dis.%</th>
+            <th width="100px" *ngIf="'PRIMARY_DIS_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              P
+              Dis.</th>
+            <th width="100px"
+              *ngIf="'SECONDARY_DIS_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">S
+              Dis.%</th>
+            <th width="100px"
+              *ngIf="'SECONDARY_DIS_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">S
+              Dis.</th>
+            <!-- <th width="100px"
+              *ngIf="'LIQUIDITION_DIS_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">L
+              Dis.%</th>
+            <th width="100px"
+              *ngIf="'LIQUIDITION_DIS_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">L
+              Dis.</th>
+            <th width="100px" *ngIf="'OTHER_DIS_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">OS
+              Dis.</th> -->
+            <th width="100px" *ngIf="'ADJUSTMENT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              Adjusted Amt</th>
+            <th width="100px" *ngIf="'NETAMOUNT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              Net
+              Amnt</th>
+            <th width="100px" *ngIf="'REMARKS_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              Remarks</th>
+          </tr>
+        </thead>
+        <tbody style="width: fit-content;">
+          <tr *ngFor="let tList of _trnMainService.TrnMainObj.ProdList;let i=index"
+            style="border: 1px solid #e6e6e6; max-height: 25px" (click)="RowClick(i)"
+            [style.background]="_trnMainService.rowBackGrounfColor(i)" [class.selected]="isTableRowSelected(i)"
+            [class.highlighted]="i==activerowIndex"
+            (keydown.delete)="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI')?'':deleteRow()" id="prodRow{{i}}">
+            <!-- START OF SNO -->
+            <td width="65px" id="sno{{i}}">{{i+1}}</td>
+            <!-- END OF SNO -->
+            <td width="100px" class="CellWithComment"
+              *ngIf="'BARCODE_OPTION'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input id="barcodebilling{{i}}" type="text" style="width: inherit" [(ngModel)]="tList.BC"
+                (keydown.enter)="BarcodekeyEvent($event,i)" autocomplete="off" />
+              <span contenteditable="false" class="CellComment">Enter BarCode and press ENTER to Select Item</span>
+            </td>
+
+            <!-- START OF ITEM CODE -->
+            <td width="100px" class="CellWithComment"
+              *ngIf="'MCODE_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input id="menucode{{i}}" type="text" style="width: inherit" [(ngModel)]="tList.MENUCODE"
+                (keydown.Tab)="ItemkeyEvent(i)" (keydown.enter)="ItemkeyEvent(i)"
+                (keydown.ArrowDown)="onMCODEDown($event,i)" (keydown.ArrowUp)="onMCODEUp($event,i)" autocomplete="off"
+                [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )" />
+              <span contenteditable="false" class="CellComment">Enter Code or press ENTER or TAB to Select Item</span>
+            </td>
+            <!-- END OF ITEM CODE -->
+
+            <!-- START OF ITEM DESC -->
+            <td width="300px" *ngIf="'DESCA_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              {{tList.ITEMDESC}}
+              <ng-container>
+                <br>
+                <span [innerHtml]="tList.VARIANTDESCA"></span>
+              </ng-container>
+            </td>
+            <!-- END OF ITEM DESC -->
+            <td width="100px" *ngIf="'CONFACTOR_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              {{tList.CARTONCONFACTOR}}
+            </td>
+            <!-- START OF BATCH -->
+            <!-- <td width="100px" class="CellWithComment" *ngIf="_trnMainService.AppSettings.HideBatch == false" *ngIf="'BATCH_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf"> -->
+            <td width="100px" class="CellWithComment"
+              *ngIf="'BATCH_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf:_trnMainService.AppSettings.HideBatch">
+              <input type="text" id="batch{{i}}" style="width: inherit" class="CellWithComment"
+                [(ngModel)]="tList.BATCH" (keydown.Tab)="BatchTabClick(i,'BATCH_HEADER')"
+                (keydown)="onKeydownOnBatch($event)" (keydown.enter)="BatchTabClick(i,'BATCH_HEADER')"
+                autocomplete="off" #focusBatch [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )" />
+              <span contenteditable="false" class="CellComment">Enter Code or press ENTER or TAB to Select
+                Batch</span>
+            </td>
+            <!-- END OF BATCH -->
+
+            <!-- manufacturing date field -->
+
+            <!-- <td width="100px" class="date" *ngIf="_trnMainService.AppSettings.HideMfgDate == false"> -->
+            <td width="100px" class="date"
+              *ngIf="'MFGDATE_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf:_trnMainService.AppSettings.HideMfgDate">
+              <ims-date-picker [showCalendar]="false"
+                [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )?true:false"
+                (onDateChange)="MFGDateEnterEvent(i,'MFGDATE_HEADER');setMFGEXPDATE('MFGDATE',$event,i)"
+                [index]="'mfgdate'+i" [date]="getMFGEXPDATE('MFGDATE',i)" [ID]="i"></ims-date-picker>
+            </td>
+            <!-- End of manufacturing date -->
+
+            <!-- start of Exp Date -->
+            <!-- <td width="100px" class="date" *ngIf="_trnMainService.AppSettings.HideExpDate == false"> -->
+            <td width="100px" class="date"
+              *ngIf="'EXPDATE_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf:_trnMainService.AppSettings.HideExpDate">
+              <ims-date-picker [showCalendar]="false" [ID]="i"
+                [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )?true:false"
+                (onDateChange)="expDateEnterEvent(i,'EXPDATE_HEADER');setMFGEXPDATE('EXPDATE',$event,i)"
+                [index]="'expdate'+i" [date]="getMFGEXPDATE('EXPDATE',i)"></ims-date-picker>
+            </td>
+            <!-- End of Exp Date -->
+
+            <!-- START OF QUANTITY -->
+            <!-- <td style="width: 100px;"  >
+              {{tList.Quantity}}  -->
+            <!-- //ralquatity_in rQuantity -->
+            <!-- </td> -->
+            <td width="100px" *ngIf="'QUANTITY_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input id="quantity{{i}}" OnlyNumber="true" type="number" [(ngModel)]="tList.Quantity"
+                style="width: inherit" (keydown)="onKeyDownInQuantity($event,i)" (change)="QuantityChangeEvent(i)"
+                (keydown.Tab)="QuantityEventClick(i,'QUANTITY_HEADER')"
+                (keydown.enter)="QuantityEventClick(i,'QUANTITY_HEADER')" (keydown.ArrowDown)="onQuantityDown($event,i)"
+                (keydown.ArrowUp)="onQuantityUp($event,i)" autocomplete="off"
+                [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )" />
+
+            </td>
+
+            <!-- <td style="width: 100px;"  >
+              {{tList.ReceivedQuantity}} 
+              ralquatity_in rQuantity 
+            </td> -->
+            <!-- <td width="100px" *ngIf="'QUANTITY_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input id="quantity{{i}}" OnlyNumber="true" type="number" [(ngModel)]="tList.AltQty"
+                style="width: inherit" (keydown)="onKeyDownInQuantity($event,i)" (change)="ReturnQuantityChangeEvent(i)"
+                (keydown.Tab)="QuantityEventClick(i)" (keydown.enter)="QuantityEventClick(i)"
+                (keydown.ArrowDown)="onQuantityDown($event,i)" (keydown.ArrowUp)="onQuantityUp($event,i)"
+                autocomplete="off" [disabled]=""/> -->
+            <!-- realquantity -->
+
+            <!-- </td> -->
+
+            <!-- END OF QUANTITY -->
+
+
+
+            <!-- START OF FREE QUANTITY -->
+            <td width="100px"
+              *ngIf="'FREEQUANTITY_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input id="freequantity{{i}}" OnlyNumber="true" type="number" [(ngModel)]="tList.FreeQuantity"
+                style="width: inherit" (keypress)="numberOnly($event)" (change)="QuantityChangeEvent(i)"
+                (keydown.Tab)="FreeQuantityEventClick(i,'FREEQUANTITY_HEADER')"
+                (keydown.enter)="FreeQuantityEventClick(i,'FREEQUANTITY_HEADER')" autocomplete="off" />
+            </td>
+
+            <!-- END OF FREE QUANTITY -->
+
+            <!-- START OF UNIT -->
+            <td width="100px" *ngIf="'PACKING_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <select (change)="SelectUnit(i)" (keydown.Tab)="UnitEnterEventClick(i,'PACKING_HEADER')"
+                style="width: inherit" (keydown.enter)="UnitEnterEventClick(i,'PACKING_HEADER')" id="alternateunit{{i}}"
+                [(ngModel)]="tList.ALTUNITObj" [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )">
+                <option *ngFor="let u of tList.Product?.AlternateUnits" [ngValue]="u">
+                  {{u.ALTUNIT}}
+                </option>
+              </select>
+            </td>
+            <!-- END OF UNIT -->
+
+            <!-- START OF MRP -->
+            <td width="100px" *ngIf="'MRP_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input id="mrp{{i}}" OnlyNumber="true" type="text" [(ngModel)]="tList.ALTMRP" style="width: inherit"
+                [disabled]="( _trnMainService.TrnMainObj.INVOICETYPE=='EDI' )" (change)="MRPChangeEvent(i)"
+                (keydown.Tab)="mrpEnterEvent(i,'MRP_HEADER')" (keydown.enter)="mrpEnterEvent(i,'MRP_HEADER')" />
+            </td>
+            <!-- END OF MRP -->
+
+            <!-- START OF COST PRICE -->
+            <td width="100px" *ngIf="'COSTPRICE_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input id="prateid{{i}}" OnlyNumber="true" type="text" onclick="this.select();" style="width: inherit"
+                [(ngModel)]="tList.ALTRATE" (change)="tranrateChangeEvent(i)"
+                (keydown.Tab)="prateEnterEvent(i,'COSTPRICE_HEADER')"
+                (keydown.enter)="prateEnterEvent(i,'COSTPRICE_HEADER')" />
+            </td>
+
+            <!-- END OF SELL PRICE -->
+            <td width="100px" *ngIf="'SELLING_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input id="srateid{{i}}" OnlyNumber="true" type="text" onclick="this.select();" style="width: inherit"
+                [(ngModel)]="tList.ALTRATE2" (change)="rateChangeEvent(i)"
+                (keydown.Tab)="SrateEnterEvent(i,'SELLING_HEADER')"
+                (keydown.enter)="SrateEnterEvent(i,'SELLING_HEADER')" />
+            </td>
+
+            <td width="100px" *ngIf="'PROFIT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              {{tList.PROFIT | number:'1.2-2'}}
+
+            </td>
+
+            <td width="100px" *ngIf="'TAXABLEAMT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              {{tList.TAXABLE | number:'1.2-2'}}
+
+            </td>
+
+            <!-- START OF DISCOUNT PERCENT -->
+            <td width="100px"
+              *ngIf="'DISCOUNT_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input type="number" decimalPlacesRestriction="2" id="discount{{i}}" min="0" max="100"
+                style="width: inherit" [(ngModel)]="tList.INDDISCOUNTRATE" (change)="IndDiscountRateChangeEvent(i)"
+                [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )"
+                (keydown.Tab)="discRateEnterClicked(i,'DISCOUNT_PER_HEADER')"
+                (keydown.enter)="discRateEnterClicked(i,'DISCOUNT_PER_HEADER')" #focusDiscount />
+            </td>
+            <!-- END OF DISCOUNT PERCENT -->
+
+            <!-- START OF DISCOUNT AMOUNT -->
+            <td width="100px"
+              *ngIf="'DISCOUNT_AMT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input type="text" id="discountAmt{{i}}" [ngModel]="tList.INDDISCOUNT | number : '1.2-2'"
+                style="width: inherit" [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )"
+                (change)="IndDiscountAmountChangeEvent(i,$event)"
+                (keydown.Tab)="discEnterClicked(i,'DISCOUNT_AMT_HEADER')"
+                (keydown.enter)="discEnterClicked(i,'DISCOUNT_AMT_HEADER')" />
+            </td>
+            <!-- END OF DISCOUNT AMOUNT -->
+
+            <!-- START OF GST RATE -->
+            <td width="100px" id="gstrateper{{i}}"
+              *ngIf="'GST_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              {{tList.GSTRATE}}
+            </td>
+            <!-- END OF GST RATE -->
+
+            <!-- START OF GST AMOUNT -->
+            <td width="100px" id="vat{{i}}"
+              *ngIf="'GST_AMT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              {{_trnMainService.nullToZeroConverter(tList.VAT)|twoDigitNumber }}
+            </td>
+            <!-- END OF GST AMOUNT -->
+            <td width="60px">
+              {{tList.INDCESS_PER}}
+            </td>
+
+            <td style="text-align: right;" width="100px">
+              {{_trnMainService.nullToZeroConverter(tList.INDCESS_AMT) |twoDigitNumber}}
+            </td>
+            <!-- START OF PRIMARY DISCOUNT PERCENT -->
+            <td width="100px"
+              *ngIf="'PRIMARY_DIS_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input type="number" [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )" style="width: inherit"
+                decimalPlacesRestriction="2" id="primarydiscountper{{i}}" min="0" max="100"
+                [(ngModel)]="tList.PrimaryDiscountPercent" (change)="manulaSchemeDiscountChange(i)"
+                (keydown.Tab)="primarydiscountperClicked(i,'PRIMARY_DIS_PER_HEADER')"
+                (keydown.enter)="primarydiscountperClicked(i,'PRIMARY_DIS_PER_HEADER')" />
+            </td>
+            <!-- END OF PRIMARY DISCOUNT PERCENT -->
+
+            <!-- START OF PRIMARY DISCOUNT -->
+            <td width="100px" *ngIf="'PRIMARY_DIS_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input type="text" [disabled]="( _trnMainService.TrnMainObj.INVOICETYPE=='EDI' )" style="width: inherit"
+                
+                id="BasePrimaryDiscount{{i}}" [(ngModel)]="tList.AltPrimaryDiscount"  
+                 (keydown.enter)="enterKeyFocusShift(i,'PRIMARY_DIS_HEADER','secondarydiscountper'+i)"/>
+            </td>
+            <!-- END OF PRIMARY DISCOUNT -->
+
+            <!-- START OF SECONDARY DISCOUNT PERCENT -->
+            <td width="100px"
+              *ngIf="'SECONDARY_DIS_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input type="number" [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )" style="width: inherit"
+                id="secondarydiscountper{{i}}" [(ngModel)]="tList.SecondaryDiscountPercent"
+                (change)="manulaSchemeDiscountChange(i)"
+                (keydown.Tab)="secondarydiscountperClicked(i,'SECONDARY_DIS_PER_HEADER')"
+                (keydown.enter)="secondarydiscountperClicked(i,'SECONDARY_DIS_PER_HEADER')" />
+            </td>
+            <!-- END OF SECONDARY DISCOUNT PERCENT -->
+
+            <!-- START OF SECONDARY DISCOUNT AMOUNT -->
+            <td width="100px"
+              *ngIf="'SECONDARY_DIS_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input type="text" [disabled]="( _trnMainService.TrnMainObj.INVOICETYPE=='EDI' )" style="width: inherit"
+                id="BaseSecondaryDiscount{{i}}" [(ngModel)]="tList.AltSecondaryDiscount"
+                (keydown.enter)="enterKeyFocusShift(i,'SECONDARY_DIS_HEADER','remarks'+i)" />
+            </td>
+            <!-- END OF SECONDARY DISCOUNT AMOUNT -->
+
+            <!-- START OF LIQUIDATION DISCOUNT PERCENT -->
+            <!-- <td width="100px"
+              *ngIf="'LIQUIDITION_DIS_PER_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input type="number" id="liquiditiondiscountper{{i}}"
+                [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )" style="width: inherit"
+                [(ngModel)]="tList.LiquiditionDiscountPercent" (change)="manulaSchemeDiscountChange(i)"
+                (keydown.Tab)="liquiditiondiscountperClicked(i,'LIQUIDITION_DIS_PER_HEADER')"
+                (keydown.enter)="liquiditiondiscountperClicked(i,'LIQUIDITION_DIS_PER_HEADER')" />
+            </td> -->
+            <!-- END OF LIQUIDATION DISCOUNT PERCENT -->
+
+            <!-- START OF LIQUIDATION DISCOUNT AMOUNT -->
+            <!-- <td width="100px"
+              *ngIf="'LIQUIDITION_DIS_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input type="text" [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )" style="width: inherit"
+                [readonly]="_trnMainService.TrnMainObj.VoucherType==3 || _trnMainService.TrnMainObj.VoucherType==110"
+                id="BaseLiquiditionDiscount{{i}}" [ngModel]="tList.BaseLiquiditionDiscount| number:'1.2-2'" />
+            </td> -->
+            <!-- END OF LIQUIDATION DISCOUNT AMOUNT -->
+
+            <!-- START OF OTHER DISCOUNT -->
+            <!-- <td width="100px" *ngIf="'OTHER_DIS_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input type="text" [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )" style="width: inherit"
+                [readonly]="_trnMainService.TrnMainObj.VoucherType==3 ||  _trnMainService.TrnMainObj.VoucherType==110"
+                id="OtherDiscount{{i}}" [ngModel]="tList.OtherDiscount| number:'1.2-2'" />
+            </td> -->
+            <!-- END OF OTHER DISCOUNT  -->
+
+            <!-- START OF ADJUSTMENT AMOUNT -->
+            <td width="100px" *ngIf="'ADJUSTMENT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input type="number" id="adjustment{{i}}" [disabled]="(_trnMainService.TrnMainObj.INVOICETYPE=='EDI' )"
+                style="width: inherit" [(ngModel)]="tList.ADJUSTEDAMNT" (change)="adjustmentAmtChange()"
+                (keydown.Tab)="adjustmentAmtrClicked(i,'ADJUSTMENT_HEADER')"
+                (keydown.enter)="adjustmentAmtrClicked(i,'ADJUSTMENT_HEADER')" />
+            </td>
+            <!-- END OF ADJUSTMENT AMOUNT -->
+
+            <!-- START OF NET AMOUNT -->
+            <td width="100px" id="netamount{{i}}"
+              *ngIf="'NETAMOUNT_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              {{_trnMainService.nullToZeroConverter(tList.NETAMOUNT)|twoDigitNumber}}
+            </td>
+            <!-- END OF NET AMOUNT -->
+
+            <!-- START OF REMARKS -->
+            <td width="100px" *ngIf="'REMARKS_HEADER'|taxinvoiceactive:_trnMainService.userwiseTransactionFormConf">
+              <input type="text" (keydown.Tab)="RemarksEnterCommand($event,i,'REMARKS_HEADER')" style="width: inherit;"
+                (keydown.enter)="RemarksEnterCommand($event,i,'REMARKS_HEADER')" id="remarks{{i}}"
+                [ngModel]="tList.REMARKS" />
+            </td>
+            <!-- END OF REMARKS -->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</ng-container>
+
+
+<div class="row">
+  <div class="col-md-12"
+    *ngIf="_trnMainService.TrnMainObj.VoucherType==3 && _trnMainService.AppSettings.ShowPurchaseHistory == true">
+    <voucher-history #voucherhistory [activeIndex]="this.activerowIndex"></voucher-history>
+  </div>
+</div>
+
+
+
+
+<div class="modal-wrap">
+  <div class="modal-sticky" *ngIf="_trnMainService.showItemStockRouteModal" style="
+      display: block;
+      padding: 0px;
+      margin-bottom: 25px;
+      height: 210px;
+      position: absolute;
+      top: 5px;
+      width: 600px;
+      z-index: 9999999;
+      left: calc(50% - 300px);
+    ">
+    <div class="modal-content modal-content-main-area" style="width: 100%; margin: 0px">
+      <div class="modal-header" style="border: none">
+        <h4 class="modal-title" id="myModalLabel">
+          {{_trnMainService.ItemOutOfStockMessage}}
+        </h4>
+      </div>
+      <div class="modal-body">
+        <span>Visit item opening to insert new stock.</span>
+      </div>
+      <div class="modal-footer" style="border: none">
+        <button type="button" style="margin-top: 5px" class="btn btn-default" data-dismiss="modal"
+          (click)="cancelShowItemRoute()">
+          Cancel
+        </button>
+
+        <a style="margin-top: 5px" class="btn btn-primary" href="/#/pages/transaction/inventory/openingstockentry"
+          target="_blank">Insert New Stock</a>
+      </div>
+    </div>
+  </div>
+</div>

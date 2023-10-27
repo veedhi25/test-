@@ -1,0 +1,13 @@
+<div class="widgets">
+    <div class="row">
+        <button type="button" class="btn btn-info" (click)="AddChanel()"
+            style="margin-left:18px; margin-bottom: 10px;">Add Channel</button>
+    </div>
+    <div class="row">
+        <ba-card title="Channel" baCardClass="with-scroll">
+            <ng2-smart-table [settings]="settings" [source]="source" (edit)="onEditClick($event)"
+                (deleteConfirm)="onDeleteConfirm($event)" (view)="onViewClick($event)"></ng2-smart-table>
+        </ba-card>
+    </div>
+
+</div>

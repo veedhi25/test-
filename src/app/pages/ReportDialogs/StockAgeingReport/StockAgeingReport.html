@@ -1,0 +1,215 @@
+<div style="background-color : #ffffff; padding :1%; height : auto; ">
+        <div class="row">
+             <!-- <div class="modal-header" bsModal #lgModal="bs-modal">
+                <button class="Close" aria-label="Close" (click)="lgModal.hide()" style="float:right;">
+                        <span aria-hidden="true">&times;</span>
+                </button>            
+            </div>  -->
+
+            <div class="modal-header"style="width: 97%; margin:0px auto;" >
+                    <button type="button" class="close" data-dismiss="modal" (click)="hide()">&times;</button>
+                   <h4 class="modal-title">Stock Ageing Report</h4> 
+            </div>
+            <!-- Left Column -->
+            <div class="_left_section col-md-6">
+                    <fieldset style="width:352px">
+                            <legend style="font-size:11px;font-weight: bold; width:auto">Date Range Selection :</legend>                   
+                                <table>
+                                  <tr>
+                                     <td><label class="smallBoldLabel">From:(AD)</label></td>
+                                     <td><label class="smallBoldLabel">To:(AD)</label></td>   
+                                  </tr>
+                                   <tr>
+                                        <td>                                                 
+                                          <label class="smallBoldLabel"><input  type="date"  style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]="StockAgeing.DATE1"  (change)="changeEntryDate($event.target.value,'AD')"  ></label>
+                                        </td>
+                                        <td>                                                 
+                                           <label class="smallBoldLabel"><input  type="date" style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]="StockAgeing.DATE2"  (change)="changeEndDate($event.target.value,'AD')"   ></label>
+                                         </td>
+                                      </tr>
+                                      <tr>
+                                            <td>
+                                                   <label class="smallBoldLabel"> <input id="nepaliDate" style="width:152px;height:25px;text-align:center" class="nepali-calendar ndp-nepali-calendar" [(ngModel)]=" StockAgeing.BSDATE1"
+                                                     type="text" (change)="changeEntryDate($event.target.value,'BS')"
+                                                    placeholder="yyyy-mm-dd" />
+                                                </label>  
+                                                                    
+                                               </td>
+                                               <td>
+                                                   <label class="smallBoldLabel">
+                                                    <input id="nepaliDate" style="width:152px;height:25px;text-align:center" class="nepali-calendar ndp-nepali-calendar" [(ngModel)]=" StockAgeing.BSDATE2"
+                                                    type="text" (change)="changeEndDate($event.target.value,'BS')"
+                                                   placeholder="yyyy-mm-dd" />
+                                                </label>                     
+                                               </td>                              
+                                       </tr>
+                                </table>
+                    </fieldset>
+
+                                 
+            </div>
+            <!-- Another column -->
+            <div class="_right_section col-md-6">
+
+                    <fieldset style="width: 316px; height: 120px;">
+                            <legend style="font-size:11px;font-weight: bold; width:auto">Item Selection:</legend>          
+                         
+    
+                             <div class="col-md-6">                                               
+                                 <!-- <label style="width:100%;">Item Code :</label>  -->
+                                 <div class="smalllabeldiv">
+                                        <label class="smallBoldLabel">Item Code:</label>
+                                 </div>
+                                 <div >
+                                        <input tabindex="-1" type="text" style="width:120px"  (keydown.enter)="menucodeChanged($event.target.value)" [(ngModel)]="itemCode" >                                
+                                 </div>
+                                   
+                           </div> 
+                           <div class="col-md-12">                                                     
+                                      <!-- <label>Item Name :</label>    -->
+                                      <div class="smalllabeldiv">
+                                            <label class="smallBoldLabel">Item Name:</label>
+                                       </div>
+                                        <div >
+                                            <input ngui-auto-complete [source]="dropListItem.bind(this)" max-num-list="25" [(ngModel)]="selectedProd" (ngModelChange)="itemChanged($event)"
+                                                style="width:284px;height:25px" list-formatter="DESCA" 
+                                                display-property-name="DESCA">
+                                        </div>
+                        </div>                           
+                       </fieldset>
+
+<!-- 
+                    <fieldset>
+                            <legend style="font-size:11px;font-weight: bold; width:auto">Report Type Selection :</legend>                 
+                              <div class="col-md-12">                        
+                                  <div class="radio">
+                                      <label class="smallBoldLabel"><input type="radio" name="optradio" [(ngModel)]=" StockAgeing.WISE" value="ITEM" >Item Wise</label>
+                                  </div>
+                                  <div class="radio">
+                                      <label class="smallBoldLabel"><input type="radio" name="optradio" [(ngModel)]=" StockAgeing.WISE" value="MGROUP"  >Item Group Wise</label>
+                                  </div>
+                                  <div class="radio">
+                                       <label class="smallBoldLabel"><input type="radio" name="optradio" [(ngModel)]=" StockAgeing.WISE" value="MCAT" >Item Category Wise</label>
+                                  </div>                    
+                              </div>                                                                                                                                                             
+                     </fieldset>   -->
+
+                   <!-- <div class="col-md-12">
+                        <input type="checkbox" name="vehicle1" [(ngModel)]=" StockAgeing.SHOWVALUATIONRATE"  value="1"> Cost Center Selection<br>
+                    </div>                                
+                   <div class="btn">
+   
+                    <button class="btn btn-info confirm-btn" type="button"  (click)=onload()>RUN</button>
+                    <button type="button"  title="Cancel" class="btn btn-info">Close</button>  
+                  </div> -->
+            </div>
+            
+        <!-- <div class="row"> -->
+                <div class="col-md-8" >
+                        <fieldset>
+                                <legend style="font-size:11px;font-weight: bold; width:auto">Ageing Criteria</legend>
+                                
+                                <div class="col-md-2" style="padding-right: 0px;padding-left: 0px">
+                                        <input type="text"  class="form-control input-sm" style="min-width:95%;"  [(ngModel)]="StockAgeing.D1">  
+                                    </div>
+                                    <div class="col-md-2" style="padding-right: 0px;padding-left: 0px">
+                                            <input type="text"  class="form-control input-sm" style="min-width:95%;"[(ngModel)]="StockAgeing.D2" >  
+                                        </div>
+                                        <div class="col-md-2" style="padding-right: 0px;padding-left: 0px">
+                                                <input type="text"  class="form-control input-sm" style="min-width:95%;" [(ngModel)]="StockAgeing.D3" >  
+                                            </div>
+                                            <div class="col-md-2" style="padding-right: 0px;padding-left: 0px">
+                                                    <input type="text"  class="form-control input-sm" style="min-width:95%;"[(ngModel)]="StockAgeing.D4" >  
+                                                </div>
+                                                <div class="col-md-2" style="padding-right: 0px;padding-left: 0px">
+                                                        <input type="text"  class="form-control input-sm" style="min-width:95%;" [(ngModel)]="StockAgeing.D5" >  
+                                                    </div>
+                                                    <div class="col-md-2" style="padding-right: 0px;padding-left: 0px">
+                                                            <input type="text"  class="form-control input-sm" style="min-width:95%;" [(ngModel)]="StockAgeing.D6" >  
+                                                        </div>
+                                                                                                     
+                        </fieldset>
+                </div>
+                <div class="col-md-4">
+                    <fieldset style="height: 82px; width:187px;">
+                            <legend style="font-size:11px;font-weight: bold; width:auto">Report Type Selection :</legend>                 
+                            <div>                        
+                                <div class="radio">
+                                    <label class="smallBoldLabel" style="width:95%"><input type="radio" name="optradio" [(ngModel)]=" StockAgeing.WISE" value="ITEM" >Item Wise</label>
+                                </div>
+                                <div class="radio">
+                                    <label class="smallBoldLabel" style="width:95%"><input type="radio" name="optradio" [(ngModel)]=" StockAgeing.WISE" value="MGROUP"  >Item Group Wise</label>
+                                </div>
+                                <div class="radio">
+                                     <label class="smallBoldLabel" style="width:95%"><input type="radio" name="optradio" [(ngModel)]=" StockAgeing.WISE" value="MCAT" >Item Category Wise</label>
+                                </div>                    
+                            </div> 
+                    </fieldset>               
+                </div>
+
+                <div class="col-md-6">
+                        <!-- <fieldset>
+                                <legend style="font-size:11px;font-weight: bold; width:auto">Supplier Selection :</legend>
+                                 <select (change)="onSelectSupplierName($event.target.value)" style="width:95%;" >
+                                     <option *ngFor="let supName of suppliersName" value={{supName.ACID}}  >{{supName.ACNAME}} </option>
+                                 </select>
+                            </fieldset> -->
+
+                            <fieldset>
+                                    <legend style="font-size:11px;font-weight: bold; width:auto">Supplier Selection :</legend>
+                                     <select [(ngModel)]="StockAgeing.selectedSupplier" style="width:95%;" >
+                                        <option>--All--</option>
+                                         <option *ngFor="let supName of suppliersName" [value]="supName.ACID"  >{{supName.ACNAME}} </option>
+                                     </select>
+                                </fieldset>
+                        <!-- <fieldset>
+                                <legend  style="font-size:11px;font-weight: bold; width:auto">Division Selection :</legend>          
+                                <div >         
+                                        <select  (click)="onSelectDivision($event.target.value)" style="width:311px;" >
+                                                <option>--All--</option>
+                                                <option *ngFor="let div of division" value={{div.INITIAL}} >{{div.NAME}} </option>
+                                        </select>
+                                </div>                                                                                                                     
+                        </fieldset>  -->
+
+                        <fieldset>
+                                <legend  style="font-size:11px;font-weight: bold; width:auto">Division Selection :</legend>          
+                                <div >         
+                                        <select  [(ngModel)]="StockAgeing.selectedDivision" style="width:311px;" >
+                                                <option>All</option> 
+                                                <option *ngFor="let div of division"  [ngValue]="div.NAME">{{div.NAME}} </option>
+                                        </select>
+                                </div>                                                                                                                     
+                        </fieldset>
+
+                </div>
+          
+                <div class="col-md-6">
+                            <div style="margin-top:10px;margin-left:17px">
+                                <input type="checkbox" name="vehicle1" [(ngModel)]=" StockAgeing.SHOWVALUATIONRATE"  value="1"> Cost Center Selection<br>
+                            </div> 
+                            <div class="btn" style="margin-top:50px">
+                                    <button class="btn btn-info confirm-btn" type="button"  (click)=onload()>RUN</button>
+                                    <button type="button"  title="Cancel" class="btn btn-info">Close</button>  
+                            </div>
+                            <!-- <div>
+                                    <button type="button"  title="Cancel" class="btn btn-info">Close</button>
+                            </div> -->
+                            
+                 </div>
+                
+                 <!-- <div class="btn">
+   
+                        <button class="btn btn-info confirm-btn" type="button"  (click)=onload()>RUN</button>
+                        <button type="button"  title="Cancel" class="btn btn-info">Close</button>  
+                    </div> -->
+
+              
+               
+            <!-- </div> -->
+        </div>
+
+      
+</div>
+
+

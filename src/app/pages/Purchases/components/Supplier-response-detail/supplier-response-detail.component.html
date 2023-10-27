@@ -1,0 +1,168 @@
+<style>
+    #SubmittedQuotationsComparison {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        overflow-x: scroll;
+        overflow-y: scroll;
+    }
+
+    #SubmittedQuotationsComparison td,
+    #SubmittedQuotationsComparison th {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+
+    #SubmittedQuotationsComparison thead {
+        background-color: #2bade5 !important;
+        color: #ffffff !important;
+        border: 1px solid #e2e2e2;
+    }
+
+
+    .AllSuppliers {
+        font-family: Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .AllSuppliers td,
+    .AllSuppliers th {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+
+    .AllSuppliers thead {
+        background-color: #2bade5 !important;
+        color: #ffffff !important;
+        border: 1px solid #e2e2e2;
+    }
+
+    table {
+        width: 100%;
+        overflow-x: scroll;
+        overflow-y: scroll;
+    }
+
+    .btnc {
+        padding: 0px;
+        font-weight: bold;
+        padding-left: 1px;
+        padding-right: 1px;
+    }
+</style>
+<div class="container">
+    <h3 style="padding:10px">For RFQ : {{rfqno}}</h3>
+    <div *ngIf="ViewSubmittedQuotations == false">
+        <div *ngIf="SubmittedSuppliers != null && SubmittedSuppliers.length !=0">
+            <h3 style="padding:10px">Quote Submitted Vendors</h3>
+
+            <table class="AllSuppliers">
+                <thead>
+                    <th>Sl No</th>
+                    <th>Vendor Name</th>
+                    <th>Vendor Email</th>
+                    <th>Comment</th>
+                    <th><Button class="btnc" style="background-color: rgb(221, 75, 75);"
+                            (click)="CompareSubmittedQuotations()">CompareQuotations</Button></th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let supplier of SubmittedSuppliers;let i = index">
+                        <td>{{i}}</td>
+                        <td>{{supplier.acname}}</td>
+                        <td>{{supplier.email}}</td>
+                        <td>{{supplier.Remarks}}</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div *ngIf="RemainingSuppliers != null && RemainingSuppliers.length !=0">
+            <h3 style="padding-top: 20px;padding-bottom: 10px;">Not Responded Vendors</h3>
+            <table class="AllSuppliers">
+                <thead>
+
+                    <th>Sl No</th>
+                    <th>Vendor Name</th>
+                    <th>Vendor Email</th>
+                    <th><button class="btnc" (click)="resendMailAndEdiToAll()"><i class="fa fa-envelope"
+                                aria-hidden="true"></i><i class="fa fa-bell" aria-hidden="true"></i></button></th>
+                    <th></th>
+
+                </thead>
+                <tbody>
+                    <tr *ngFor="let supplier of RemainingSuppliers;let i = index">
+                        <td>{{i}}</td>
+                        <td>{{supplier.acname}}</td>
+                        <td>{{supplier.email}}</td>
+                        <td><button class="btnc" (click)="resendRFQ(i,supplier)"><i class="fa fa-envelope"
+                                    aria-hidden="true"></i><i class="fa fa-bell" aria-hidden="true"></i></button></td>
+                        <td>
+                            <button class="btnc" (click)="UploadExcel(i,supplier)"><i class="fa fa-file-excel-o"
+                                    aria-hidden="true"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div *ngIf="SubmittedQuotations!=null && SubmittedQuotations.length !=0 && ViewSubmittedQuotations == true">
+        <div>
+            <table id="SubmittedQuotationsComparison">
+                <thead>
+                    <th></th>
+                    <th>Sno.</th>
+                    <th>Supplier COMPANYID</th>
+                    <th>Supplier Name</th>
+                    <th>Mcode</th>
+                    <th>Item Name</th>
+                    <th>Quantity</th>
+                    <th>Order Quantity</th>
+                    <th>Packing</th>
+                    <th>DeliveryDate</th>
+                    <th>Item Rate</th>
+                    <th>Dcrate</th>
+                    <th>Dcamnt</th>
+                    <th>NetAmount</th>
+                    <th>Due Days</th>
+                    <th>Rating</th>
+                    <th>Item Remarks</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let p of SubmittedQuotations;let i = index">
+                        <td><input type="checkbox" name="" id="" [(ngModel)]="p.check"></td>
+                        <td>{{i+1}}</td>
+                        <td>{{p.SupplierCOMPANYID}}</td>
+                        <td>{{p.SupplierName}}</td>
+                        <td>{{p.Mcode}}</td>
+                        <td>{{p.ItemName}}</td>
+                        <td>{{p.Quantity}}</td>
+                        <td>{{p.OrderQuantity}}</td>
+                        <td>{{p.AltUnit}}</td>
+                        <td>{{transformDate(p.DeliveryDate)}}</td>
+                        <td>{{p.ItemRate}}</td>
+                        <td>{{p.Dcrate}}</td>
+                        <td>{{p.Dcamnt}}</td>
+                        <td>{{p.NetAmount}}</td>
+                        <td>{{p.DueDays}}</td>
+                        <td>{{p.Rating}}</td>
+                        <td>{{p.ItemRemarks}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="padding: 10px;">
+                <button class="btnc" style="background-color: rgb(51, 177, 51);" type="submit"
+                    (click)=CreatePO($event)>Approve
+                    Quotations For
+                    PO</button>
+            </div>
+        </div>
+    </div>
+
+    <file-uploader-popup #fileUploadPopupQT [popupsettings]="fileUploadPopupSettingsQT"
+        (onUploaded)="FileUploadedQT($event)">
+    </file-uploader-popup>

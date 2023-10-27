@@ -1,0 +1,62 @@
+<div style="background-color : #ffffff; padding :1%; height : auto;width:55% ">
+
+        <div class=row>
+                <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" (click)="hide()">&times;</button>
+                        <h4 class="modal-title">Analysis Report-minus Stock</h4>
+                </div>
+            <div class="_left_section col-md-12">
+               <div class="col-md-12">
+                    <fieldset>
+                            <legend >As on Dated :</legend>           
+                             <table>
+                                 <tr>
+                                     <td><label class="smallBoldLabel">From:(AD)</label></td>
+                                     <td></td>
+                                 </tr>
+                                 <tr>
+                                    <td>                                                 
+                                        <label class="smallBoldLabel"><input  type="date"  style="width:152px; min-width:50%;"  placeholder="Year Start Date"  [(ngModel)]="MinusStock.DATE"  (change)="changeEntryDate($event.target.value,'AD',Date1)" ></label>
+                                    </td>
+                                    <td>                                                 
+                                        <!-- <input  type="date" style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]="MinusStock.BSDATE2"  (change)="changeEntryDate($event.target.value,'BS',Date1)" >B S -->
+                                        <label class="smallBoldLabel"> <input id="nepaliDate" style="width:152px;height:25px;text-align:center" class="nepali-calendar ndp-nepali-calendar" [(ngModel)]="MinusStock.BSDATE2"
+                                            type="text" (change)="changeEntryDate($event.target.value,'BS')"
+                                           placeholder="yyyy-mm-dd" />
+                                       </label>
+                                    </td>
+                                 </tr>
+                             
+                             </table>                                                                                   
+                    </fieldset>
+                    <fieldset>
+                            <legend style="font-size:11px;font-weight: bold; width:auto">Warehouse Selection :</legend>          
+                            <div >
+                                    <select  [(ngModel)]="MinusStock.selectedWarehouse" style="width:275px;" >
+                                        <option>--All--</option>
+                                        <option *ngFor="let item of items" value={{item.NAME}}>{{item.NAME}} </option>
+                                    </select>
+                            </div>                                                                                                                       
+                     </fieldset>
+                     <div> 
+                            <button class="btn btn-info confirm-btn" type="button"  (click)=onload()>RUN</button>   
+                            <button type="button" (click)="cancel()" title="Cancel" class="btn btn-info">Close</button>
+                    </div> 
+
+               </div>    
+                 <!-- <div class="col-md-6">
+                  
+                 </div> -->
+                
+                    
+
+            </div>
+           <!-- <div class="._right_section col-md-6">            
+               
+                <div> 
+                        <button class="btn btn-info confirm-btn" type="button"  (click)=onload()>RUN</button>   
+                        <button type="button" (click)="cancel()" title="Cancel" class="btn btn-info">Close</button>
+                </div>
+            </div>  -->
+        </div>
+</div>

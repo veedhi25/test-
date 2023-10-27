@@ -1,0 +1,44 @@
+.modal-dialog.modal-md{
+    top: 45%;
+    margin-top: 0px;
+}
+
+.modal-dialog.modal-sm{
+    top: 45%;
+    margin-top: 0px;
+}
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.my-pagination /deep/ .ngx-pagination .current {
+    background: #17a2b8 !important;
+    border: transparent !important;
+    border-radius: 20px !important;
+  }
+  
+  .my-pagination /deep/ .ngx-pagination .current:hover {
+    background: #74d4e2 !important;
+    border-radius: 20px !important; 
+    border: transparent !important;
+  }
+  .my-pagination /deep/ .ngx-pagination a:hover, .ngx-pagination button:hover {
+      background: #c2c2c2;
+      border-radius: 20px !important;
+  }

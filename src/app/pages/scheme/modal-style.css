@@ -1,0 +1,576 @@
+.modal-dialog.modal-md {
+    top: 45%;
+    margin-top: 0px;
+}
+
+.modal-dialog.modal-sm {
+    top: 45%;
+    margin-top: 0px;
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+input,
+select,
+option {
+    height: 23px;
+    vertical-align: middle;
+    font-size: 13px;
+    border: 1px solid #cbcbcb;
+    border-radius: 3px;
+    color: black;
+}
+
+
+/* .message {
+  position: fixed;
+  top: 2px;
+  right: 163px;
+  height: 30px;
+  font-size: 18px;
+} */
+
+textarea {
+    font-size: 13px;
+    border: 1px solid #cbcbcb;
+    border-radius: 3px;
+    color: black;
+}
+
+.plainBackGround {
+    border: 2px solid #E6E6E6;
+    margin-bottom: 5px;
+    padding: 10px;
+}
+
+
+/*.myFont {
+     font-size:13px;
+     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+     font-style:normal;
+}
+*/
+
+label {
+    height: 28px;
+    font-weight: normal;
+    width: 90px;
+    margin: 2px;
+    vertical-align: middle;
+    font-size: 13px;
+    padding-top: 4px;
+}
+
+input {
+    padding-left: 4px;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input:disabled,
+select:disabled,
+textarea:disabled {
+    cursor: not-allowed !important;
+    color: black !important;
+    background-color: #EBEBE4 !important;
+}
+
+button:disabled {
+    cursor: not-allowed !important;
+}
+
+.btn-add-focus:focus {
+    transform: scale(1.2);
+    -webkit-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -o-transform: scale(1.2);
+}
+
+tr th {
+    font-weight: bold;
+}
+
+.tableBorder {
+    border: 1px solid;
+    border-color: #dcdcdc
+}
+
+.show {
+    overflow: visible;
+    height: auto;
+}
+
+.alert-danger {
+    background-color: none !important;
+    border-color: none !important;
+    color: #a94442;
+}
+
+
+/* Style the tab */
+
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+
+/* Style the buttons inside the tab */
+
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+
+/* Change background color of buttons on hover */
+
+.tab button:hover {
+    background-color: #ddd;
+}
+
+
+/* Create an active/current tablink class */
+
+.tab button.active {
+    background-color: #ccc;
+}
+
+
+/* Style the tab content */
+
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+.col-sm-3half,
+.col-sm-8half {
+    position: relative;
+    min-height: 1px;
+    padding-right: 2px;
+    padding-left: 10px;
+}
+
+@media (min-width: 768px) {
+    .col-sm-3half,
+    .col-sm-8half {
+        float: left;
+    }
+    .col-sm-3half {
+        width: 10%;
+    }
+    .col-sm-8half {
+        width: 70.83333333%;
+    }
+}
+
+.table-fixed thead {
+    width: 97%;
+}
+
+.table-fixed tbody {
+    height: 230px;
+    width: 97%;
+}
+
+.table-fixed thead,
+.table-fixed tbody,
+.table-fixed tr,
+.table-fixed td,
+.table-fixed th {
+    display: block;
+}
+
+.table-fixed tbody td,
+.table-fixed thead>tr>th {
+    float: left;
+    border-bottom-width: 0;
+}
+
+
+/* tbody tr:hover{
+  /* background-color: #E6E6E6; */
+
+*/ .table-fx table {
+    width: 100%;
+    /* 140px * 5 column + 16px scrollbar width */
+    border-spacing: 0;
+}
+
+.table-fx tbody,
+.table-fx thead tr {
+    display: block;
+}
+
+.table-fx tbody {
+    height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.table-fx tbody>td,
+.table-fx thead>th {
+    width: 140px;
+}
+
+.table-fx thead th:last-child {
+    width: 156px;
+    /* 140px + 16px scrollbar width */
+}
+
+.wrapper {
+    width: 100%;
+    position: relative;
+    /*border: 1px solid #000;*/
+    /*background: #efefef;*/
+    overflow: hidden;
+    /*border-radius: 7px;*/
+    border-bottom: 2px solid #FFFFFF;
+}
+
+.left {
+    float: left;
+}
+
+.box {
+    /*border: 1px solid #000;*/
+    width: 400px;
+}
+
+.container {
+    overflow-y: scroll;
+    height: 200px;
+    /*border-top: 41px solid transparent;*/
+    border-bottom: 41px solid transparent;
+}
+
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    width: 100%;
+    background-color: #FFFFFF;
+}
+
+td+td {
+    border-left: 1px solid #fff;
+}
+
+td,
+th {
+    /*border-bottom: 1px solid #fff;*/
+    /*background: #efefef;*/
+    padding: 0px;
+}
+
+thead tr th,
+tfoot tr td {
+    height: 40px;
+    line-height: 0;
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    color: transparent;
+    border: none;
+    white-space: nowrap;
+}
+
+thead tr th div,
+tfoot tr td div {
+    position: absolute;
+    /*color: #fff;*/
+    color: #666666;
+    padding: 10px;
+    margin-left: -10px;
+    line-height: normal;
+    width: 100%;
+    z-index: 0;
+    text-align: left;
+    font-weight: bold;
+}
+
+thead tr th div {
+    /*border-left: 1px solid #000;
+  border-bottom: 1px solid #000;*/
+    border-bottom: 2px solid #E6E6E6;
+    color: #666666;
+}
+
+tfoot tr td div {
+    /*border-left: 1px solid #000;
+  border-top: 1px solid #000;*/
+    border-left: 2px solid #FFFFFF;
+    border-top: 1px solid #FFFFFF;
+}
+
+
+/* tfoot tr td div.c1,
+thead tr th div.c1 {
+  /*background: gray;*/
+
+
+/* tfoot tr td div.c2,
+thead tr th div.c2 {
+  /*background: green;*/
+
+*/ tfoot tr td div.c3,
+thead tr th div.c3 {
+    /*background: yellow;*/
+    background: #E6E6E6;
+}
+
+thead tr th div {
+    top: 0;
+}
+
+tfoot tr td div {
+    bottom: 0;
+}
+
+thead tr th:first-child div,
+tfoot tr td:first-child div {
+    border-left: none;
+}
+
+.table>tbody>tr>td {
+    border-top: 0px !important;
+}
+
+
+/* Modal Content */
+
+.PList {
+    display: block;
+    margin-top: 40px;
+    height: 640px;
+    width: 1100px;
+    position: fixed;
+    float: right;
+    margin-left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+    left: 0;
+    top: 0;
+    z-index: 1;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%;
+    /* position: fixed; */
+    height: -webkit-fill-available;
+    margin-left: 50pc;
+    margin-top: 10pc;
+}
+
+
+/* tooltip */
+
+#MyTable {
+    border-style: solid;
+    border-color: black;
+    border-width: 2px
+}
+
+#MyTable td {
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    padding: 3px;
+}
+
+.CellWithComment {
+    position: relative;
+}
+
+.CellComment {
+    margin-top: 60px;
+    display: none;
+    position: absolute;
+    z-index: 100;
+    border: 1px;
+    background-color: white;
+    border-style: solid;
+    border-width: 1px;
+    padding: 3px;
+    color: #655e5e;
+    top: 20px;
+    background: #eef1f2;
+    width: 180px;
+    text-align: center;
+    border-radius: 10px;
+    font-size: 12px;
+    font-family: cursive;
+    padding: 0px;
+    line-height: 20px;
+}
+
+.CellWithComment:hover span.CellComment {
+    display: block;
+}
+
+.modal1 {
+    display: block;
+    margin-top: 40px;
+    height: 440px;
+    width: 800px;
+    position: fixed;
+    float: right;
+    margin-left: 220px;
+    background-color: rgba(0, 0, 0, 0);
+    left: 0;
+    top: 0;
+    z-index: 1;
+}
+
+
+/* Modal Content */
+
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 70%;
+    /* position: fixed; */
+    height: -webkit-fill-available;
+    margin-left: 35pc;
+    margin-top: 10pc;
+}
+
+
+/* The Close Button */
+
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+/*  pagination */
+
+.pagination {
+    display: inline-block;
+}
+
+.pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+.pagination a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.pagination a:hover:not(.active) {
+    background-color: #ddd;
+}
+
+
+/* tooltip */
+
+#MyTable {
+    border-style: solid;
+    border-color: black;
+    border-width: 2px
+}
+
+#MyTable td {
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    padding: 3px;
+}
+
+.CellWithComment {
+    position: relative;
+}
+
+.CellComment {
+    margin-top: 60px;
+    display: none;
+    position: absolute;
+    z-index: 100;
+    border: 1px;
+    background-color: white;
+    border-style: solid;
+    border-width: 1px;
+    padding: 3px;
+    color: #655e5e;
+    top: 20px;
+    background: #eef1f2;
+    width: 180px;
+    text-align: center;
+    border-radius: 10px;
+    font-size: 12px;
+    font-family: cursive;
+    padding: 0px;
+    line-height: 20px;
+}
+
+.CellWithComment:hover span.CellComment {
+    display: block;
+}
+
+
+/* .table tr.active td {
+  background-color:#123456 !important;
+  color: white;
+  } */
+
+.table tr.active td {
+    background-color: #123456 !important;
+    color: white;
+}
+
+.highlighted {
+    background: silver;
+    color: black;
+}

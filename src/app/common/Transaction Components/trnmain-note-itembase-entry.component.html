@@ -1,0 +1,57 @@
+﻿<div class="row">
+    <form [formGroup]="TrnMainForm">
+        <div class="plainBackGround">
+            
+            <div class="row ">
+             
+                <div class="col-md-7">
+                    <label style="width: 15%;">Tran Mode :</label>
+                    <label style="width:60px"><input type="radio" value="credit" formControlName="TRNMODE" style="height:13px" (change)="radioTrnModeChange($event.target.value)">Credit</label>
+                    <label style="width:60px"><input type="radio" value="cash" formControlName="TRNMODE" style="height:13px" (change)="radioTrnModeChange($event.target.value)">Cash</label>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-5">
+
+                    <label *ngIf="_transactionService.TrnMainObj.TRNMODE=='credit'" style="width:85.5px;">Party :</label>
+                    <label *ngIf="_transactionService.TrnMainObj.TRNMODE=='cash'" style="width:85.5px;">Cash A/c :</label>
+                 
+                    <select style="width:78%;" formControlName="TRNAC" (change)="accountChange()"><option *ngFor="let al of AccountList | async " [ngValue]="al.ACID">{{al.ACNAME}}</option></select>
+                </div>
+
+                <div class="col-md-7">
+
+                    <label *ngIf="_transactionService.TrnMainObj.TRNMODE!='credit' && TrnMainObj.VoucherType==15 " style="width:85.5px">Customer :</label>
+                    <select *ngIf="_transactionService.TrnMainObj.TRNMODE!='credit' && TrnMainObj.VoucherType==15" style="width:40%;" formControlName="TRNAC"><option *ngFor="let s of CustomerList " [ngValue]="s.ACID">{{s.ACNAME}}</option></select>
+                    <label *ngIf="_transactionService.TrnMainObj.TRNMODE!='credit' && TrnMainObj.VoucherType==16" style="width:85.5px">Supplier :</label>
+                    <select *ngIf="_transactionService.TrnMainObj.TRNMODE!='credit' && TrnMainObj.VoucherType==16" style="width:40%;" formControlName="TRNAC"><option *ngFor="let s of SupplierList " [ngValue]="s.ACID">{{s.ACNAME}}</option></select>
+                    <input *ngIf="RefNoVisible" type="text" placeholder="Ref No" formControlName="referenceNo"  (keydown.enter)="getVoucherNoWiseData()">
+            
+
+                </div>
+            </div>
+            <div class="row" *ngIf="AppSettings.ENABLEMULTICURRENCY==1">
+                <div class="col-md-5">
+                    <label style="width:85.5px;">Currency :</label>
+                    <select style="width:78%;" formControlName="FCurrency" (change)="CurrencyChange()">
+                    <option *ngFor="let c of  masterService.Currencies" [ngValue]="c.CURNAME" >{{c.CURNAME}}</option>
+                </select>
+
+                </div>
+                <div class="col-md-5">
+                    <label style="width:100px;">Exchange Rate :</label>
+                    <input type="text" width="110" formControlName="EXRATE" readonly>
+                </div>
+            </div>
+         
+            <div class="row">
+                <div class="col-md-11">
+                    <label style="width:85.5px;">*Remarks :</label>
+                    <input type="text" style="min-width:81%;" formControlName="REMARKS" (change)="formValidCheck">
+                </div>
+            </div>
+    
+        </div>
+    </form>
+</div>

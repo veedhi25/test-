@@ -1,0 +1,683 @@
+<!-- begin form here -->
+<div class="content-wrapper PartyLedger-form">
+  <form id="frm" [formGroup]="form">
+    <div class="user-topbtn">
+      <h3 class="page-title">{{ Title }}</h3>
+      <div class="right-btn">
+        <button type="button" (click)="SumbitSave()" title="onSave" class="btn add-btn" [disabled]="!this.parentGroup"
+          *ngIf="grp == 'G'">
+          Save
+        </button>
+        <button type="button" [disabled]="!form.valid" *ngIf='this.mode!="view"' (click)="SumbitSave()" title="onSave"
+          class="btn add-btn">
+          Save
+        </button>
+        <button type="button" (click)="cancel()" title="Cancel" class="btn btn-back">Back</button>
+      </div>
+    </div>
+    <div class="full-width">
+      <div class="tap-tabbable General-inofo">
+        <div class="tabbable" id="warehouse-tabs">
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" href="#general-info" data-toggle="tab">General Info</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#contact-details" data-toggle="tab">Payment</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#gst" data-toggle="tab">GST</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#other" data-toggle="tab">Other</a>
+            </li>
+            <li class="nav-item" *ngIf="_trnMainService.AppSettings.CompanyNature == 3">
+              <a class="nav-link" href="#eyedetail" data-toggle="tab">Eye Details</a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" id="general-info">
+              <!-- General Info -->
+              <div class="row">
+                <div class="col-sm-12">
+                  <div *ngIf="(PType == 'C' || PType == 'V' && isGroup == 0) && 'Title'|ControlShowHide:formSetting"
+                    class="form-group">
+                    <label class="col-sm-4 form-control-label">TITLE:</label>
+                    <div class="col-sm-8">
+                      <select class="form-control" formControlName="TITLE">
+                        <option value="Mr">Mr.</option>
+                        <option value="Mrs">Mrs.</option>
+                        <option value="Dr">Dr.</option>
+                        <option value="Others">Others</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group" [ngClass]="{'supplierLabel':PType === 'V'}">
+                    <label class="col-sm-4 form-control-label">{{ formObj.Name }}: <span class="mandatory">*</span>
+                    </label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" id="ACNAME" formControlName="ACNAME" placeholder="Name"
+                        id="ACNAME" />
+                      <div *ngIf="
+                      !form.controls['ACNAME'].valid &&
+                      form.controls['ACNAME']?.touched
+                      " class="text-danger">
+                        <span *ngIf="form.get('ACNAME').hasError('required')">
+                          Name is required.
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="isGroup == 0">
+                    <div *ngIf="PType == 'C' || PType == 'V'" class="form-group">
+                      <label class="col-sm-4 form-control-label">Mobile: <span class="mandatory">*</span>
+                      </label>
+                      <div class="col-sm-8">
+                        <input type="text" OnlyNumber="true" class="form-control" formControlName="MOBILE"
+                          placeholder="MOBILE" />
+                      </div>
+                    </div>
+                    <div class="form-group" *ngIf="'Phone'|ControlShowHide:formSetting">
+                      <label class="col-sm-4 form-control-label">Phone: </label>
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control" formControlName="PHONE" placeholder="PHONE" />
+                      </div>
+                    </div>
+                    <div class="form-group" *ngIf="'Address1'|ControlShowHide:formSetting">
+                      <label class="col-sm-4 form-control-label">Address1:</label>
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control" formControlName="ADDRESS" placeholder="Temp Address" />
+                      </div>
+                    </div>
+                    <div *ngIf="(PType == 'C' || PType == 'V')&& 'Address1'|ControlShowHide:formSetting"
+                      class="form-group">
+                      <label class="col-sm-4 form-control-label">Address2:</label>
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control" formControlName="TEMPADDRESS"
+                          placeholder="Parmanent Address" />
+                      </div>
+                    </div>
+                    <div class="form-group" *ngIf="'City'|ControlShowHide:formSetting">
+                      <label class="col-sm-4 form-control-label">City:</label>
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control" formControlName="CITY" placeholder="City" />
+                      </div>
+                    </div>
+                    <div class="form-group" *ngIf="'VILLAGE'|ControlShowHide:formSetting">
+                      <label class="col-sm-4 form-control-label">Village:</label>
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control" formControlName="VILLAGE" placeholder="VILLAGE" />
+                      </div>
+                    </div>
+                    <div class="form-group" *ngIf="'VILLAGECODE'|ControlShowHide:formSetting">
+                      <label class="col-sm-4 form-control-label">Village Code:</label>
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control" formControlName="VILLAGECODE"
+                          placeholder="VILLAGECODE" />
+                      </div>
+                    </div>
+                    <div class="form-group" *ngIf="'KHASRA'|ControlShowHide:formSetting">
+                      <label class="col-sm-4 form-control-label">Khashra:</label>
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control" formControlName="KHASHRA" placeholder="KHASRA" />
+                      </div>
+                    </div>
+                    <div class="form-group" *ngIf="'KHASHRAAREA'|ControlShowHide:formSetting">
+                      <label class="col-sm-4 form-control-label">Khashra Area:</label>
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control" formControlName="KHASHRAAREA"
+                          placeholder="KHASHRAAREA" />
+                      </div>
+                    </div>
+                    <div *ngIf="(PType == 'C' || PType == 'V')&&'District'|ControlShowHide:formSetting"
+                      class="form-group">
+                      <label class="col-sm-4 form-control-label">District:</label>
+                      <div class="col-sm-8">
+                        <input id="districtselectid" type="text" (keydown.enter)="DistrictTabCommand($event)"
+                          (keydown.tab)="DistrictTabCommand($event)" (keydown)="preventInput($event)" autocomplete="off"
+                          title="Enter or Tab to select" class="form-control" formControlName="DISTRICT" />
+                      </div>
+                    </div>
+                    <div class="form-group" *ngIf="'Area'|ControlShowHide:formSetting">
+                      <label class="col-sm-4 form-control-label">Area:</label>
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control" formControlName="AREA" placeholder="AREA" />
+                      </div>
+                    </div>
+                    <div class="form-group" *ngIf="'PostalCode'|ControlShowHide:formSetting">
+                      <label class="col-sm-4 form-control-label">Postal Code:</label>
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control" formControlName="POSTALCODE" placeholder="PINCODE" />
+
+                      </div>
+                    </div>
+                    <div class="form-group" *ngIf="'Email'|ControlShowHide:formSetting">
+                      <label class="col-sm-4 form-control-label">Email: </label>
+                      <div class="col-sm-8">
+                        <input type="text" class="form-control" formControlName="EMAIL" placeholder="EMAIL" />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-4 form-control-label">Branch: </label>
+                      <div class="col-sm-8">
+                        <select name="CDIVISION" id="CDIVISION" formControlName="CDIVISION" class="form-control">
+                          <option value="">All</option>
+                          <option *ngFor="let branch of BranchList;" value="{{branch.INITIAL}}">{{branch.NAME}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group" *ngIf="EnableGlobalCustomerSYnc()">
+                      <label class="col-sm-4 form-control-label">Is Global party?: </label>
+                      <div class="col-sm-8">
+                        <select name="ISGLOBALPARTY" id="ISGLOBALPARTY" formControlName="ISGLOBALPARTY"
+                          class="form-control">
+                          <option value="1">YES</option>
+                          <option value="0">NO</option>
+                        </select>
+                      </div>
+                    </div>
+
+
+
+
+                    <div class="form-group" *ngIf="showDiscontinueOption()">
+                      <label class="col-sm-4 form-control-label">DisContinue:</label>
+                      <div class="col-sm-8">
+                        <select class="form-control" formControlName="ISDISCONTINUED">
+                          <option value="1">YES</option>
+                          <option value="0">NO</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="contact-details">
+              <!-- Contact Details -->
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="form-group" *ngIf="'PaymentMode'|ControlShowHide:formSetting">
+                    <label class="col-sm-2 form-control-label">{{ formObj.PMode }}
+                    </label>
+                    <div class="col-sm-8">
+                      <select class="form-control" formControlName="PMODE" (change)="ChangePMODE($event.target.value)">
+                        <option value="cash">Cash</option>
+                        <option value="credit">Credit</option>
+                        <option value="cashandcredit">
+                          Both Cash and Credit
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group" *ngIf="'AllowCredit'|ControlShowHide:formSetting">
+                    <label class="col-sm-2 form-control-label">Allow Credit:</label>
+                    <div class="col-sm-8">
+                      <select class="form-control" formControlName="ALLOWCREDIT">
+                        <option>--select--</option>
+                        <option value="1">YES</option>
+                        <option value="0">NO</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group" *ngIf="'CreditLimit'|ControlShowHide:formSetting">
+                    <label class="col-sm-2 form-control-label">Credit Limit:
+                    </label>
+                    <div class="col-sm-8">
+                      <input [style.background-color]="CreditDisabled()"
+                        [readOnly]="CrDisabled == 'disabled' ? true : false" type="number" class="form-control"
+                        formControlName="CRLIMIT" placeholder="CRLIMIT" />
+                    </div>
+                  </div>
+                  <div class="form-group" *ngIf="'CreditDays'|ControlShowHide:formSetting">
+                    <label class="col-sm-2 form-control-label">Credit Days:
+                    </label>
+                    <div class="col-sm-8">
+                      <input [style.background-color]="CreditDisabled()"
+                        [readOnly]="CrDisabled == 'disabled' ? true : false" type="number" class="form-control"
+                        formControlName="CRPERIOD" placeholder="CRPERIOD" />
+                    </div>
+                  </div>
+                  <div *ngIf="(PType == 'C' || PType == 'V')&&'Currency'|ControlShowHide:formSetting"
+                    class="form-group">
+                    <label class="col-sm-2 form-control-label">Currency:</label>
+                    <div class="col-sm-8">
+                      <select class="form-control" formControlName="Currency">
+                        <option value="INDIAN RUPEE">INDIAN RUPEE</option>
+                        <option value="USD">USD</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group" *ngIf="(PType =='C')&&'DiscountPer'|ControlShowHide:formSetting">
+                    <label class="col-sm-2 form-control-label">Discount %:</label>
+                    <div class="col-sm-8">
+                      <input type="number" class="form-control" OnlyNumber="true" formControlName="CDISCOUNT" />
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="gst">
+              <!-- GST  -->
+              <!-- ANISH EXCEL UPDATE -->
+              <div class="form-group" *ngIf="'GSTType'|ControlShowHide:formSetting">
+                <label class="col-sm-2 form-control-label">GST Type:</label>
+                <div class="col-sm-8">
+                  <select class="form-control" formControlName="GSTTYPE">
+                    <option value="Regular">Regular</option>
+                    <option value="Composite">Composite</option>
+                    <option value="Un-Register">Un-Register</option>
+                  </select>
+                </div>
+              </div>
+
+              <ng-container *ngIf="formObj.PSType == 'Sales Type'">
+                <div class="form-group" *ngIf="'Sales Type'| ControlShowHide:formSetting">
+                  <label class="col-sm-2 form-control-label">
+                    {{ formObj.PSType }}</label>
+                  <div class="col-sm-8">
+                    <select class="form-control" formControlName="PSTYPE">
+                      <option value="local">Local</option>
+                      <option value="interstate">Interstate</option>
+                    </select>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="formObj.PSTyp == 'Purchase Type'">
+                <div class="form-group" *ngIf="'Purchase Type'| ControlShowHide:formSetting">
+                  <label class="col-sm-2 form-control-label">
+                    {{ formObj.PSType }}</label>
+                  <div class="col-sm-8">
+                    <select class="form-control" formControlName="PSTYPE">
+                      <option value="local">Local</option>
+                      <option value="interstate">Interstate</option>
+                    </select>
+                  </div>
+                </div>
+              </ng-container>
+
+
+              <div class="form-group" *ngIf="'GST No'|ControlShowHide:formSetting">
+                <label class="col-sm-2 form-control-label">GST No:</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" formControlName="GSTNO" placeholder="GSTNO" />
+                </div>
+              </div>
+
+              <div class="form-group" *ngIf="'PANNO'|ControlShowHide:formSetting">
+                <label class="col-sm-2 form-control-label">PAN No:</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" formControlName="VATNO" placeholder="VNO" />
+                </div>
+              </div>
+
+              <ng-container *ngIf="MasterService.appSetting.CompanyNature==1">
+                <div class="form-group" *ngIf="'DLNO1'|ControlShowHide:formSetting">
+                  <label class="col-sm-2 form-control-label">Drug License No.1:</label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control" formControlName="DLNO1" />
+                  </div>
+                </div>
+                <div class="form-group" *ngIf="'DLNO2'|ControlShowHide:formSetting">
+                  <label class="col-sm-2 form-control-label">Drug License No.2:</label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control" formControlName="DLNO2" />
+                  </div>
+                </div>
+                <div class="form-group" *ngIf="'DLNO3'|ControlShowHide:formSetting">
+                  <label class="col-sm-2 form-control-label">Drug License No.3:</label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control" formControlName="DLNO3" />
+                  </div>
+                </div>
+                <div class="form-group" *ngIf="'DLNO4'|ControlShowHide:formSetting">
+                  <label class="col-sm-2 form-control-label">Drug License No.4:</label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control" formControlName="DLNO4" />
+                  </div>
+                </div>
+              </ng-container>
+
+
+
+
+
+              <div class="form-group">
+                <label class="col-sm-6 form-control-label">State: <span class="mandatory">*</span></label>
+                <div class="col-sm-8">
+                  <select class="form-control" name="STATE" id="STATE" formControlName="STATE"
+                    (change)="stateChangeEvent()">
+                    <option *ngFor="let i of StateList" [ngValue]="i.StateCode">
+                      {{i.StateName}}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group" *ngIf="'AadharNo'|ControlShowHide:formSetting">
+                <label class="col-sm-4 form-control-label">Aadhar No:</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" formControlName="ADHARNO" placeholder="ANO" />
+                </div>
+              </div>
+              <!-- <div class="form-group" *ngif="'POS'">
+                <label class="col-sm-4 form-control-label">POS:</label>
+                <div class="col-sm-8">
+                  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" formControlName="POS" placeholder="ANO" />
+                </div>
+              </div>  -->
+              <div *ngIf="PType == 'C' || PType == 'V'" class="form-group">
+                <label class="col-sm-2 form-control-label">Invoice Type: <span class="mandatory">*</span></label>
+                <div class="col-sm-8">
+                  <select id="invoiceType" class="form-control" formControlName="CTYPE">
+                    <option value="RETAIL INVOICE">RETAIL INVOICE</option>
+                    <option value="E-COMMERCE">E-COMMERCE</option>
+                    <option value="EXEMPTED">EXEMPTED</option>
+                    <option value="TAX INVOICE">TAX INVOICE</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="other">
+              <!-- OTHER  -->
+              <div class="row">
+                <div class="col-sm-12">
+                  <div *ngIf="(PType == 'C')&& ('Category'|ControlShowHide:formSetting)" class="form-group">
+                    <label class="col-sm-2 form-control-label">Category:</label>
+                    <div class="col-sm-8">
+                      <select class="form-control" [(ngModel)]="geo" [ngModelOptions]="{standalone:true}"
+                        (change)="categoryChange()">
+                        <option value="walkin">walkin</option>
+                        <option *ngFor="let i of GeoList" value="{{i.CATEGORY_NAME}}">
+
+                          {{ i.CATEGORY_NAME }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div *ngIf="(PType == 'C')&& ('Cast'|ControlShowHide:formSetting)" class="form-group">
+                    <label class="col-sm-2 form-control-label">Cast:</label>
+                    <div class="col-sm-8">
+                      <select class="form-control" formControlName="CAST">
+                        <option *ngFor="let cast of cateList;let i=index" value="{{cast.value}}">{{cast.type}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div *ngIf="(PType == 'C')&&('Price Level')|ControlShowHide:formSetting " class="form-group">
+                    <label class="col-sm-2 form-control-label">Price Level:</label>
+                    <div class="col-sm-8">
+                      <input formControlName="PRICELEVEL" type="text" class="form-control" />
+                    </div>
+                  </div>
+
+                  <div *ngIf="(PType == 'V')&&('ERP Plant Code'|ControlShowHide:formSetting)" class="form-group">
+                    <label class="col-sm-2 form-control-label">ERP Plant Code:</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" formControlName="ERPPLANTCODE"
+                        placeholder="Supplier Id" />
+                    </div>
+                  </div>
+                  <div *ngIf="(PType == 'C') && ('CustomerID'|ControlShowHide:formSetting)" class="form-group">
+                    <label class="col-sm-2 form-control-label">Customer ID :</label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" formControlName="CUSTOMERID" placeholder="Customer Id" />
+                    </div>
+                  </div>
+                  <div class="form-group" *ngIf="(PType == 'C') &&('SalesMan'|ControlShowHide:formSetting)">
+                    <label class="col-sm-2 form-control-label">
+                      Sales Man:
+                    </label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" formControlName="SALESMAN" />
+                    </div>
+                  </div>
+                  <div class="form-group" *ngIf="'Distance'|ControlShowHide:formSetting">
+                    <label class="col-sm-2 form-control-label">Distance:</label>
+                    <div class="col-sm-8">
+                      <input type="number" class="form-control" formControlName="DISTANCE" placeholder="Distance (KMs)"
+                        value="0" />
+                    </div>
+                  </div>
+                  <div class="form-group" *ngIf="'IntegrationType'|ControlShowHide:formSetting">
+                    <label class="col-sm-2 form-control-label">Integration Type:</label>
+                    <div class="col-sm-8">
+                      <select class="form-control" formControlName="MAILTYPE">
+                        <option value="None">None</option>
+                        <option value="SAP">SAP</option>
+                        <option value="CSV">CSV</option>
+                        <option value="EDI">EDI</option>
+                        <option value="Inline HTML">Inline HTML</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group" *ngIf="'Status'|ControlShowHide:formSetting">
+                    <label class="col-sm-2 form-control-label">Status:</label>
+                    <div class="col-sm-8">
+                      <select class="form-control" formControlName="ISACTIVE">
+                        <option value="1">Active</option>
+                        <option value="0">Inactive</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group" *ngIf="PType == 'C' && 'POSupplier'|ControlShowHide:formSetting">
+                    <label class="col-sm-2 form-control-label">POSupplier:</label>
+                    <div class="col-sm-8">
+                      <select class="form-control" formControlName="ISPOSUPPLIER">
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div *ngIf="PType == 'C' && 'TransporterName'|ControlShowHide:formSetting" class="form-group">
+                    <label class="col-sm-2 form-control-label">
+                      Transporter Name:
+                    </label>
+                    <div class="col-sm-8">
+                      <input type="text" class="form-control" (keydown.enter)="TransporterTabCommand($event)"
+                        (keydown.tab)="TransporterTabCommand($event)" (keydown)="preventInput($event)"
+                        formControlName="TRANSPORTERNAME" />
+                    </div>
+                  </div>
+                  <div *ngIf="PType == 'C' && 'Anniversary'|ControlShowHide:formSetting" class="form-group mb-4">
+                    <label class="col-sm-2 form-control-label">Anniversary:</label>
+                    <div class="col-sm-8">
+                      <input class="form-control" type="date" formControlName="ANNIVERSARY" />
+                    </div>
+                  </div>
+                  <div *ngIf="PType == 'C' && 'Birthday'|ControlShowHide:formSetting" class="form-group mb-4">
+                    <label class="col-sm-2 form-control-label">
+                      Birthday:
+                    </label>
+                    <div class="col-sm-8">
+                      <input class="form-control" type="date" formControlName="BIRTHDAY" />
+                    </div>
+                  </div>
+                  <div *ngIf="PType == 'C' && showItemDivision() && 'salesType'|ControlShowHide:formSetting"
+                    class="form-group">
+                    <label class="col-sm-2 form-control-label">Item Type:</label>
+                    <div class="col-sm-8">
+                      <select class="form-control" formControlName="MCAT">
+                        <option value="%">All</option>
+                        <option value="Open">Open</option>
+                        <option value="Non-Open">Non-Open</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div *ngIf="PType == 'C' && itemDivisionList.length && showItemDivision()"
+                    class="form-group row col-sm-12">
+                    <div class="col-md-12">
+                      <label for="">Item Divisions</label>
+                    </div>
+                    <div class="col-md-12">
+                      <div class="col-md-2" *ngFor="let div of itemDivisionList">
+                        <input type="checkbox" name="as" [(ngModel)]="div.DIVISIONS"
+                          [ngModelOptions]="{standalone:true}" />
+                        {{div.LABEL}}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group mt-4" *ngIf="'Remarks'|ControlShowHide:formSetting">
+                    <label class="col-sm-2 form-control-label"> Remarks: </label>
+                    <div class="col-sm-8">
+                      <textarea class="form-control" formControlName="REMARKS" style="height: 150px;"></textarea>
+                    </div>
+                  </div>
+                  <div class="form-group mt-4">
+                    <label class="col-sm-2 form-control-label"> Billing Lock Days: </label>
+                    <div class="col-sm-8">
+                      <input type="number" class="form-control" formControlName="BILLINGLOCKDAYS" />
+                    </div>
+                  </div>
+
+                  <div *ngIf="PType == 'V' && 'JobWork'|ControlShowHide:formSetting" class="form-group">
+                    <label class="col-sm-2 form-control-label">Job Work:</label>
+                    <div class="col-sm-8">
+                      <select class="form-control" formControlName="jobWork">
+                        <option value=0>No</option>
+                        <option value=1>Yes</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="route">
+              <!-- ROUTE -->
+              <div class="form-group row">
+                <div class="col-sm-6">
+                  <div class="form-group row col-sm-12">
+                    <label class="col-sm-2 form-control-label">Route:</label>
+                    <div class="col-sm-8">
+                      <select class="form-control" formControlName="ROUTE" (change)="RouteClick($event.target.value)">
+                        <option>None</option>
+                        <option *ngFor="let i of RouteList" value="{{ i.RouteCode }}">
+                          {{ i?.RouteName }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group row col-sm-12">
+                    <label class="col-sm-2 form-control-label">Sales Officer:</label>
+                    <div class="col-sm-8">
+                      <select class="form-control" formControlName="SO" (change)="SOChange($event.target.value)">
+                        <option>None</option>
+                        <option [value]="i.CODE" *ngFor="let i of solist">
+                          {{ i.NAME }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group row col-sm-12">
+                    <label class="col-sm-2 form-control-label">Officer Code:</label>
+                    <div class="col-sm-8">
+                      <select class="form-control" formControlName="SO" (change)="SOChange($event.target.value)">
+                        <option>None</option>
+                        <option [value]="i.CODE" *ngFor="let i of solist">
+                          {{ i.CODE }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group row col-sm-12">
+                    <label class="col-sm-2 form-control-label">Route Days:</label>
+                    <div class="col-sm-8">
+                      <select class="form-control" formControlName="RouteDays">
+                        <option>Sunday</option>
+                        <option>Monday</option>
+                        <option>Tuesday</option>
+                        <option>Wednesday</option>
+                        <option>Thursday</option>
+                        <option>Friday</option>
+                        <option>Saturday</option>
+                      </select>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-secondary" (click)="RouteAdd()">
+                    Add
+                  </button>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group row col-sm-12" style="border: 1px solid #cccccc; height: 180px">
+                    <table style="width: 100%; height: 110px">
+                      <tr>
+                        <th style="width: 5%">SNO</th>
+                        <th style="width: 35%">Route Name</th>
+                        <th style="width: 35%">Sales Officer</th>
+                        <th style="width: 20%">Officer Code</th>
+                        <th style="width: 5%"></th>
+                      </tr>
+                      <ng-container *ngIf="SOTableList.length">
+                        <tr *ngFor="let i of SOTableList;let ind = index">
+                          <td>1</td>
+                          <td>{{ i?.RouteName }}</td>
+                          <td>{{ i?.SONAME }}</td>
+                          <td>{{ i?.SOCODE }}</td>
+                          <td>
+                            <button class="glyphicon glyphicon-trash" (click)="deleteSOList(ind)"></button>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-pane" id="eyedetail" *ngIf="_trnMainService.AppSettings.CompanyNature == 3">
+              <!-- OTHER  -->
+              <div class="row">
+                <div class="col-sm-12">
+
+                  <table>
+                    <thead>
+                      <tr>
+                        <th class="text-center" colspan="3">Eyes Details</th>
+                      </tr>
+                      <tr>
+                        <th class="text-left"></th>
+                        <th class="text-left">LEFT</th>
+                        <th class="text-left">RIGHT</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let opt of opticalEyeDetail;let i=index">
+                        <td class="text-left">
+                          <b>
+                            <em>
+                              {{opt.LABEL}}
+                            </em>
+                          </b>
+                        </td>
+                        <td class="text-left">
+                          <input type="text" name="left{{i}}" id="left{{i}}" [ngModelOptions]="{standalone: true}"
+                            [(ngModel)]="opt.LEFT">
+                        </td>
+                        <td class="text-left">
+                          <input type="text" name="right{{i}}" id="right{{i}}" [ngModelOptions]="{standalone: true}"
+                            [(ngModel)]="opt.RIGHT">
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<generic-popup-grid #genericGridDistrict [popupsettings]="gridPopupSettingsForDistrict"
+  (onItemDoubleClick)="onDistrictSelected($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericGriTransporter [popupsettings]="gridPopupSettingsForTransporter"
+  (onItemDoubleClick)="onTransporterSelected($event)">
+</generic-popup-grid>
+
+
+<style>
+
+</style>

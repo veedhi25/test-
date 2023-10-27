@@ -1,0 +1,46 @@
+<!-- Modal content -->
+<div style="height: 500px;" class="report-mainfiltemodal">
+  <div class="modal-content modal-content-main-area">
+    <div class="modal-header">
+      <h4 class="modal-title">Non Transacted Customer Report Filter</h4>
+      <button class="close" aria-label="Close" (click)="closeReportBox()">
+      <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="col-md-12">
+        <div class="form-group">
+          <div class="report-filter" *ngIf="masterService.fiscalYearList && masterService.fiscalYearList.length">
+            <label class="modal-label">Phiscal Year</label>
+            <select class="form-control" [(ngModel)]="reportFilterService.repObj.reportparam.PHISCALID">
+            <option *ngFor="let f of masterService.fiscalYearList;let i=index" value="{{f.PhiscalID}}">
+              {{f.PhiscalID}}
+            </option>
+            </select>
+          </div>
+          <div class="report-filter">
+            <label class="modal-label">Date Selection</label>
+            <form [formGroup]="reportFilterService.calendarForm">
+              <input type="text" ngxDaterangepickerMd formControlName="selectedDate" class="form-control"
+              placeholder="Choose date" [showDropdowns]="true" showCancel="true"
+              [ranges]="masterService.dateFilterRange" [alwaysShowCalendars]="true" />
+            </form>
+          </div>
+          <div class="report-filter">
+            <label class="modal-label">Non Transacted Based On</label>
+            <select class="form-control" [(ngModel)]="reportFilterService.repObj.reportparam.REPORTMODE">
+            <option value="0">TransactionWise</option>
+            <option value="1">PaymentWise</option>
+
+            </select>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn add-btn" (click)=onload()>RUN</button>
+      <button class="btn cancel-btn" (click)="closeReportBox()">Close</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,488 @@
+<style>
+  .reorderitem {
+    margin-bottom: 0;
+    font-weight: 500;
+  }
+
+  input {
+    border: 1px solid #545454;
+    height: 30px;
+  }
+
+  select {
+    height: 30px !important;
+  }
+
+  .content-wrapper {
+    padding: 5px;
+  }
+</style>
+
+
+
+<div class="content-wrapper fixed-top">
+
+  <div class="row">
+    <div class="col-md-3">
+      <h3 class="main-heading">{{ _trnMainService.pageHeading }} [{{_trnMainService.TrnMainObj.Mode |titlecase}}]</h3>
+      <button class="btn btn-info" (click)="IndentConfig()">Indent Config</button>
+    </div>
+    <div class="col-md-9 form-right-btn">
+      <button type="button" class="btn btn-info pull-right" (click)="GenerateIndent()">Save Indent</button>
+      <button type="button" class="btn btn-info pull-right" style="margin-right: 5px;"
+        (click)="ResetIndent()">Reset</button>
+      <button type="button" class="btn btn-info pull-right" style="margin-right: 5px;"
+        (click)="EditIndent()">Edit</button>
+      <button type="button" class="btn btn-info pull-right" style="margin-right: 5px;"
+        (click)="ViewIndent()">View</button>
+      <button type="button" class="btn btn-info pull-right" style="margin-right: 5px;"
+        (click)="cancelIndent()">Cancel</button>
+      <button *ngIf="this.userProfile.CompanyInfo.companycode!=null && this.userProfile.CompanyInfo.isHeadoffice==0"
+        type="button" class="btn btn-info pull-right" style="margin-right: 5px;"
+        (click)="deliverIndentToCenter()">DeliverIndentToCenter</button>
+      <button *ngIf="this.userProfile.CompanyInfo.companycode!=null && this.userProfile.CompanyInfo.isHeadoffice==1"
+        (click)="LoadIndentsFromOutlet()" class="btn btn-info pull-right" style="margin-right: 5px;">Load Indents From
+        Outlet </button>
+      <button class="btn btn-info pull-right" (click)="sendToPrint()">Print</button>
+      <button *ngIf="allowSupplierInIndent==1 && _trnMainService.TrnMainObj.Mode.toLowerCase()=='view' "
+        class="btn btn-info pull-right" (click)="convertToPO()">Convert To PO</button>
+
+    </div>
+  </div>
+
+</div>
+
+
+<div class="clearfix">
+  <div class="col-md-4 pull-right">
+    <input #inputBox type="text" style="width: 100%;" placeholder="Enter keyword to search" [(ngModel)]="filter" />
+  </div>
+</div>
+
+<div class="clearfix">
+  <div class="row">
+    <div class="col-md-12">
+      <ng-container>
+        <div class="transaction-table-custom">
+          <div class="table-container ims-scrollable-table">
+            <table id="BlueHeaderResizableTable" #reportHtmlTable class="reportTabel" style="table-layout: fixed; overflow-x:scroll;height: 60vh;    font-size: 12px;
+              font-family: sans-serif;">
+              <thead style="width: calc(100% - 1em);">
+                <tr>
+                  <th width="60px" class="text-left">SNO</th>
+                  <th *ngIf="allowSupplierInIndent==1" width="150px" class="text-left">Supplier</th>
+                  <th width="100px" class="text-left">Item Code</th>
+                  <th width="200px" class="text-left">Item Name</th>
+                  <th width="60px" class="text-left">UOM</th>
+                  <th width="100px" class="text-left">Last Purchase Date</th>
+                  <th width="100px" class="text-left">Last Purchase Qty</th>
+                  <th width="60px" class="text-right">Stock Qty</th>
+                  <th width="60px" class="text-right">Order Qty</th>
+
+
+
+                </tr>
+              </thead>
+              <tbody style="width: fit-content;">
+                <tr
+                  *ngFor="let tList of IndentList | filter:filter | paginate: { itemsPerPage: 20, currentPage: p };let i=index"
+                  style="border: 1px solid #e6e6e6; max-height: 25px" (click)="activerowIndex=i"
+                  (keydown.delete)="deleteRow(tList)">
+                  <td width="60px" id="sno{{i}}">{{i+1}}</td>
+
+                  <td *ngIf="allowSupplierInIndent==1" style="overflow: hidden;" width="150px"
+                    class="cell-with-comment">
+                    <input id="parac{{i}}" type="text" [(ngModel)]="tList.ACNAME" (keydown)="$event.preventDefault()"
+                      (keydown.Tab)="supplierkeyEvent(i,tList)" (keydown.enter)="supplierkeyEvent(i,tList)"
+                      class="form-control" />
+                    <span class="cell-comment">
+                      Press Enter or Tab to select Supplier
+                    </span>
+                  </td>
+
+                  <td style="overflow: hidden;" width="100px" class="cell-with-comment">
+                    <input id="menucode{{i}}" type="text" [(ngModel)]="tList.MCODE" (keydown)="$event.preventDefault()"
+                      (keydown.Tab)="ItemkeyEvent(i,tList)" (keydown.enter)="ItemkeyEvent(i,tList)" class="form-control" />
+                    <span class="cell-comment">
+                      Press Enter or Tab to select Item
+                    </span>
+                  </td>
+
+                  <!-- START OF ITEM DESCA -->
+                  <td style="overflow: hidden;"  width="200px" class="CellWithComment text-left">
+                    {{tList.DESCA}}
+                  </td>
+                  <!-- END OF ITEM DESCA -->
+
+                  <!-- START OF ITEM ALTUNIT -->
+                  <td style="overflow: hidden;" width="60px"
+                    *ngIf="tList.AlternateUnits !=null || tList.AlternateUnits!=undefined">
+                    <select style="height: 30px !important;" id="alternateunit{{i}}" [(ngModel)]="tList.ALTUNIT"
+                      class="form-control">
+                      <option *ngFor="let u of tList.AlternateUnits" value="{{u.ALTUNIT}}">
+                        {{u.ALTUNIT}}
+                      </option>
+                    </select>
+                  </td>
+
+                  <td style="overflow: hidden;" width="60px"
+                    *ngIf="tList.AlternateUnits ==null || tList.AlternateUnits==undefined">
+                    <select style="height: 30px !important;" name="" id="altunit" [(ngModel)]="tList.ALTUNIT"
+                      class="form-control">
+                      <option value="{{tList.ALTUNIT}}">{{tList.ALTUNIT}}</option>
+                    </select>
+                  </td>
+
+                  <!-- END OF ITEM ALTUNIT -->
+
+                  <!-- START OF ITEM LAST PURCHASE DATE -->
+                  <td style="overflow: hidden;"  width="100px" class="CellWithComment">
+                    {{tList.LASTPURCHASEDATE}}
+
+                  </td>
+                  <!-- END OF ITEM LAST PURCHASE DATE -->
+
+                  <!-- START OF ITEM LAST PURCHASE QTY -->
+                  <td style="overflow: hidden;"  width="100px" class="CellWithComment">
+                    {{tList.LASTPURCHASEQTY}}
+                  </td>
+                  <!-- END OF ITEM LAST PURCHASE QTY -->
+
+                  <!-- START OF ITEM STOCK -->
+                  <td style="overflow: hidden;"  width="60px" class="CellWithComment">
+                    {{tList.STOCK}}
+                  </td>
+                  <!-- END OF ITEM STOCK -->
+
+                  <!-- START OF ITEM ORDER QUANTITY -->
+                  <td width="60px" class="CellWithComment" style="overflow: hidden;">
+                    <input id="indent{{i}}" type="number" [(ngModel)]="tList.Indent" class="form-control"
+                      (keydown.Enter)="OnQuantityEnter(i)" />
+                  </td>
+                  <!-- END OF ITEM ORDER QUANTITY -->
+
+                </tr>
+              </tbody>
+            </table>
+            <pagination-controls (pageChange)="p = $event"></pagination-controls>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+
+<div class="print-modal-sticky" *ngIf="promptPrintDevice" style="display : block; padding: 0px;  margin-bottom: 25px;height: auto;
+  position: absolute;top: 5px;left: 40%;z-index: 9999999">
+
+  <div class="modal-content modal-content-main-area">
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel">Available Printing Device Supported</h4>
+    </div>
+    <div class="modal-body">
+      <form>
+        <ng-container>
+          <input type="radio" [formControl]="printControl" name="printOption" value=0 [checked]='true'>Default Print
+          <br>
+        </ng-container>
+
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal" (click)="cancelprint()">Cancel</button>
+      <button type="button" class="btn btn-primary" (click)="print()">Print</button>
+    </div>
+
+  </div>
+</div>
+
+<generic-popup-grid #genericGrid [popupsettings]="gridPopupSettings" (onItemDoubleClick)="onItemDoubleClick($event)"
+  (onButtonClick)="onMultipleIndentSelect($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericEditGrid [popupsettings]="gridPopupSettings"
+  (onItemDoubleClick)="onItemEditDoubleClick($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericGridOutletIndents [popupsettings]="gridPopupSettingsOutletIndents"
+  (onItemDoubleClick)="onOutletIndentDoubleClick($event)" (onButtonClick)="onOutletIndentButtonClick($event)">
+</generic-popup-grid>
+
+
+
+
+<generic-popup-grid #genericGridItem [popupsettings]="gridPopupSettingsItem"
+  (onItemDoubleClick)="onItemDoubleClickItem($event)">
+</generic-popup-grid>
+
+
+
+
+
+
+
+
+
+
+
+<div class="print-modal-sticky" *ngIf="promptIndentOption" style="display: block;
+padding: 0px;
+margin-bottom: 25px;
+height: auto;
+position: absolute;
+top: 5rem;
+width: fit-content;">
+
+  <div class="modal-content modal-content-main-area">
+    <div class="modal-header" style="padding:0">
+      <h4 class="modal-title" id="myModalLabel">Indent Filter</h4>
+    </div>
+    <div class="modal-body">
+
+
+      <div class="row">
+        <div class="col-md-12">
+          <fieldset>
+            <legend>Generate Order List</legend>
+            <div style="box-shadow: 0px 1px 2px 1px #c5c2c2;
+            padding: 5px;" class="col-md-12 basedoncurrentstock">
+              <input [(ngModel)]="reorderFilter.ORDERLISTBASEDON.BASEDON" style="margin-right:5px;height: 10px;"
+                type="radio" name="basedoncurrentstock" value="0" id="basedoncurrentstock"><label
+                for="basedoncurrentstock" class="reorderitem">Based on current
+                stock</label>
+              <div class="col-md-12">
+
+                <div class="col-md-8">
+                  <div style="margin: 5px 0px;" class="col-md-12">
+                    <div class="col-md-6">
+                      <input [(ngModel)]="reorderFilter.ORDERLISTBASEDON.BASEDONCURRENTSTOCKPARAM.CURRENTSTOCKPARAM"
+                        style="margin-right:5px;height: 10px;" value="0" type="radio" name="reorderbasedoncurrentstock"
+                        id="itemwithzerostock"><label for="itemwithzerostock" class="reorderitem">Items with zero
+                        stock</label>
+                    </div>
+                    <div class="col-md-6">
+                      <select style="height: 30px !important;"
+                        [(ngModel)]="reorderFilter.ORDERLISTBASEDON.BASEDONCURRENTSTOCKPARAM.ITEMWITHZEROSTOCK"
+                        [disabled]="reorderFilter.ORDERLISTBASEDON.BASEDON!='0'" name="a" class="form-control">
+                        <option value="0">NA</option>
+                        <option value="1">Fixed minimum stock level greater than zeo(>0)</option>
+                        <!-- <option value="2">Calculated minium stock level greater than zero(>0)</option> -->
+                      </select>
+                    </div>
+                  </div>
+                  <div style="margin: 5px 0px;" class="col-md-12">
+                    <div class="col-md-6">
+                      <input [(ngModel)]="reorderFilter.ORDERLISTBASEDON.BASEDONCURRENTSTOCKPARAM.CURRENTSTOCKPARAM"
+                        id="balancestocklessthanfixedminqtylevel" style="margin-right:5px;height: 10px;" value="1"
+                        type="radio" name="reorderbasedoncurrentstock"><label for="balancestocklessthanfixedminqtylevel"
+                        class="reorderitem">Balance stock less than
+                        fixed min qty level</label>
+                    </div>
+
+                    <div class="col-md-6">
+                      <select style="height: 30px !important;" [disabled]="reorderFilter.ORDERLISTBASEDON.BASEDON!='0'"
+                        [(ngModel)]="reorderFilter.ORDERLISTBASEDON.BASEDONCURRENTSTOCKPARAM.STOCKLESSTHANFIXEDMINQTYLEVEL"
+                        name="a" class="form-control">
+                        <option value="0">NA</option>
+                        <option value="1">Balance stock is zero</option>
+                        <option value="2">Balance stock > zero</option>
+                        <option value="3">Balance stock >= zero</option>
+                      </select>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="col-md-4"
+                  *ngIf="reorderFilter.ORDERLISTBASEDON.BASEDON=='0' && (reorderFilter.ORDERLISTBASEDON.BASEDONCURRENTSTOCKPARAM.CURRENTSTOCKPARAM=='1' || reorderFilter.ORDERLISTBASEDON.BASEDONCURRENTSTOCKPARAM.CURRENTSTOCKPARAM=='2')">
+                  <div class="col-md-12"><label for="" class="reorderitem col-md-6" style="padding-top: 5px;
+                    padding-bottom: 10px;
+                    font-weight: bold;">Transaction period between</label></div>
+                  <div class="col-md-12" style="margin-bottom: 5px;"><label for=""
+                      class="reorderitem col-md-2">From</label> <input
+                      [(ngModel)]="reorderFilter.ORDERLISTBASEDON.BASEDONCURRENTSTOCKPARAM.DATE1" type="date"
+                      class="col-md-8"></div>
+                  <div class="col-md-12"><label for="" class="reorderitem col-md-2">To</label> <input
+                      [(ngModel)]="reorderFilter.ORDERLISTBASEDON.BASEDONCURRENTSTOCKPARAM.DATE2" type="date"
+                      class="col-md-8"></div>
+                </div>
+              </div>
+            </div>
+
+
+
+
+
+
+
+
+            <div class="col-md-12" style="padding: 0;margin-top: 5px;">
+              <div class="col-md-4" style="padding: 0;">
+                <div style="padding: 5px;" class="col-md-12 basedonfixminqtylevel">
+                  <input [(ngModel)]="reorderFilter.ORDERLISTBASEDON.BASEDON" id="basedonfixedminqty"
+                    style="margin-right:5px;height: 10px;" type="radio" name="basedoncurrentstock" value="1"> <label
+                    for="basedonfixedminqty" class="reorderitem">Based on fixed
+                    min qty
+                    level</label>
+                </div>
+              </div>
+              <div class="col-md-4" style="padding-left: 20px !important;
+              padding-right: 50px !important;">
+                <select style="height: 30px !important;" class="form-control"
+                  [disabled]="reorderFilter.ORDERLISTBASEDON.BASEDON!='1'"
+                  [(ngModel)]="reorderFilter.ORDERLISTBASEDON.BASEDONFIXEDMINQTYLEVELAPPLICABLE">
+                  <option value="0">NA</option>
+                  <option value="1">Less than (&lt;) </option>
+                  <option value="2">Greter than (&gt;)</option>
+                  <option value="3">Less than equal to (&lt;=)</option>
+                  <option value="4">Greter than (&gt;=)</option>
+                  <option value="5">Equal to (=)</option>
+                </select>
+              </div>
+              <div class="col-md-4" style="padding-left: 20px !important;
+              padding-right: 50px !important;">
+                <div class="col-md-2"><label for="" class="reorderitem">Value</label></div>
+                <div class="col-md-8"><input type="number" min=1
+                    [(ngModel)]="reorderFilter.ORDERLISTBASEDON.BASEDONFIXEDMINQTYLEVELVALUE"></div>
+              </div>
+            </div>
+
+
+
+
+
+
+            <div class="col-md-12" style="padding: 0;">
+              <div class="col-md-4" style="padding: 0;">
+                <div style="padding: 5px;" class="col-md-12 basedonfixminqtylevel">
+                  <input [(ngModel)]="reorderFilter.ORDERLISTBASEDON.BASEDON" id="basedonsales"
+                    style="margin-right:5px;height: 10px;" type="radio" name="basedoncurrentstock" value="3"><label
+                    for="basedonsales" class="reorderitem">Based on
+                    sales</label>
+                </div>
+              </div>
+              <div class="col-md-4" style="padding-left: 20px !important;
+              padding-right: 50px !important;">
+                <select style="height: 30px !important;" class="form-control"
+                  [(ngModel)]="reorderFilter.ORDERLISTBASEDON.BASEDONSALESAPPLICABLE"
+                  [disabled]="reorderFilter.ORDERLISTBASEDON.BASEDON!='3'">
+                  <option value="0">NA</option>
+                  <option value="1">Today </option>
+                  <option value="2">Yesterday</option>
+                  <option value="3">Last two days</option>
+                  <option value="4">This day last month</option>
+                  <option value="5">This day this month</option>
+                  <option value="6">Custom Date</option>
+                </select>
+              </div>
+              <div *ngIf="reorderFilter.ORDERLISTBASEDON.BASEDONSALESAPPLICABLE=='6'" class="col-md-4" style="padding-left: 20px !important;
+              padding-right: 50px !important;">
+                <div class="col-md-2"><label for="" class="reorderitem">From</label></div>
+                <div class="col-md-4"><input type="date" class="form-control"
+                    [(ngModel)]="reorderFilter.ORDERLISTBASEDON.BASEDONSALESAPPLICABLEFROM"></div>
+                <div class="col-md-2"><label for="" class="reorderitem">To</label></div>
+                <div class="col-md-4"><input type="date" class="form-control"
+                    [(ngModel)]="reorderFilter.ORDERLISTBASEDON.BASEDONSALESAPPLICABLETO"></div>
+              </div>
+            </div>
+
+            <div style="padding: 5px;" class="col-md-12 basedonfixminqtylevel">
+              <input [(ngModel)]="reorderFilter.ORDERLISTBASEDON.BASEDON" id="none"
+                style="margin-right:5px;height: 10px;" type="radio" name="basedoncurrentstock" value="7"><label
+                for="none" class="reorderitem">None</label>
+            </div>
+
+          </fieldset>
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <fieldset>
+            <legend>Order Quantity Calculation</legend>
+            <div class="col-md-12" style="padding: 0;">
+              <div class="col-md-4" style="padding: 0;">
+                <div style="padding: 5px;" class="col-md-12 basedonfixminqtylevel">
+                  <input [(ngModel)]="reorderFilter.ORDERLISTBASEDON.ORDERCRITERIA"
+                    style="margin-right:5px;height: 10px;" type="radio" id="orderforndaysstock" name="ORDERCRITERIA"
+                    value="1"><label for="orderforndaysstock" class="reorderitem">Order for N days
+                    stock</label>
+                </div>
+              </div>
+              <div class="col-md-4" style="padding-left: 20px !important;
+              padding-right: 50px !important;">
+                <input type="number" min="1" class="form-control"
+                  [(ngModel)]="reorderFilter.ORDERLISTBASEDON.ORDERFORNDAYSSTOCK">
+              </div>
+              <div class="col-md-4" style="padding-left: 20px !important;
+              padding-right: 50px !important;">
+
+                <div class="col-md-2"><label for="" class="reorderitem">From</label></div>
+                <div class="col-md-4"><input type="date" class="form-control"
+                    [(ngModel)]="reorderFilter.ORDERLISTBASEDON.ORDERFORNDAYSSTOCKFROM"></div>
+                <div class="col-md-2"><label for="" class="reorderitem">To</label></div>
+                <div class="col-md-4"><input type="date" class="form-control"
+                    [(ngModel)]="reorderFilter.ORDERLISTBASEDON.ORDERFORNDAYSSTOCKTO"></div>
+              </div>
+            </div>
+
+
+
+
+
+
+            <div class="col-md-12" style="padding: 0;">
+              <div class="col-md-4" style="padding: 0;">
+                <div style="padding: 5px;" class="col-md-12 basedonfixminqtylevel">
+                  <input [(ngModel)]="reorderFilter.ORDERLISTBASEDON.ORDERCRITERIA"
+                    style="margin-right:5px;height: 10px;" type="radio" name="ORDERCRITERIA" id="orderqtyfromsalesorder"
+                    value="3"><label for="orderqtyfromsalesorder" class="reorderitem">Order quantity from
+                    sales order [Sales Order
+                    -Current
+                    Stock]</label>
+                </div>
+              </div>
+
+
+
+              <div class="col-md-4" style="padding-left: 20px !important;
+              padding-right: 50px !important;">
+                <input type="number" min="1" class="form-control"
+                  [(ngModel)]="reorderFilter.ORDERLISTBASEDON.NOOFDAYSFORSALESORDER">
+              </div>
+              <div class="col-md-4" style="padding-left: 20px !important;
+              padding-right: 50px !important;">
+
+                <div class="col-md-2"><label for="" class="reorderitem">From</label></div>
+                <div class="col-md-4"><input type="date" class="form-control"
+                    [(ngModel)]="reorderFilter.ORDERLISTBASEDON.NOOFDAYSFORSALESORDERFROM"></div>
+                <div class="col-md-2"><label for="" class="reorderitem">To</label></div>
+                <div class="col-md-4"><input type="date" class="form-control"
+                    [(ngModel)]="reorderFilter.ORDERLISTBASEDON.NOOFDAYSFORSALESORDERTO"></div>
+              </div>
+            </div>
+
+
+          </fieldset>
+
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-info" data-dismiss="modal" (click)="promptIndentOption=false">Cancel</button>
+      <button type="button" class="btn btn-info" (click)="loadIndent()">Load Indent</button>
+      <button type="button" class="btn btn-info" (click)="resetFilter()">Reset</button>
+    </div>
+
+  </div>
+</div>
+
+
+<generic-popup-grid #genericGridSupplier [popupsettings]="gridPopupSettingsForSupplier"
+  (onItemDoubleClick)="onSupplierSelected($event)">

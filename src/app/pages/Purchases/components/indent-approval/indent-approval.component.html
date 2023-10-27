@@ -1,0 +1,12 @@
+<div class="content-wrapper">
+    <div class="form-right-btn">
+        <button class="btn btn-load" (click)="LoadClick()">Load UnApproved</button>
+        <button class="btn add-btn" (click)="getApprovedIndents()">Load Approved</button>
+        <button class="btn add-btn" (click)="approvedIndents()"
+            *ngIf="this.showApprovalButton && this.loadUnapprovedBtnSelected">Approve</button>
+        <button class="btn add-btn" (click)="deliverClick()"
+            *ngIf="this.showDeliveryButon && this.loadApprovedBtnSelected">Deliver To HQ</button>
+    </div>
+    <invoice-list *ngIf="source" [source]="source" (pageChange)="onPageChangedEvent($event)" [header]="Header">
+    </invoice-list>
+</div>

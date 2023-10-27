@@ -1,0 +1,46 @@
+<div class="content-wrapper">
+  <div class="user-topbtn">
+    <h4 class="hder-hding">Ean Code Setting</h4>
+    <div class="right-btn">
+      <button class="btn btn-download" (click)="onSaveClicked()">Save</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="col-md-4">
+        <input type="text" placeholder="Press Enter to Select Item." [(ngModel)]="ITEMCODE" class="form-control"
+          (keydown)="$event.preventDefault()" (keydown.Enter)="codeEnter()">
+      </div>
+    </div>
+  </div>
+  <div class="full-width compony-infoouter">
+    <div class="custom-table no-mr">
+      <table class="table">
+        <tr>
+          <th style="width: 5%;">S.No.</th>
+          <th style="width: 8%;">Mcode</th>
+          <th style="width: 30%;">Item Desc</th>
+          <th style="width: 10%;">Bar Code</th>
+
+        </tr>
+
+        <tr *ngFor="let bar of barcodeModels; index as i">
+
+          <td style="width: 5%;"> {{ i+1 }} </td>
+          <td style="width: 8%;">{{bar?.MCODE}}</td>
+          <td style="width: 30%;">{{ITEMDESC}} </td>
+
+          <td style="width: 10%;"> <input type="text" class="form-control" id="bcode{{i}}" [(ngModel)]="bar.BCODE" (keydown.Enter)="onBarcodeEnter(i)"> </td>
+
+        </tr>
+
+      </table>
+
+    </div>
+  </div>
+
+</div>
+
+
+<generic-popup-grid #genericGridBarcode [popupsettings]="gridPopupSettingsForBarcode"
+  (onItemDoubleClick)="onItemSelect($event,bar)"></generic-popup-grid>

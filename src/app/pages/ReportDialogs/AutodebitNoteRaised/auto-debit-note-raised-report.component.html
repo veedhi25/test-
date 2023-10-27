@@ -1,0 +1,78 @@
+<!-- Modal content -->
+<div style="height: 500px;;">
+    <div class="modal-content modal-content-main-area" style="width: 60% !important">
+        <div class="modal-header" style="padding: 0px;background: #ecad79;">
+            <button type="button" class="close" data-dismiss="modal" (click)="hide()">&times;</button>
+            <h4 class="modal-title">Auto DebitNote Raised Report Filter</h4>
+        </div>
+        <div class="modal-body">
+            <div class="clearfix">
+                <div class="col-md-12">
+                    <div class="col-md-12 form-group">
+
+                        <div class="report-filter">
+                            <label>Enter SapCode</label>
+                            <input type="text" class="form-control" id="sapcode"
+                                [(ngModel)]="repObj.reportparam.COMPANYID">
+                        </div>
+                        <div class="report-filter" style="margin: 5px 0px;">
+                            <fieldset>
+                                <Legend style="font-size: 12px;
+                                margin: 0;
+                                width: 30%;
+                                font-weight: bold;">Month Selection</Legend>
+
+                                <select class="form-control" name="month" id="month"
+                                    [(ngModel)]="repObj.reportparam.MONTH">
+                                    <option value="%">All</option>
+                                    <option *ngFor="let month of months;let i=index" value={{month.value}}>
+                                        {{month.month}}</option>
+                                </select>
+                            </fieldset>
+                        </div>
+                        <div class="report-filter" style="margin: 5px 0px;">
+                            <fieldset>
+                                <Legend style="font-size: 12px;
+                                margin: 0;
+                                width: 25%;
+                                font-weight: bold;">Year Selection</Legend>
+                                <select class="form-control" name="year" id="year"
+                                    [(ngModel)]="repObj.reportparam.YEAR">
+                                    <option value="%">All</option>
+                                    <option *ngFor="let year of listOfYear;let i=index" value={{year.year}}>
+                                        {{year.year}}</option>
+                                </select>
+
+                            </fieldset>
+                        </div>
+                        <div class="report-filter" style="margin: 5px 0px;">
+                            <fieldset>
+                                <Legend style="font-size: 12px;
+                                margin: 0;
+                                width: 40%;
+                                font-weight: bold;">Item Division Selection</Legend>
+                                <select class="form-control" name="item" id="item"
+                                    [(ngModel)]="repObj.reportparam.ITEMDIVISION">
+                                    <option value="%">All</option>
+                                    <option value="FOOD">FOOD</option>
+                                    <option value="NON FOOD">NON FOOD</option>
+                                    <option value="BISCUIT & CONFFECTIONARY">BISCUIT & CONFFECTIONARY</option>
+                                </select>
+
+                            </fieldset>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <hr style="margin-bottom: 0px !important">
+        <div class="clearfix" style="padding: 10px;">
+
+            <button class="btn btn-info pull-right" style="margin-left: 10px;" (click)=onload()>RUN</button>
+            <button class="btn btn-info pull-right" (click)="hide()">Close</button>
+        </div>
+    </div>
+</div>

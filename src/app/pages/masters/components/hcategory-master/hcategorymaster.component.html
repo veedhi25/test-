@@ -1,0 +1,72 @@
+<div class="row  mb-4" style="position: relative;margin-top: 10px;">
+    <div *ngIf="HCategMode==null" class="col-md-3 ml-auto text-right">
+        <button type="button" class="btn-con btn-bg-warning" (click)="AddNewHCategory()">
+            <i class="fa fa-plus mr-2 text-white"></i>Add New
+        </button>
+    </div>
+</div>
+<div class="row  mb-4" style="position: relative;margin-top: 10px;">
+    <div class="col-md-12">
+        <table border="1" *ngIf="HCategMode==null">
+            <thead>
+                <tr>
+                    <th>Action</th>
+                    <th>Category Name</th>
+                    <th>Parent Category Name</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let col of lsthCategoryMaster">
+                    <td>
+                        <a  (click)="LoadhCategoryById(col.CategoryId)"><i class="fa fa-eye"></i></a>
+                    </td>
+                    <td>{{col.CategoryName}}</td>
+                    <td>{{col.ParentCategoryName}}</td>
+                    <td>{{col.Status===1?'Active':'Inactive'}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row mt-5" style="position: relative;margin-top: 10px;" *ngIf="HCategMode!=null">
+    <div class="col-md-12">
+        <form #myForm="ngForm">
+            <div class="row">
+                <div class="col-md-2">Parent Category</div>
+                <div class="col-md-4">
+                    <select required class="form-control" [(ngModel)]="hCategoryMaster.ParentCategoryId" name="ddlItemCategory">
+                        <option selected="selected" [ngValue]=0>Select Parent Category</option>
+                        <option  *ngFor="let col of lstCategoryList" 
+                        [disabled]="col.CategoryId==hCategoryMaster.CategoryId" [ngValue]=col.CategoryId>{{col.CategoryName}}</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    Category Name
+                </div>
+                <div class="col-md-4">
+                    <input type="text"  [(ngModel)]="hCategoryMaster.CategoryName" required class="form-control" name="txtItemGrpName">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    Status
+                </div>
+                <div class="col-md-4">
+                    <select name="ddlStatus" [(ngModel)]="hCategoryMaster.Status" required  class="form-control">
+                        <option selected="selected" [ngValue]=1>Active</option>
+                        <option [ngValue]=0>Inactive</option>
+                    </select>
+                </div>
+                <div class="col-md-2"></div>
+                <div class="col-md-4"></div>
+            </div>
+            <div class="row justify-content-center">
+                <button type="button" [disabled]="!myForm.form.valid" type="button"
+                    class="btn-con btn btn-success mr-3" (click)="SaveItemGroup()">Save</button>
+                    <button class="btn-con closeButtonCon" (click)="CloseModal()">Close</button>
+            </div>
+        </form>
+    </div>
+</div>

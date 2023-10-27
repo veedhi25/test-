@@ -1,0 +1,2 @@
+For running : npm start
+For build :  npm run build:prod

@@ -1,0 +1,17 @@
+<div class="clearfix">
+  <button type="button" (click)="updatePriceChange()" class="btn add-btn pull-right">
+    Update From Excel
+  </button>
+</div>
+<div class="content-wrapper">
+  <div class="ng-tableinner">
+    <ba-card title="Item List" baCardClass="with-scroll">
+      <ng2-smart-table [settings]="settings" [source]="source" (edit)="onEditClick($event)"
+        (deleteConfirm)="onDeleteConfirm($event)"></ng2-smart-table>
+    </ba-card>
+  </div>
+</div>
+
+<file-uploader-popup #fileUploadPopup [popupsettings]="fileUploadPopupSettings"
+  (onUploaded)="fileUploadSuccessStatus($event)">
+</file-uploader-popup>

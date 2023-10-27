@@ -1,0 +1,41 @@
+<!-- Modal content -->
+<div style="height: 500px;" class="report-mainfiltemodal">
+  <div class="modal-content modal-content-main-area">
+    <div class="modal-header">
+      <h4 class="modal-title">Coupon Master Report Filter</h4>
+      <button class="close" aria-label="Close" (click)="closeReportBox()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="col-md-12">
+        <div class="form-group">
+
+          <div class="report-filter">
+            <label class="modal-label">Date Selection</label>
+            <form [formGroup]="reportFilterService.calendarForm">
+              <input type="text" ngxDaterangepickerMd formControlName="selectedDate" class="form-control"
+                placeholder="Choose date" [showDropdowns]="true" showCancel="true"
+                [ranges]="masterService.dateFilterRange" [alwaysShowCalendars]="true" />
+            </form>
+          </div>
+
+          <div class="report-filter">
+            <label class="modal-label">Select Mode</label>
+            <select class="form-control" [(ngModel)]="reportFilterService.repObj.reportparam.MODE">
+              <!-- <option value="%" selected>ALL</option> -->
+              <option *ngFor="let wh of modeStatus;let i=index" value="{{wh.value}}">
+                {{wh.name}}
+              </option>
+            </select>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn add-btn" (click)=onload()>RUN</button>
+      <button class="btn cancel-btn" (click)="closeReportBox()">Close</button>
+    </div>
+  </div>
+</div>

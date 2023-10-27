@@ -1,0 +1,12 @@
+<div class="content-wrapper">
+  <div class ="right-btn">
+    <button *ngIf="canActiveMenu('Branch', 'add')" type="button" class="btn add-btn" 
+    (click)="addNewBranch()">Add Company </button>
+  </div>
+
+  <div class="ng-tableinner">
+    <ba-card  title="Company" baCardClass="with-scroll">
+      <ng2-smart-table [settings]="settings" [source]="source" (edit)="onEditClick($event)" (view)="onViewClick($event)" (deleteConfirm)="onDeleteConfirm($event)"></ng2-smart-table>
+    </ba-card>
+  </div> 
+</div>

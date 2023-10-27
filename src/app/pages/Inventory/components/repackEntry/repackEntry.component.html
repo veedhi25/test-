@@ -1,0 +1,137 @@
+<div class="sticky-top">
+  <div class="row">
+    <div class="col-md-4">
+      <h3>Repack Entry {{_trnMainService.TrnMainObj.TRNMODE}}</h3>
+    </div>
+    <div class="col-md-8 form-right-btn">
+      <voucher-master-action (onSaveClickedEmitted)="onSaveClicked()"></voucher-master-action>
+    </div>
+  </div>
+</div>
+<div class="main-container">
+  <div class="row">
+    <div class="col-sm-12">
+      <repack-params></repack-params>
+    </div>
+  </div>
+  <div class="clearfix">
+    <div class="col-sm-8 transaction-table-custom" style="padding: 0;">
+      <div class="table-container ims-scrollable-table">
+        <table id="BlueHeaderResizableTable" #reportHtmlTable class="reportTabel" style="table-layout: fixed; overflow-x:scroll;height: 60vh;    font-size: 12px;
+        font-family: sans-serif;">
+          <thead style="width: calc(100% - 1em);">
+            <tr>
+              <th width="100px">Code</th>
+              <th width="200px">Description</th>
+              <th width="60px">Conversion</th>
+              <th width="60px">MRP</th>
+              <th width="60px">Selling</th>
+              <th width="60px">Qty</th>
+            </tr>
+          </thead>
+          <tbody style="width: fit-content;">
+            <tr *ngFor="
+                let tList of _trnMainService.TrnMainObj.ProdList;
+                let i = index">
+              <td width="100px" style="overflow: hidden;" class="cell-with-comment">
+                <input id="mcode{{ i }}" type="text" (keydown)="$event.preventDefault()" (focus)="activeRowIndex=i" (keydown.Tab)="onItemClick(i)"
+                  (keydown.Enter)="onItemClick(i)" [(ngModel)]="tList.MENUCODE" class="form-control" />
+                <span class="cell-comment">Press Enter or Tab to select Item</span>
+              </td>
+              <td width="200px" style="overflow: hidden;" class="text-left">
+                {{tList.ITEMDESC}}
+              </td>
+              <td width="60px" style="overflow: hidden;">
+                <select (focus)="activeRowIndex=i" (change)="SelectUnit(i)" (keydown.Tab)="UnitEnterEventClick(i)"
+                  (keydown.enter)="UnitEnterEventClick(i)" id="alternateunit{{ i }}" [(ngModel)]="tList.ALTUNITObj"
+                  disabled class="form-control">
+                  <option *ngFor="let u of tList.Product?.AlternateUnits" [ngValue]="u">
+                    {{ u.ALTUNIT }}
+                  </option>
+                </select>
+              </td>
+              <td width="60px" style="overflow: hidden;">
+                <input type="number" [(ngModel)]="tList.MRP" (focus)="activeRowIndex=i" id="mrp{{ i }}"
+                  class="form-control" />
+              </td>
+
+              <td width="60px" style="overflow: hidden;">
+                <input type="number" id="sellingrate{{ i }}" class="form-control" [(ngModel)]="tList.RATE"
+                  (focus)="activeRowIndex=i" />
+              </td>
+              <td width="60px" style="overflow: hidden;">
+                <input type="text" id="Quantity{{ i }}" class="form-control" [(ngModel)]="tList.Quantity"
+                  (keydown.Enter)="QuantityEnter(i)" (keydown.Tab)="QuantityEnter(i)" (focus)="activeRowIndex=i" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-sm-4" style="min-height: 300px;max-height: 300px; overflow-y: scroll;"
+      *ngIf=" _trnMainService.TrnMainObj.ProdList[activeRowIndex] &&  _trnMainService.TrnMainObj.ProdList[activeRowIndex].BULKITEM">
+      <div class="bulk-details-wrap">
+        <div class="heading">
+          <h3>Bulk Details</h3>
+        </div>
+        <div class="form-group row">
+          <label for="bulkCode">Bulk Code :</label>
+          <input type="text" class="form-control" [(ngModel)]="
+              _trnMainService.TrnMainObj.ProdList[activeRowIndex].BULKITEM.MCODE" readonly />
+        </div>
+        <div class="form-group row">
+          <label for="bulkCode">Bulk Item :</label>
+          <input type="text" class="form-control" [(ngModel)]="
+              _trnMainService.TrnMainObj.ProdList[activeRowIndex].BULKITEM
+                .ITEMDESC
+            " readonly />
+        </div>
+        <div class="form-group row">
+          <label for="bulkCode">Weight :</label>
+          <input type="text" class="form-control" [(ngModel)]="
+              _trnMainService.TrnMainObj.ProdList[activeRowIndex].BULKITEM
+                .WEIGHT
+            " readonly />
+        </div>
+        <div class="form-group row">
+          <label for="bulkCode">Cost :</label>
+          <input type="text" class="form-control" [(ngModel)]="
+              _trnMainService.TrnMainObj.ProdList[activeRowIndex].BULKITEM.PRATE
+            " readonly />
+          <label for="bulkCode">Latest Sel :</label>
+          <input type="text" class="form-control" [(ngModel)]="
+              _trnMainService.TrnMainObj.ProdList[activeRowIndex].BULKITEM.RATE
+            " readonly />
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-4">
+            <label for="current">Current :</label>
+            <input type="text" readonly class="form-control" [(ngModel)]="
+                _trnMainService.TrnMainObj.ProdList[activeRowIndex].BULKITEM
+                  .STOCK
+              " />
+          </div>
+          <div class="col-sm-4">
+            <label for="current">Packed :</label>
+            <input type="text" readonly class="form-control" [(ngModel)]="
+                _trnMainService.TrnMainObj.ProdList[activeRowIndex].BULKITEM
+                  .PACKED
+              " />
+          </div>
+          <div class="col-sm-4">
+            <label for="current">Avail For :</label>
+            <input type="text" readonly class="form-control" [(ngModel)]="
+                _trnMainService.TrnMainObj.ProdList[activeRowIndex].BULKITEM
+                  .AVAIL
+              " />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<generic-popup-grid #genericGridItem [popupsettings]="gridPopupSettingsForItem"
+  (onItemDoubleClick)="onItemSelected($event)"></generic-popup-grid>

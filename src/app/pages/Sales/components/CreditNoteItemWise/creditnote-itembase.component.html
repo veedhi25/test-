@@ -1,0 +1,45 @@
+﻿<div class="form-inner">
+<div class="top-forms">
+    <div class="row">
+        <div class="col-md-3">
+            <h3 class="main-heading">
+                <!-- <i class="fa fa-th" (click)="onTransactionConfigureClick()"
+                style="color: #2bade5;
+              cursor: pointer; font-size: 20px;" title="Click to configure grid"></i> -->
+                {{_trnMainService.pageHeading}} [{{_trnMainService.TrnMainObj.Mode |titlecase}}]</h3>
+        </div>
+        <div class="col-md-9 form-right-btn">
+            <voucher-master-toggler></voucher-master-toggler>
+            <voucher-master-action (onCancelEmit)="onCancelClicked()"
+                (onSalesReturnCancel)="genericSalesReturnCanclePopup()" (onFromDebitNoteClickedEvent)="loadFromDebitNote()"></voucher-master-action>
+        </div>
+    </div>
+</div>
+<div class="content-areaform">
+    <div class="col-md-12">
+        <div *ngIf="masterService.ShowMore" class="row">
+            <trnmain-parameters-master></trnmain-parameters-master>
+        </div>
+        <div class="row">
+            <productentry></productentry>
+        </div>
+    </div>
+    <voucher-sidebar-billdetail></voucher-sidebar-billdetail>
+</div>
+
+</div>
+
+<div class="sticky-bottom">
+    <voucher-total-area></voucher-total-area>
+</div>
+
+
+
+<generic-popup-grid #genericSalesReturnCancle [popupsettings]="gridcancelSalesPopupSettings"
+    (onItemDoubleClick)="onSalesReturnCancelSelect($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericFromDebitNote [popupsettings]="gridFromDebitNotePopupSettings"
+    (onItemDoubleClick)="onFomDebitNoteClicked($event)">
+</generic-popup-grid>
+<user-wise-transaction-form-configuration #userwisetransactionformconfig
+(updateGridConfigAfterSave)="updateGridConfig($event)"></user-wise-transaction-form-configuration>

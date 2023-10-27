@@ -1,0 +1,24 @@
+<div class="form-inner">
+        <div class="top-forms">
+          <div class="col-md-2">
+            <h3 class="main-heading">{{_trnMainService.pageHeading}}[{{_trnMainService.TrnMainObj.Mode |titlecase}}]</h3>
+          </div>
+          <div class="col-md-8 form-right-btn">
+            <voucher-master-action></voucher-master-action>
+            <voucher-master-toggler></voucher-master-toggler>
+          </div>
+        </div>
+        <div class="content-areaform">
+          <div *ngIf="masterService.ShowMore">
+            <inv-params></inv-params>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <productentry></productentry>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sticky-bottom">
+        <voucher-total-area></voucher-total-area>
+      </div>

@@ -1,0 +1,83 @@
+
+       <div id="profitLossReportId" style="background-color : #ffffff; padding :1%; height : auto; ">
+            <div class="row">
+               <div class="modal-header" style="width : 97%; margin : 0px auto;">
+                  <button type="button" class="close" data-dismiss="modal" (click)="closeReportBox()">&times;</button>
+                  <h4 class="modal-title">Profit & Loss Report</h4>
+               </div>
+               <!-- Left Column -->
+               <div class="col-md-6">
+                                    
+                    <fieldset style="width : 99%;">
+                            <legend>Date Range Selection :</legend>
+                            
+                            <table>
+                               <tr>
+                                  <td><label class="smallBoldLabel">From(AD):</label></td>
+                                  <td><label class="smallBoldLabel">To(AD):</label></td>
+                               </tr>
+                               <tr>
+                                  <td>                                                 
+                                        <label class="smallBoldLabel"><input  type="date"  style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]="ReportParameters.DATE1"  (change)="changestartDate($event.target.value,'AD')"  ></label>
+                                  </td>
+                                  <td>                                                 
+                                        <label class="smallBoldLabel"><input  type="date" style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]="ReportParameters.DATE2"  (change)="changeEndDate($event.target.value,'AD')"   ></label>
+                                  </td>
+                               </tr>
+                               <tr>
+                                  <td>
+                                        <label class="smallBoldLabel"><input id="nepaliDate" style="width:152px;height:25px;text-align:center" class="nepali-calendar ndp-nepali-calendar" [(ngModel)]="ReportParameters.BSDATE1"
+                                     type="text" (change)="changestartDate($event.target.value,'BS')"
+                                     placeholder="yyyy-mm-dd" /> </label>
+                                  </td>
+                                  <td>
+                                        <label class="smallBoldLabel"><input id="nepaliDate" style="width:152px;height:25px;text-align:center" class="nepali-calendar ndp-nepali-calendar" [(ngModel)]="ReportParameters.BSDATE2"
+                                     type="text" (change)="changeEndDate($event.target.value,'BS')"
+                                     placeholder="yyyy-mm-dd" /> </label>
+                                  </td>
+                               </tr>
+                            </table>
+                         </fieldset>
+                         <fieldset>
+                              <legend>Division Selection:</legend>
+                              <select [(ngModel)]="ReportParameters.DIVISION" style="width : 100%;">
+                                 <option value="%">ALL</option>
+                                 <option *ngFor="let div of division" value="{{ div.INITIAL }}">
+                                    {{ div.NAME }}
+                                 </option>
+                              </select>
+                           </fieldset>
+                         <fieldset>
+                             <legend>Report Type</legend>
+                             <label class="smallBoldLabel">
+                                 <input type="radio" name="optRepType" [(ngModel)]="ReportParameters.OPT_SHOWSUMMARY_REPORT" value="0">&nbsp;Detail Report
+                                 <input type="radio" name="optRepType" [(ngModel)]="ReportParameters.OPT_SHOWSUMMARY_REPORT" value="1">&nbsp;Summary Report
+                             </label>
+                         </fieldset>
+               </div>
+               <!-- Right Column -->
+               <div class="col-md-6">
+                   <fieldset>
+                       <legend>Report Group Level</legend>
+                       <input type="text" name="repGrLvl" [(ngModel)]="ReportParameters.GroupLevel">
+                   </fieldset>
+                   <fieldset>
+                       <legend>Report Format:</legend>
+                       <label class="smallBoldLabel">
+                           <input type="radio" name="repFormat" [(ngModel)]="ReportParameters.OPT_ISVERTICAL_REPORT" value="1">&nbsp;Vertical
+                           <input type="radio" name="repFormat" [(ngModel)]="ReportParameters.OPT_ISVERTICAL_REPORT" value="0">&nbsp;Horizontal
+                       </label>
+                   </fieldset>
+
+                   <label class="smallBoldLabel"><input type="checkbox" name="showSubLed"  (change)="$event.target.checked?(ReportParameters.CHK_SHOWSUBLEDGER=1):(ReportParameters.CHK_SHOWSUBLEDGER=0)" [checked]="ReportParameters.CHK_SHOWSUBLEDGER == 1">&nbsp;Show SubLedger Also</label><br>
+                   <!-- <label class="smallBoldLabel"><input type="checkbox" name="InAcZeroVal">&nbsp;Include Accounts With Zero Value</label><br>
+                   <label class="smallBoldLabel"><input type="checkbox" name="costCent">&nbsp;Cost Center Selection</label> -->
+
+            </div>
+            <div class="btn">
+                    <!-- <button type="button"  title="onSave" class="btn btn-info">Run</button>    -->
+                    <button class="btn btn-info confirm-btn" type="button"  (click)=onload()>RUN</button>
+                    <button type="button"  title="Cancel" class="btn btn-info" (click)="closeReportBox()">Close</button>  
+                 </div>
+         
+       </div>

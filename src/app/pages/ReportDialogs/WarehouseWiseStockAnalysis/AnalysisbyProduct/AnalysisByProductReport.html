@@ -1,0 +1,82 @@
+<div style="background-color : #ffffff; padding :1%; height : auto;width:55%; ">
+
+        <div class=row>
+                <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" (click)="hide()">&times;</button>
+                        <h4 class="modal-title">Stock Analysis-Product </h4>
+                </div>
+            <div class="_left_section col-md-12">
+                        <div style="border:1px solid #c0c0c0; height: 50px;  " >                   
+                                   
+                             <table>
+                                 <tr>
+                                     <td><label class="smallBoldLabel" style="margin-left:25px;">Date:(AD)</label></td>
+                                     <td></td>
+                                 </tr>
+                                 <tr>
+                                    <td>                                                 
+                                        <label class="smallBoldLabel"><input  type="date"  style="width:152px; min-width:50%;margin-left:25px;"  placeholder="Year Start Date"  [(ngModel)]="AnalysisProduct.DATE"  (change)="changeEntryDate($event.target.value,'AD',Date1)" ></label>
+                                      
+                                    </td>
+                                    <td>                                                 
+                                            <label class="smallBoldLabel"> <input id="nepaliDate" style="width:152px;height:25px;text-align:center;" class="nepali-calendar ndp-nepali-calendar" [(ngModel)]="AnalysisProduct.BSDATE1"
+                                                type="text" (change)="changeEntryDate($event.target.value,'BS')"
+                                               placeholder="yyyy-mm-dd" />
+                                           </label>  
+                                    </td>
+                                 </tr>
+                             
+                             </table>
+                             <div>
+
+                             </div> 
+                                                     
+                        </div>
+
+                    <fieldset style="height: 170px">
+                            <legend >Product Selection:</legend>          
+                             <div class="col-md-6">                                               
+                                 <!-- <label style="width:100%;">Item Code :</label>  -->
+                                 <div class="smalllabeldiv">
+                                        <label class="smallBoldLabel">Item Code:</label>
+                                 </div>
+                                 <div class="smallBoldLabel">
+                                        <input tabindex="-1" type="text" style="width:120px"  (keydown.enter)="menucodeChanged($event.target.value)" [(ngModel)]="itemCode" >                                
+                                 </div>
+                                   
+                           </div> 
+                           <div class="col-md-12">                                                     
+                                      <!-- <label>Item Name :</label>    -->
+                                      <div class="smalllabeldiv">
+                                            <label class="smallBoldLabel">Item Name:</label>
+                                       </div>
+                                        <div class="smallBoldLabel">
+                                            <input ngui-auto-complete [source]="dropListItem.bind(this)" max-num-list="25" [(ngModel)]="selectedProd" (ngModelChange)="itemChanged($event)"
+                                                style="width:284px;height:25px" list-formatter="DESCA" 
+                                                display-property-name="DESCA">
+                                        </div>
+                                        <div>
+                                            <button type="button"  style="height: 25px" (click)="OnClick()">...</button>
+                                        </div>
+                                        <div class="smalllabeldiv">
+                                                <input type="text"  [(ngModel)]="itemListobj" style="min-width:95%; height: 50px;" >                                                                                                                                                    
+                                        </div>
+                        </div>                           
+                       </fieldset>                               
+                    <fieldset>
+                            <legend >Supplier Selection :</legend>          
+                            <div class="col-md-12">                               
+                                <select [(ngModel)]="AnalysisProduct.selectedSupplier" style="width:95%;" >
+                                        <option value="0">Choose Supplier</option>
+                                        <option *ngFor="let supName of suppliersName" value={{supName.ACID}}  >{{supName.ACNAME}} </option>
+                                </select>
+                            </div>                                                                                                                     
+                    </fieldset>
+
+                    <div style="margin-left:244px;"> 
+                            <button class="btn btn-info confirm-btn" type="button"  (click)=onload()>RUN</button>   
+                            <button type="button" (click)="cancel()" title="Cancel" class="btn btn-info">Close</button>
+                    </div>
+            </div>     
+        </div>    
+    </div>

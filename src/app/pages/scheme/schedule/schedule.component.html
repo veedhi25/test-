@@ -1,0 +1,137 @@
+<style>
+    #searchclear {
+        position: absolute;
+        right: 5px;
+        top: 0;
+        bottom: 0;
+        height: 14px;
+        margin: auto;
+        font-size: 14px;
+        cursor: pointer;
+        color: #ccc;
+    }
+
+    #searchclear::before {
+        margin-left: -115px;
+    }
+</style>
+
+
+
+
+
+<div class="sticky-top row" >
+    <div class="col-md-4" >
+        <h5> {{ modeTitle }} </h5>
+    </div>
+    <div class="col-md-8" >
+        <div class="row pull-right" >
+            <button type="submit" class="btn btn-info btn-sm" (click)="onSave()" > Save </button>
+            <button type="button" class="btn btn-info btn-sm" (click)="cancel()" > Back </button>
+            <button type="button" class="btn btn-info btn-sm" (click)="reset()" > Reset </button>
+        </div>
+    </div>
+</div>
+
+<div class="card" >
+
+    <div style="margin-top: 50px;" class="card-header" >
+       Schedule Entry
+    </div>
+
+
+
+    <div style="height: 406px;margin-left: 40px; " >
+        <form class="row form-horizontal" style="margin-top: 15px;" [formGroup]="form" >
+            
+            <div class="form-group row" style="margin-left: 0px;" >
+                <label style="width: 10%; margin-left: 15px;" class="col-md-3 form-control-label">Name: </label>
+                <div class="col-md-9" >
+                    <input type="text" class="form-control" style="margin-left: -2.4vw; width: 106%;" formControlName="discountname" >
+                </div>
+            </div>
+
+
+            <div class="form-group row" style="margin-left: 0px;">
+                <div class="col-md-6 pd0 row" >
+                    <label style="margin-left: 15px;width: auto;" class="col-md-4 form-control-label">Start Date: </label>
+                    <div class="col-md-7" >
+                        <input type="date" class="form-control" formControlName="startdate">
+                    </div>
+                </div>
+                <div class="col-md-6 pd0 row" >
+                    <label style="margin-left: 15px;width: auto;"  class="col-md-4 form-control-label">End Date: </label>
+                    <div class="col-md-7" >
+                        <input type="date" class="form-control" formControlName="enddate">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group row" style="margin-left: 0px;">
+                <fieldset style="border: 2px solid #d9d9d9; width: 85%; margin-left: 32px;" [disabled]="Daywise" >
+                    <legend style="font-size: 15px; text-align: left; margin-bottom: 3px; width: auto;" >Daywise <input type="checkbox" (change)="daywiseChange($event)" [disabled]="_activatedRoute.snapshot.params['mode'] == 'view' "> </legend>
+                
+                    <div class="col-md-12 pd0" style="text-align: center; width: 50%; display: flex; margin-left: 289px; justify-content: space-around;" >
+                        <label class="days">
+                            <input type="checkbox" formControlName="sun" > Sun
+                        </label>
+
+                        <label class="days">
+                            <input type="checkbox" formControlName="mon"> Mon
+                        </label>
+
+                        <label class="days">
+                            <input type="checkbox" formControlName="tue" > Tue 
+                        </label>
+
+                        <label class="days">
+                            <input type="checkbox" formControlName="wed"> Wed
+                        </label>
+
+                        <label class="days">
+                            <input type="checkbox" formControlName="thu"> Thu
+                        </label>
+
+                        <label class="days">
+                            <input type="checkbox" formControlName="fri"> Fri
+                        </label>
+
+                        <label class="days">
+                            <input type="checkbox" formControlName="sat"> Sat
+                        </label>
+
+                    </div>
+                </fieldset>
+            </div>
+
+
+            <div class="form-group row" style="margin-left: 0px;">
+                <fieldset style="border: 2px solid #d9d9d9; width: 85%; margin-left: 30px;" [disabled]="happyhour" >
+                    <legend style="font-size: 15px; text-align: left; margin-bottom: 3px; width: auto;" > Happy hour (Default <input type="checkbox" (change)="happyHourChange($event)" [disabled]="_activatedRoute.snapshot.params['mode'] == 'view'" > ) </legend>
+                    <div class="row" style="margin-left: 44px;" >
+
+                        <div class="col-md-6 pd0 row" >
+                            <label style="margin-left: 15px;width: auto;"  class="col-md-4 form-control-label " > Start time: </label>
+                            <div class="col-md-7" >
+                                <input type="time" class="form-control" formControlName="starttime">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 pd0 row" >
+                            <label  style="margin-left: 15px;width: auto;" class="col-md-3 form-control-label"> End time: </label>
+                            <div class="col-md-7" >
+                                <input type="time" class="form-control" formControlName="endtime" >
+                            </div>
+                        </div>
+
+                    </div>
+                </fieldset>
+            </div>
+        </form>
+    </div>
+
+
+</div>
+
+

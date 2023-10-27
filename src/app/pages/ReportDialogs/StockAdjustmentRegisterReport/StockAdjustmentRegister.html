@@ -1,0 +1,77 @@
+
+<div style="background-color : #ffffff; padding :1%; height : auto; ">
+        <div class="row">
+         <div class="modal-header" style="width: 97%; margin:0px auto;">
+                    <button type="button" class="close" data-dismiss="modal" (click)="hide()">&times;</button>
+                   <h4 class="modal-title">Stock Adjustment Register</h4> 
+            </div>
+            <!-- Left Column -->
+            <div class=" col-md-6">
+                    <fieldset>
+                            <legend >Date Range Selection :</legend>                            
+                                <table>
+                                  <tr>
+                                     <td><label class="smallBoldLabel">From:(AD)</label></td>
+                                     <td><label class="smallBoldLabel">To:(AD)</label></td>    
+                                  </tr>
+
+                                   <tr>
+                                        <td>                                                 
+                                          <input  type="date"  style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]="AdjustmentRegister.DATE1"  (change)="changeEntryDate($event.target.value,'AD',Date1)"  >
+                                        </td>
+                                        <td>                                                 
+                                           <input  type="date" style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]="AdjustmentRegister.DATE1"  (change)="changeEndDate($event.target.value,'AD',Date2)"   >
+                                         </td>
+                                      </tr>
+                                      <!-- <tr>
+                                         <td>                                                 
+                                           <input  type="date"  style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]=" StockAgeing.BSDATE1"  (change)="changeEntryDate($event.target.value,'BS',Date1)" >B S
+                                         </td>
+                                         <td>                                                 
+                                            <input  type="date" style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]=" StockAgeing.BSDATE2"  (change)="changeEndDate($event.target.value,'BS',Date2)" >B S
+                                          </td>
+                                       </tr> -->
+
+                                </table>
+                    </fieldset> 
+
+                                 
+            </div>
+            <!-- Another column -->
+            <div class=" col-md-6">
+
+                    <fieldset>
+                            <legend>Stock Take Batch Wise Report :</legend>                 
+                            <label class="smallBoldLabel">Batch</label>
+                            <select  [(ngModel)]="AdjustmentRegister.selectedBatch" style="width:95%;" >
+                                    <option *ngFor="let item of BatchList" [value]="warehouse">{{item.NAME}} </option>
+                            </select>                                                                                                                                                         
+                     </fieldset>               
+     
+            </div>
+                    
+                <div class="col-md-6">         
+                            <fieldset>
+                                    <legend >Division Selection :</legend>          
+                                    <div class="col-md-12">
+                                            <select [(ngModel)]="AdjustmentRegister.selectedDivision" (click)="onSelectDivision($event.target.value)" style="width:95%;" >
+                                                    <option *ngFor="let div of division" [value]="div.INITIAL" >{{div.NAME}} </option>
+                                            </select>
+                                    </div>                                                                                                                     
+                            </fieldset>                        
+                </div>
+                
+                 <div class="btn">
+   
+                        <button class="btn btn-info confirm-btn" type="button"  (click)=onload()>RUN</button>
+                        <button type="button"  title="Cancel" class="btn btn-info">Close</button>  
+                    </div>
+
+              
+               
+            <!-- </div> -->
+        </div>
+
+</div   >
+
+

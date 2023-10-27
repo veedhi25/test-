@@ -1,0 +1,25 @@
+<div class="sticky-top">
+    <div class="row clearfix">
+        <div class="col-md-4">
+            <h2 style="color: black;">Delivery Order Transfer</h2>
+        </div>
+
+    </div>
+
+    <div class="col-md-2">
+        <button style="margin:4px;" class="btn btn-info" (click)=" ERP_BPOS_MAPPING_EXCEL()">
+            Upload Delivery Order Transfer
+        </button>
+
+    </div>
+
+    <div class="col-md-2">
+        <button style="margin:4px;" class="btn btn-info" (click)=" STOREOPENINGINFO()">
+            Upload Store Opening Info
+        </button>
+
+    </div>
+</div>
+<file-uploader-popup #fileUploadPopup [popupsettings]="fileUploadPopupSettings"
+    (onUploaded)="fileUploadSuccessStatus($event)">
+</file-uploader-popup>

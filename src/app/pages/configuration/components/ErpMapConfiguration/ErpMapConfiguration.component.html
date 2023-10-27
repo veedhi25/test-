@@ -1,0 +1,35 @@
+<div class="sticky-top">
+    <div class="row clearfix">
+        <div class="col-md-4">
+            <h2 style="color: black;">BPOS ERP CONFIGURATION</h2>
+        </div>
+
+    </div>
+
+    <div class="col-md-2">
+        <button style="margin:4px;" class="btn btn-info" (click)=" ERP_BPOS_MAPPING_EXCEL()">
+            ERP-BPOS MAPPING EXCEL
+        </button>
+
+    </div>
+    <div class="col-md-2" *ngIf="showsuppliermapping()">
+        <button style="margin:4px;" class="btn btn-info" (click)="SUPPLIER_BPOS_MAPPING_EXCEL()">
+            SUPPLIER MAPPING EXCEL
+        </button>
+    </div>
+
+
+    <div class="col-md-2" *ngIf="showsuppliermapping()">
+        <button style="margin:4px;" class="btn btn-info" (click)="INCENTIVE_BPOS_MAPPING_EXCEL()">
+            INCENTIVE SLAB MAPPING EXCEL
+        </button>
+    </div>
+    <div class="col-md-2" *ngIf="showsuppliermapping()">
+        <button style="margin:4px;" class="btn btn-info" (click)="AUTOCNDN_BPOS_MAPPING_EXCEL()">
+            AUTO CNDN SD MAPPING EXCEL
+        </button>
+    </div>
+</div>
+<file-uploader-popup #fileUploadPopup [popupsettings]="fileUploadPopupSettings"
+    (onUploaded)="fileUploadSuccessStatus($event)">
+</file-uploader-popup>

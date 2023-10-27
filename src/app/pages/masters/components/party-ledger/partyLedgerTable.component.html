@@ -1,0 +1,64 @@
+<div class="row">
+    <ba-card style="background-color: #ffffff" baCardClass="with-scroll">
+        <div class="col-md-12" style="padding: 0px">
+            <button [disabled]="addMode" type="button" class="btn btn-info right" (click)="AddGroup(Tree)" style="margin-bottom: 10px;">Add Group</button>
+            <button [disabled]="addMode" type="button" class="btn btn-info right" (click)="AddLedger()" style=" margin-bottom: 10px;  margin-left: 10px;">Add Party</button>
+
+        </div>
+        <div [ngBusy]="busy"></div>
+        <div class="col-md-3 " style="padding: 0px;">
+            <div class="plainBackGround">
+                <form>
+                    <!--<form style="background-color:#ffffff; border:1px solid;border-color:#dcdcdc">-->
+                    <fieldset [class.disabledbutton]="addMode" [disabled]="addMode" style="border:1px solid;border-color:#dcdcdc">
+                        <input name="filter" #filter (keyup)="filterNodes(filter.value, tree)" placeholder="&nbsp; Search Party" class="filterclass"
+                        />
+                        <div id=treediv>
+                            <div style="overflow: auto; border: black;border-width: 2px;height: 500px;background:white;margin:10px;font-size:12px">
+                                <Tree #tree [nodes]="nodes" [focused]="true" [options]="customTemplateStringOptions" (onEvent)="onEvent($event)" (onActivate)="onselect(tree,$event)">
+                                    <ng-template #treeNodeTemplate let-node>
+                                        <span title="{{node.data.subTitle}}" [contextMenu]="myContextMenu" [contextMenuSubject]="node.data">{{ node.data.ACNAME }}{{ childrenCount(node) }}</span>
+
+                                    </ng-template>
+                                    <ng-template #loadingTemplate>Loading, please hold....</ng-template>
+                                </Tree>
+
+                            </div>
+                            <br>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+
+        </div>
+
+        <div *ngIf="!addMode" class="col-md-9" style="padding-left: 5px;">
+            <ng2-smart-table [settings]="settings" [source]="source" (edit)="onEditClick($event)" (deleteConfirm)="onDeleteConfirm($event)"
+                (view)="onViewClick($event)"></ng2-smart-table>
+        </div>
+        <div *ngIf="addMode" class="col-md-9" style="padding-left: 5px;">
+            <addPartyLedgerSelector [Title]="modeTitle" [acid]="selectedNode?.ACID" [rootID]="root" (onClose)="onAddClose($event)" [mode]="mode"
+                [grp]="grp" (SavePartyEmit)="SavePartyEmit($event)"></addPartyLedgerSelector>
+        </div>
+    </ba-card>
+
+    <context-menu #myContextMenu>
+        <ng-template *ngFor="let action of contextMenuActions" contextMenuItem let-item [visible]="action.visible" [enabled]="action.enabled"
+            [divider]="action.divider" (execute)="contextMenuClick($event.item,action)">
+            {{ action.html(item) }}
+        </ng-template>
+    </context-menu>
+</div>
+<style>
+    .filterclass {
+        margin: 10px;
+        height: 25px;
+        width: 228px;
+        color: #666666;
+        border: 1px solid #cbcbcb;
+        border-radius: 5px;
+        background-color: #ffffff;
+        box-shadow: none;
+        font-size: 14px;
+    }
+</style>

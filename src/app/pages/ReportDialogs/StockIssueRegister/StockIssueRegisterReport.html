@@ -1,0 +1,76 @@
+<div style="background-color : #ffffff; padding :1%; height : auto; ">
+        <div class="row" >
+                <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" (click)="hide()">&times;</button>
+                        <h4 class="modal-title">Stock Issue Register</h4>
+                </div>
+            <div class="_left_section col-md-6">
+                <fieldset style="width:352px">
+                    <legend style="font-size:11px;font-weight: bold; width:auto">Date Range Selection :</legend>                   
+                        <table>
+                          <tr>
+                             <td><label class="smallBoldLabel">From:(AD)</label></td>
+                             <td><label class="smallBoldLabel">To:(AD)</label></td>   
+                          </tr>
+                           <tr>
+                                <td>                                                 
+                                  <label class="smallBoldLabel"><input  type="date"  style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]="StockIssueRegister.DATE1"  (change)="changeEntryDate($event.target.value,'AD')"  ></label>
+                                </td>
+                                <td>                                                 
+                                   <label class="smallBoldLabel"><input  type="date" style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]="StockIssueRegister.DATE2"  (change)="changeEndDate($event.target.value,'AD')"   ></label>
+                                 </td>
+                              </tr>
+                              <tr>
+                                    <td>
+                                           <label class="smallBoldLabel"> <input id="nepaliDate" style="width:152px;height:25px;text-align:center" class="nepali-calendar ndp-nepali-calendar" [(ngModel)]="StockIssueRegister.BSDATE1"
+                                             type="text" (change)="changeEntryDate($event.target.value,'BS')"
+                                            placeholder="yyyy-mm-dd" />
+                                        </label>  
+                                                            
+                                       </td>
+                                       <td>
+                                           <label class="smallBoldLabel">
+                                            <input id="nepaliDate" style="width:152px;height:25px;text-align:center" class="nepali-calendar ndp-nepali-calendar" [(ngModel)]="StockIssueRegister.BSDATE2"
+                                            type="text" (change)="changeEndDate($event.target.value,'BS')"
+                                           placeholder="yyyy-mm-dd" />
+                                        </label>                     
+                                       </td>                              
+                               </tr>
+                        </table>
+            </fieldset>
+                       <div>
+                            <div class="checkbox" style="margin-top:10px;padding:7px;">
+                                <label><input type="checkbox" value="">Cost Center Selection</label>
+                            </div> 
+                        </div>  
+
+            </div>
+            <div  class="_right_section col-md-6">
+                    <fieldset>
+                            <legend >Transfer From :</legend>          
+                            <div class="col-md-12">
+                                    <label style="height:16px ; width:105.5px;" class="smallBoldLabel">Warehouse :</label>  
+                                    <select [(ngModel)]="StockIssueRegister.selectedFrom"  style="width:95%;" >
+                                            <option *ngFor="let item of items"  [value]="item.NAME">{{item.NAME}} </option>
+                                    </select>
+                            </div>                                                                                                                     
+                     </fieldset> 
+                     <fieldset>
+                            <legend >Transfer To :</legend>          
+                            <div class="col-md-12">
+                                    <label style="width:105.5px;" class="smallBoldLabel">Warehouse :</label> 
+                                    <select [(ngModel)]="StockIssueRegister.selectedTo"  style="width:95%;" >
+                                            <option *ngFor="let item of items"  [value]="item.NAME">{{item.NAME}} </option>
+                                    </select>
+                            </div>                                                                                                                     
+                     </fieldset> 
+                     
+            </div>
+        </div>
+        <hr style="margin-top:0px ; margin-bottom:0px">
+        <div style="margin-left:571px"> 
+                <button class="btn btn-info confirm-btn" type="button"  (click)=onload()>RUN</button> 
+            <!-- <button type="button" (click)="onSaveClicked()" title="onSave" class="btn btn-info">Run</button>    -->
+            <button type="button" (click)="cancel()" title="Cancel" class="btn btn-info">Close</button>
+        </div>
+</div>

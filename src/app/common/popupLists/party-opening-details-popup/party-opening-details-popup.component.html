@@ -1,0 +1,191 @@
+<style>
+  .modal-content {
+    padding: 1px;
+    margin: 0px;
+    float: right;
+  }
+
+  tbody > tr:hover {
+    background-color: #f3f5f4;
+    cursor: pointer;
+  }
+  tr {
+    font-size: 11px;
+  }
+  .selected-row {
+    background-color: #ced6d3 !important;
+  }
+
+  .table > tbody > tr > td {
+    line-height: 30px !important;
+  }
+  .table > thead > tr > th {
+    line-height: 5px !important;
+  }
+  .table > tbody > tr > td:first-child {
+    text-align: left !important;
+    padding: 0px 0px 0px 11px !important;
+  }
+
+  .modal-content {
+    box-shadow: -10px 0px 10px 1px #aaaaaa;
+  }
+
+  .modal-content-main-area {
+    max-height: 100%;
+    height: 100%;
+    overflow: auto;
+    overflow-x: hidden;
+  }
+
+  .modal-content-summary-area {
+    max-height: 20%;
+    height: 20%;
+    overflow: auto;
+    overflow-x: hidden;
+  }
+
+  .ellipsis {
+    /* width: 220px;
+    text-overflow: ellipsis;
+    overflow: hidden; */
+    white-space: nowrap;
+  }
+</style>
+<div
+  class="modal-sticky"
+  [class.modal-sticky-hide]="!isActive"
+  style="display : block; padding: 0px; width:58%"
+>
+  <!-- Modal content -->
+  <div
+    class="modal-content modal-content-main-area"
+    style="width: 143% !important"
+  >
+    <div *ngIf="_trnMainService.TrnMainObj">
+      <div>
+        <div class="modal-header" style="padding: 0px;background: #ecad79;">
+          <button class="close" aria-label="Close" (click)="hide()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title" style="text-align: center;">
+            Party Opening Details
+          </h4>
+        </div>
+        <div
+          class="col-md-12 table-scroll"
+          *ngIf="_trnMainService.TrnMainObj.TrntranList.length > 0"
+        >
+          <table class="table">
+            <thead>
+              <tr style="background: #b5e26a;">
+                <th width="10px">SN.</th>
+                <th width="20px">VOUCHER NO.</th>
+                <th width="20px">VOUCHER DATE</th>
+                <th width="20px">AMT</th>
+                <th width="20px">CLEAR AMT</th>
+                <th width="20px">DUE AMT</th>
+                <th width="20px">DUE DATE</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="_trnMainService.TrnMainObj.TrntranList[currentIndex]">
+              <tr
+                *ngFor="
+                  let item of _trnMainService.TrnMainObj.TrntranList[
+                    currentIndex
+                  ].PartyDetails;
+                  let i = index
+                "
+              >
+                <td>{{ i + 1 }}</td>
+                <td>
+                  <input
+                    type="text"
+                    name="ref_vchrno_{{ i }}"
+                    (keydown.Delete)="deleteRow(i)"
+                    [(ngModel)]="
+                      _trnMainService.TrnMainObj.TrntranList[currentIndex]
+                        .PartyDetails[i].REFVNO
+                    "
+                  />
+                </td>
+                <td>
+                  <input
+                    type="date"
+                    name="ref_date_{{ i }}"
+                    (keydown.Delete)="deleteRow(i)"
+                    [(ngModel)]="
+                      _trnMainService.TrnMainObj.TrntranList[currentIndex]
+                        .PartyDetails[i].REFDATE
+                    "
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    decimalPlacesRestriction="2"
+                    (change)="onAmountChange(i)"
+                    name="amount_{{ i }}"
+                    (keydown.Delete)="deleteRow(i)"
+                    [(ngModel)]="
+                      _trnMainService.TrnMainObj.TrntranList[currentIndex]
+                        .PartyDetails[i].AMOUNT
+                    "
+                    (ngModelChagne)="recalculateDueAmt(i)"
+                    style="text-align: right;"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="number"
+                    decimalPlacesRestriction="2"
+                    (change)="onAmountChange(i)"
+                    name="clr_amount_{{ i }}"
+                    (keydown.Delete)="deleteRow(i)" 
+                    [(ngModel)]="
+                      _trnMainService.TrnMainObj.TrntranList[currentIndex]
+                        .PartyDetails[i].CLRAMOUNT
+                    "
+                    style="text-align: right;"
+                  />
+                </td>
+                <td>
+                    <input
+                    disabled
+                      type="number"
+                      decimalPlacesRestriction="2" 
+                      name="clr_amount_{{ i }}"
+                      (keydown.Delete)="deleteRow(i)"
+                      [(ngModel)]="
+                       _trnMainService.TrnMainObj.TrntranList[currentIndex]
+                        .PartyDetails[i].DUEAMT"
+                      style="text-align: right;"
+                    />
+                  </td> 
+                <td>
+                  <input
+                    type="date"
+                    name="due_date_{{ i }}"
+                    [(ngModel)]="
+                      _trnMainService.TrnMainObj.TrntranList[currentIndex]
+                        .PartyDetails[i].DUEDATE
+                    "
+                    (keydown.Enter)="addRow(i)"
+                    (keydown.Tab)="addRow(i)"
+                    (keydown.Delete)="deleteRow(i)" 
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div
+          class="col-md-12 table-scroll"
+          *ngIf="_trnMainService.TrnMainObj.TrntranList.length == 0"
+        >
+          Invalid Configuration detected.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

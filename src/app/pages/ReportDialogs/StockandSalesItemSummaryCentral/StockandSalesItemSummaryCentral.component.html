@@ -1,0 +1,92 @@
+<!-- Modal content -->
+<div style="height: 500px;" class="report-mainfiltemodal">
+  <div class="modal-content modal-content-main-area">
+    <div class="modal-header">
+      <h4 class="modal-title">Stock and Sales Item Summary Report Filter</h4>
+      <button class="close" aria-label="Close" (click)="closeReportBox()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="col-md-12">
+        <div class="form-group">
+          <!-- <div class="report-filter">
+            <label>Enter SapCode</label>
+            <input type="text" class="form-control" id="sapcode"
+              [(ngModel)]="reportFilterService.repObj.reportparam.COMPANYID">
+          </div> -->
+        
+          <div class="report-filter">
+            <label>Company Model Selection</label>
+            <angular4-multiselect [data]="modelListinit" class="form-control" [(ngModel)]="modelList"
+                [settings]="multiselectmodelSetting" (onSelect)="onModelListMultiSelect($event)"
+                (onDeSelect)="onModelListMultiSelect($event)"
+                (onSelectAll)="onModelListMultiSelect($event)"
+                (onDeSelectAll)="onModelListMultiSelect($event)">
+            </angular4-multiselect>
+        </div>
+        <div class="report-filter">
+            <label>Outlet Selection</label>
+            <angular4-multiselect [data]="outletList" class="form-control"
+                [(ngModel)]="reportFilterService.repObj.reportparam.COMPANYID"
+                [settings]="multiselectOutLetSetting" (onSelect)="onMultiSelect($event)"
+                (onDeSelect)="onMultiSelect($event)" (onSelectAll)="onMultiSelect($event)"
+                (onDeSelectAll)="onMultiSelect($event)">
+            </angular4-multiselect>
+        </div>
+          <div class="report-filter" *ngIf="masterService.fiscalYearList && masterService.fiscalYearList.length">
+            <label class="modal-label">Phiscal Year</label>
+            <select class="form-control" [(ngModel)]="reportFilterService.repObj.reportparam.PHISCALID">
+              <option *ngFor="let f of masterService.fiscalYearList;let i=index" value="{{f.PhiscalID}}">
+                {{f.PhiscalID}}
+              </option>
+            </select>
+          </div>
+          <div class="report-filter">
+            <label class="modal-label">Date Selection</label>
+            <form [formGroup]="reportFilterService.calendarForm">
+              <input type="text" ngxDaterangepickerMd formControlName="selectedDate" class="form-control"
+                placeholder="Choose date" [showDropdowns]="true" showCancel="true"
+                [ranges]="masterService.dateFilterRange" [alwaysShowCalendars]="true" />
+            </form>
+          </div>
+          <!-- <div class="report-filter">
+            <label class="modal-label">Division Selection</label>
+            <select class="form-control" [(ngModel)]="reportFilterService.repObj.reportparam.division">
+            <option value="%" selected>ALL</option>
+            <option *ngFor="let divs of masterService.AllDivisions;let i=index" value="{{divs.INITIAL}}">
+              {{divs.NAME}}
+            </option>
+            </select>
+          </div> -->
+          <div class="report-filter">
+            <fieldset>
+              <Legend style="font-size: 12px;
+                margin: 0;
+                width: 33%;
+                font-weight: bold;">Report Mode</Legend>
+              <div class="radio">
+                <label>
+                  <input type="radio" name="repmode" id="detail" value=0
+                    [(ngModel)]="reportFilterService.repObj.reportparam.REPORTMODE">
+                  Show All Items
+                </label>
+              </div>
+              <div class="radio">
+                <label>
+                  <input type="radio" name="repmode" id="summary" value=1 checked
+                    [(ngModel)]="reportFilterService.repObj.reportparam.REPORTMODE">
+                  Show Item with Stock Only
+                </label>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn add-btn" (click)=onload()>RUN</button>
+      <button class="btn cancel-btn" (click)="closeReportBox()">Close</button>
+    </div>
+  </div>
+</div>

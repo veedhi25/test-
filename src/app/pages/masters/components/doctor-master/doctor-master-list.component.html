@@ -1,0 +1,27 @@
+<div class="content-wrapper">
+    <div class="right-btn">
+        <button class="btn add-btn" [disabled]="saveButtonstatus" (click)="onAddClick()"
+            *ngIf="(outletconfigChild() || outletconfigParentandIndividual())">Add New Doctor</button>
+        <button class="btn btn-warning" [disabled]="bulkButtonstatus" (click)="onBulkUploadClicked()"
+            *ngIf="(outletconfigImportChild() || outletconfigParentandIndividual())">Import Doctor
+        </button>
+        <button class="btn btn-success" [disabled]="exportButtonstatus" (click)="ExportDoctorToExcel()"
+            *ngIf="(outletconfigExportChild() || outletconfigParentandIndividual())">Export
+            Doctor</button>
+        <!-- <a href="assets/mappingfiledemo.xlsx" [disabled]="downloadButtonstatus" download="assets/mappingfiledemo.xlsx" class="btn btn-success" [class.disabled]="bulkButtonstatus">Download File</a>  -->
+
+    </div>
+    <div class="full-width">
+        <div class="ng-tableinner">
+            <ims-grid #accountGenericGrid [imsGridSettings]="imsGridSettingsEntity"
+                (onEditClicked)="onEditClicked($event)" (onViewClicked)="onViewClicked($event)"
+                (onDeleteClicked)="onAccountDelete($event)"></ims-grid>
+            <!-- <ng2-smart-table [settings]="settings" [source]="source" (edit)="onEditClick($event)"
+                (view)="onViewClick($event)"></ng2-smart-table> -->
+        </div>
+    </div>
+</div>
+
+<file-uploader-popup #fileUploadPopup [popupsettings]="fileUploadPopupSettings"
+    (onUploaded)="fileUploadSuccessStatus($event)">
+</file-uploader-popup>

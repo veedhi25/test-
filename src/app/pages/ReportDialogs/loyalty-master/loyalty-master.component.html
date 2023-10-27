@@ -1,0 +1,63 @@
+<!-- Modal content -->
+<div style="height: 500px;;">
+    <div class="modal-content modal-content-main-area" style="width: 50% !important">
+        <div class="modal-header" style="padding: 0px;background: #ecad79;">
+            <button type="button" class="close" data-dismiss="modal" (click)="hide()">&times;</button>
+            <h4 class="modal-title">Loyalty Master Report Filter</h4>
+        </div>
+        <div class="modal-body">
+            <div class="clearfix">
+                <div class="col-md-12">
+                    <div class="col-md-12 form-group">
+
+
+                        <div class="report-filter">
+                            <label>Customer Selection</label>
+                            <input class="form-control" type="text" (keydown)="$event.preventDefault()"
+                                (keydown.Tab)="CustomerkeyEvent()" (keydown.enter)="CustomerkeyEvent()"
+                                autocomplete="off" />
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-12">
+
+                    <div class="table-container" style="height: 25vh">
+                        <table id="BlueHeaderResizableTable" style="font-size: 12px; width: 100%; overflow-x: auto"
+                            class="reportTabel">
+                            <thead>
+                                <tr>
+                                    <th width="100px">Customer Name</th>
+                                    <th width="100px"></th>
+                                </tr>
+                            </thead>
+                            <tbody style="width: fit-content">
+                                <tr *ngFor="let Customer of selectedCustomerList; let i = index" style="border: 1px">
+                                    <td width="100px">{{ Customer.ACNAME }}</td>
+                                    <td width="100px">
+                                        <i class="fa fa-trash" (click)="remove(i)"></i>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <hr style="margin-bottom: 0px !important">
+        <div class="clearfix" style="padding: 10px;">
+
+            <button class="btn btn-info pull-right" style="margin-left: 10px;" (click)=onload()>RUN</button>
+            <button class="btn btn-info pull-right" (click)="hide()">Close</button>
+        </div>
+    </div>
+</div>
+
+<generic-popup-grid #genericGrid [popupsettings]="gridPopupSettings"
+    (onItemDoubleClick)="dblClickPopupCustomer($event)">
+</generic-popup-grid>

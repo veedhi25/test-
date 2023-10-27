@@ -1,0 +1,151 @@
+<style>
+  label {
+    margin: 0;
+    padding: 3px;
+  }
+
+  .PList {
+    display: block;
+    margin-top: 40px;
+    height: 640px;
+    width: 1100px;
+    position: fixed;
+    float: right;
+    margin-left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+    left: 0;
+    top: 0;
+    z-index: 1;
+  }
+
+  .form-control[readonly],
+  .form-control[disabled] {
+    color: #000000;
+  }
+
+  .content-wrapper label.form-control-label {
+    margin: 6px 0 4px;
+  }
+
+  .kit-config2 .form-control-label {
+    margin: 10px 0 0 !important;
+  }
+</style>
+
+
+<div class="content-wrapper">
+  <div class="user-topbtn">
+    <h3 class="page-title space-heading">Kit Config Quality Check [{{ _trnMainService.TrnMainObj.Mode }}]</h3>
+    <div class="right-btn">
+      <button class="btn add-btn" *ngIf="IsShow" (click)="onSaveClicked()">Save Record</button>
+      <button class="btn btn-download" (click)="onReset()">F3 Reset</button>
+   
+    </div>
+  </div>
+  <div class="full-width compony-infoouter">
+    <div class="row">
+      <div class="col-md-12 kit-config2">
+        <div class="form-group">
+          <label for="date" class="col-md-4 form-control-label">Entry Date :</label>
+          <div class="col-md-8 kit-config-lable">{{ _trnMainService.TrnMainObj.TRNDATE }}</div>
+        </div>
+        <div class="form-group">
+          <label for="date" class="col-md-4 form-control-label">Combo No :</label>
+          <div class="col-md-8 kit-config-lable">{{ _trnMainService.TrnMainObj.VCHRNO }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="inner-wrap">
+      <div class="kitFormWrap">
+        <div class="productWrap">
+          <label for="type" class="col-md-2 form-control-label">Combopack Name :</label>
+          <div class="col-md-4">
+            <ng-container *ngIf="_trnMainService.TrnMainObj.Mode.toUpperCase() != 'VIEW'">
+              <input type="text" [(ngModel)]="product" class="form-control" placeholder="Press Enter to Select"
+                (keydown.Enter)="productSelect()" (keydown)="preventInput($event)" />
+            </ng-container>
+
+            <ng-container *ngIf="_trnMainService.TrnMainObj.Mode.toUpperCase() == 'VIEW'">
+              <h3 class="title-prodct">{{ product }}</h3>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+      <div class="qty wrap">
+       
+      </div>
+      <div class="col-md-12">
+       
+      </div>
+      <div class="custom-table">
+        <div>
+          <table class="table">
+            <tr>
+              <th style="width: 1%">S.No.</th>
+              
+              <!-- style="width: 28%" -->
+              <th style="width: 5%">
+                VCHRNO
+              </th>
+              <th style="width: 8%">Code</th>
+              <th style="width: 20%" >
+                DESCA
+              </th>
+              <th>Unit</th>
+              <th style="width: 10%">
+                Pending Quality Qty
+              </th>
+              <th style="width: 10%">
+              Accept Qty
+              </th>
+              <th>Approved Record
+                <input type="checkbox" [(ngModel)]="selectAll"  (change)="getSelectAllRecord()" /></th>
+            </tr>
+            <tbody style="width: fit-content">
+              <tr *ngFor="let product of products; let i = index" (click)="RowClick(i)">
+                <td id="sno{{ i }}">
+                  {{ i + 1 }}
+                </td>
+                <td>
+                  {{ product.VCHRNO }}
+                </td>
+                <td>
+                  {{ product.MCODE }}
+                </td>
+                <td>
+                  {{ product.DESCA }}
+                </td>
+                <td>
+                  {{ product.UNIT }}
+                </td>
+                <td>
+                  {{ product.QTY }}
+                </td>
+                <td>
+                  <input type="number" [(ngModel)]="product.AcceptQty" />
+                </td>
+                <td>
+                  <input type="checkbox"  [(ngModel)]="product.ConfigurationAccess" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="masterService.PlistTitle == 'batchList'" class="PList">
+      <PBatchList (dbClickEvent)="dblClickPopupBatch($event)" [activerowIndex]="activerowIndex" [title]="PlistTitle"
+        [BList]="_trnMainService.batchlist" (BatchClosedClick)="model1Closed()"
+        (returnBatchValue)="returnBatch($event)">
+      </PBatchList>
+    </div>
+  </div>
+</div>
+<generic-popup-grid #genericGridProduct [popupsettings]="gridProductPopupSettings"
+  (onItemDoubleClick)="dblClickPopupProduct($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericGridItem [popupsettings]="gridItemPopupSettings"
+  (onItemDoubleClick)="dblClickPopupItem($event)">
+</generic-popup-grid>
+<generic-popup-grid #genericGridview [popupsettings]="gridItemviewSettings" (onItemDoubleClick)="dblClickview($event)">
+</generic-popup-grid>

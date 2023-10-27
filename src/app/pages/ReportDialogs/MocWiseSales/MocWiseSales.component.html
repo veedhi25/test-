@@ -1,0 +1,162 @@
+<style>
+  .modal-content-main-area {
+    width: 100% !important;
+  }
+</style>
+
+
+<!-- Modal content -->
+<div style="height: 500px;;">
+  <div class="modal-content modal-content-main-area" style="width: 100% !important;margin-top: 10%;">
+    <div class="modal-header" style="padding: 0px;background: #ecad79;">
+      <button class="close" aria-label="Close" (click)="closeReportBox()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="modal-title" style="text-align: center;">
+        MocWiseSales Report Filter
+      </h4>
+    </div>
+    <div class="modal-body">
+      <div class="clearfix">
+        <div class="col-md-12">
+          <div class="col-md-12 form-group">
+            <!-- <div class="report-filter" *ngIf="masterService.fiscalYearList && masterService.fiscalYearList.length">
+              <label>Phiscal Year</label>
+              <select class="form-control" [(ngModel)]="reportFilterService.repObj.reportparam.PHISCALID">
+                <option *ngFor="let f of masterService.fiscalYearList;let i=index" value="{{f.PhiscalID}}">
+                  {{f.PhiscalID}}</option>
+              </select>
+            </div> -->
+            <!-- <div class="report-filter">
+              <label>Date Selection</label>
+              <form [formGroup]="reportFilterService.calendarForm">
+                <input type="text" ngxDaterangepickerMd formControlName="selectedDate" class="form-control"
+                  placeholder="Choose date" [showDropdowns]="true" showCancel="true"
+                  [ranges]="masterService.dateFilterRange" [alwaysShowCalendars]="true" />
+              </form>
+            </div> -->
+          
+            <!-- <div class="report-filter" style="margin: 5px 0px;">
+              <fieldset>
+                  <Legend style="font-size: 12px;
+                  margin: 0;
+                  width: 30%;
+                  font-weight: bold;">Month Selection</Legend>
+
+                  <select class="form-control" name="month" id="month"
+                   
+                      [(ngModel)]="reportFilterService.repObj.reportparam.MONTH">
+                      <option value="%">All</option>
+                      <option *ngFor="let month of months;let i=index" value={{month.value}}>
+                          {{month.month}}</option>
+                  </select>
+              </fieldset>
+          </div> -->
+          
+
+
+
+         <div class="report-filter" style="margin: 5px 0px;" > 
+            <!-- Month -->
+            <fieldset>
+              <Legend style="font-size: 12px;
+              margin: 0;
+              width: 30%;
+              font-weight: bold;">Month Selection</Legend>
+
+                  <angular4-multiselect [data]="months" [(ngModel)]="selectedMonths"
+                    class="form-control" [settings]="matrixSelectSetting"
+                    (onSelect)="onMultiSelect($event)" (onDeSelect)="onMultiSelect($event)"
+                    (onSelectAll)="onMultiSelect($event)" (onDeSelectAll)="onMultiSelect($event)">
+                  </angular4-multiselect>
+
+                  
+            </fieldset>
+              
+              
+         </div> 
+              
+
+
+
+
+
+
+
+
+          <div class="report-filter" style="margin: 5px 0px;">
+              <fieldset>
+                  <Legend style="font-size: 12px;
+                  margin: 0;
+                  width: 25%;
+                  font-weight: bold;">Year Selection</Legend>
+                  <select class="form-control" name="year" id="year"
+                      [(ngModel)]="reportFilterService.repObj.reportparam.YEAR">
+                      <option value="%">All</option>
+                      <option *ngFor="let year of listOfYear;let i=index" value={{year.year}}>
+                          {{year.year}}</option>
+                  </select>
+
+              </fieldset>
+          </div>
+
+          <div class="cell-with-comment report-filter">
+            <label>Customer</label>
+            <input id="customerselectid" autocomplete="off" title="Enter or Tab to select" [(ngModel)]="ACNAME"
+              (keydown.tab)="customerEnterCommand($event)" (keydown.enter)="customerEnterCommand($event)"
+              (keydown)="preventInput($event)" class="form-control" />
+
+            <span class="cell-comment" style="margin-left: 27%">
+              press ENTER or TAB to Select Customer
+            </span>
+          </div>
+          <div></div>
+
+          
+          </div>
+
+          <div class="col-md-8">
+            <h4 class="text-align">Selected Accounts</h4>
+            <div class="clearfix" style="height: 165px;overflow-y: scroll;">
+              <table>
+                <thead style="width: 98%;">
+                  <th style="background-color: #e3e1df !important;">ACNAME</th>
+                  <th style="background-color: #e3e1df !important;">ACID</th>
+                  <th style="background-color: #e3e1df !important;">ACTION</th>
+                </thead>
+                <tbody>
+                  <ng-container *ngIf="selectedVoucherList.length">
+                    <tr *ngFor="let itm of selectedVoucherList;let i=index">
+                      <td>
+                        {{itm?.ACNAME}}
+                      </td>
+                      <td>
+                        {{itm?.ACID}}
+                      </td>
+                      <td><i class="fa fa-trash" (click)="removeFromSelectedList(i)"></i></td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <hr style="margin-bottom: 0px !important">
+    <div class="clearfix" style="padding: 10px;">
+
+      <button class="btn btn-info pull-right" style="margin-left: 10px;" (click)=onload()>RUN</button>
+      <button class="btn btn-info pull-right" (click)="closeReportBox()">Close</button>
+    </div>
+  </div>
+
+  <div class="custom-genericGrid" style="height: 200px;">
+    <generic-popup-grid #genericGridCustomer [popupsettings]="gridPopupSettingsForCustomer"
+      (onItemDoubleClick)="onCustomerSelected($event)">
+    </generic-popup-grid>
+  </div>
+
+</div>

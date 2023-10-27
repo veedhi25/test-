@@ -1,0 +1,317 @@
+<style>
+  input,
+  select,
+  option {
+    height: 23px;
+    vertical-align: middle;
+    font-size: 13px;
+    border: 1px solid #cbcbcb;
+    border-radius: 3px;
+    color: black;
+  }
+
+  .plainBackGround {
+    border: 2px solid #E6E6E6;
+    margin-bottom: 5px;
+    padding: 10px;
+  }
+
+  label {
+    height: 28px;
+    font-weight: normal;
+    width: 90px;
+    margin: 2px;
+    vertical-align: middle;
+    font-size: 13px;
+    padding-top: 4px;
+  }
+
+  button:disabled {
+    cursor: not-allowed !important;
+  }
+
+  button {
+    margin-left: 3px;
+  }
+
+  .btn-add-focus:focus {
+    transform: scale(1.2);
+    -webkit-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -o-transform: scale(1.2);
+  }
+
+  tr th {
+    font-weight: bold;
+  }
+
+
+  .tableBorder {
+    border: 1px solid;
+    border-color: #dcdcdc
+  }
+
+  input {
+    padding-left: 4px;
+  }
+
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+
+  input:disabled,
+  select:disabled,
+  textarea:disabled {
+    cursor: not-allowed !important;
+    color: black !important;
+    background-color: #EBEBE4 !important;
+  }
+  table{
+    border-collapse: inherit;
+    background-color: transparent;
+  }
+</style>
+
+
+<div class="clearfix" style="padding: 5px 0px;background:#E2EAEA; margin-left:10px">
+  <div class="col-md-6">
+    <h4>Cash Handover</h4>
+  </div>
+  <div class="col-md-6">
+    <button  class="btn btn-info pull-right" (click)="reset()">
+      Reset
+    </button>
+    <button  class="btn btn-info pull-right" (click)="saveDenomination()">
+      Save
+    </button>
+    <button  class="btn btn-info pull-right" (click)="onPrint()">
+      Print
+    </button>
+  </div>
+</div>
+<div class="clearfix"  style="margin-left:10px;height:555px;overflow: scroll;">
+
+<div class="row plainBackGround clearfix">
+  <div class="row" style="margin-left: 10px">
+    <div class="col-md-5" style="
+        margin: 10px;
+        max-height: 150px;
+      ">
+      <div class="row cell-with-comment">
+        <label style="width: 25%">Date :</label>
+        <input type="text" style="width: 70%" [(ngModel)]="date" readonly />
+      </div>
+
+      <div class="row">
+        <label style="width: 25%">Counter :</label>
+        <input type="text" style="width: 70%" />
+      </div>
+
+      <div class="row">
+        <label style="width: 25%">User:</label>
+        <input style="width:70%" type="text" readonly [(ngModel)]="_trnMainService.userProfile.username">
+      </div>
+    </div>
+    <!-- <div class="col-md-5" style="
+        margin: 10px;
+        max-height: 150px;
+      ">
+      <div class="row">
+        <label style="width: 25%">No of Bills:</label>
+        <input style="width:70%" type="text" readonly [(ngModel)]="noOfBills">
+      </div>
+      <div class="row">
+        <label style="width: 25%">No of Items:</label>
+        <input style="width:70%" type="text" readonly [(ngModel)]="noOfItems">
+      </div>
+      <div class="row">
+        <label style="width: 25%">Total Sales:</label>
+        <input style="width:70%" type="text" readonly [(ngModel)]="totalSales">
+      </div>
+      <div class="row">
+        <label style="width: 25%">Discount Amount:</label>
+        <input style="width:70%" type="text" readonly [(ngModel)]="discountAmount">
+      </div>
+    </div> -->
+  </div>
+</div>
+<ba-card>
+  <div class="col-md-4 clearfix" >
+
+    <table class="tableBorder" style="padding:10px">
+      <tr>
+        <th colspan=2 style="background-color: #fcb0b0;">
+          Morning Cash
+        </th>
+        <th>
+          <input type="text" [(ngModel)]="morningCash" (change)="changeMorningCash($event)">
+
+        </th>
+
+      </tr>
+      <tr>
+        <th colspan=2 style="background-color: #fcb0b0;">
+          Cash Taken
+        </th>
+        <th>
+          <input type="text" [(ngModel)]="cashTaken" (change)="changeCashTaken($event)">
+
+        </th>
+
+      </tr>
+      <tr>
+        <th style="background-color: rgb(240, 164, 164);padding-left: 10px">
+          Deno</th>
+        <th style="padding-left:10px;background-color: rgb(240, 164, 164)">
+          Count</th>
+        <th style="background-color: rgb(240, 164, 164)">Amount</th>
+      </tr>
+      <tr *ngFor="let item of denoList;let i=index">
+        <td style="padding-left:10px">{{item.denO_NAME}}</td>
+        <td><input type="number" (change)="calculateDenomination()" [(ngModel)]="item.qty"></td>
+        <td style="padding-left:10px" style="background-color: #d9e0e9fd;">{{item.amount}}</td>
+      </tr>
+      <tr>
+        <td colspan=2>Total</td>
+        <td colspan=2 style="background-color:rgb(255 215 215);">{{total}}</td>
+
+      </tr>
+    </table>
+  </div>
+  <div class="col-md-1"></div>
+
+  <!-- <div class="row" style="margin-left: 10px;">
+      <label>Morning Cash</label>
+      <input type="number" [(ngModel)]="morningCash" (change)="changeMorningCash($event)">
+      <label>Cash Taken</label>
+      <input type="number" [(ngModel)]="cashTaken" (change)="changeCashTaken($event)">
+    </div> -->
+
+  <div class="col-md-4">
+
+    <table class="tableBorder" style="padding:10px">
+      <tr>
+        <td>Date</td>
+        <td><input type="date" (change)="dateChange($event.target.value)" [(ngModel)]="dateForTotalSales"></td>
+      </tr>
+      <tr>
+        <td style="background-color: #c8fcb0;">No of Bills</td>
+        <td style="background-color: #B6DDE8;">{{noOfBills}}</td>
+      </tr>
+      <tr>
+        <td style="background-color: #c8fcb0;">No of Items</td>
+      <td style="background-color: #B6DDE8;">{{noOfItems}}</td>
+      </tr>
+      <tr>
+        <td style="background-color: #c8fcb0;">Total Sales</td>
+        <td style="background-color: #B6DDE8;">{{totalSales}}</td>
+      </tr>
+      <tr>
+        <td style="background-color: #c8fcb0;">Discount Amount</td>
+        <td style="background-color: #B6DDE8;" >{{discountAmount}}</td>
+      </tr>
+      <tr>
+        <td style="background-color: #c8fcb0;">Sales Return</td>
+        <td style="background-color: #B6DDE8;" >{{salesReturn}}</td>
+      </tr>
+      <tr>
+        <td style="background-color: #c8fcb0;">Bill Cancelled</td>
+        <td style="background-color: #B6DDE8;" >{{billCancel}}</td>
+      </tr>
+     
+      <tr>
+        <th style="background-color: rgb(240, 164, 164);">
+          Mode of Payment</th>
+        <th style="padding-left:10px;background-color: rgb(240, 164, 164);">
+          Amount</th>
+      </tr>
+      <tr *ngFor="let a of modeOfPaymentList">
+        <td>{{a.trnmode}}</td>
+        <td>{{a.amount}}</td>
+
+      </tr>
+      <tr>
+        <th style="background-color: rgb(240, 164, 164);">Actual Cash</th>
+        <th style="background-color: rgb(240, 164, 164);" >{{actualCash}}</th>
+      </tr>
+      <!-- <tr>
+        <td>credit</td>
+        <td><input type="text"></td>
+
+      </tr>
+      <tr>
+        <td>credit card</td>
+        <td><input type="text"></td>
+
+      </tr>
+      <tr>
+        <td>Sales Return</td>
+        <td><input type="text"></td>
+
+      </tr>
+      <tr>
+        <td>Coupon</td>
+        <td><input type="text"></td>
+      </tr> -->
+    </table>
+
+
+    </div>
+</ba-card>
+</div>
+
+
+<div class="print-modal-sticky" *ngIf="showPosPrinterPreview" style="
+    display: block;
+    padding: 0px;
+    margin-bottom: 25px;
+    height: auto;
+    position: absolute;
+    right: 30%;
+    top: 5px;
+    width: 30%;
+    z-index: 9999999;
+  ">
+  <div class="modal-content modal-content-main-area" style="width: 100%">
+    <div class="modal-header">
+      <h4 class="modal-title" id="myModalLabel">Print Preview</h4>
+    </div>
+    <div class="modal-body" style="height: 420px; overflow: scroll">
+      <pre>
+        {{print}}
+      </pre>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal" (click)="canclePreview()">
+        Close
+      </button>
+      <button type="button" class="btn btn-primary" (click)="printDayEndBill()">
+        Print
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="modal fade" bsModal #childModal="bs-modal" tabindex="-1" role="dialog" style="margin-left:-1200px;margin-top:-600px"
+    aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" aria-label="Close" (click)="childModal.hide()">
+                    <span aria-hidden="true">&times;</span>
+
+                </button>
+                <h4 class="modal-title">Information</h4>
+            </div>
+            <div class="modal-body">
+                {{DialogMessage}}
+            </div>
+
+
+        </div>
+    </div>
+</div> -->

@@ -1,0 +1,402 @@
+<style>
+    td {
+        overflow: hidden;
+    }
+
+    input,
+    select {
+        height: 30px;
+        width: inherit;
+        border-radius: 5px;
+        padding: 5px;
+    }
+
+    .form-control-label {
+        text-align: left !important;
+    }
+</style>
+<div class="user-topbtn">
+
+    <h3 class="page-title space-heading">{{modeTitile}}</h3>
+
+    <div class="right-btn">
+        <button type="submit" class="btn add-btn" (click)="onSubmit()">Save</button>
+        <button type="button" class="btn btn-cancel" (click)="back()">Cancel</button>
+    </div>
+</div>
+
+
+
+
+
+<div class="full-width compony-infoouter">
+    <div class="form-card">
+        <div>
+            <ng-container *ngIf="mode=='user' || mode=='edit'">
+                <form [formGroup]="userForm">
+                    <div class="form-group">
+                        <label for="inputUsername" class="col-sm-4 form-control-label">User Name</label>
+                        <div class="col-sm-8">
+                            <input type="text" formControlName="username" id="inputUsername" placeholder="User Name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword3" class="col-sm-4 form-control-label">Password</label>
+                        <div class="col-sm-8">
+                            <input type="text" formControlName="password" id="inputPassword3" placeholder="Password">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-4 form-control-label">Email</label>
+                        <div class="col-sm-8">
+                            <input type="email" formControlName="email" id="inputEmail3" placeholder="Email">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-4 form-control-label">Phone</label>
+                        <div class="col-sm-8">
+                            <input type="phone" formControlName="phone" id="inputPhone3" placeholder="phone">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputmobile" class="col-sm-4 form-control-label">Role</label>
+                        <div class="col-sm-8">
+                            <select formControlName="role">
+                                <option *ngFor="let role of roleList;let i=index" value="{{role.rolename}}">
+                                    {{role?.rolename}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-4 form-control-label">Warehouse</label>
+                        <div class="col-sm-8">
+                            <select formControlName="warehouse">
+                                <option *ngFor="let warehouse of warehouseList;let i=index" value="{{warehouse.NAME}}">
+                                    {{warehouse?.NAME}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputmobile" class="col-sm-4 form-control-label">Division</label>
+                        <div class="col-sm-8">
+                            <select formControlName="division">
+                                <option *ngFor="let warehouse of divisionList;let i=index"
+                                    value="{{warehouse.INITIAL}}">
+                                    {{warehouse?.NAME}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="checkbox-inneradduser">
+                        <div class="form-group"
+                            *ngIf="loggedInuserDetail.username.toLowerCase()=='admin' || loggedInuserDetail.username.toLowerCase()=='patanjali_user'">
+                            <div class="col col-12 col-md-4">
+                                <div class="checkbox">
+                                    <label><input type="checkbox" formControlName="allowAppBilling" />
+                                        Allow App Billing?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group"
+                            *ngIf="(this.userProfile.CompanyInfo.companycode!=null && this.userProfile.CompanyInfo.isHeadoffice==0)&&(loggedInuserDetail.username.toLowerCase()=='admin' || loggedInuserDetail.username.toLowerCase()=='patanjali_user')">
+                            <div class="col col-12 col-md-4">
+                                <div class="checkbox">
+                                    <label><input type="checkbox" formControlName="allowIndentDeliveryToHQ" />
+                                        Allow Indent Delivery To HQ?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group"
+                            *ngIf="(this.userProfile.CompanyInfo.companycode!=null && this.userProfile.CompanyInfo.isHeadoffice==0)&&(loggedInuserDetail.username.toLowerCase()=='admin' || loggedInuserDetail.username.toLowerCase()=='patanjali_user')">
+                            <div class="col col-12 col-md-4">
+                                <div class="checkbox">
+                                    <label><input type="checkbox" formControlName="allowIndentApprovalToHQ" />
+                                        Allow Indent Approval To HQ?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group"
+                            *ngIf="loggedInuserDetail.username.toLowerCase()=='admin' || loggedInuserDetail.username.toLowerCase()=='patanjali_user'">
+                            <div class="col col-12 col-md-4">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" formControlName="allowPhysicalInventoryAppAccess" />
+                                        Allow PI App Access?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group"
+                            *ngIf="loggedInuserDetail.username.toLowerCase()=='admin' || loggedInuserDetail.username.toLowerCase()=='patanjali_user'">
+                            <div class="col col-12 col-md-4">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox"
+                                            formControlName="allowPhysicalInventoryAppReportAccess" />
+                                        Allow BLive App Access?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group"
+                            *ngIf="loggedInuserDetail.username.toLowerCase()=='admin' || loggedInuserDetail.username.toLowerCase()=='patanjali_user'">
+                            <div class="col col-12 col-md-4">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" formControlName="AllowStockSettlementApprovalApp" />
+                                        Allow Stock Settlement Approval For PI App?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+                </form>
+            </ng-container>
+
+
+
+
+
+            <!-- added by roshan start -->
+            <ng-container *ngIf="mode=='role'|| mode =='editRole'">
+                <form [formGroup]="roleForm">
+                    <div class="clearfix col-md-12">
+                        <strong for="inputUsername" class="col-md-1" style="padding: 5px;">Role Name</strong>
+                        <div class="col-sm-6">
+                            <input type="text" formControlName="roleName">
+                        </div>
+                    </div>
+                    <div formArrayName="menuRights" class="horizontal-scroll ims-scrollable-table">
+                        <table class="table table-striped">
+                            <thead>
+
+                                <tr style="position: sticky; top:0;line-height: 1.5rem;">
+                                    <th scope="col" style="width:12%" style="color: white !important;
+                                    background: #2bade5;
+                                    font-size: 16px;
+                                    font-weight: 600;">Menu Rights</th>
+
+                                </tr>
+                            </thead>
+
+                            <tbody style="width: fit-content;height: 30vh;">
+                                <tr *ngFor="let item of roleForm.controls.menuRights.controls; let i=index"
+                                    [formGroupName]="i" class="row show-grid">
+
+                                    <td style="width: 37%;"> <input type="checkbox"
+                                            (change)="onRoleParentChecked(i,$event)">
+                                        <input type="text"
+                                            style="border:0;background-color: #d9e5e7 !important; height: 4vh" size="40"
+                                            formControlName="title">
+                                    </td>
+
+                                    <ng-container *ngIf="path!=''">
+
+                                        <td style="width: 13%;"><input type="checkbox"
+                                                formControlName="view"><span>View</span>
+                                        </td>
+
+
+                                        <td style="width: 13%;"><input type="checkbox"
+                                                formControlName="add"><span>Add</span>
+                                        </td>
+
+
+                                        <td style="width: 13%;"><input type="checkbox"
+                                                formControlName="edit"><span>Edit</span>
+                                        </td>
+
+
+                                        <td style="width: 13%;"> <input type="checkbox"
+                                                formControlName="delete"><span>Delete</span>
+                                        </td>
+
+
+                                        <td style="width: 13%;"><input type="checkbox"
+                                                formControlName="print"><span>Print</span>
+                                        </td>
+
+                                    </ng-container>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+                    </div>
+                </form>
+
+
+            </ng-container>
+            <!-- added by roshan end  -->
+
+
+
+
+
+
+            <ng-container *ngIf="mode=='role'|| mode =='editRole'">
+                <form [formGroup]="roleForm">
+                    <div class="user-rights" *ngIf="roleForm.controls.userRights.controls?.length">
+
+                        <div class="clearfix">
+                            <h3 style="padding: 5px;
+                            background: #2bade5;
+                            color: white;
+                            text-align: center;">User Rights</h3>
+                        </div>
+                        <div class="clearfix" formArrayName="userRights">
+                            <div class="col-sm-3"
+                                *ngFor="let item of roleForm.controls.userRights.controls;let i=index">
+                                <ng-container *ngIf="item.value.right != 'DIVISION' && item.value.right != 'WAREHOUSE'">
+                                    <div [formGroupName]="i">
+                                        <div *ngIf="item.value.valueType=='tinyint'">
+                                            <input type="checkbox" formControlName="value">
+                                            <span>
+                                                <input style="margin-top: 3px; margin-bottom: 3px;" type="text"
+                                                    style="width: 20vw;" formControlName="path">
+                                            </span>
+                                        </div>
+                                        <div
+                                            *ngIf="(item.value.valueType=='varchar' || item.value.valueType=='char') && item.value.right != 'DIVISION'">
+                                            <input *ngIf="item.value.right != 'WAREHOUSE'" type="text"
+                                                style="width: 20vw;" formControlName="path">
+                                            <span *ngIf="item.value.right != 'WAREHOUSE'">
+                                                <input type="text" style="margin-top: 3px; margin-bottom: 3px;"
+                                                    formControlName="value" />
+                                            </span>
+                                        </div>
+                                        <div
+                                            *ngIf="(item.value.valueType=='varchar' || item.value.valueType=='char') && item.value.right == 'DIVISION'">
+                                            <input type="text" style="width: 20vw;" formControlName="path">
+                                            <span>
+                                                <select formControlName="value"
+                                                    style="margin-top: 3px; margin-bottom: 3px; min-width: 200px;"
+                                                    (change)="changeDivision($event.target.value)">
+                                                    <option *ngFor="let d of masterService.allDivisionList$ | async"
+                                                        value="{{d.INITIAL}}">{{d.NAME}}</option>
+                                                </select>
+                                            </span>
+                                        </div>
+                                        <div
+                                            *ngIf="(item.value.valueType=='varchar' || item.value.valueType=='char') && item.value.right == 'WAREHOUSE'">
+                                            <input type="text" style="border:0;background-color: transparent"
+                                                formControlName="path">
+                                            <span>
+                                                <select formControlName="value"
+                                                    style="margin-top: 3px; margin-bottom: 3px; min-width: 200px;">
+                                                    <option *ngFor="let w of divisionWarehouseList" [ngValue]="w.NAME">
+                                                        {{w.NAME}}
+                                                    </option>
+                                                </select>
+                                            </span>
+                                        </div>
+                                        <div
+                                            *ngIf="item.value.valueType=='numeric' || item.value.valueType=='decimal' || item.value.valueType=='float'">
+                                            <input type="text" style="width: 20vw;" formControlName="path"> <span><input
+                                                    type="text" formControlName="value"></span>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </form>
+
+
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="row" style="padding-bottom: 100px;">
+    <ng-container *ngIf="androidBillRights && androidBillRights.length">
+        <div class="col-md-12">
+            <h3>Android App Menu Rights</h3>
+        </div>
+        <div class="col-md-12">
+            <div class="horizontal-scroll">
+                <table class="table table-striped" style="width: 100%;table-layout: fixed;">
+                    <tbody>
+                        <ng-container *ngFor="let item of androidBillRights; let i=index" class="row show-grid">
+
+                            <tr>
+                                <td>
+                                    <input type="checkbox" [(ngModel)]="item.IsEnable"
+                                        (change)=androidMenuHearCheck(item)>
+                                    {{item?.MenuName}}
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 20%;" *ngFor="let menu of item.childMenus; let j=index">
+                                    <input type="checkbox" [(ngModel)]="menu.IsEnable">
+                                    <span>{{menu?.MenuName}}</span>
+                                </td>
+                            </tr>
+
+
+
+                        </ng-container>
+
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+    </ng-container>
+</div>
+
+
+
+
+
+
+
+
+<div class="modal fade" bsModal #childModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1" role="dialog"
+    aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close" aria-label="Close" (click)="hideChildModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Information</h4>
+            </div>
+            <div class="modal-body">
+                {{DialogMessage}}
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<!-- <div class="modal fade" bsModal #loginModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1" role="dialog"
+    aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <login (signedIn)="hideloginModal()" toUrl="test"></login>
+        </div>
+    </div>
+</div> -->

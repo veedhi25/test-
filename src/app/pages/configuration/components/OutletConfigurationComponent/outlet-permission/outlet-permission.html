@@ -1,0 +1,38 @@
+<div class="right-btn">
+    <button class="btn add-btn" title="onSave" (click)="saveOutletPermissionSetting()" type="button">Save</button>
+</div>
+<div class="transaction-table-custom col-md-12" style="padding-left: 25px; margin-top: 2rem;" #prodlistTable
+    id="prodlistTable">
+    <div class="table-container scroll-tablee table-scrollsales">
+        <table id="BlueHeaderResizableTable" #reportHtmlTable class="reportTabel" style="table-layout: fixed;">
+            <thead>
+                <tr>
+                    <th width="150px">TypeName</th>
+                    <th width="100px">DomainId</th>
+                    <th width="100px">Setting TypeId</th>
+                    <th width="100px">Create</th>
+                    <th width="100px">View</th>
+                    <th width="100px">Update</th>
+                    <th width="100px">Delete</th>
+                    <th width="100px">Export</th>
+                    <th width="100px">Import</th>
+                </tr>
+            </thead>
+            <tbody style="width: fit-content;">
+                <tr *ngFor="let item of permissionArray">
+                    <td>{{item.TypeName}}</td>
+                    <td>{{item.DomainId}}</td>
+                    <td>{{item.SettingTypeId}}</td>
+                    <td><input type="checkbox" [(ngModel)]="item.CanCreate" /></td>
+                    <td><input type="checkbox" [(ngModel)]="item.CanView" /></td>
+                    <td><input type="checkbox" [(ngModel)]="item.CanUpdate" /></td>
+                    <td><input type="checkbox" [(ngModel)]="item.CanDelete" /></td>
+                    <td><input type="checkbox" [(ngModel)]="item.CanExport" /></td>
+                    <td><input type="checkbox" [(ngModel)]="item.CanImport" /></td>
+                </tr>
+
+            </tbody>
+
+        </table>
+    </div>
+</div>

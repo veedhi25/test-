@@ -1,0 +1,116 @@
+<form [formGroup]="form" (ngSubmit)="onSave()"  style="margin-top: 15px;">
+  <ba-card [title]="modeTitle" baCardClass="with-scroll">
+    <div class="form-group row">
+      <label class="col-sm-2 form-control-label">Company ID *</label>
+      <div class="col-sm-5">
+        <input type="text" [style.background-color]="disabled()" [style.background-color]="editDisabled()"
+          style="color:black" class="form-control" [readOnly]="mode == 'view' || mode == 'edit' ? true : false"
+          id="BranchID" name="BranchID" formControlName="COMPANYID" placeholder=" " />
+        <div *ngIf="
+            !form.controls['COMPANYID'].valid &&
+            form.controls['COMPANYID']?.touched
+          " class="text-danger">
+          <span *ngIf="form.get('COMPANYID').hasError('required')">
+            Branch Id is required.
+          </span>
+          <span *ngIf="
+              form.get('COMPANYID').hasError('minlength') ||
+              form.get('COMPANYID').hasError('maxlength')
+            ">
+            Branch id length should be exactly 3 character
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-2 form-control-label">Name * </label>
+      <div class="col-sm-5">
+        <input type="text" [style.background-color]="disabled()" style="color:black" class="form-control"
+          [readOnly]="mode == 'view' ? true : false" id="BranchName" name="BranchName" formControlName="name"
+          placeholder="Name" />
+        <div *ngIf="!form.controls['name'].valid && form.controls['name']?.touched" class="text-danger">
+          <span *ngIf="form.get('name').hasError('required')">
+            Branch Name is required.
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-sm-2 form-control-label">Company Short Name </label>
+      <div class="col-sm-5">
+        <input type="text" [style.background-color]="disabled()" style="color:black" class="form-control"
+          [readOnly]="mode == 'view' ? true : false" id="CompanyAlias" name="CompanyAlias"
+          formControlName="companyAlias" placeholder="Company Short Name" />
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-sm-2 form-control-label">Type:</label>
+      <div class="col-sm-5">
+        <select (change)="onTypeChange()" class="form-control" style="color:black" formControlName="type"
+          [style.background-color]="disabled()">
+          <option value="importer">Importer</option>
+          <option value="distributer">Distributer</option>
+          <option value="retailer">Retailer</option>
+          <option value="directparty">Direct Party</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group row" *ngIf="showChanelOption">
+      <label class="col-sm-2 form-control-label">Chanel:</label>
+      <div class="col-sm-5">
+        <select class="form-control" style="color:black" formControlName="chanel" [style.background-color]="disabled()">
+          <option *ngFor="let item of chanels" value="{{ item.CHANELID }}">{{
+            item.CHANELNAME
+          }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-sm-2 form-control-label">Margin</label>
+      <div class="col-sm-5">
+        <input type="text" [style.background-color]="disabled()" style="color:black" class="form-control"
+          [readOnly]="mode == 'view' ? true : false" id="margin" name="margin" formControlName="margin"
+          placeholder="Margin" />
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-sm-2 form-control-label">Remarks:</label>
+      <div class="col-sm-5">
+        <textarea [readOnly]="mode == 'view' ? true : false" class="form-control" [style.background-color]="disabled()"
+          style="color:black" id="Remarks" name="Remarks" formControlName="remarks" placeholder="Remarks"></textarea>
+      </div>
+    </div>
+  </ba-card>
+
+  <div style="padding-bottom: 10px; margin-top: -8px;">
+    <button *ngIf="viewMode == false" type="submit" [disabled]="!this.form.valid" style="margin-right: 4px;"
+      class="btn btn-info">
+      Save
+    </button>
+    <button type="button " class="btn btn-info" (click)="cancel()">
+      Back
+    </button>
+  </div>
+</form>
+
+<div class="modal fade" bsModal #childModal="bs-modal" [config]="{ backdrop: 'static' }" tabindex="-1" role="dialog"
+  aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button class="close" aria-label="Close" (click)="hideChildModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Information</h4>
+      </div>
+      <div class="modal-body">
+        {{ DialogMessage }}
+      </div>
+    </div>
+  </div>
+</div>

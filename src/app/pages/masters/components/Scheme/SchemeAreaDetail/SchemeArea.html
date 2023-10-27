@@ -1,0 +1,30 @@
+<form class="row" class="form-horizontal" [formGroup]="form">
+    <div class="col-md-6">
+        <label class="col-md-4 form-control-label">Area:</label>
+        <div class="col-md-6">
+            <select class="form-control" style="color:black" [style.background-color]="disabled()" name="AREA" id="AREA"
+                formControlName="AREA">
+                <option value="Teku">Teku Area</option>
+                <option value="Kalimati">Kalimati</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <label class="col-md-4 form-control-label">Area Type:</label>
+        <div class="col-md-6">
+            <select class="form-control" style="color:black" [style.background-color]="disabled()" name="AREATYPE"
+                id="AREATYPE" formControlName="AREATYPE">
+                <option value=1>ASM</option>
+                <option value=0>RSM</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <label class="col-md-4 form-control-label">Budget:</label>
+        <div class="col-md-6">
+            <input type="number" [style.background-color]="disabled()" style="color:black" class="form-control"
+                id="BUDGET" name="BUDGET" formControlName="BUDGET" placeholder="Press TAB or Enter to select ITEM"
+                 />
+        </div>
+    </div>
+</form>

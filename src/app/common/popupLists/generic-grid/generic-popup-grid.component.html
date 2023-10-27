@@ -1,0 +1,229 @@
+<style>
+  .selected-row {
+    background-color: #ced6d3 !important;
+  }
+
+
+  .modal-content-main-area {
+    max-height: 100%;
+    height: 100%;
+    overflow: auto;
+    overflow-x: hidden;
+    width: 100% !important;
+  }
+
+  .modal-content-summary-area {
+    max-height: 20%;
+    height: 20%;
+    overflow: auto;
+    overflow-x: hidden;
+  }
+
+  .ellipsis {
+    white-space: nowrap;
+  }
+
+  .table-responsive {
+    margin-top: 0px;
+  }
+</style>
+
+<div *ngIf="isActive" class="modal-sticky customsidebar-modal" [class.modal-sticky-hide]="!isActive"
+  style="display : block;">
+  <!-- Modal content -->
+  <div class="modal-content modal-content-main-area">
+    <div *ngIf="popupsettings">
+      <div>
+        <div class="modal-header">
+          <button *ngIf="isMultiSelectEnabled" class="btn btn-info" (click)="onMultiSelectApply()" style="float: left;">
+            Apply</button>
+          <button class="close" aria-label="Close" (click)="hide()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">{{ popupsettings.title }}</h4>
+        </div>
+        <div class="row sidebar-tophead">
+          <div class="col-md-12">
+            <div class="col-md-6">
+              <select class="form-control" [(ngModel)]="filterOption" (change)="triggerSearch($event)">
+                <option value="" selected>Select Filter Option</option>
+                <ng-container *ngFor="let item of popupsettings.columns">
+                  <option *ngIf="!item.noSearch" [value]="item.key">
+                    {{item.title}}
+                  </option>
+                </ng-container>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <input class="form-control" #inputBox type="text" placeholder="Enter keyword to search"
+                [formControl]="filterValue" />
+            </div>
+          </div>
+        </div>
+        <div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th
+                  *ngIf="popupsettings.title =='Indent List For PO' ||(this.popupsettings.title == 'Intend List' && this.userProfile.CompanyInfo.isHeadoffice ==1 && this.userProfile.CompanyInfo.companycode!=null)||(this.popupsettings.title == 'Indents Received From Outlets')||(this.popupsettings.title == 'Suppliers List For RFQ' && (this.userProfile.CompanyInfo.isHeadoffice == 1 || this.userProfile.CompanyInfo.companycode == null))">
+                  <input type="checkbox" name="" id="" [(ngModel)]="isGlobalChecked" (change)="globalSelect($event)">
+                </th>
+                <ng-container *ngIf="isMultiSelectEnabled">
+                  <th></th>
+                </ng-container>
+                <ng-container *ngFor="let item of popupsettings.columns">
+                  <th *ngIf="!item.hidden">{{ item.title }}</th>
+                </ng-container>
+
+                <th *ngIf="popupsettings.showActionButton && popupsettings.actionKeys.length">Action</th>
+              </tr>
+            </thead>
+            <tbody *ngIf="itemList.length">
+              <tr class="highlight" [class.selected-row]="selectedRowIndex == i" *ngFor="
+                  let itemObj of itemList
+                    | paginate
+                      : {
+                          id: tabindex,
+                          itemsPerPage: pageSize,
+                          currentPage: pageNumber,
+                          totalItems: totalItems
+                        };
+                  let i = index
+                  " (dblclick)="isMultiSelectEnabled?'':doubleClick(itemObj)" (click)="singleClick(i)"
+                title="double click for detail view">
+                <td
+                  *ngIf="popupsettings.title =='Indent List For PO' ||(this.popupsettings.title == 'Intend List' && this.userProfile.CompanyInfo.isHeadoffice ==1 && this.userProfile.CompanyInfo.companycode!=null)||(this.popupsettings.title == 'Indents Received From Outlets')||(this.popupsettings.title == 'Suppliers List For RFQ' && (this.userProfile.CompanyInfo.isHeadoffice == 1 || this.userProfile.CompanyInfo.companycode == null))">
+                  <input type="checkbox" name="" id="" [(ngModel)]="itemObj.isChecked"
+                    *ngIf="(itemObj.isDisabled ==false)" (change)="singleSelect($event,itemObj)">
+                </td>
+                <ng-container *ngIf="isMultiSelectEnabled">
+                  <th>
+                    <input type="checkbox" name="selectbox{{i}}" [(ngModel)]="itemObj.isSelected">
+                  </th>
+                </ng-container>
+                <ng-container *ngFor="let item of popupsettings.columns">
+                  <td *ngIf="!item.hidden">
+                    <div title="{{ itemObj[item.key] }}">
+                      {{ itemObj[item.key] }}
+                    </div>
+                  </td>
+                </ng-container>
+
+
+
+                <ng-container *ngIf="popupsettings.showActionButton && popupsettings.actionKeys.length">
+                  <td>
+                    <ng-container *ngFor="let action of popupsettings.actionKeys;let z=index">
+                      <span>
+                        <i class="{{action.icon}}" (click)="onActionClicked(action.text,i)"
+                          title="{{action.title}}"></i>
+                      </span>
+                    </ng-container>
+                  </td>
+                </ng-container>
+              </tr>
+              <tr
+                *ngIf="popupsettings.title =='Indent List For PO'||(this.popupsettings.title == 'Intend List' && this.userProfile.CompanyInfo.isHeadoffice ==1 && this.userProfile.CompanyInfo.companycode!=null)||(this.popupsettings.title == 'Indents Received From Outlets')||(this.popupsettings.title == 'Suppliers List For RFQ' && (this.userProfile.CompanyInfo.isHeadoffice == 1 || this.userProfile.CompanyInfo.companycode == null))">
+
+                <button type="submit" (click)="buttonClick()">OK</button>
+              </tr>
+            </tbody>
+          </table>
+          <div class="row">
+            <div class="col-md-12 custom-pagination" *ngIf="itemList.length">
+              <pagination-controls [id]="tabindex" (pageChange)="onPageChange($event)" maxSize="9" directionLinks="true"
+                autoHide="true" responsive="true" previousLabel="Previous" nextLabel="Next"
+                screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+                screenReaderCurrentLabel="You're on page">
+              </pagination-controls>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="summary" [innerHTML]="summary"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .sidebar-openmodal .modal-header {
+    padding: 6px 0;
+    border-bottom: 1px solid #e5e5e5;
+    background: #11cdef;
+    text-align: center;
+    color: #fff;
+  }
+
+  .sidebar-openmodal select {
+    height: 36px !important;
+    width: 100%;
+    font-size: 14px;
+    padding: 0 6px;
+  }
+
+  .sidebar-openmodal input {
+    height: 36px !important;
+    width: 100%;
+    font-size: 14px;
+    padding: 0 6px;
+  }
+
+  .sidebar-openmodal .modal-header .close {
+    color: #ffffff;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    background: #fff;
+    opacity: 1;
+    width: 25px;
+    border-radius: 2px;
+    padding: 0;
+    height: 25px;
+    margin: 2px 9px 0 0;
+  }
+
+  .sidebar-openmodal .modal-header span {
+    line-height: 10px;
+    font-size: 28px;
+    height: auto !important;
+    color: #12778a;
+    position: relative;
+    top: -1px;
+  }
+
+  .sidebar-table>thead>tr>th {
+    border: 1px solid #62e7ff;
+    background: #93ebfb;
+    color: #005767 !important;
+    font-weight: 600 !important;
+    text-align: center;
+  }
+
+  .sidebar-table>tbody>tr>td {
+    padding: 4px 8px;
+    line-height: 28px;
+    border: 1px solid gainsboro;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: #252525;
+  }
+
+  .table-top-selecvr {
+    margin: 10px 0;
+  }
+
+  .enter-siderbartable .modal-content {
+    box-shadow: -2px 0px 5px 1px #d6d6d6;
+    border: 1px solid #c7c7c7;
+  }
+
+  .selected-row {
+    background-color: #cff5fd !important;
+  }
+
+  .sidebar-table tbody>tr:hover {
+    background-color: #f3f5f4;
+    cursor: pointer;
+  }
+</style>

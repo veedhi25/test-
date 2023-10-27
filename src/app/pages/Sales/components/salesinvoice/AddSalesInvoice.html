@@ -1,0 +1,68 @@
+<div class="form-inner">
+  <div class="top-forms">
+    <div class="row">
+      <div class="col-md-4">
+        <ng-container *ngIf="_trnMainService.TrnMainObj.VoucherType==61">
+          <h3 class="main-heading">{{ _trnMainService.pageHeading }} </h3>
+          <h3 class="main-heading">{{_trnMainService.TrnMainObj.AdditionalObj.TRNTYPE=="local"?'CGST/SGST':'IGST'}}</h3>
+        </ng-container>
+        <ng-container *ngIf="_trnMainService.TrnMainObj.VoucherType==14">
+          <h3 class="main-heading" style="margin-top: 4px;"><i class="fa fa-th" (click)="onTransactionConfigureClick()" style="color: #2bade5;
+            cursor: pointer; font-size: 20px;" title="Click to configure grid"></i>{{ _trnMainService.pageHeading }}
+            [{{_trnMainService.TrnMainObj.Mode |titlecase}}]
+          </h3>
+          <h3 class="main-heading">{{_trnMainService.TrnMainObj.AdditionalObj.TRNTYPE=="local"?'CGST/SGST':'IGST'}}</h3>
+        </ng-container>
+        <h3 class="main-heading">{{_trnMainService.TrnMainObj?.BILLTO|uppercase}}</h3>
+      </div>
+      <div class="col-md-8 form-right-btn">
+        <voucher-master-toggler></voucher-master-toggler>
+        <voucher-master-action #voucherMasterAction (onLoadFromSOClickEmit)="showLoadFromSOPopup($event)"
+          (onLoadFromPerformaInvoiceClickEmit)="showApprovedPreformaInvoicePopup($event)"
+          (onLoadFromDeliveryChallaanClickEmit)="showApprovedDeliveryChallaanPopup($event)"
+          (onLoadCancelSalesEmit)="showSalesDayWise($event)">
+        </voucher-master-action>
+        <generic-popup-grid #genericGridSO [popupsettings]="gridPopupSettings"
+          (onItemDoubleClick)="onSalesOrderSelect($event)">
+        </generic-popup-grid>
+        <generic-popup-grid #genericPerformaInvoiceGridSO [popupsettings]="gridPerformaInvoicePopupSettings"
+          (onItemDoubleClick)="onPerformaInvoiceSelect($event)">
+        </generic-popup-grid>
+        <generic-popup-grid #genericDeliveryChalaaanGridSO [popupsettings]="gridDeliveryChallaanPopupSettings"
+        (onItemDoubleClick)="onDeliveryChallaanSelect($event)">
+      </generic-popup-grid>
+
+        <generic-popup-grid #genericCancelSales [popupsettings]="gridcancelSalesPopupSettings"
+          (onItemDoubleClick)="onSalesCancelSelect($event)">
+        </generic-popup-grid>
+      </div>
+    </div>
+  </div>
+  <div class="content-areaform">
+    <div class="col-md-12">
+      <div *ngIf="masterService.ShowMore" class="row">
+        <trnmain-parameters-master></trnmain-parameters-master>
+      </div>
+      <div class="row"
+        [style.height]=" this.masterService.ShowMore || _trnMainService.AppSettings.ShowPurchaseHistory == false ? 'auto' : '50vh' ">
+        <productentry #productinsert></productentry>
+      </div>
+    </div>
+
+    <!-- SIDE NAV -->
+    <voucher-sidebar-billdetail></voucher-sidebar-billdetail>
+
+  </div>
+</div>
+
+<div class="row" *ngIf="_trnMainService.AppSettings.ShowPurchaseHistory == true">
+  <div class="col-md-12">
+    <sales-history #saleshistory [activeIndex]="productinsert.activerowIndex"></sales-history>
+  </div>
+</div>
+
+<div class="sticky-bottom">
+  <voucher-total-area></voucher-total-area>
+</div>
+
+<user-wise-transaction-form-configuration #userwisetransactionformconfig (updateGridConfigAfterSave)="updateGridConfig($event)"></user-wise-transaction-form-configuration>

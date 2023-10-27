@@ -1,0 +1,17 @@
+<div class="content-wrapper">
+  <div class="right-btn">
+    <button type="button" class="btn add-btn" (click)="AddSaleman()"
+      *ngIf="(outletconfigChild() || outletconfigParentandIndividual())">Add SalesMan</button>
+  </div>
+  <div class="full-width">
+    <div class="ng-tableinner">
+      <ba-card title="Sales Man" baCardClass="with-scroll">
+        <ims-grid #accountGenericGrid [imsGridSettings]="imsGridSettingsEntity" (onEditClicked)="onEditClicked($event)"
+          (onViewClicked)="onViewClicked($event)" (onDeleteClicked)="onAccountDelete($event)"></ims-grid>
+
+        <!-- <ng2-smart-table [settings]="settings" [source]="source" (edit)="onEditClick($event)"
+          (view)="onViewClick($event)" (deleteConfirm)="onDeleteConfirm($event)"></ng2-smart-table> -->
+      </ba-card>
+    </div>
+  </div>
+</div>

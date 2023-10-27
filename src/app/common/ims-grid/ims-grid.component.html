@@ -1,0 +1,183 @@
+<div class="row customercategory-style" style="margin: 5px !important;box-shadow: 0px 1px 3px #7a7676;">
+  <div class="modal-content modal-content-main-area">
+    <div *ngIf="imsGridSettings" class="" #prodlistTable id="prodlistTable">
+      <div class="col-md-12 table-container" style="padding:0">
+        <table id="BlueHeaderResizableTable" #reportHtmlTable class="table table-bordered">
+          <thead>
+            <tr style="background: #D5D5D5;">
+              <ng-container *ngFor="let item of imsGridSettings.columns">
+                <th *ngIf="!item.hidden" title="{{item.title}}">{{ item.title
+                  }}</th>
+              </ng-container>
+              <th *ngIf="imsGridSettings.showActionButton && imsGridSettings.actionKeys.length">Action
+              </th>
+            </tr>
+            <tr>
+              <ng-container *ngFor="let item of imsGridSettings.columns;let c=index">
+                <td *ngIf="!item.hidden">
+                  <ng-container *ngIf="(item.type=='string'|| item.type==null) && (!item.noSearch)">
+                    <input type="text" (input)="onValueChange($event,$event.target.value,item.key)"
+                      placeholder="{{item.title}}">
+                  </ng-container>
+                  <ng-container *ngIf="(item.type=='list') && (!item.noSearch)">
+                    <select (change)="onValueChange($event,$event.target.value,item.key)">
+                      <option value="%">Select</option>
+                      <ng-container *ngIf="item.filter && item.filter.list.length">
+                        <option *ngFor="let l of item.filter.list;let a=index" value="{{l.value}}">{{l?.title}}</option>
+                      </ng-container>
+                    </select>
+                  </ng-container>
+                </td>
+              </ng-container>
+              <td *ngIf="imsGridSettings.showActionButton && imsGridSettings.actionKeys.length" width="100px"></td>
+
+            </tr>
+          </thead>
+          <tbody *ngIf="itemList.length" style="width: fit-content;">
+            <tr class="highlight" [class.selected-row]="selectedRowIndex == i" *ngFor="
+                  let itemObj of itemList
+                    | paginate
+                      : {
+                          id: tabindex,
+                          itemsPerPage: pageSize,
+                          currentPage: pageNumber,
+                          totalItems: totalItems
+                        };
+                  let i = index">
+              <ng-container *ngFor="let item of imsGridSettings.columns">
+                <td *ngIf="!item.hidden">
+                  {{ getPreparedValue(item,itemObj[item.key])}}
+                </td>
+
+              </ng-container>
+
+
+              <ng-container *ngIf="imsGridSettings.showActionButton && imsGridSettings.actionKeys.length">
+                <td>
+                  <ng-container *ngFor="let action of imsGridSettings.actionKeys;let z=index">
+                    <span class="btn" *ngIf="action.hidden==0">
+                      <i [ngClass]="action.icon" (click)="onActionClicked(action.type,i,action)"
+                        title="{{action.title}}">
+                        <!-- <a  title="{{action.title}}"></a> -->
+                      </i>
+                    </span>
+                  </ng-container>
+                </td>
+              </ng-container>
+            </tr>
+          </tbody>
+        </table>
+        <div class="row col-md-12  mx-auto offset-md-4">
+
+          <div style="margin: 0 auto;" *ngIf="itemList.length">
+            <pagination-controls [id]="tabindex" (pageChange)="onPageChange($event)" maxSize="9" directionLinks="true"
+              autoHide="true" responsive="true" previousLabel="Previous" nextLabel="Next"
+              screenReaderPaginationLabel="Pagination" screenReaderPageLabel="page"
+              screenReaderCurrentLabel="You're on page"></pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .table td {
+    padding: 4px 0 !important;
+    font-size: 13px;
+    color: #505050;
+    text-align: center;
+  }
+
+  .table>thead>tr>th {
+    line-height: 12px !important;
+    background: #2bade5;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .table td {
+    padding: 4px 2px !important;
+    font-size: 13px;
+    color: #505050;
+    text-align: center;
+    font-weight: 500;
+  }
+
+  .modal-content {
+    border: none;
+  }
+
+  .card>.card-body {
+    padding: 0;
+    height: 100%;
+    padding-bottom: 3px;
+  }
+
+  .modal-content {
+    padding: 1px;
+    margin: 0px;
+  }
+
+  tbody>tr:hover {
+    /* background-color: #f3f5f4; */
+    cursor: pointer;
+  }
+
+  tr {
+    font-size: 11px;
+  }
+
+  .table>thead>tr>th {
+    line-height: 5px !important;
+  }
+
+  .table>tbody>tr>td:first-child {
+    text-align: left !important;
+  }
+
+  .modal-content-main-area {
+    max-height: 100%;
+    height: 80Vh;
+    overflow: hidden;
+  }
+
+  .modal-content-summary-area {
+    max-height: 20%;
+    height: 20%;
+    overflow: auto;
+    overflow-x: hidden;
+  }
+
+  .table td {
+    padding: 6px 2px !important;
+    vertical-align: middle;
+  }
+
+  .table th {
+    padding: 14px 2px !important;
+    vertical-align: middle;
+    text-align: center;
+  }
+
+  input,
+  select {
+    height: 32px !important;
+    padding: 0px 3px !important;
+    border: 1px solid #d3d3d3;
+    width: 100%;
+  }
+
+  .table[_ngcontent-c7]>thead[_ngcontent-c7]>tr[_ngcontent-c7]>th[_ngcontent-c7] {
+    line-height: 12px !important;
+  }
+
+  .table[_ngcontent-c7] td[_ngcontent-c7] {
+    padding: 6px 2px !important;
+  }
+
+  .table thead tr th:first-child,
+  .table tbody tr td:first-child {
+    text-align: left;
+  }
+</style>

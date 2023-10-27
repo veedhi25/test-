@@ -1,0 +1,126 @@
+.simpleSelect {
+  position: relative;
+  display : inline-block;
+  width   : 100%;
+
+  .simplesuggestformControl {
+    border       : 1px solid #a5a5a5;
+    padding      : 6px 30px;
+    width        : inherit;
+    border-radius: 2px;
+
+  }
+
+  .simplesuggestformControl:hover {
+    box-shadow: 0px 0px 3px 0px #e3e3e3
+  }
+
+  .simplesuggestformControl:focus {
+    box-shadow: 0px 0px 3px 0px #e3e3e3
+  }
+
+  .selectedOptions {
+    border-radius: 17px;
+    width        : 300px;
+    cursor       : auto;
+    height       : 35px;
+    padding-left : 40px;
+    font-size    : 13px;
+    box-sizing   : border-box;
+  }
+
+  .selectedOptions:focus {
+    outline: none;
+  }
+
+  >.optionsContainer {
+    overflow        : hidden;
+    display         : block;
+    position        : absolute;
+    width           : 100%;
+    z-index         : 1;
+    background-color: #fff;
+
+    .options {
+      list-style   : none;
+      padding      : 0;
+      max-height   : 308px;
+      overflow-y   : auto;
+      margin-bottom: 0;
+
+      li {
+
+        padding   : 4px 12px;
+        cursor    : pointer;
+        transition: all .1s;
+      }
+
+      li:hover,
+      li:focus {
+        outline: none;
+
+        color: #4ca2cb;
+      }
+
+      .active {
+
+        color: #4ca2cb;
+      }
+    }
+
+    >.options::-webkit-scrollbar,
+    >.options::-webkit-scrollbar-thumb {
+      width     : 10px;
+      background: #d7d7d7;
+    }
+
+    >.options::-webkit-scrollbar-track {
+      background: #fff;
+    }
+
+  }
+
+  >span {
+
+    position: absolute;
+    top     : 5px;
+    right   : 9px;
+  }
+
+  .search-lens-icon {
+    left : 10px;
+    width: 20px;
+  }
+}
+
+.top {
+  .expanded {
+    border-top-left-radius : 0;
+    border-top-right-radius: 0;
+  }
+
+  >.optionsContainer {
+    bottom                    : 34px;
+    border-bottom             : none;
+    box-shadow                : 0px 2px 5px 0px #ececec;
+  }
+}
+
+
+.down {
+  .expanded {
+    border-bottom-left-radius : 0;
+    border-bottom-right-radius: 0;
+  }
+
+  >.optionsContainer {
+    z-index: 1050;
+    top                          : 30px;
+    box-shadow                   : 0px 2px 5px 0px #7b7e7e;
+    border-top: none;
+  }
+}
+
+.form-group input[type="text"] {
+  border-radius: none;
+}

@@ -1,0 +1,19 @@
+<div class="content-wrapper">
+
+  <div class="form-right-btn">
+    <button class="btn add-btn" (click)="deliverClick()" *ngIf="postatus=='0'">Deliver</button>
+    <button class="btn btn-load" (click)="LoadClick()">Load</button>
+    <button class="btn btn-download" (click)="ResendPOClick()" *ngIf="postatus=='1'">Delivered PO Resend</button>
+  </div>
+
+  <delivery-order [title]="title" (advanceSearchEmiter)="show()" (dateRangeChange)="dateRangeChanged($event)"
+    (postatusemit)="postatusemit($event)">
+  </delivery-order>
+  <invoice-list *ngIf="source" [source]="source" (pageChange)="onPageChangedEvent($event)" [header]="Header">
+  </invoice-list>
+</div>
+
+<dynamic-filter-option-popup #dynamicFilterOption [dynamicFilterSettings]="filterSettings"
+  (onApplyClick)="onFilterApply($event)">
+
+</dynamic-filter-option-popup>

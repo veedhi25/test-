@@ -1,0 +1,199 @@
+<div class="sub-headingbar">
+  <div class="col-md-6">
+    <h3>
+      Set Scheduler
+    </h3>
+  </div>
+  <div class="col-md-6">
+    <button type="button" (click)="onSaveClicked()" title="Send" class="btn btn-info pull-left">
+      Set Now
+    </button>
+    <button class="btn btn-back" (click)="Importparty()" (onUploaded)="fileUploadSuccessStatus($event)">Upload
+      Excel</button>
+
+  </div>
+</div>
+
+<div class="row">
+  <form class="form-horizontal" [formGroup]="form">
+    <div class="col-md-12" style="height: 550px; overflow: scroll;margin: 50px 5px;">
+
+      <!-- <div class="form-group clearfix">
+        <label class="col-sm-2 form-control-label">Select Recipient*</label>
+        <div class="col-sm-5">
+          <select formControlName="RECIPIENTS" class="form-control"
+          (change)="getOutlets($event)">
+         <option value="" [selected]="isSelected"> Select Recipient </option>
+         <option value="Customer">Customer</option>
+         <option value="Employee">Employee</option>
+          </select>
+        </div>
+      </div> -->
+      <div class=" form-group col-sm-12 ">
+        <label class=" col-sm-2 form-control-label">Select Recipient Type *</label>
+        <select class=" col-sm-4" [(ngModel)]="selectRecptType" formControlName="CUSTMOBILE" (change)="getChoose()">
+          <option value="0">Select Recipient Type</option>
+          <option *ngFor="let Cust of mySelecttype;let i=index" value="{{Cust.value}}">
+            {{Cust.name}}
+          </option>
+        </select>
+        <!-- <div class="form-group col-sm-2" *ngIf="excelup">
+          <input type="file" class="form-control" (change)="uploadedFile($event)" placeholder="Upload file"
+            accept=".xlsx">
+          <div class="col-sm-2 form-group">
+            <button type="button" class="btn btn-info" (click)="readAsText()">Read as Text</button>
+          </div>
+        </div> -->
+
+
+        <div class="col-sm-12">
+          <label class="col-sm-2 form-control-label">RECIPIENTNO*</label>
+          <div class="col-sm-4">
+            <textarea type="number" formControlName="RECIPIENTNO" [readonly]="RECIPIENTNOFlag" class="form-control"
+              (keypress)="numberOnly($event)" (onclick)="onclicktext()" placeholder="Recipient No"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="form-group clearfix">
+        <label class="col-sm-2 form-control-label">Category*</label>
+        <div class="col-sm-5">
+          <select formControlName="MYOUTLETS" class="form-control" (change)="getmyCategory($event.target.value)">
+            <option value="" [selected]="isSelected"> Select Category </option>
+            <option *ngFor="let w of myOutletList[0]" [ngValue]="w.OUTLETID">
+              {{w.OUTLETNAME}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group clearfix">
+        <label class="col-sm-2 form-control-label">Sub Category*</label>
+        <div class="col-sm-5">
+          <select formControlName="MYCategory" class="form-control" (change)="getSchedularType($event.target.value)">
+            <option value="" [selected]="isSelected"> Select Sub Category </option>
+            <option *ngFor="let w of myCatList[0]" [ngValue]="w.SMSCATID">
+              {{w.SmsCatTitle}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <!-- sms content read only -->
+        <div class="col-md-4" *ngIf="mysmscontentflag">
+          <label class="col-sm-4 form-control-label">SMS CONTENT*</label>
+          <div class="col-sm-8">
+            <textarea type="text" value=" " [readonly]="messagetemp" formControlName="SMSCONTENT"
+              [(ngModel)]="mysmsContent" class="form-control mb-10" placeholder="SMS Content"></textarea>
+          </div>
+        </div>
+        <!--  sms content end -->
+        <!-- email content read only -->
+        <div class="col-md-4" *ngIf="myemailcontentflag">
+          <label class="col-sm-4 form-control-label">EMAIL CONTENT*</label>
+          <div class="col-sm-8">
+            <textarea type="text" value=" " [readonly]="emailtemp" formControlName="EMAILCONTENT"
+              [(ngModel)]="myemailContent" class="form-control" placeholder="Email Content"></textarea>
+          </div>
+        </div>
+        <div class="col-md-4" *ngIf="myemailsubjectflag">
+          <label class="col-sm-4 form-control-label">EMAIL Subject*</label>
+          <div class="col-sm-8">
+            <textarea type="text" formControlName="EMAILCONTENTSUBJECT" [readonly]="emailtemp"
+              [(ngModel)]="myemailContentSubject" class="form-control"></textarea>
+          </div>
+
+
+        </div>
+        <!--  email content end -->
+      </div>
+
+
+      <!-- for scheduler cycle -->
+      <div class="row">
+        <div class="form-group clearfix" *ngIf="mySchedulerFlag">
+          <div class="col-sm-2" *ngIf="dateflag">
+            <label class="col-sm-2 form-control-label">Set Schedular Date*</label>
+            <input type="date" class="form-control" formControlName="SCHDATE" [ngModel]="schdate">
+          </div>
+          <label class="col-sm-2 form-control-label">Set Schedular Time*</label>
+          <div class="col-sm-2">
+            <select formControlName="HOURS" class="form-control">
+              <option value="" [selected]="isSelected"> Hours</option>
+              <option *ngFor='let in of counter(25) ;let i = index' [ngValue]="i">{{i}}</option>
+            </select>
+          </div>
+          <div class="col-sm-2">
+            <select formControlName="MINUTES" class="form-control">
+              <option value="" [selected]="isSelected"> Minutes</option>
+              <option *ngFor='let in of counter(61) ;let i = index' [ngValue]="i">{{i}}</option>
+            </select>
+          </div>
+          <div class="col-sm-2">
+            <select formControlName="SCHEDULERCYCLE" class="form-control" (change)="cycletype($event.target.value)">
+              <option value="" [selected]="isSelected"> Scheduler Cycle</option>
+              <option value="fixed">Fixed</option>
+              <option value="1/1">Daily</option>
+              <option value="7/2">Two Time a Week</option>
+              <option value="30/4">Quater a Month</option>
+              <option value="30/2">Two time a month</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <!-- end scheduler cycle -->
+
+      <div class="row">
+        <div class="col-md-6">
+          <label class="col-md-4 form-control-label">Choose Notification Mode*</label>
+          <div class="col-md-4" *ngFor="let ch of myMessageMode; let i=index;">
+
+            <input type="checkbox" formControlName="messageMode" (change)="getSelectedMode($event,ch.value);">
+            {{ch.name}}
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6" *ngIf="textMessageModeSelect">
+          <label class="col-md-4 form-control-label">Use Default For Text Message*</label>
+          <div class="col-md-2">
+            <input type="checkbox" formControlName="defaultMessageForText" (change)="checkCustomMessage($event)" />
+          </div>
+        </div>
+        <div class="col-md-6" *ngIf="emailModeSelect">
+          <label class="col-md-4 form-control-label">Use Default Email*</label>
+          <div class="col-md-2">
+            <input type="checkbox" formControlName="defaultMessageForEmail" (change)="checkCustomEmail($event)" />
+          </div>
+        </div>
+      </div>
+
+
+
+
+    </div>
+
+
+
+    <div class="modal fade" bsModal #childModal="bs-modal" [config]="{ backdrop: 'static' }" tabindex="-1" role="dialog"
+      aria-labelledby="mySmallModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button class="close" aria-label="Close" (click)="hideChildModal()">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">Information</h4>
+          </div>
+          <div class="modal-body">
+            {{ DialogMessage }}
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <file-uploader-popup #fileUploadPopup [popupsettings]="fileUploadPopupSettings"
+    (onUploaded)="fileUploadSuccessStatus($event)">
+  </file-uploader-popup>
+
+</div>

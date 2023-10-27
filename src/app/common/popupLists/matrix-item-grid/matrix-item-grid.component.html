@@ -1,0 +1,58 @@
+<div *ngIf="isActive" class="modal-sticky" [class.modal-sticky-hide]="!isActive"
+  style="display : block; padding: 0px;  margin-bottom: 25px;">
+  <!-- Modal content -->
+  <div class="modal-content modal-content-main-area">
+    <div class="modal-header" style="padding: 0px;background: #ecad79;">
+      <button class="close" aria-label="Close" (click)="hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="modal-title" style="text-align: center;">
+        {{itemname}}
+      </h4>
+    </div>
+    <div class="modal-body" style="min-height: 60vh;" *ngIf="matrixItemAtrribute && matrixItemAtrribute.length">
+      <table id="BlueHeaderResizableTable" #reportHtmlTable style="font-size: 12px; width: 98%; overflow-x: auto"
+        class="matrix-table">
+        <thead>
+          <tr
+            style="border-bottom: 2px solid #e6e6e6;border-top: 2px solid #e6e6e6;height: 30px;background: silver;color: black;">
+            <ng-container *ngFor="let head of headerKeys;let i=index">
+              <th width="100px">{{head}}</th>
+            </ng-container>
+          </tr>
+
+        </thead>
+        <tbody style="width: fit-content">
+          <tr style="border: 1px solid #e6e6e6; max-height: 25px" *ngFor="let tList of matrixItemRows;let i=index"
+            (click)="SELECTEDINDEX=i">
+
+            <ng-container *ngFor="let key of keys;let j=index">
+              <td width="100px">
+                <select *ngIf="selectInputType(key,'select')" name="{{key}}{{i}}" id="{{key}}{{i}}"
+                  (click)="SELECTEDINDEX=i" [(ngModel)]="tList[key]" (change)="onAttributeChange(key,i)">
+                  <option *ngFor="let variant of getvariantValues(key);let k=index" [ngValue]="variant">
+                    {{variant.NAME}}</option>
+                </select>
+
+
+                <input (keydown.Enter)="onAttributeChange(key,i)"
+                  *ngIf="selectInputType(key,'input') && (key!='BARCODE' && key!='BATCH')" type="number" min=1 OnlyNumber="true"
+                  name="{{key}}{{i}}" (click)="SELECTEDINDEX=i" id="{{key}}{{i}}" [(ngModel)]="tList[key]">
+                <input *ngIf="key=='BARCODE' " type="text" name="{{key}}{{i}}" id="{{key}}{{i}}"
+                  (click)="SELECTEDINDEX=i" (keydown.Enter)="onAttributeChange(key,i)" [(ngModel)]="tList[key]">
+                <input *ngIf="key=='BATCH'" type="text" name="{{key}}{{i}}" id="{{key}}{{i}}" (click)="SELECTEDINDEX=i"
+                  (keydown.Enter)="addRows(i)" [(ngModel)]="tList[key]">
+              </td>
+            </ng-container>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <div class="modal-footer">
+      <button class="btn btn-info pull-right" (click)="okClicked()">Apply</button>
+      <button class="btn btn-info pull-right" (click)="hide()" style="margin-right: 5px;">cancel</button>
+    </div>
+  </div>
+</div>

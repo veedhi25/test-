@@ -1,0 +1,236 @@
+<div class="sticky-top">
+  <div class="row clearfix" style=" padding: 0px 20px;">
+    <div class="col-md-6">
+      <h3 class="page-title">{{ modeTitle }}</h3>
+    </div>
+    <div class="col-md-6" style="float: right;">
+      <button type="button " class="btn btn-info pull-right" (click)="cancel()" style="margin-right : 10px;">
+        Back
+      </button>
+      <button *ngIf="viewMode == false" (click)="onSave()" class="btn btn-info pull-right"
+        style="margin-right : 10px;" [disabled]="!form.valid">
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+<div class="main-container" style="padding-top : 10px; margin-bottom: 0px">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="tabbable" id="SchemeMaster-tabs">
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" href="#general-info" data-toggle="tab">Scheme Master</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#Range" data-toggle="tab">Discount Range</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#Brand" data-toggle="tab">Brand Details</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#Area" data-toggle="tab">Area Details</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#Retailor" data-toggle="tab">Retailor Details</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#ChannelExclusion" data-toggle="tab">Channel Exclusion</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#SubTypeExclusion" data-toggle="tab">Sub-Type Exclusion</a>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+          <div class="tab-pane active" id="general-info">
+            <form class="row" class="form-horizontal" [formGroup]="form">
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">Scheme Name:*</label>
+                <div class="col-md-6">
+                  <input type="text" [style.background-color]="editDisabled()" class="form-control"
+                    id="SCHEMEDESCRIPTION" name="SCHEMEDESCRIPTION" formControlName="SCHEMEDESCRIPTION"
+                    placeholder="Scheme Name"  />
+
+                  <div *ngIf="
+                      !form.controls['SCHEMEDESCRIPTION'].valid &&
+                      form.controls['SCHEMEDESCRIPTION']?.touched
+                    " class="text-danger">
+                    <span *ngIf="form.get('SCHEMEDESCRIPTION').hasError('required')">
+                      SchemeName is required.
+                    </span>
+                  </div>
+
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">Type:</label>
+                <div class="col-md-6">
+                    <select class="form-control" style="color:black" [style.background-color]="disabled()" name="TYPE"
+                      id="TYPE" formControlName="TYPE">
+                    <option  value=1>TPP</option>
+                    <option  value=0>PriceApproval</option>
+                    </select>
+                  </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">From Date:*</label>
+                <div class="col-md-6">
+                    <input type="date" [style.background-color]="disabled()" style="color:black" class="form-control"
+                      id="FROMDATE" name="FROMDATE" formControlName="FROMDATE" />
+                  </div>
+                  <div *ngIf="
+                  !form.controls['SCHEMEDESCRIPTION'].valid &&
+                  form.controls['SCHEMEDESCRIPTION']?.touched
+                " class="text-danger">
+                <span *ngIf="form.get('SCHEMEDESCRIPTION').hasError('required')">
+                  From Date is required.
+                </span>
+              </div>
+              </div>
+
+
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">To Date:*</label>
+                <div class="col-md-6">
+                  <input type="date" [style.background-color]="disabled()" style="color:black" class="form-control"
+                    id="TODATE" name="TODATE" formControlName="TODATE" />
+                </div>
+                <div *ngIf="
+                !form.controls['SCHEMEDESCRIPTION'].valid &&
+                form.controls['SCHEMEDESCRIPTION']?.touched
+              " class="text-danger">
+              <span *ngIf="form.get('SCHEMEDESCRIPTION').hasError('required')">
+                To Date is required.
+              </span>
+            </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">Scheme Type:</label>
+                <div class="col-md-6">
+                  <select class="form-control" style="color:black" [style.background-color]="disabled()" name="SCHEMETYPE"
+                    id="SCHEMETYPE" formControlName="SCHEMETYPE">
+                  <option  value=1>True</option>
+                  <option  value=0>False</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">Budget:</label>
+                <div class="col-md-6">
+                  <input type="text" [style.background-color]="disabled()" style="color:black" class="form-control"
+                    id="BUDGET" name="BUDGET" formControlName="BUDGET" placeholder="HSNCODE" />
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">Claimable:</label>
+                <div class="col-md-6">
+                    <select class="form-control" style="color:black" [style.background-color]="disabled()" name="CLAIMABLE"
+                      id="CLAIMABLE" formControlName="CLAIMABLE">
+                    <option  value=1>True</option>
+                    <option  value=0>False</option>
+                    </select>
+                  </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">Prorata:</label>
+                <div class="col-md-6">
+                    <input type="text" [style.background-color]="disabled()" style="color:black" class="form-control"
+                      id="PRORATA" name="PRORATA" formControlName="PRORATA" placeholder="PRORATA" />
+                  </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">QPS:</label>
+                <div class="col-md-6">
+                    <select class="form-control" style="color:black" [style.background-color]="disabled()" name="QPS"
+                      id="QPS" formControlName="QPS">
+                    <option  value=1>True</option>
+                    <option  value=0>False</option>
+                    </select>
+                  </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">Combi:</label>
+                <div class="col-md-6">
+                    <select class="form-control" style="color:black" [style.background-color]="disabled()" name="COMBI"
+                      id="COMBI" formControlName="COMBI">
+                    <option  value=1>True</option>
+                    <option  value=0>False</option>
+                    </select>
+                  </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">Retailor Level Scheme:</label>
+                <div class="col-md-6">
+                    <select class="form-control" style="color:black" [style.background-color]="disabled()" name="RETAILERLEVELSCHEME"
+                      id="RETAILERLEVELSCHEME" formControlName="RETAILERLEVELSCHEME">
+                    <option  value=1>True</option>
+                    <option  value=0>False</option>
+                    </select>
+                  </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">Budget Level:</label>
+                <div class="col-md-6">
+                  <input type="number" [style.background-color]="disabled()" style="color:black" class="form-control"
+                    id="BUDGETLEVEL" name="BUDGETLEVEL" formControlName="BUDGETLEVEL" placeholder="BUDGETLEVEL" />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">PCL:</label>
+                <div class="col-md-6">
+                  <input type="text" [style.background-color]="disabled()" style="color:black" class="form-control"
+                    id="PCL" name="PCL" formControlName="PCL" placeholder="PCL" />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">Status:</label>
+                <div class="col-md-6">
+                  <input type="number" [style.background-color]="disabled()" style="color:black" class="form-control"
+                    id="STATUS" name="STATUS" formControlName="STATUS" placeholder="STATUS" />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <label class="col-md-4 form-control-label">Approve:</label>
+                <div class="col-md-6">
+                  <input type="text" [style.background-color]="disabled()" style="color:black" class="form-control"
+                    id="APPROVEDBY" name="APPROVEDBY" formControlName="APPROVEDBY" placeholder="APPROVEDBY" />
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="tab-pane" id="Range">
+            <SchemeDiscountRange></SchemeDiscountRange>>
+          </div>
+          <div class="tab-pane" id="Brand">
+            <SchemeBrand ></SchemeBrand>>
+          </div>
+          <div class="tab-pane" id="Area">
+            <SchemeArea></SchemeArea>
+          </div>
+          <div class="tab-pane" id="Retailor">
+            <SchemeRetailor></SchemeRetailor>>
+          </div>
+          <div class="tab-pane" id="ChannelExclusion">
+            <SchemeChannelExlusion></SchemeChannelExlusion>
+          </div>
+          <div class="tab-pane" id="SubTypeExclusion">
+            <SchemeSubTypeExclusion></SchemeSubTypeExclusion>>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sticky-bottom">
+
+</div>

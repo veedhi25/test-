@@ -1,0 +1,16 @@
+
+
+<div class="widgets">
+<div class ="row">
+    
+      <button type="button" class="btn btn-info" (click)="AddCategory()" style="margin-left:18px; margin-bottom: 10px;">Add Category</button>
+    
+  </div>
+  
+  <div class="row">
+    <ba-card  title="Category" baCardClass="with-scroll">
+      <ng2-smart-table [settings]="settings" [source]="source" (edit)="onEditClick($event)" (view)="onViewClick($event)" (delete)="onDeleteConfirm($event)"></ng2-smart-table>
+    </ba-card>
+  </div>
+
+</div>

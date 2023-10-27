@@ -1,0 +1,488 @@
+<div class="clearfix sticky-top">
+  <div class="col-md-6">
+    <h3>
+      Page vs Item
+    </h3>
+  </div>
+  <div class="col-md-2" *ngIf="isShownsave">
+    <button type="button" (click)="onSaveClicked('save')" [disabled]="saveButtonstatus" title="Save" style="padding: 4px 12px !important;" class="btn btn-primary pull-left">
+     Save
+    </button> 
+  </div>
+  <div class="col-md-2" *ngIf="isShownupdate">
+    <button type="button" (click)="onSaveClicked('edit')" title="edit" style="padding: 4px 12px !important;" class="btn btn-info pull-left">
+      Edit
+    </button> 
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12" style="height: 550px; overflow: scroll;margin: 50px 5px;">
+    <div class="col-md-4">
+      <div class="table-inner table-responsive" style="overflow: auto; height: 450px;">
+      
+          
+        <table class="table location-wise">
+          <thead>
+            <tr>
+              <th colspan="8">
+                <input type="search" placeholder="Search by Barcode Name " id="search5" #query1 (keyup)="searchSupplier(query1.value)"  [(ngModel)] = "searchSup"  class="form-control"/>
+              </th>
+          </tr>
+            <tr>
+              <th> .</th>
+              <!-- <th><input type="checkbox" [(ngModel)]="selectAllSup"  (change)="getSelectAllRecord('sup')" /></th> -->
+              <th>Barcode Name</th>
+              <!-- <th>Supplier Name</th> -->
+             
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of myBarcode;let x = index" class="row">
+              <td>
+                <input type="checkbox"  id="{{ 'chksup' + x }}"   [(ngModel)]="item.supCheck"/>
+                  
+              </td>
+            
+              <td>{{item.ConfigParaTitle}}</td>
+              <!-- <td>{{item.ACNAME}}</td> -->
+             
+             </tr>
+           
+          </tbody>
+         
+        </table>
+        </div>
+      </div>
+
+      <!-- <div class="col-md-3">
+         <label class="col-md-3">Select Category*</label>
+          <div class="col-md-8">
+            <select [(ngModel)]="selectedCategory" (change)="changeCategory()" class="form-control">
+               <option value="all"> All Category</option>
+                 <option *ngFor="let w of itemCategory"  value="{{w.MCAT}}"  >
+               {{w.MCAT}}
+             </option>
+            </select>
+          </div>
+
+      </div> -->
+      <div class="col-md-3">
+        <label class="col-md-3">Select Type</label>
+         <div class="col-md-8">
+           <select [(ngModel)]="selectedType" (change)="changeType()" class="form-control">
+              <option value=""> All Type</option>
+                <option *ngFor="let w of allType"  value="{{w.value}}"  >
+              {{w.name}}
+            </option>
+           </select>
+         </div>
+
+     </div>
+
+      <div class="col-md-5">
+         
+        <div class="table-inner table-responsive" style="overflow: auto; height: 450px;">
+      
+          
+            <table class="table location-wise">
+              <thead>
+                <tr>
+                  <th colspan="8">
+                    <input type="search" placeholder="Search by MCODE" id="search5" #query (keyup)="searchItem(query.value)"  [(ngModel)] = "searchIt"  class="form-control"/>
+                  </th>
+              </tr>
+                <tr>
+                  <th><input type="checkbox" [(ngModel)]="selectAllitem"  (change)="getSelectAllRecord('item')" /></th>
+                  <th>MCODE</th>
+                 
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let it of myItem;let x = index" class="row">
+                  <td>
+                    <input type="checkbox"  id="{{ 'chkitem' + x }}"   [(ngModel)]="it.itemCheck"/>
+                      
+                  </td>
+                
+                  <td>{{it.MCODE}}</td>
+                 
+                  
+                
+              
+                </tr>
+               
+              </tbody>
+             
+            </table>
+            
+          
+     
+        </div>
+   
+
+     
+    </div>
+
+    </div>
+  </div>
+   
+  <div *ngIf="showBulkUpload" style="display: block;
+  top: 150px;
+  display: block;
+  padding: 0px;
+  margin-bottom: 0;
+  height: 36vh;
+  position: absolute;
+  left: calc(40% - 201px);
+  /* top: 135%; */
+  width: 40%;
+  z-index: 1;">
+
+<div class="modal-content modal-content-main-area" style="width: 100%;text-align:left;">
+  <div class="modal-header" style="text-align: left;
+  height: 40px;
+  position: relative;padding: 9px;">
+    <h4 class="modal-title m-0" id="myModalLabel">Suppllier Vs Item Bulk Uploader</h4>
+    <button class="close" aria-label="Close" style="
+  position: absolute;
+  clear: both;
+  z-index: 1;
+  right: 16px;
+  top: 10px;" (click)="onCloseBulk()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="clearfix">
+      
+      <div class="form-inline">
+        <label for="billno" style="width: 35%;">Choose Excel File :</label>
+        <input type="file" class="form-control" id="customFile" name="myfile" [(ngModel)]="excelFile" (change)="onFileSelect($event)" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="width:57%;">
+      </div>
+      <div class="form-inline">
+        <button type="button" [disabled]="submitBulkUploadButton" (click)="saveBulkUpload()" title="Bulk Upload"
+          class="btn btn-success">
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+  body{
+    font-family: 'Montserrat', sans-serif;
+  }
+  .pager-header {
+    background: #0099e5;
+    padding: 16px 30px;
+    color: #fff;
+}
+h4 {
+  font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+}
+.page-link.active{
+  background-color:skyblue;
+  color: white;
+}
+
+input.form-contol {
+    width: 100%;
+    display: inline-block;
+    height: 38px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.form-group label {
+    margin-bottom: 4px;
+    color: #292929;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+}
+
+.page-body{
+  background: #ffffff;
+    box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
+}
+
+form{
+    padding: 14px 20px 22px;
+}
+
+h2.min-hd{
+  font-size: 17px;
+    background: #ffffff;
+    color: #4c4c4c;
+    padding: 12px 18px;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+    border-bottom: 2px solid #ccc;
+}
+
+.page-inner{
+  padding: 20px;
+}
+
+.btn.-submit-btn {
+  background: #0099e5;
+    color: #fff;
+    padding: 12px 40px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+    margin: 14px 0 4px;
+}
+
+.btn-inner {
+    text-align: center;
+}
+
+.table-inner {
+    height: 300px;
+    overflow: auto;
+    width: 100%;
+}
+
+.table > tbody > tr > td {
+  padding: 2px 8px;
+    line-height: 35px;
+    border: 1px solid #b7b7b7;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    border-bottom: none;
+    vertical-align: middle;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.table > thead > tr > th {
+  padding: 4px 8px;
+    line-height: 35px;
+    border: 1px solid #0588ca;
+    font-weight: 600;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    background: #0099e5;
+    color: #fff !important;
+}
+
+.table-responsive {
+    margin-top: 0;
+}
+.table-inner[_ngcontent-c5] {
+    width: 100%;
+    background: #fff;
+    margin: 24px 0 0;
+    padding: 0;
+}
+
+button.btn.print-btn {
+    margin: 0;
+    padding: 6px 14px;
+    font-size: 13px;
+    background: #0099e5;
+    color: #fff;
+    border-radius: 2px;
+}
+
+
+table {
+  width: 100%;
+}
+
+table, td {
+  border-collapse: collapse;
+  }
+
+thead {
+  display: table; /* to take the same width as tr */
+  width: calc(100% - 17px); /* - 17px because of the scrollbar width */
+}
+
+tbody {
+  display: block; /* to enable vertical scrolling */
+  max-height: 350px; /* e.g. */
+  overflow-y: scroll; /* keeps the scrollbar even if it doesn't need it; display purpose */
+}
+
+th, td {
+  width: 28.33%; /* to enable "word-break: break-all" */
+  padding: 5px;
+  word-break: break-all; /* 4. */
+}
+
+tr {
+  display: table; /* display purpose; th's border */
+  width: 100%;
+  box-sizing: border-box; /* because of the border (Chrome needs this line, but not FF) */
+}
+
+td {
+  text-align: center;
+  border-bottom: none;
+  border-left: none;
+}
+
+
+
+</style>
+<style>
+  body {
+    margin: 30px;
+    font-family: sans-serif;
+    }
+  
+  #fontSizeWrapper { font-size: 16px; }
+  
+  #fontSize {
+    width: 100px;
+    font-size: 1em;
+    }
+  
+  /* ————————————————————–
+    Tree core styles
+  */
+  .locationtree { margin: 1em; }
+  
+  .locationtree input {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    }
+  
+  .locationtree input ~ ul { display: none; }
+  
+  .locationtree input:checked ~ ul { display: block; }
+  
+  /* ————————————————————–
+    Tree rows
+  */
+  .locationtree li {
+    line-height: 1.2;
+    position: relative;
+    padding: 0 0 1em 1em;
+    }
+  
+  .locationtree ul li { padding: 1em 0 0 1em; }
+  
+  .locationtree > li:last-child { padding-bottom: 0; }
+  
+  /* ————————————————————–
+    Tree labels
+  */
+  .locationtree_label {
+    position: relative;
+    display: inline-block;
+    background: #fff;
+    }
+  
+  label.locationtree_label { cursor: pointer; }
+  
+  label.locationtree_label:hover { color: #666; }
+  
+  /* ————————————————————–
+    Tree expanded icon
+  */
+  label.locationtree_label:before {
+    background: #0099e5;
+    color: white;
+    position: relative;
+    z-index: 1;
+    float: left;
+    margin: 0 1em 0 -2em;
+    width: 1em;
+    height: 1em;
+    border-radius: 1em;
+     content: '+'; 
+    text-align: center;
+    line-height: .9em;
+    }
+  
+  :checked ~ label.locationtree_label:before { 
+     content: '–';  
+    }
+  
+  /* ————————————————————–
+    Tree branches
+  */
+  .locationtree li:before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -.5em;
+    display: block;
+    width: 0;
+    border-left: 1px solid #0099e5;
+     content: ""; 
+    }
+  
+  .locationtree_label:after {
+    position: absolute;
+    top: 0;
+    left: -1.5em;
+    display: block;
+    height: 0.5em;
+    width: 1em;
+    border-bottom: 1px solid #0099e5;
+    border-left: 1px solid #0099e5;
+    border-radius: 0 0 0 .3em;
+   content: '';
+    }
+  
+  label.locationtree_label:after { border-bottom: 0; }
+  
+  :checked ~ label.locationtree_label:after {
+    border-radius: 0 .3em 0 0;
+    border-top: 1px solid #0099e5;
+    border-right: 1px solid #0099e5;
+    border-bottom: 0;
+    border-left: 0;
+    bottom: 0;
+    top: 0.5em;
+    height: auto;
+    }
+  
+  .locationtree li:last-child:before {
+    height: 1em;
+    bottom: auto;
+    }
+  
+  .locationtree > li:last-child:before { display: none; }
+  
+  .locationtree_custom {
+    display: block;
+    background: #eee;
+    padding: 1em;
+    border-radius: 0.3em;
+
+  }
+
+  .table.location-wise th,  .table.location-wise td {
+    width: auto;
+    padding: 5px;
+ }
+ 
+ .table.location-wise thead{
+  display: table-row-group;
+    width: 100%;
+}
+.table.location-wise tbody {
+    display: table-row-group;
+}
+.table.location-wise tr {
+    display: table-row;
+}
+  </style>
+
+
+

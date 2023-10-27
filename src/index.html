@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assets/glyphicon/css/glyphicon.css" />
+  <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+  <script type="text/javascript" src="assets/ckeditor/ckeditor.js"></script>
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    body {
+      max-width: 100%;
+      overflow: hidden;
+      font-family: 'Montserrat', sans-serif;
+    }
+  </style>
+
+  <!-- <script type="text/javascript" src="assets/nepali-calender/nepali.datepicker.v2.1.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="assets/nepali-calender/nepali.datepicker.v2.1.min.css" /> -->
+  <!-- <script text="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-chart.js/0.4.0/angular-chart.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/angular-chart.js/0.4.0/angular-chart.min.css" /> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+  </script>
+  <title>
+    <%= htmlWebpackPlugin.options.title %>
+  </title>
+
+  <meta name="description" content="<%= htmlWebpackPlugin.options.metadata.description %>">
+  <% if (webpackConfig.htmlElements.headTags) { %>
+    <!-- Configured Head Tags  -->
+    <%= webpackConfig.htmlElements.headTags %>
+      <% } %>
+
+        <!-- base url -->
+        <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>">
+
+
+</head>
+
+<body>
+  <app>
+  </app>
+
+  <div id="preloader">
+    <div></div>
+  </div>
+
+  <% if (htmlWebpackPlugin.options.metadata.isDevServer && htmlWebpackPlugin.options.metadata.HMR !==true) { %>
+    <!-- Webpack Dev Server reload -->
+    <script src="/webpack-dev-server.js"></script>
+    <% } %>
+
+
+
+
+</body>
+
+</html>

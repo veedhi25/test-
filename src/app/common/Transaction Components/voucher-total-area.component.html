@@ -1,0 +1,37 @@
+﻿<style>
+  .footer {
+    margin-right: 1px;
+    height: 70px;
+    clear: both;
+    padding-top: 20px;
+    border: 1px solid #eaeaea;
+    background-color: #d1d6d8;
+  }
+
+  .total-block{
+    padding: 0px 5px;
+  }
+</style>
+<div class="row clearfix footer">
+  <div class="col-md-12">
+    <div class="col-md-8" style="vertical-align:center;padding: 0;margin: 0;">
+      <div class="col-md-4 total-block">
+        <h4>Total Quantity: {{ _trnMainService.TrnMainObj.TOTALQTY | twoDigitNumber }}</h4>
+      </div>
+      <div class="col-md-4 total-block">
+        <h4>Total Gross Weight: {{ _trnMainService.TrnMainObj.TOTALWEIGHT | twoDigitNumber }}</h4>
+      </div>
+      <div class="col-md-4 total-block">
+        <h4>Total Net Weight: {{ _trnMainService.TrnMainObj.TOTALNETWEIGHT | twoDigitNumber }}</h4>
+      </div>
+    </div>
+    <div class="col-md-4"  style="vertical-align:center;padding: 0;margin: 0;">
+      <div class="col-md-6 total-block">
+        <h4>Total CLD : {{ _trnMainService.TrnMainObj.TOTALCLDQUANTITY | twoDigitNumber }}</h4>
+      </div>
+      <div class="col-md-6 total-block">
+        <h4>Total: {{ _trnMainService.TrnMainObj.NETAMNT | twoDigitNumber }}</h4>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,84 @@
+﻿
+<div class="form-inner">
+<div class="top-forms" *ngIf="!_trnMainService.TrnMainObj.hasShipName">
+  <div class="row">
+
+    <div class="col-md-4">
+      <h3 class="main-heading" style="margin-top: 4px;"><i class="fa fa-th" (click)="onTransactionConfigureClick()"
+        style="color: #2bade5;
+      cursor: pointer; font-size: 20px;" title="Click to configure grid"></i>{{ _trnMainService.pageHeading }} [{{_trnMainService.TrnMainObj.Mode |titlecase}}]</h3>
+      <h3 class="main-heading">{{_trnMainService.TrnMainObj.AdditionalObj.TRNTYPE=="local"?'CGST/SGST':'IGST'}}</h3>
+      <voucher-master-toggler></voucher-master-toggler>
+    </div>
+    <div class="col-md-8 add-mr">
+      <voucher-master-action
+      (onLoadFromHoTaxInvoiceClickEmit)="showSupplierSalesInvoiceFromHOPopup($event)"
+      (onLoadFromSAPFTPClickEmit)="showSAPPurchaseInvoice($event)"
+      (onPInvoieFileUploadPopupEmit)="showPurchaseInvoicePopup($event)"
+      (onLoadFromHOPerformaInvoiceClickEmit)="showLoadFromPerformaInvoiceRequestPopup($event)"
+      (onCancelEmit)="onCancelClicked()"
+      (onLoadFromPOClickEmit)="showLoadFromPOPopup($event)" 
+      (onLoadRcvdDeliveryChallaanClickEmit)="showRcvdDeliveryChallaanPopup($event)"
+
+      >
+    </voucher-master-action>
+      <generic-popup-grid #genericHOSalesInvoiceGridTI [popupsettings]="gridHoSalesInvoicePopupSettings"
+        (onItemDoubleClick)="onHoSalesInvoiceSelect($event)" (onDeleteClicked)="DeleteEDISalesInvoice($event)"></generic-popup-grid>
+
+      <generic-popup-grid #genericsGridSAPPI [popupsettings]="gridSAPPIPopupSettings"
+        (onItemDoubleClick)="onSAPPurchaseInvoiceSelect($event)" (onDeleteClicked)="DeleteSapInvoice($event)">
+      </generic-popup-grid>
+      <generic-popup-grid #genericRcvdDeliveryChalaaanGridSO [popupsettings]="gridRcvdDeliveryChallaanPopupSettings"
+        (onItemDoubleClick)="onDeliveryChallaanSelect($event)">
+      </generic-popup-grid>
+    </div>
+  </div>
+</div>
+<div class="content-areaform" *ngIf="!_trnMainService.TrnMainObj.hasShipName">
+  <div *ngIf="masterService.ShowMore" class="row clearfix">
+    <trnmain-purchase-entry></trnmain-purchase-entry>
+  </div>
+  <div class="row" style="margin-top: 5px">
+    <div class="col-md-12">
+      <productentry></productentry>
+    </div>
+  </div>
+</div>
+</div>
+<div style="top:15%;right:-20%;position: absolute;">
+  <voucher-sidebar-billdetail></voucher-sidebar-billdetail>
+
+</div>
+<div class="sticky-bottom" *ngIf="!_trnMainService.TrnMainObj.hasShipName">
+  <voucher-total-area></voucher-total-area>
+</div>
+
+
+<file-uploader-popup
+    #fileUploadPopup
+    [popupsettings]="fileUploadPopupSettings"
+    (onUploaded) = "fileUploadSuccess($event)"
+>
+</file-uploader-popup>
+<user-wise-transaction-form-configuration #userwisetransactionformconfig
+(updateGridConfigAfterSave)="updateGridConfig($event)"></user-wise-transaction-form-configuration>
+
+
+
+<generic-popup-grid
+#genericGridPerformaInvoice
+[popupsettings]="gridPopupSettingsForHOPerformaRequest"
+(onItemDoubleClick)="onHoPerformaInvoiceClicked($event)"
+>
+</generic-popup-grid>
+<generic-popup-grid
+#genericGridPO
+[popupsettings]="gridPopupSettingsForPurchaseOrder"
+(onItemDoubleClick)="onHoPurchaseOrderClicked($event)"
+>
+
+<style>
+  input#datepitrndatetrndate {
+    display: none;
+}
+</style>

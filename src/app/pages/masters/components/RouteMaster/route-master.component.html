@@ -1,0 +1,321 @@
+<style>
+  svg {
+    position: absolute;
+    width: 15%;
+    left: 15px;
+    height: 15%;
+    top: 0px
+  }
+
+  .date {
+    font-size: 16px;
+    font-weight: 800;
+  }
+</style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="sticky-top">
+  <div class="row clearfix" style=" padding: 0px 20px;">
+    <div class="col-md-6">
+      <h3 class="page-title">{{ modeTitle }}</h3>
+    </div>
+    <div class="col-md-6" style="float: right;">
+      <button type="button " class="btn btn-info pull-right" (click)="cancel()" style="margin-right : 10px;">
+        Back
+      </button>
+      <button *ngIf="viewMode == false" (click)="showRoutePlan?saveRoutePlan():onSave()" class="btn btn-info pull-right"
+        style="margin-right : 10px;" [disabled]="!form.valid && !showRoutePlan">
+        Save
+      </button>
+    </div>
+  </div>
+</div>
+<div class="main-container" style="padding-top : 10px; margin-bottom: 0px">
+  <div class="row" *ngIf="!showRoutePlan && !viewScheduleMode">
+    <div class="col-md-12">
+      <div class="tabbable" id="warehouse-tabs">
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" href="#general-info" data-toggle="tab">General Info</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="general-info">
+            <form class="form-horizontal" [formGroup]="form">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label class="col-sm-4 form-control-label">Route Name:</label>
+                      <div class="col-sm-8">
+                        <input type="text" [style.background-color]="disabled()"
+                          [style.background-color]="editDisabled()" style="color:black" class="form-control"
+                          id="RouteName" name="RouteName" formControlName="RouteName" placeholder="Route Name" />
+                        <div *ngIf="
+                              !form.controls['RouteName'].valid &&
+                              form.controls['RouteName']?.touched
+                            " class="text-danger">
+                          <span *ngIf="form.get('RouteName').hasError('required')">
+                            Route name is required.
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group row">
+                      <label class="col-sm-2">Is Active </label>
+                      <div class="col-sm-6">
+                        <select formControlName="status" class="form-control">
+                          <option value="0">Inactive</option>
+                          <option value="1">Active</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="clearfix">
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="col-md-3">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" formControlName="Sunday"> Sunday
+                      </label>
+                    </div>
+
+                  </div>
+                  <div class="col-md-3">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" formControlName="Monday">Monday
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" formControlName="Tuesday">Tuesday
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" formControlName="Wednesday">Wednesday
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="col-md-3">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" formControlName="Thursday">Thursday
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" formControlName="Friday">Friday
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" formControlName="Saturday"> Saturday
+                      </label>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="viewScheduleMode">
+    <div class="col-md-12">
+      <div class="col-md-3 form-group">
+        <label>Route List</label>
+        <select class="form-control" (change)="getRouteSchedule($event)" #routeSelected>
+          <option value="" selected>Select Route</option>
+          <option *ngFor="let route of allRouteMasterList;let i=index" [value]="route.RouteCode">{{route?.RouteName}}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="showRoutePlan">
+    <div class="col-md-12">
+      <div class="col-md-4">
+        <form>
+          <div class="col-md-3" style="padding-left: 0px;">
+            <select class="form-control" #month (change)="jump()">
+              <option value=0>January</option>
+              <option value=1>February</option>
+              <option value=2>March</option>
+              <option value=3>April</option>
+              <option value=4>May</option>
+              <option value=5>June</option>
+              <option value=6>July</option>
+              <option value=7>August</option>
+              <option value=8>September</option>
+              <option value=9>October</option>
+              <option value=10>November</option>
+              <option value=11>December</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <select class="form-control" #year (change)="jump()">
+              <option *ngFor="let year of listOfYear;let i=index" value={{year.year}}>{{year.year}}</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-info" style="width: 90px !important;margin-right:10px;"
+          [disabled]=isPrevValid(year.value,month.value) (click)="previous()">Previous</button>
+        <button class="btn btn-info" style="width: 90px  !important;" [disabled]=isNextValid(year.value,month.value)
+          (click)="next()">Next</button>
+      </div>
+    </div>
+    <div class="col-md-12" *ngIf="routePlanForm">
+      <form [formGroup]="routePlanForm" class="col-md-6">
+        <table class="table table-bordered table-responsive-sm" style="background-color: white;table-layout: fixed;">
+          <thead>
+            <tr>
+              <th class="text-center" style="height: 25px !important; width:100px !important">
+
+                <span style="position: relative;top:10px;">
+                  <strong>Week</strong>
+                </span>
+
+                <svg viewBox="0 0 30 30" preserveAspectRatio="none">
+                  <line x1="0" y1="0" x2="30" y2="30" stroke="black" stroke-width="0.1" />
+                </svg>
+                <span style="position: relative;top:-5px;">
+                  <strong>Days</strong>
+                </span>
+              </th>
+              <th class="text-center"><strong>Sun</strong></th>
+              <th class="text-center"><strong>Mon</strong></th>
+              <th class="text-center"><strong>Tue</strong></th>
+              <th class="text-center"><strong>Wed</strong></th>
+              <th class="text-center"><strong>Thu</strong></th>
+              <th class="text-center"><Strong>Fri</Strong></th>
+              <th class="text-center"><strong>Sat</strong></th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container formArrayName="weeks"
+              *ngFor="let item of routePlanForm.get('weeks').controls; let i = index;">
+              <tr [formGroupName]="i" *ngIf="dateArray" class="text-center">
+                <td>
+
+
+                  <span>
+                    <strong>Week{{i+1}}</strong>
+                  </span>
+                </td>
+                <td>
+                  <div class="checkbox" *ngIf="dateArray[i][0] != 0">
+                    <label>
+                      <input type="checkbox" formControlName="Sunday"><span class="date">
+                        {{dateArray[i][0]}}
+                      </span>
+                    </label>
+                  </div>
+                </td>
+                <td>
+                  <div class="checkbox" *ngIf="dateArray[i][1] != 0">
+                    <label>
+                      <input type="checkbox" formControlName="Monday"> <span class="date">
+                        {{dateArray[i][1]}}
+                      </span>
+                    </label>
+                  </div>
+                </td>
+                <td>
+                  <div class="checkbox" *ngIf="dateArray[i][2] != 0">
+                    <label>
+                      <input type="checkbox" formControlName="Tuesday"> <span class="date">
+                        {{dateArray[i][2]}}
+                      </span>
+                    </label>
+                  </div>
+                </td>
+                <td>
+                  <div class="checkbox" *ngIf="dateArray[i][3] != 0">
+                    <label>
+                      <input type="checkbox" formControlName="Wednesday"> <span class="date">
+                        {{dateArray[i][3]}}
+                      </span>
+                    </label>
+                  </div>
+                </td>
+                <td>
+                  <div class="checkbox" *ngIf="dateArray[i][4] != 0">
+                    <label>
+                      <input type="checkbox" formControlName="Thursday"> <span class="date">
+                        {{dateArray[i][4]}}
+                      </span>
+                    </label>
+                  </div>
+                </td>
+                <td>
+                  <div class="checkbox" *ngIf="dateArray[i][5] != 0">
+                    <label>
+                      <input type="checkbox" formControlName="Friday"> <span class="date">
+                        {{dateArray[i][5]}}
+                      </span>
+                    </label>
+                  </div>
+                </td>
+                <td>
+                  <div class="checkbox" *ngIf="dateArray[i][6] != 0">
+                    <label>
+                      <input type="checkbox" formControlName="Saturday"> <span class="date">
+                        {{dateArray[i][6]}}
+                      </span>
+                    </label>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </form>
+    </div>
+
+
+
+  </div>
+
+
+
+
+</div>

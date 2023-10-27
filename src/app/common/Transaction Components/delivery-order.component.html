@@ -1,0 +1,91 @@
+<div class="po-delivery-inner">
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="main-heading">{{title}}</h3>
+        </div>
+    </div>
+
+    <div class="row po-delivery-form">
+        <div class="col-md-12">
+            <div class="col-md-6">
+                <label class="col-md-4 form-control-label">Type:</label>
+                <div *ngIf="title == 'PO Delivery'" class="col-md-8">
+                    <select class="form-control" [(ngModel)]="postatus" (change)="undeliverpostatus()">
+                        <option value="0">Undelivered PO</option>
+                        <option value="1">Delivered PO</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label class="col-md-4 form-control-label">Location:</label>
+                <div class="col-md-8">
+                    <input type="text" readonly name="location" [(ngModel)]="_transactionService.FilterObj.location"
+                        #location (keydown.enter)="from.focus()" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label class="col-md-4 form-control-label">Date:</label>
+                <div class="col-md-8">
+                    <input class="form-control" type="text" ngxDaterangepickerMd [(ngModel)]="selectedDate"
+                        [showDropdowns]="true" [showCustomRangeLabel]="true" [alwaysShowCalendars]="true"
+                        [locale]="locale" [ranges]="masterService.dateFilterRange" [linkedCalendars]="true"
+                        [showCancel]="true" placeholder="Date Range..." (ngModelChange)="dateChanged($event)" />
+                </div>
+
+            </div>
+            <div class="col-md-6 advance-searchinner">
+                <label class="col-md-4 form-control-label"></label>
+                <a (click)="advanceSearch()" #advance class="advance-search">Advance Search</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .po-delivery-inner {
+        display: inline-block;
+        width: 100%;
+        background: #fff;
+        border: 1px solid #d3d3d3;
+        margin: 12px 0 0;
+    }
+
+    .po-delivery-form {
+        padding: 0;
+        margin: 20px 0;
+    }
+
+    h3.main-heading {
+        padding: 10px 16px;
+        margin: 0;
+        border-bottom: 1px solid #d3d3d3;
+        width: 100%;
+    }
+
+    .po-delivery-inner input,
+    .po-delivery-inner select {
+        height: 36px;
+        vertical-align: middle;
+        border: 1px solid #cbcbcb;
+        border-radius: 3px;
+        color: #4c4c4c;
+        padding: 8px 6px;
+        margin: 0 0 20px;
+    }
+
+    .po-delivery-inner label.form-control-label {
+        margin: 2px 0 0;
+    }
+
+    .po-delivery-inner a.advance-search {
+        background: #2bade5;
+        padding: 10px 20px;
+        color: #fff !important;
+        font-weight: 600;
+        border-radius: 2px;
+        font-size: 14px;
+        cursor: pointer;
+        margin: 0px 16px;
+        display: inline-block;
+    }
+</style>

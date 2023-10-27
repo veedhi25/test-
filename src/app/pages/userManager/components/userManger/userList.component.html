@@ -1,0 +1,39 @@
+<div class="content-wrapper">
+
+  <div class="right-btn">
+    <!-- <button class="btn add-btn" *ngIf="(outletconfigUserManagementCreateChild() || outletconfigParentandIndividual())" (click)="onAddClick(); (false)">Add User</button>
+    <button class="btn btn-back" *ngIf="(outletconfigUserManagementCreateChild() || outletconfigParentandIndividual())" (click)="addRole(); (false)">Add Role</button> -->
+    <button class="btn add-btn" (click)="onAddClick(); (false)">Add User</button>
+    <button class="btn btn-back" (click)="addRole(); (false)">Add Role</button>
+  </div>
+
+  <div class="full-width">
+    <div class="tap-tabbable edit-customer">
+      <div class="ng-tableinner border-">
+        <ba-card baCardClass="with-scroll">
+          <ul class="nav nav-tabs">
+              <li class="nav-item">
+                <a class="nav-link active" href="#user" data-toggle="tab">User List</a>
+              </li>
+             
+              <li class="nav-item">
+                <a class="nav-link" href="#role" data-toggle="tab">Role List</a>
+              </li>
+            </ul>
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="user">
+            <ng2-smart-table [settings]="settings" [source]="source" (edit)="onEditClick($event)"
+              (delete)="onDeleteConfirm($event)"></ng2-smart-table>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="role">
+              <ng2-smart-table [settings]="roleSettings" [source]="roleSource" (edit)="onRoleEditClick($event)"
+              ></ng2-smart-table>
+          </div>
+        </div>
+      </ba-card>
+      </div>
+    </div>
+   
+  </div>
+
+</div>

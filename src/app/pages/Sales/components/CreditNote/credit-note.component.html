@@ -1,0 +1,16 @@
+<div class="row" style="margin: 0px; margin-top:-13px">
+    <ba-card style="margin-top:-15px;">
+        <voucher-date-entry style="margin-top:-15px;" [isSales]="true"></voucher-date-entry>
+        <trnmain-voucher-entry></trnmain-voucher-entry>
+    </ba-card>
+</div>
+    <!-- <SeriesDialog [voucherType]="voucherType" (sendPrefix)="prefixChanged($event)"></SeriesDialog> -->
+
+    <div class="row" style="margin: 0px; margin-top:-5px">
+        <trntran-voucher-entry></trntran-voucher-entry>
+    </div>
+
+    <div style="padding-bottom: 10px">
+        <button [disabled]="_trnMainService.saveDisable" *ngIf="TrnMainObj.Mode != 'VIEW'" style="margin-right: 4px;" (click)="onSaveClicked()"  class="btn btn-info">Save</button>
+        <button (click)="onCancelClicked()" class="btn btn-info">Back</button>
+    </div>

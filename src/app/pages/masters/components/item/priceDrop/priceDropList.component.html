@@ -1,0 +1,16 @@
+<div class="widgets">
+    <div class ="row">
+        
+          <button type="button" class="btn btn-info" (click)="AddNewPriceDrop()" style="margin-left:18px; margin-bottom: 10px;">Add Price Drop</button>
+          <button *ngIf="enableSyncOutlet()" type="button" class="btn btn-info" (click)="syncPriceDropToOutlet()" style="margin-left:18px; margin-bottom: 10px;">Sync Outlet</button>
+        
+      </div>
+<div class="content-wrapper">
+    <div class="ng-tableinner">
+      <ba-card title="Price Drops" baCardClass="with-scroll">
+        <ng2-smart-table [settings]="settings" [source]="source" (view)="onViewClicked($event)" (edit)="onEditClick($event)"
+          (deleteConfirm)="onDeleteConfirm($event)"></ng2-smart-table>
+      </ba-card>
+    </div>
+  </div>
+  </div>

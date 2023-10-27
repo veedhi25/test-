@@ -1,0 +1,66 @@
+<style>
+  .overlay {
+    position: fixed; /* Positioning and size */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(128, 128, 128, 0.5); /* color */
+    z-index: 99999999999999999;
+  }
+</style>
+
+<div class="overlay" id="ordermeNotification"    *ngIf="notificationForAck && notificationForAck.length"
+>
+  <div
+    class="col-md-12 plainBackGroud"
+    style="
+      padding: 0;
+      position: fixed;
+      top: 50%;
+      right: 10%;
+      width: 50%;
+      border-radius: 5px;
+      background: #c8d8d8;
+      transform: translate(-50%, -50%);
+    "
+  >
+    <div class="col-md-12 ims-scrollable-table" style="padding: 0">
+      <table
+        id="BlueHeaderResizableTable"
+        #reportHtmlTable
+        style="
+          font-size: 12px;
+          width: 100%;
+          overflow-x: auto;
+          height: 500px !important;
+        "
+        class="reportTabel"
+      >
+        <thead>
+          <tr style="background: #d5d5d5">
+            <th colspan="4" width="400px" class="text-center">
+              Order Acknowledgement
+            </th>
+          </tr>
+          <tr style="background: #d5d5d5">
+            <th width="100px">Order No</th>
+            <th width="100px">Date</th>
+            <th width="100px">Remarks</th>
+            <th width="100px"></th>
+          </tr>
+        </thead>
+        <tbody style="width: fit-content">
+          <tr *ngFor="let orderme of notificationForAck; let i = index">
+            <td width="100px">{{ orderme["REFNO"] }}</td>
+            <td width="100px">{{ orderme["TIMESTAMP"] }}</td>
+            <td width="100px">{{ orderme["REMARKS"] }}</td>
+            <td width="100px" class="text-right">
+              <button class="btn btn-info" (click)="sendACK(i)">Acknowledge</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

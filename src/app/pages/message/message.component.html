@@ -1,0 +1,177 @@
+<style>
+    .container{
+         max-width: 100%;
+   
+    padding-left: 25px;
+    padding-right: 25px;
+    }
+ 
+       
+    .active-yellow-2 input.form-control[type=text]:focus:not([readonly]) {
+  border: 1px solid #b5e26a;
+  box-shadow: 0 1px 0 0 #b5e26a;
+ 
+}
+.active-yellow input.form-control[type=text] {
+  border: 1px solid #b5e26a;
+  box-shadow: 0 1px 0 0 #b5e26a;
+}
+.active {
+  background-color: rgb(0 0 0 / 5%);
+  color: black;
+  border: black;
+}
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0);
+    margin-top: 60px;
+}
+li:hover {
+  background-color: rgb(0 0 0 / 5%);
+  cursor: pointer;
+}
+@media screen and (max-width: 1200px) {
+.wrapper{
+    grid-template-rows: 59px 473px!important;
+}
+}
+@media screen and (min-width: 1920px) {
+.wrapper{
+    grid-template-rows: 59px 700px!important;
+}
+.messagescol{
+    height: 828px!important;
+}
+}
+
+
+.reply {
+  text-overflow: ellipsis;
+  background-color:#b5e26a;
+  /* text-align: right; */
+
+  max-width: 550px;
+  width: max-content;
+  
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 5px;
+}
+.query {
+  text-overflow: ellipsis;
+  
+ 
+  background-color: white;
+  
+  max-width: 520px;
+  width: max-content;
+  margin-top: 5px;
+  padding: 10px;
+  border-radius: 8px;
+}
+</style>
+<div class="container">
+
+
+<div class="row" >
+<div class="col-md-3 messagescol" style="height: 683px; border-right: 1px solid #8080803d;  padding:0px; background: white;overflow-y: scroll;">
+    <div class="row" style="border-bottom: 1px solid #8080803d;
+       position: fixed;    z-index: 99999;width: inherit;margin-left: 0px!important;">
+        <div class="md-form active-yellow-2 mb-3" style="padding: 10px 0px 10px 20px;" >
+            <input class="form-control" type="text" placeholder="Search" aria-label="Search" style="    
+            border-radius: 25px;
+            font-size: 16px!important;
+            width:95%;
+            background: none;
+            " [(ngModel)]= "searchItem" (keyup.enter)="searchUser(searchItem)">
+          </div>
+    </div>
+    <ul style="
+    list-style: none;
+    padding-left: 0px;
+    padding-top: 60px;
+    margin-left: 10px;
+">
+        <li *ngFor="let member of members;let i=index " [class.active]="active ===i" style="padding: 5px;
+        border-bottom: 1px solid #8080803d;padding: 6px;"(click)="onClickUser(member)" (click)="onClickDisplayUser(i)" (click)="onClickActive(i)">
+            <div class="row">
+                <div class="col-md-7">
+                    <p>{{ member.ACNAME }}<p>
+                </div>
+                <div class="col-md-5" style="color:  #808080;">
+                    <p style="font-size: 12px;"> {{member.STAMP | date}} &nbsp; {{member.STAMP | date: "shortTime"}}</p> 
+                </div>
+            </div>
+            
+            <p style="color:  #808080;"> {{member.MESSAGE}} </p>
+            
+           
+        </li>
+    </ul>
+
+</div>
+<div class="col-md-9" style="height: 684px;">
+    <div class="wrapper" style="display: grid;
+     grid-template-rows: 59px 557px;">
+
+   
+    <div class="row" style="border-bottom: 1px solid #8080803d;
+    background: #f0f3f4;
+    ">
+    <p style="margin-left: 15px;
+    font-size: 17px;
+    line-height: 3.5;">{{membername}}</p>
+    </div>
+     <div class="row" style="    padding: 20px;    overflow-y: scroll;">
+
+    <!-- <div *ngFor="let chat of chatHistory">
+            <div *ngIf="chat.query != ''" class="query">
+                {{chat.query}} <br>
+                <div style="font-size: 10px">
+                    {{ chat.chatdate }} {{chat.chattime}}
+                  </div>
+            </div>
+            <div *ngIf="chat.reply != ''" class="reply" style="margin-left: auto">
+                {{chat.reply}}
+                <br>
+                <div style="font-size: 10px">
+                    {{ chat.chatdate }} {{chat.chattime}}
+                  </div>
+            </div>
+
+        </div>  -->
+<div *ngFor="let chat of companyChat">
+    <div *ngIf="chat.TAG=='RECEIVE'" class="query" >
+        {{chat.MESSAGE}} <br>
+        <div style="font-size: 10px;">
+        {{chat.STAMP | date}} &nbsp;{{ chat.STAMP | date: "shortTime" }}
+        </div>
+    </div>
+    <div *ngIf="chat.TAG=='SEND'" class="reply"style="margin-left: auto" >
+        {{chat.MESSAGE}} <br>
+        <div style="font-size: 10px;">
+        {{chat.STAMP | date}} &nbsp;{{ chat.STAMP | date: "shortTime" }}
+        </div>
+    </div>
+
+</div>
+    </div> 
+    <div class="row" style="border-top:1px solid #8080803d ;padding: 15px;">
+<div class="col-md-11">
+    <input class="form-control" type="text" placeholder="Type a message" [(ngModel)]="ReplyMessage" aria-label="Search" style="    
+    border-radius: 25px;
+    font-size: 16px!important;
+    
+    background: none; 
+    "  (keyup.enter)="sendMessage(ReplyMessage)">
+</div>
+<div class="col-md-1" style="    text-align: end;">
+    <button style="    border: 0px;background: none;
+    line-height: 3" (click)="sendMessage(ReplyMessage)">
+        <i class="fa fa-chevron-right" style="font-size: 20px;"></i>
+    </button>
+</div>
+    </div>
+</div>
+</div>
+</div>
+</div>

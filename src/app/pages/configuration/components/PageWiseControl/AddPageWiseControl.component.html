@@ -1,0 +1,224 @@
+<div class="clearfix">
+  <div class="col-md-6">
+    <h3>
+      Add Control
+    </h3>
+  </div>
+  
+</div>
+<div class="container" style="margin-top:1%" >
+  
+    <div class="clearfix">
+       
+ 
+    <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-4">
+        <div class="form-group clearfix">
+         Page Name
+          <input type="text" class="form-contol" [(ngModel)]="pageName" placeholder="Enter Page Name">
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-4">
+        <div class="form-group">
+        Control Name
+          <input type="text" class="form-contol" [(ngModel)]="controlName" placeholder="Enter Control Name">
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-4">
+        <div class="form-group">
+        Control Type
+        
+        <select name="ControlType"  class="form-control"  [(ngModel)]="ControlType">
+          <option value="0" selected="true">Choose Control</option>
+          <option value="textbox">TextBox</option>
+          <option value="DropDownList">DropDownList</option>
+          <option value="button">Button</option>
+          <option value="checkbox">Checkbox</option>
+          <option value="radiobutton">RadioButton</option>
+        </select>
+        </div>
+      </div>
+      
+    </div>
+   
+    <div class="row" *ngFor="let in of counter(1);let i=index">
+      <i class="fa fa-spinner fa-spin" *ngIf="loading"></i>
+      <div class="col-md-6"  >
+        <button type="button" (click)="onSaveClicked()" title="onSave"   *ngIf="check('save')" class="btn btn-primary">
+          Save
+        </button>
+        <button type="button" (click)="onUpdateClicked()" title="onUpdate"  *ngIf="check('update')" class="btn btn-info">
+          Update
+        </button>
+        <button type="button" class="btn btn-default"  (click)="onBackClick();" *ngIf="check('back')">Back</button>   
+       
+      </div>
+    </div>
+ 
+</div>
+  
+</div>
+
+
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+  body{
+    font-family: 'Montserrat', sans-serif;
+  }
+  .pager-header {
+    background: #0099e5;
+    padding: 16px 30px;
+    color: #fff;
+}
+h4 {
+  font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+}
+
+input.form-contol {
+    width: 100%;
+    display: inline-block;
+    height: 38px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.form-group label {
+    margin-bottom: 4px;
+    color: #292929;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+}
+
+.page-body{
+  background: #ffffff;
+    box-shadow: 0px 1px 6px rgba(0, 0, 0, 0.2);
+}
+
+form{
+    padding: 14px 20px 22px;
+}
+
+h2.min-hd{
+  font-size: 17px;
+    background: #ffffff;
+    color: #4c4c4c;
+    padding: 12px 18px;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+    border-bottom: 2px solid #ccc;
+}
+
+.page-inner{
+  padding: 20px;
+}
+
+.btn.-submit-btn {
+  background: #0099e5;
+    color: #fff;
+    padding: 12px 40px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+    margin: 14px 0 4px;
+}
+
+.btn-inner {
+    text-align: center;
+}
+
+.table-inner {
+    height: 300px;
+    overflow: auto;
+    width: 100%;
+}
+
+.table > tbody > tr > td {
+  padding: 2px 8px;
+    line-height: 35px;
+    border: 1px solid #b7b7b7;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    border-bottom: none;
+    vertical-align: middle;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.table > thead > tr > th {
+  padding: 4px 8px;
+    line-height: 35px;
+    border: 1px solid #0588ca;
+    font-weight: 600;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    background: #0099e5;
+    color: #fff !important;
+}
+
+.table-responsive {
+    margin-top: 0;
+}
+.table-inner[_ngcontent-c5] {
+    width: 100%;
+    background: #fff;
+    margin: 24px 0 0;
+    padding: 0;
+}
+
+button.btn.print-btn {
+    margin: 0;
+    padding: 6px 14px;
+    font-size: 13px;
+    background: #0099e5;
+    color: #fff;
+    border-radius: 2px;
+}
+
+
+table {
+  width: 100%;
+}
+
+table, td {
+  border-collapse: collapse;
+  }
+
+thead {
+  display: table; /* to take the same width as tr */
+  width: calc(100% - 17px); /* - 17px because of the scrollbar width */
+}
+
+tbody {
+  display: block; /* to enable vertical scrolling */
+  max-height: 350px; /* e.g. */
+  overflow-y: scroll; /* keeps the scrollbar even if it doesn't need it; display purpose */
+}
+
+th, td {
+  width: 28.33%; /* to enable "word-break: break-all" */
+  padding: 5px;
+  word-break: break-all; /* 4. */
+}
+
+tr {
+  display: table; /* display purpose; th's border */
+  width: 100%;
+  box-sizing: border-box; /* because of the border (Chrome needs this line, but not FF) */
+}
+
+td {
+  text-align: center;
+  border-bottom: none;
+  border-left: none;
+}
+
+</style>
+

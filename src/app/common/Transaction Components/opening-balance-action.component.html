@@ -1,0 +1,33 @@
+﻿     
+<button (click)="onCancelClicked()" class="btn btn-info pull-right" #back>
+    F10 Back
+</button> 
+<button #save
+  *ngIf="(_trnMainService.TrnMainObj.Mode != 'VIEW' || !_trnMainService.showPerformaApproveReject) && !showSecondaryButtons"
+  style="margin: 0px 4px;"
+  (click)="onSaveClicked()"
+  class="btn btn-info pull-right" 
+>
+  F6 SAVE
+</button>
+<!-- <button #view
+*ngIf = "(!_trnMainService.showPerformaApproveReject && _trnMainService.TrnMainObj.VoucherType !=58) && !showSecondaryButtons"
+  (click)="onViewClicked()"
+  style="margin: 0px 4px;"
+  class="btn btn-info pull-right"
+>
+  F4 VIEW
+</button>  -->
+<button  #reset
+  style="margin: 0px 4px;"
+  (click)="onNewClick()"
+  class="btn btn-info pull-right"
+  *ngIf="!showSecondaryButtons"
+>
+  F3 RESET
+</button> 
+<generic-popup-grid  
+  #genericGrid 
+  [popupsettings]="gridPopupSettings"
+  (onItemDoubleClick) = "onItemDoubleClick($event)"
+></generic-popup-grid>  

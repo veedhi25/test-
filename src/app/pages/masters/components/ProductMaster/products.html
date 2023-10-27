@@ -1,0 +1,58 @@
+<div class="content-wrapper multiple-btn">
+  <div class="clearfix">
+    <div class="user-topbtn">
+      <h3 class="page-title space-heading">Product Master</h3>
+      <div class="right-btn">
+        <button type="button" *ngIf="modeForHideAddProduct !== 'view' && (isHeadoffice==1 || CNAME==null || CNAME=='') "
+          class="btn btn-info" (click)="onMenuClick('addproduct')"
+          [disabled]="ProductHomeTabs[0].name!='productlist'">Add Product</button>
+
+        <button class="btn btn-info"
+          *ngIf="ProductHomeTabs[0].name=='productlist' && (isHeadoffice==1 || CNAME==null || CNAME=='')"
+          (click)="SyncProductFromMobile()">
+          Sync Product From Mobile
+        </button>
+        <button class="btn btn-info" *ngIf="ProductHomeTabs[0].name=='productlist'" (click)="ExportReportInExcel()">
+          Export Product
+        </button>
+
+        <button class="btn btn-info"
+          *ngIf="ProductHomeTabs[0].name=='productlist' && (isHeadoffice==1 || CNAME==null || CNAME=='')"
+          (click)="ImportProductFromExcel()">
+          Import Product
+        </button>
+
+        <button class="btn btn-info"
+          *ngIf="ProductHomeTabs[0].name=='productlist' && (isHeadoffice!==1 && CNAME!==null && CNAME!=='') "
+          (click)="onSyncCentral()">
+          Sync From HQ
+        </button>
+        <button class="btn btn-info"
+          *ngIf="ProductHomeTabs[0].name=='productlist' && (isHeadoffice ==1 && CNAME!==null && CNAME!=='') "
+          (click)="onSynctoCentral()">
+          Sync to outlet
+        </button>
+
+
+        <button *ngIf="ProductHomeTabs[0].name!='productlist'" type="button" class="btn btn-info" (click)="onCancel()">
+          Back
+        </button>
+
+
+      </div>
+    </div>
+  </div>
+
+  <div class="full-width">
+    <div class="ng-tableinner icon-view">
+      <hometabs [source]="source" [productObj]="productObj" [ProductHomeTabs]="ProductHomeTabs"
+        (activeTabEmit)="activeTabEmitEvent($event)"></hometabs>
+    </div>
+  </div>
+
+
+</div>
+
+<file-uploader-popup #fileUploadPopup [popupsettings]="fileUploadPopupSettings"
+  (onUploaded)="fileUploadSuccess($event)">
+</file-uploader-popup>

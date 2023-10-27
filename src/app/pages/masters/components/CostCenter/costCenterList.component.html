@@ -1,0 +1,15 @@
+<div class="widgets">
+<div class ="row">
+    
+      <button type="button" class="btn btn-info" (click)="AddCostCenter()" style="margin-left:18px; margin-bottom: 10px;">Add CostCenter</button>
+    
+  </div>
+   <!--<button type="button" class="btn btn-info" name=test (click)="AddCostCenter()" data-toggle="modal" data-target="#orderModal" >Add CostCenter</button>-->
+  <div class="row">
+    <ba-card  title="CostCenter" baCardClass="with-scroll">
+      <ng2-smart-table [settings]="settings" [source]="source" (edit)="onEditClick($event)" (view)="onViewClick($event)" (deleteConfirm)="onDeleteConfirm($event)"></ng2-smart-table>
+    </ba-card>
+  </div>
+
+
+</div>

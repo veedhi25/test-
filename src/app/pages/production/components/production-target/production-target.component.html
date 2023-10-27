@@ -1,0 +1,182 @@
+<style>
+  label {
+    margin: 0;
+    padding: 3px;
+  }
+
+  .PList {
+    display: block;
+    margin-top: 40px;
+    height: 640px;
+    width: 1100px;
+    position: fixed;
+    float: right;
+    margin-left: 0px;
+    background-color: rgba(0, 0, 0, 0);
+    left: 0;
+    top: 0;
+    z-index: 1;
+  }
+
+  .form-control[readonly],
+  .form-control[disabled] {
+    color: #000000;
+  }
+
+  .content-wrapper label.form-control-label {
+    margin: 6px 0 4px;
+  }
+
+  .kit-config2 .form-control-label {
+    margin: 10px 0 0 !important;
+  }
+
+  .form-control {
+    width: 100%;
+  }
+
+  td {
+    height: 25px;
+  }
+
+  .content-wrapper {
+    padding: 0;
+  }
+</style>
+
+
+<div class="content-wrapper">
+  <div class="user-topbtn">
+    <h3 class="page-title space-heading">Production Target [{{ mode }}]</h3>
+    <div class="right-btn">
+      <button class="btn add-btn" (click)="onSaveClicked()">Save</button>
+      <button class="btn btn-download" (click)="onReset()">Reset</button>
+      <button class="btn btn-back" (click)="onViewClicked()">View</button>
+      <button class="btn btn-back" (click)="onPrintClicked()">Print</button>
+    </div>
+  </div>
+  <div class="full-width compony-infoouter">
+    <div class="row">
+      <div class="col-md-12 kit-config2">
+        <div class="col-md-4">
+          <label for="date" class="col-md-4 form-control-label">Entry Date :</label>
+          <div class="col-md-8 kit-config-lable">{{productionTarget.TRNDATE }}</div>
+        </div>
+        <div class="col-md-4">
+          <label for="date" class="col-md-4 form-control-label">Target No :</label>
+          <div class="col-md-8 kit-config-lable">{{productionTarget.VCHRNO }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="inner-wrap">
+
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="col-md-4">
+            <div class="productWrap cell-with-comment">
+              <label for="type" class="col-md-4 form-control-label">BOM Name :</label>
+              <div class="col-md-8">
+                <ng-container *ngIf="mode.toUpperCase() != 'VIEW'">
+                  <input type="text" [(ngModel)]="productionTarget.DESCA" class="form-control"
+                    placeholder="Press Enter to Select" (keydown.Enter)="productSelect()"
+                    (keydown.Enter)="productSelect()" (keydown)="$event.preventDefault()" />
+                  <span class="cell-comment">
+                    Press Enter Or Tab to select Production Item
+                  </span>
+                </ng-container>
+
+                <ng-container *ngIf="mode.toUpperCase() == 'VIEW'">
+                  <h3 class="title-prodct">{{ productionTarget.DESCA }}</h3>
+                </ng-container>
+
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4 ">
+            <label for="type" class="col-md-4 form-control-label">Config Qty :</label>
+            <div class="col-md-8">
+              <input type="number" min="1" [(ngModel)]="productionTarget.QTY" (change)="onKitConfitQuantityChange()"
+                class="form-control" />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label for="type" class="col-md-4 form-control-label">Config Unit :</label>
+            <div class="col-md-8">
+
+              <select name="configunit" id="configunit" class="form-control" [(ngModel)]="productionTarget.UNIT"
+                (change)="onKitConfitQuantityChange()">
+                <option *ngFor="let u of productionTarget.alternateUnits" value="{{u.ALTUNIT}}">{{u.ALTUNIT}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="transaction-table-custom" #productionentry id="productionentry">
+  <div class="table-container scroll-tablee table-scrollsales" [style.height]="'65vh'">
+    <table id="BlueHeaderResizableTable" #productionentrytable class="reportTabel" style="table-layout: fixed;"
+      [style.height]="'65vh'">
+      <thead>
+        <tr>
+          <th width="65px">S.No.</th>
+          <th width="100px">Code</th>
+          <th width="300px">
+            Description
+          </th>
+          <th width="100px">Unit</th>
+          <th width="100px">Base Qty</th>
+          <th width="100px">Req Qty</th>
+          <th width="100px">Stock</th>
+          <th width="100px"> AvailableStock Stock</th>
+        </tr>
+      </thead>
+      <tbody style="width: fit-content">
+        <tr *ngFor="let product of productionTarget.ProdList; let i = index" (click)="RowClick(i)">
+          <td id="sno{{ i }}" width="65px">
+            {{ i + 1 }}
+          </td>
+          <td width="100px">
+            {{ product.RMCODE }}
+          </td>
+          <td width="300px">
+            {{ product.DESCA }}
+          </td>
+
+          <td width="100px" class="text-center">
+            {{ product.UNIT }}
+          </td>
+          <td width="100px" class="text-right">
+            {{ product.QTY }}
+          </td>
+          <td width="100px" class="text-right">
+            {{product.ReqQty}}
+
+          </td>
+          <td width="100px" class="text-right">
+            {{product.STOCK}}
+
+          </td>
+          <td width="100px" class="text-right">
+            {{product?.AvailableStock}}
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div *ngIf="masterService.PlistTitle == 'batchListold'" class="PList">
+  <PBatchListOld (dbClickEvent)="dblClickPopupBatch($event)" [activerowIndex]="activerowIndex" [title]="PlistTitle"
+    [BList]="_trnMainService.batchlist" (BatchClosedClick)="model1Closed()" (returnBatchValue)="returnBatch($event)">
+  </PBatchListOld>
+</div>
+<generic-popup-grid #genericGridProduct [popupsettings]="gridProductPopupSettings"
+  (onItemDoubleClick)="dblClickPopupProduct($event)">
+</generic-popup-grid>
+
+<generic-popup-grid #genericGridview [popupsettings]="gridItemviewSettings" (onItemDoubleClick)="dblClickview($event)">
+</generic-popup-grid>

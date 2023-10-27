@@ -1,0 +1,399 @@
+<div class="sticky-top">
+        <div class="row clearfix" style=" padding: 0px 20px;">
+          <div class="col-md-6">
+            <h3 class="page-title">{{ modeTitle }}</h3>
+          </div>
+          <div class="col-md-6" style="float: right;">
+            <button
+              type="button "
+              class="btn btn-info pull-right"
+              (click)="cancel()"
+              style="margin-right : 10px;"
+            >
+              Back
+            </button>
+            <button
+              *ngIf="mode == 'add' || mode=='edit'"
+              (click)="onSave()"
+              class="btn btn-info pull-right"
+              style="margin-right : 10px;"
+              [disabled]="!form.valid"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="main-container" style="padding-top : 10px; margin-bottom: 0px">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="tabbable" id="warehouse-tabs">
+              <ul class="nav nav-tabs">
+                <li class="nav-item">
+                  <a class="nav-link active" href="#general-info" data-toggle="tab"
+                    >General Info</a
+                  >
+                </li>
+              
+              </ul>
+              <div class="tab-content">
+                <div class="tab-pane active" id="general-info">
+                  <form class="row" class="form-horizontal" [formGroup]="form">
+                  <div class="col-sm-6">
+                      <div class="form-group row">
+                          <label class="col-sm-3 form-control-label">State:</label>
+                          <div class="col-sm-8">
+                            <select
+                              class="form-control"
+                              style="color:black"
+                              [style.background-color]="disabled()"
+                              name="state"
+                              id="state"
+                              formControlName="STATE"
+                            >
+                              <option *ngFor="let p of Statelist" [value]="p.StateCode">{{p.StateName}}</option>
+                             
+                            </select>
+                            <div
+                              *ngIf="
+                                !form.controls['STATE'].valid &&
+                                form.controls['STATE']?.touched
+                              "
+                              class="text-danger"
+                            >
+                              <span
+                                *ngIf="form.get('STATE').hasError('required')"
+                              >
+                              STATE is required.
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Item:</label>
+                                <div class="col-sm-8">
+                                  <input
+                                    type="text"
+                                    [style.background-color]="disabled()"
+                                    [style.background-color]="editDisabled()"
+                                    style="color:black"
+                                    class="form-control"
+                                    [readOnly]="(mode == 'view' || MODE=='edit') ? true : false"
+                                    id="itemforbatchprice"
+                                    name="itemforbatchprice"
+                                    formControlName="DESCA"
+                                    placeholder="Press Enter for choosing Item"
+                                    (keydown.enter)="ItemEnterKeyCommand()"
+                                    (keydown)="onKeydownPreventEdit($event)"
+                                  />
+                                  <div
+                                    *ngIf="
+                                      !form.controls['MCODE'].valid &&
+                                      form.controls['MCODE']?.touched
+                                    "
+                                    class="text-danger"
+                                  >
+                                    <span *ngIf="form.get('MCODE').hasError('required')">
+                                      Item is required.
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                           
+                              <div class="form-group row">
+                                      <label class="col-sm-3 form-control-label">Barcode:</label>
+                                      <div class="col-sm-8">
+                                        <input
+                                          type="text"
+                                          [style.background-color]="disabled()"
+                                          [style.background-color]="editDisabled()"
+                                          style="color:black"
+                                          class="form-control"
+                                          [readOnly]="(mode == 'view' || mode=='edit') ? true : false"
+                                          id="barcode"
+                                          name="barcode"
+                                          formControlName="BCODE"
+                                          placeholder="Barcode"
+                                        />
+                                        <div
+                                          *ngIf="
+                                            !form.controls['BCODE'].valid &&
+                                            form.controls['BCODE']?.touched
+                                          "
+                                          class="text-danger"
+                                        >
+                                          <span *ngIf="form.get('BCODE').hasError('required')">
+                                           Barcode is required.
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="form-group row">
+                                          <label class="col-sm-3 form-control-label">Batch Code:</label>
+                                          <div class="col-sm-8">
+                                            <input
+                                              type="text"
+                                              [style.background-color]="disabled()"
+                                              [style.background-color]="editDisabled()"
+                                              style="color:black"
+                                              class="form-control"
+                                              [readOnly]="(mode == 'view' || mode=='edit')? true : false"
+                                              id="batchcode"
+                                              name="batchcode"
+                                              formControlName="BATCHCODE"
+                                              placeholder="Batch Code"
+                                            />
+                                            <div
+                                              *ngIf="
+                                                !form.controls['BATCHCODE'].valid &&
+                                                form.controls['BATCHCODE']?.touched
+                                              "
+                                              class="text-danger"
+                                            >
+                                              <span *ngIf="form.get('BATCHCODE').hasError('required')">
+                                               Batch Code is required.
+                                              </span>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="form-group row">
+                                              <label class="col-sm-3 form-control-label">MRP:</label>
+                                              <div class="col-sm-8">
+                                                <input
+                                                  type="number"
+                                                 
+                                                  style="color:black"
+                                                  class="form-control"
+                                                  [readOnly]="mode == 'view' ? true : false"
+                                                  id="mrp"
+                                                  name="mrp"
+                                                  formControlName="MRP"
+                                                  placeholder="MRP"
+                                                />
+                                                <div
+                                                  *ngIf="
+                                                    !form.controls['MRP'].valid &&
+                                                    form.controls['MRP']?.touched
+                                                  "
+                                                  class="text-danger"
+                                                >
+                                                  <span *ngIf="form.get('MRP').hasError('required')">
+                                                   MRP is required.
+                                                  </span>
+                                                </div>
+                                              </div>
+                                            </div> 
+                                            <div class="form-group row">
+                                                  <label class="col-sm-3 form-control-label">LSP:</label>
+                                                  <div class="col-sm-8">
+                                                    <input
+                                                      type="number"
+                                                      
+                                                      style="color:black"
+                                                      class="form-control"
+                                                      [readOnly]="mode == 'view' ? true : false"
+                                                      id="lsp"
+                                                      name="lsp"
+                                                      formControlName="LSP"
+                                                      placeholder="Least selling Price"
+                                                    />
+                                                    <div
+                                                      *ngIf="
+                                                        !form.controls['LSP'].valid &&
+                                                        form.controls['LSP']?.touched
+                                                      "
+                                                      class="text-danger"
+                                                    >
+                                                      <span *ngIf="form.get('LSP').hasError('required')">
+                                                       Least Selling Price is required.
+                                                      </span>
+                                                    </div>
+                                                  </div>
+                                                </div> 
+                                                <div class="form-group row">
+                                                      <label class="col-sm-3 form-control-label">selling Rate Before Tax:</label>
+                                                      <div class="col-sm-8">
+                                                        <input
+                                                          type="number"
+                                                         
+                                                          style="color:black"
+                                                          class="form-control"
+                                                          [readOnly]="mode == 'view' ? true : false"
+                                                          id="sellingratebeforetax"
+                                                          name="sellingratebeforetax"
+                                                          formControlName="SELLRATEBEFORETAX"
+                                                          placeholder="Sell Rate Before Tax"
+                                                        />
+                                                        <div
+                                                          *ngIf="
+                                                            !form.controls['SELLRATEBEFORETAX'].valid &&
+                                                            form.controls['SELLRATEBEFORETAX']?.touched
+                                                          "
+                                                          class="text-danger"
+                                                        >
+                                                          <span *ngIf="form.get('SELLRATEBEFORETAX').hasError('required')">
+                                                           Sell Rate Before Tax is Required.
+                                                          </span>
+                                                        </div>
+                                                      </div>
+                                                    </div> 
+                  </div>
+                  <div class="col-sm-6">
+                  
+                                          <div class="form-group row">
+                                                <label class="col-sm-3 form-control-label">Manufacturing Date:</label>
+                                                <div class="col-sm-6">
+                                                  <input
+                                                    type="date"
+                                                   
+                                                    style="color:black"
+                                                    class="form-control"
+                                                    [readOnly]="mode == 'view' ? true : false"
+                                                    id="MFGDATE"
+                                                    name="MFGDATE"
+                                                    formControlName="MFGDATE"
+                                                    placeholder="ManuFacturing Date"
+                                                    
+                                                  />
+                                                  <div
+                                                    *ngIf="
+                                                      !form.controls['MFGDATE'].valid &&
+                                                      form.controls['MFGDATE']?.touched
+                                                    "
+                                                    class="text-danger"
+                                                  >
+                                                    <span *ngIf="form.get('MFGDATE').hasError('required')">
+                                                     Manufacturing Date is Required.
+                                                    </span>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div class="form-group row">
+                                                    <label class="col-sm-3 form-control-label">Expiry Date:</label>
+                                                    <div class="col-sm-6">
+                                                      <input
+                                                        type="date"
+                                                       
+                                                        style="color:black"
+                                                        class="form-control"
+                                                        [readOnly]="mode == 'view' ? true : false"
+                                                        id="EXPDATE"
+                                                        name="EXPDATE"
+                                                        formControlName="EXPDATE"
+                                                        placeholder="Expiry Date"
+                                                       
+                                                      />
+                                                      <div
+                                                        *ngIf="
+                                                          !form.controls['EXPDATE'].valid &&
+                                                          form.controls['EXPDATE']?.touched
+                                                        "
+                                                        class="text-danger"
+                                                      >
+                                                        <span *ngIf="form.get('EXPDATE').hasError('required')">
+                                                        Expiry Date is Required.
+                                                        </span>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  <!-- <div class="form-group row">
+                                                        <label class="col-sm-3 form-control-label">SelfLife:</label>
+                                                        <div class="col-sm-6">
+                                                          <input
+                                                            type="number"
+                                                            [style.background-color]="disabled()"
+                                                            [style.background-color]="editDisabled()"
+                                                            style="color:black"
+                                                            class="form-control"
+                                                            [readOnly]="mode == 'view' ? true : false"
+                                                            id="SELFLIFE"
+                                                            name="SELFLIFE"
+                                                            formControlName="SELFLIFE"
+                                                            placeholder="Self Life"
+                                                          />
+                                                          <div
+                                                            *ngIf="
+                                                              !form.controls['SELFLIFE'].valid &&
+                                                              form.controls['SELFLIFE']?.touched
+                                                            "
+                                                            class="text-danger"
+                                                          >
+                                                            <span *ngIf="form.get('SELFLIFE').hasError('required')">
+                                                             SelfLife is Required.
+                                                            </span>
+                                                          </div>
+                                                        </div>
+                                                      </div> -->
+                                                      <div class="form-group row">
+                                                            <label class="col-sm-3 form-control-label">Apply From:</label>
+                                                            <div class="col-sm-6">
+                                                              <input
+                                                                type="date"
+                                                              
+                                                                style="color:black"
+                                                                class="form-control"
+                                                                [readOnly]="mode == 'view' ? true : false"
+                                                                id="APPLYFROMDATE"
+                                                                name="APPLYFROMDATE"
+                                                                formControlName="APPLYFROMDATE"
+                                                                placeholder="Apply From "
+                                                              />
+                                                              <div
+                                                                *ngIf="
+                                                                  !form.controls['APPLYFROMDATE'].valid &&
+                                                                  form.controls['APPLYFROMDATE']?.touched
+                                                                "
+                                                                class="text-danger"
+                                                              >
+                                                                <span *ngIf="form.get('APPLYFROMDATE').hasError('required')">
+                                                                 Appy From Date is Required.
+                                                                </span>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                  <div class="form-group row">
+                                        <label class="col-sm-3 form-control-label">PCL:</label>
+                                        <div class="col-sm-6">
+                                          <select
+                                            class="form-control"
+                                            style="color:black"
+                                            [style.background-color]="disabled()"
+                                            name="pcl"
+                                            id="pcl"
+                                            formControlName="PCL"
+                                          >
+                                            <option *ngFor="let p of PCLList" [value]="p.PCL">{{p.COMPANYNAME}}</option>
+                                           
+                                          </select>
+                                          <div
+                                            *ngIf="
+                                              !form.controls['PCL'].valid &&
+                                              form.controls['PCL']?.touched
+                                            "
+                                            class="text-danger"
+                                          >
+                                            <span
+                                              *ngIf="form.get('PCL').hasError('required')"
+                                            >
+                                            PCL is required.
+                                            </span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    
+                                    </div>
+                   
+                  </form>
+                </div>
+               
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <generic-popup-grid  
+  #genericGrid 
+  [popupsettings]="gridPopupSettings"
+  (onItemDoubleClick) = "onItemDoubleClick($event)"
+  ></generic-popup-grid>
+      

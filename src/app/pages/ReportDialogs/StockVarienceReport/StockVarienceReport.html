@@ -1,0 +1,205 @@
+
+<div style="background-color : #ffffff; padding :1%; height : auto; ">
+        <div class="row">
+          <div class="modal-header" style="width: 97%; margin:0px auto;">
+                    <button type="button" class="close" data-dismiss="modal" (click)="hide()">&times;</button>
+                   <h4 class="modal-title">Stock Varience Report</h4> 
+            </div>
+            <!-- Left Column -->
+
+            <div class=" col-md-6">
+                <fieldset>
+                    <legend style="font-size:11px;font-weight: bold; width:auto"> Show Batch Variance Report</legend>
+                    <label class="smallBoldLabel">Batch</label>
+                    <select  (click)="onSelectWarehouse($event.target.value)" style="width:95%;" >
+                            <option *ngFor="let item of BatchList" [ngValue]="warehouse">{{item.NAME}} </option>
+                    </select> 
+                </fieldset>                                              
+            </div>
+            
+            <div class=" col-md-6">
+                    <fieldset>
+                            <legend style="font-size:11px;font-weight: bold; width:auto" >Date Range Selection :</legend>                            
+                                <table>
+                                  <tr>
+                                     <td><label class="smallBoldLabel">From:(AD)</label></td>
+                                     <td><label class="smallBoldLabel">To:(AD)</label></td>    
+                                  </tr>
+
+                                   <tr>
+                                        <td>                                                 
+                                         <label class="smallBoldLabel"><input  type="date"  style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]=" StockVarience.DATE1"  (change)="changeEntryDate($event.target.value,'AD',Date1)"  ></label> 
+                                        </td>
+                                        <td>                                                 
+                                           <label class="smallBoldLabel"><input  type="date" style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]=" StockVarience.DATE2"  (change)="changeEndDate($event.target.value,'AD',Date2)"   ></label>
+                                         </td>
+                                      </tr>
+                                      <tr>
+                                         <!-- <td>                                                 
+                                           <input  type="date"  style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]=" StockAgeing.BSDATE1"  (change)="changeEntryDate($event.target.value,'BS',Date1)" >B S
+                                         </td> -->
+                                         <!-- <td>                                                 
+                                            <input  type="date" style="width:152px; min-width:50%;"  placeholder="Year Start Date" [(ngModel)]=" StockAgeing.BSDATE2"  (change)="changeEndDate($event.target.value,'BS',Date2)" >B S
+                                          </td> -->
+                                       </tr>
+
+                                </table>
+                    </fieldset> 
+
+                                 
+            </div>
+            <hr style="margin-top: 6rem; margin-bottom:0rem">
+            <!-- Another column -->
+           
+        <!-- <div class="row"> -->
+                <div class="col-md-7">
+                        <label class="smallBoldLabel">Warehouse Selection</label>
+                        <select  (click)="onSelectWarehouse($event.target.value)" style="width:95%;" >
+                                <option *ngFor="let item of items" [ngValue]="warehouse">{{item.NAME}} </option>
+                        </select> 
+
+                        <label class="smallBoldLabel">Major Group Selection</label>
+                        <select  (click)="onSelectWarehouse($event.target.value)" style="width:95%;" >
+                                <option *ngFor="let item of GroupList" [ngValue]="warehouse">{{item.NAME}} </option>
+                        </select> 
+
+                        <label class="smallBoldLabel">Category Selection</label>
+                        <select   (change)=" onSelectItemCategory($event.target.value)" style="width:95%;" >
+                                <option *ngFor="let itemCat of itemsCategory"  value={{itemCat.MENUCAT}} >{{itemCat.MENUCAT}} </option>
+                        </select>
+                        
+                        <label class="smallBoldLabel">Supplier Selection</label>
+                        <select (change)="onSelectSupplierName($event.target.value)" style="width:95%;" >
+                                <option *ngFor="let supName of suppliersName" value={{supName.ACNAME}}  >{{supName.ACNAME}} </option>
+                        </select>
+                </div>
+                <!-- <div class="col-md-4">
+                        <label class="smallBoldLabel">Category Selection</label>
+                        <select   (change)=" onSelectItemCategory($event.target.value)" style="width:95%;" >
+                                <option *ngFor="let itemCat of itemsCategory"  value={{itemCat.MENUCAT}} >{{itemCat.MENUCAT}} </option>
+                        </select>
+                        
+                        <label class="smallBoldLabel">Supplier Selection</label>
+                        <select (change)="onSelectSupplierName($event.target.value)" style="width:95%;" >
+                                <option *ngFor="let supName of suppliersName" value={{supName.ACNAME}}  >{{supName.ACNAME}} </option>
+                        </select>
+
+                </div> -->
+                       
+                <div class="col-md-5" style="margin-top:3px; ">
+                        <!-- <div>
+                            <input type="checkbox" name="vehicle1" [(ngModel)]=" StockVarience.SHOWVALUATIONRATE"  value="1">Ignore Warehouse<br>
+                        </div>  
+                        <div>
+                                <input type="checkbox" name="vehicle1" [(ngModel)]=" StockVarience.SHOWVALUATIONRATE"  value="1"> Show Barcode Wise Variance Report <br>
+                            </div> 
+                            <div>
+                                <input type="checkbox" name="vehicle1" [(ngModel)]=" StockVarience.SHOWVALUATIONRATE"  value="1"> Show Detail Report<br>
+                            </div>   -->
+                            <div style="border:1px solid;margin-top:10px;padding:4px;height: 73px; line-height: 2" >
+                                    <div class="radio">
+                                            <label class="smallBoldLabel" style="width: 95%"><input type="radio" name="optradio6" [(ngModel)]="StockVarience.ReportOptionSelection" value="7">Show Counted Stock Only </label>
+                                        </div>
+                                        <div class="radio">
+                                                <label class="smallBoldLabel" style="width: 95%"><input type="radio" name="optradio7" [(ngModel)]="StockVarience.ReportOptionSelection" value="5" >Show Not Counted Stock Only</label>
+                                            </div>
+                                            <div class="radio">
+                                                    <label class="smallBoldLabel" style="width: 95%"><input type="radio" name="optradio8" [(ngModel)]="StockVarience.ReportOptionSelection"  value="8">Show All Stock</label>
+                                                </div>
+                            </div>    
+                           
+                        <div style="border:1px solid; margin-top:8px; height: 73px; padding: 4px;line-height: 2">
+                                <div >
+                                        <label class="smallBoldLabel" style="width: 95%"><input type="radio" name="optradiow" [(ngModel)]="StockVarience.Wise" value="ITEM" >Item Wise&nbsp;&nbsp;</label>
+                                    </div>
+                                    <div>
+                                        <label class="smallBoldLabel" style="width: 95%" ><input type="radio" name="optradiog" [(ngModel)]="StockVarience.Wise" value="MGROUP"  >Item Group Wise&nbsp;&nbsp;</label>
+                                    </div>
+                                    <div >
+                                         <label class="smallBoldLabel" style="width: 95%"><input type="radio" name="optradioc" [(ngModel)]="StockVarience.Wise" value="MCAT" >Item Category Wise</label>
+                                    </div>                    
+                                           
+                       </div>                
+                                                                                                                                                                                              
+                </div>
+
+                <hr style="margin-top: 11rem;margin-bottom:0rem">
+                <div class="col-md-4" style="height:100px;  line-height: 2;">
+                        <div class="radio">
+                                <label class="smallBoldLabel" style="width: 95%"><input type="radio" name="optradio1" [(ngModel)]="StockVarience.OPT_FLAG" value="1" >Show Difference Stock</label>
+                            </div>
+                            <div class="radio">
+                                    <label class="smallBoldLabel" style="width: 95%"><input type="radio" name="optradio2" [(ngModel)]="StockVarience.OPT_FLAG" value="2" >Show Excess Stock Only</label>
+                                </div>
+                                <div class="radio">
+                                        <label class="smallBoldLabel" style="width: 95%"><input type="radio" name="optradio3" [(ngModel)]="StockVarience.OPT_FLAG" value="3" >Show Shortage Only</label>
+                                    </div>
+                                    <div class="radio">
+                                            <label class="smallBoldLabel" style="width: 95%"><input type="radio" name="optradio4" [(ngModel)]="StockVarience.OPT_FLAG" value="4" >Show Equal Stock Only</label>
+                                        </div>&nbsp;
+                                       
+                                   
+                </div>
+                
+                <!-- <div class="col-md-4" >
+                        <div class="radio">
+                                <label class="smallBoldLabel"><input type="radio" name="optradio4" [(ngModel)]="StockVarience.OPT_FLAG" value="4" >Show Equal Stock Only</label>
+                            </div>
+                            <div class="radio">
+                                    <label class="smallBoldLabel"><input type="radio" name="optradio5" [(ngModel)]="StockVarience.OPT_FLAG" value="6" >Show All</label>
+                                </div>
+                            
+                </div> -->
+                <div class="col-md-4" style=" " >
+                        <!-- <div class="radio">
+                                <label  style="font-size: 11px; font-weight: bold"><input type="radio" name="optradio6" [(ngModel)]="StockVarience.ReportOptionSelection" value="7">Show Counted Stock Only </label>
+                            </div>
+                            <div class="radio">
+                                    <label style="font-size: 11px; font-weight: bold"><input type="radio" name="optradio7" [(ngModel)]="StockVarience.ReportOptionSelection" value="5" >Show Not Counted Stock Only</label>
+                                </div>
+                                <div class="radio">
+                                        <label style="font-size: 11px; font-weight: bold"><input type="radio" name="optradio8" [(ngModel)]="StockVarience.ReportOptionSelection"  value="8">Show All Stock</label>
+                                    </div> -->
+                                    <div class="radio">
+                                            <label class="smallBoldLabel" style="width: 95%"><input type="radio" name="optradio5" [(ngModel)]="StockVarience.OPT_FLAG" value="6" >Show All</label>
+                                        </div>
+
+                                    <div style="line-height: 2;">
+                                            <div class="smallBoldLabel" style="width:95%">
+                                                    <input type="checkbox" name="vehicle1" [(ngModel)]=" StockVarience.SHOWVALUATIONRATE"  value="1">Ignore Warehouse<br>
+                                                </div>  
+                                                <div class="smallBoldLabel" style="width:95%">
+                                                        <input type="checkbox" name="vehicle1" [(ngModel)]=" StockVarience.SHOWVALUATIONRATE"  value="1"> Show Barcode Wise Variance Report <br>
+                                                    </div> 
+                                                    <div class="smallBoldLabel" style="width:95%">
+                                                        <input type="checkbox" name="vehicle1" [(ngModel)]=" StockVarience.SHOWVALUATIONRATE"  value="1"> Show Detail Report<br>
+                                                    </div>
+                                    </div>
+                                         
+                </div>
+                <!-- <hr style="margin-top: 6rem; margin-bottom:0rem"> -->
+
+          
+                <!-- <div class="col-md-6">          
+                        <div>
+                            <input type="checkbox" name="vehicle1" [(ngModel)]=" StockVarience.SHOWVALUATIONRATE"  value="1"> Show Barcode Wise Variance Report <br>
+                        </div> 
+                        <div>
+                            <input type="checkbox" name="vehicle1" [(ngModel)]=" StockVarience.SHOWVALUATIONRATE"  value="1"> Show Detail Report<br>
+                        </div>                             
+                 </div> -->
+               
+                 <div class="col-md-4" style="margin-top: 10px">  
+                        <button class="btn btn-info confirm-btn" type="button"  (click)=onload()>RUN</button>
+                        <button type="button"  title="Cancel" class="btn btn-info">Close</button>  
+                </div>
+
+              
+               
+            <!-- </div> -->
+        </div>
+
+      
+</div>
+
+

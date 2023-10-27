@@ -1,0 +1,17 @@
+colreszable should be in assest folder.
+getmaxdate is missing.
+seperate the database loading for time being and make it easy if required to.
+
+use NgaModule for material design modules.
+
+the login routing should be reviesed
+
+payment save not working
+
+login with same name should be control
+
+jobsheet no in every transaction
+
+issue mode in every transaction 
+
+make dialog interface to delivery/transaction in with itemtype,receivedtype
