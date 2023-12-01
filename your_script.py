@@ -2,7 +2,7 @@ import paramiko
 from scp import SCPClient
 
 # SSH Connection Details
-hostname = 'BSPLRTDEVOPS-jenkins'
+hostname = '10.18.11.197'
 port = 2232
 username = 'root'
 password = 'Bharuwa@123!@#'  # You can use key-based authentication for better security
