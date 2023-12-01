@@ -10,7 +10,7 @@ password = 'Bharuwa@123!@#'  # You can use key-based authentication for better s
 # Local file path
 local_file_path = r'C:\ProgramData\Jenkins\.jenkins\workspace\apibuild\dist'
 
-# Remote directory path
+#  Remote directory path
 remote_directory = '/home'
 
 # Create SSH client
