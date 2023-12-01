@@ -8,10 +8,10 @@ username = 'root'
 password = 'Bharuwa@123!@#'  # You can use key-based authentication for better security
 
 # Local file path
-local_file_path = 'C:\ProgramData\Jenkins\.jenkins\workspace\apibuild\dist'
+local_file_path = 'C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\apibuild\\dist'
 
 # Remote directory path
-remote_directory = '/home'
+remote_directory = '//home'
 
 # Create SSH client
 ssh = paramiko.SSHClient()
@@ -27,3 +27,4 @@ with SCPClient(ssh.get_transport()) as scp:
 
 # Close SSH connection
 ssh.close()
+
