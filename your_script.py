@@ -8,7 +8,7 @@ username = 'root'
 password = 'Bharuwa@123!@#'  # You can use key-based authentication for better security
 
 # Local file path
-local_file_path = 'C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\apibuild\\dist'
+local_file_path = r'C:\\ProgramData\\Jenkins\\.jenkins\\workspace\\apibuild\\dist'
 
 # Remote directory path
 remote_directory = '//home'
