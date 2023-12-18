@@ -1,29 +1,30 @@
-import paramiko
-from scp import SCPClient
 
-# SSH Connection Details
-hostname = '10.18.11.197'
-port = 2232
-username = 'root'
-password = 'Bharuwa@123!@#'  # You can use key-based authentication for better security
+import subprocess
 
-# Local file path
-local_file_path = r'D:\\dev test22222\\retailerpos_Frontend\\dist'
+local_path = r'C:\ProgramData\Jenkins\.jenkins\workspace\apibuild\dist\\'
+remote_user = 'root'
+remote_host = '10.18.11.197'
+remote_port = '2232'
+remote_path = '/home/'
+password = 'Bharuwa@123!@#'
 
-# Remote directory path
-remote_directory = '/home'
+# Construct the scp command
+scp_command = [
+    'scp',
+    '-r',
+    '-o', 'StrictHostKeyChecking=no',
+    '-P', remote_port,
+    '-o', f'PasswordAuthentication=yes',
+    local_path,
+    f'{remote_user}@{remote_host}:{remote_path}{password}'
+]
 
-# Create SSH client
-ssh = paramiko.SSHClient()
-ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+# Set the environment variable with the password
+env = {'SSHPASS': f'{password}'}
 
-# Connect to SSH server
-ssh.connect(hostname, port, username, password)
+# Run the scp command
 try:
-   
-   with SCPClient(ssh.get_transport()) as scp:
-        # Copy local file to remote server
-        scp.put(local_file_path, remote_directory)
-
-except PermissionError as e:
-    print(f"PermissionError: {e}")
+    subprocess.run(scp_command, check=True, env=env)
+    print("SCP transfer successful!")
+except subprocess.CalledProcessError as e:
+    print(f"SCP transfer failed with error:\n{e}")
