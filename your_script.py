@@ -16,7 +16,7 @@ scp_command = [
     '-P', remote_port,
     '-o', f'PasswordAuthentication=yes',
     local_path,
-    f'{remote_user}@{remote_host}:{remote_path}{password}'
+    f'{remote_user}@{remote_host}:{remote_path}'
 ]
 
 # Set the environment variable with the password
