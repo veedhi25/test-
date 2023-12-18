@@ -1,4 +1,3 @@
-
 import subprocess
 
 local_path = r'C:\ProgramData\Jenkins\.jenkins\workspace\apibuild\dist\\'
@@ -15,12 +14,12 @@ scp_command = [
     '-o', 'StrictHostKeyChecking=no',
     '-P', remote_port,
     '-o', f'PasswordAuthentication=yes',
-    local_path,
+    f'{local_path}',
     f'{remote_user}@{remote_host}:{remote_path}'
 ]
 
 # Set the environment variable with the password
-env = {'SSHPASS': f'{password}'}
+env = {'SSHPASS': password}
 
 # Run the scp command
 try:
@@ -28,3 +27,5 @@ try:
     print("SCP transfer successful!")
 except subprocess.CalledProcessError as e:
     print(f"SCP transfer failed with error:\n{e}")
+
+
